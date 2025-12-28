@@ -7,6 +7,7 @@
     "dev": "bun index.ts"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/bun": "latest",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "@bitwiselearn/prisma": "*",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.8.0",
     "cookie-parser": "^1.4.7",
