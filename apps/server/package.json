@@ -21,7 +21,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@devhire/prisma": "*",
+    "@bitwiselearn/prisma": "*",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.8.0",
     "cookie-parser": "^1.4.7",
