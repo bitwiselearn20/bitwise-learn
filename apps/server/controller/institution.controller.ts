@@ -24,7 +24,7 @@ class InstitutionController {
             }
             const hashedPassword = await hashPassword(data.loginPassword);
 
-            const createdInstitution = await prismaClient.user.create({
+            const createdInstitution = await prismaClient.institution.create({
                 data: {
                     name: data.name,
                     email: data.email,
@@ -142,21 +142,16 @@ class InstitutionController {
                 where: {
                     id: institutionId
                 },
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true,
-                },
             });
             if (!institution) throw new Error("institution not found");
-            await prismaClient.user.delete({
+            const deletedInstitution = await prismaClient.user.delete({
                 where: { id: institutionId },
             });
+            if (!deletedInstitution) throw new Error("Error deleting institution");
+
             return res
                 .status(200)
-                .json(apiResponse(200, "institution deleted successfully", institution));
+                .json(apiResponse(200, "institution deleted successfully", deletedInstitution));
         } catch (error: any) {
             console.log(error);
             return res.status(200).json(apiResponse(200, error.message, null));
@@ -228,7 +223,7 @@ class InstitutionController {
             if (!institute) throw new Error("institute not found");
             return res
                 .status(200)
-                .json(apiResponse(200, "admin fetched successfully", institute));
+                .json(apiResponse(200, "institution fetched successfully", institute));
         } catch (error: any) {
             console.log(error);
             return res.status(200).json(apiResponse(200, error.message, null));

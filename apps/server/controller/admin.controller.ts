@@ -138,25 +138,18 @@ class AdminController {
                     ROLE: "ADMIN",
                     id: adminId
                 },
-                select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    ROLE: true,
-                    createdAt: true,
-                    updatedAt: true,
-                },
             });
             if (!admin) throw new Error("admin not found");
             if (admin.id === userId) {
                 throw new Error("superadmin cannot delete themselves");
             }
-            await prismaClient.user.delete({
+            const deletedAdmin = await prismaClient.user.delete({
                 where: { id: adminId },
             });
+            if (!deletedAdmin) throw new Error("Error deleting admin");
             return res
                 .status(200)
-                .json(apiResponse(200, "admin deleted successfully", admin));
+                .json(apiResponse(200, "admin deleted successfully", deletedAdmin));
         } catch (error: any) {
             console.log(error);
             return res.status(200).json(apiResponse(200, error.message, null));
