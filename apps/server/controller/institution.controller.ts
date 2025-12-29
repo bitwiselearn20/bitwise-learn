@@ -13,7 +13,7 @@ class InstitutionController {
             if (!data) throw new Error("Please Provide all required fields");
             const userId = req.user.id;
 
-            const dbAdmin = await prismaClient.institution.findFirst({
+            const dbAdmin = await prismaClient.user.findFirst({
                 where: { id: userId },
             });
 

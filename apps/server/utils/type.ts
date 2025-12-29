@@ -99,3 +99,22 @@ export interface GradesBody {
   questionId: string;
   answer: string[];
 }
+
+export interface CreateTeacherBody {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  loginPassword: string;
+  instituteId: string;
+  batchId: string;
+  vendorId?: string;
+}
+
+export interface UpdateTeacherBody {
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+  loginPassword?: string;
+  batchId?: string;
+  vendorId?: string;
+}
