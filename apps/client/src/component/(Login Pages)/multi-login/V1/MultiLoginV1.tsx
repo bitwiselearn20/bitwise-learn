@@ -3,7 +3,7 @@
 type LoginRole = "Instructor" | "Institution" | "Partner";
 
 
-import MutliLoginIMG from "../V1/MultiLoginIMG.png"
+import MutliLoginIMG from "../v1/MultiLoginIMG.png"
 import Image from "next/image";
 import { Mail, Lock, Eye, EyeOff, GraduationCap, School, Handshake } from "lucide-react";
 import { useState, useEffect } from "react";
