@@ -12,6 +12,7 @@ import hpp from "hpp";
 import "dotenv/config";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import problemsRouter from "./routes/dsa-question.route";
 dotenv.config({ path: "../.env" });
 
 const app: Express = express();
@@ -70,7 +71,6 @@ app.get("/health", async (req, res) => {
     FRONTEND_URL: process.env.FRONTEND_URL,
   });
 });
-
 declare global {
   namespace Express {
     interface Request {
@@ -78,6 +78,7 @@ declare global {
     }
   }
 }
+app.use("/api/v1/problems", problemsRouter);
 
 const errorHandler = (
   error: any,

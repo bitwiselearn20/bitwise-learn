@@ -161,7 +161,7 @@ function AllListedQuestions() {
       <Filter />
       <div className="w-full">
         {questions.map((question, index) => {
-          return <QuestionCard {...question} />;
+          return <QuestionCard key={index} {...question} />;
         })}
       </div>
     </div>
