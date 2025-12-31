@@ -18,6 +18,12 @@ enum COURSE_LEVEL {
   ADVANCE
 }
 
+enum PROBLEM_LEVEL {
+  EASY
+  MEDIUM
+  HARD
+}
+
 enum ASSIGNMENT_TYPE {
   MCQ
   SCQ
@@ -269,12 +275,13 @@ model CourseEnrollment {
 }
 
 model Problem {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   hints       String[]
-  createdBy   String   @db.ObjectId
-  creator     User     @relation(fields: [createdBy], references: [id])
+  difficulty  PROBLEM_LEVEL @default(EASY)
+  createdBy   String        @db.ObjectId
+  creator     User          @relation(fields: [createdBy], references: [id])
 
   sectionId String?         @db.ObjectId
   section   CourseSections? @relation(fields: [sectionId], references: [id])

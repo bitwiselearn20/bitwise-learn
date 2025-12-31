@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
 
-type Difficulty = "easy" | "medium" | "hard";
+type Difficulty = "EASY" | "MEDIUM" | "HARD";
 
 function QuestionCard({
   id,
@@ -14,10 +13,13 @@ function QuestionCard({
 }: {
   id: string;
   name: string;
-  topics: string[];
+  topics: any[]; // array of topic objects
   difficulty: Difficulty;
   solved: boolean;
 }) {
+  // Flatten all tagNames into a single array
+  const topicNames: string[] = topics.flatMap((topic) => topic.tagName || []);
+
   return (
     <div
       className="
@@ -49,7 +51,7 @@ function QuestionCard({
 
       {/* Topics */}
       <div className="w-56 flex gap-2 justify-end shrink-0">
-        {topics.slice(0, 3).map((topic) => (
+        {topicNames.slice(0, 3).map((topic) => (
           <span
             key={topic}
             className="
@@ -63,8 +65,10 @@ function QuestionCard({
             {topic}
           </span>
         ))}
-        {topics.length > 3 && (
-          <span className="text-xs text-white/40">+{topics.length - 3}</span>
+        {topicNames.length > 3 && (
+          <span className="text-xs text-white/40">
+            +{topicNames.length - 3}
+          </span>
         )}
       </div>
     </div>
@@ -73,14 +77,14 @@ function QuestionCard({
 
 function DifficultyBadge({ difficulty }: { difficulty: Difficulty }) {
   const map = {
-    easy: "text-green-400",
-    medium: "text-yellow-400",
-    hard: "text-red-400",
+    EASY: "text-green-400",
+    MEDIUM: "text-yellow-400",
+    HARD: "text-red-400",
   };
 
   return (
     <span className={`font-medium ${map[difficulty]}`}>
-      {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+      {difficulty.toLowerCase()}
     </span>
   );
 }

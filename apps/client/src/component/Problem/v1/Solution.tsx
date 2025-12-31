@@ -16,11 +16,10 @@ function Solution({ content }: any) {
       {content.videoSolution && (
         <div className="space-y-2">
           <div className="w-full aspect-video rounded-lg overflow-hidden border border-neutral-700 bg-black">
-            <iframe
+            <video
               src={content.videoSolution}
               className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
+              controls
             />
           </div>
         </div>

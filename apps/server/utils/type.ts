@@ -134,6 +134,7 @@ export interface ProblemBody {
   name: string;
   description: string;
   hints?: string[];
+  difficulty: "EASY" | "MEDIUM" | "HARD";
 }
 
 export interface UpdateProblemBody {

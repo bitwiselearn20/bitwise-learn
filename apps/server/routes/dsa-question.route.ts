@@ -2,14 +2,6 @@ import { Router } from "express";
 import dsaQuestionController from "../controller/dsa-question.controller";
 import { authMiddleware as adminMiddleware } from "../middleware/auth.middleware";
 const problemsRouter = Router();
-/** 
-
-update-testcase-to-problem/:id
-delete-testcase-to-problem/:id
-add-solution-to-problem/:id
-update-solution-to-problem/:id
-delete-solution-to-problem/:id
-*/
 
 problemsRouter.get(
   "/get-all-dsa-problem/",
@@ -28,12 +20,12 @@ problemsRouter.post(
   adminMiddleware,
   dsaQuestionController.addDsaProblem
 );
-problemsRouter.post(
+problemsRouter.patch(
   "/update-problem/:id",
   adminMiddleware,
   dsaQuestionController.updateDsaProblem
 );
-problemsRouter.post(
+problemsRouter.delete(
   "/delete-problem/:id",
   adminMiddleware,
   dsaQuestionController.deleteDsaProblem
@@ -43,12 +35,12 @@ problemsRouter.post(
   adminMiddleware,
   dsaQuestionController.addTopicToProblem
 );
-problemsRouter.post(
+problemsRouter.patch(
   "/update-topic-to-problem/:id",
   adminMiddleware,
   dsaQuestionController.updateTopicToProblem
 );
-problemsRouter.post(
+problemsRouter.delete(
   "/delete-topic-from-problem/:id",
   adminMiddleware,
   dsaQuestionController.deleteTopicFromProblem
@@ -58,12 +50,12 @@ problemsRouter.post(
   adminMiddleware,
   dsaQuestionController.addQuestionTemplate
 );
-problemsRouter.post(
+problemsRouter.patch(
   "/update-template-to-problem/:id",
   adminMiddleware,
   dsaQuestionController.updateQuestionTemplate
 );
-problemsRouter.post(
+problemsRouter.delete(
   "/delete-template-from-problem/:id",
   adminMiddleware,
   dsaQuestionController.deleteQuestionTemplate
@@ -73,15 +65,30 @@ problemsRouter.post(
   adminMiddleware,
   dsaQuestionController.addTestCaseToProblem
 );
-problemsRouter.post(
+problemsRouter.patch(
   "/update-testcase-to-problem/:id",
   adminMiddleware,
   dsaQuestionController.addTestCaseToProblem
 );
-problemsRouter.post(
+problemsRouter.delete(
   "/delete-testcase-to-problem/:id",
   adminMiddleware,
   dsaQuestionController.addTestCaseToProblem
+);
+problemsRouter.post(
+  "/add-solution-to-problem/:id",
+  adminMiddleware,
+  dsaQuestionController.addProblemSolution
+);
+problemsRouter.patch(
+  "/update-solution-to-problem/:id",
+  adminMiddleware,
+  dsaQuestionController.updateProblemSolution
+);
+problemsRouter.delete(
+  "/delete-solution-to-problem/:id",
+  adminMiddleware,
+  dsaQuestionController.removeProblemSolution
 );
 
 export default problemsRouter;
