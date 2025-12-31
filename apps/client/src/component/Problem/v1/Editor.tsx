@@ -23,17 +23,27 @@ export default function CodeEditor({ template }: { template: any[] }) {
     return map;
   }, [template]);
 
-  const defaultLang = Object.keys(templatesByLanguage)[0] || "javascript";
+  /* Pick first available language deterministically */
+  const defaultLang = template?.length
+    ? normalizeLanguage(template[0].language)
+    : "python";
+  const defaultCode = template?.length ? template[0].defaultCode : "";
 
   const [language, setLanguage] = useState(defaultLang);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(defaultCode);
 
-  /* Load code when language changes */
+  /* Load defaultCode first, fallback to functionBody */
   useEffect(() => {
     const tpl = templatesByLanguage[language];
     if (!tpl) return;
 
-    setCode(tpl.functionBody || tpl.defaultCode || "");
+    if (tpl.defaultCode && tpl.defaultCode.trim().length > 0) {
+      setCode(tpl.defaultCode);
+    } else if (tpl.functionBody) {
+      setCode(tpl.functionBody);
+    } else {
+      setCode("");
+    }
   }, [language, templatesByLanguage]);
 
   const handleLanguageChange = (lang: string) => {
@@ -45,7 +55,8 @@ export default function CodeEditor({ template }: { template: any[] }) {
       {/* Top Bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-[#262626] border-b border-[#333]">
         <span className="text-sm font-semibold text-gray-300">Code</span>
-        <div className=" flex ">
+
+        <div className="flex">
           <button className="px-3 ml-3 rounded-sm bg-secondary-bg text-md font-semibold">
             Run
           </button>
@@ -53,6 +64,7 @@ export default function CodeEditor({ template }: { template: any[] }) {
             Submit
           </button>
         </div>
+
         <select
           value={language}
           onChange={(e) => handleLanguageChange(e.target.value)}
@@ -87,6 +99,8 @@ export default function CodeEditor({ template }: { template: any[] }) {
             cursorBlinking: "smooth",
             fontLigatures: true,
             smoothScrolling: true,
+            formatOnPaste: true,
+            formatOnType: true,
           }}
         />
       </div>

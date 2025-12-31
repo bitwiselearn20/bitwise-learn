@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import MarkdownComponent from "./MarkdownComponent";
 import { ChevronRight } from "lucide-react";
+import TestCaseSection from "./TestcaseSection";
 
 function Description({ content }: { content: any }) {
   if (!content) return null;
@@ -16,38 +17,7 @@ function Description({ content }: { content: any }) {
 
       {/* Problem Description */}
       <MarkdownComponent content={description} />
-
-      {/* Examples */}
-      {testCases?.length > 0 && (
-        <div>
-          <h2 className="text-lg font-semibold text-white mb-2">Examples</h2>
-
-          <div className="space-y-4">
-            {testCases.map((test: any, index: number) => (
-              <div
-                key={test.id}
-                className="bg-neutral-800 border border-neutral-700 rounded-lg p-4"
-              >
-                <p className="text-sm text-gray-400 mb-2">
-                  Example {index + 1}
-                </p>
-
-                <div className="text-sm space-y-1">
-                  <div>
-                    <span className="font-medium text-gray-200">Input:</span>{" "}
-                    <code className="text-[#facc15]">{test.input}</code>
-                  </div>
-
-                  <div>
-                    <span className="font-medium text-gray-200">Output:</span>{" "}
-                    <code className="text-[#facc15]">{test.output}</code>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <TestCaseSection testCases={testCases} />
 
       {/* Topics */}
       {problemTopics?.length > 0 && (
@@ -66,6 +36,7 @@ function Description({ content }: { content: any }) {
           </div>
         </div>
       )}
+
       {/* Hints */}
       {hints?.length > 0 && (
         <div>

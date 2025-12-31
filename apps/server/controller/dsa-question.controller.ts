@@ -39,6 +39,7 @@ class DsaQuestionController {
           name: data.name,
           description: data.description,
           hints: data.hints,
+          difficulty: data.difficulty,
           createdBy: dbAdmin.id,
         },
       });
@@ -127,7 +128,11 @@ class DsaQuestionController {
   //TODO: implement pagination service
   async getAllDsaProblem(req: Request, res: Response) {
     try {
-      const problems = await prismaClient.problem.findMany({});
+      const problems = await prismaClient.problem.findMany({
+        include: {
+          problemTopics: true,
+        },
+      });
       return res.status(200).json(apiResponse(200, "data fetched", problems));
     } catch (error: any) {
       console.log(error);
@@ -155,7 +160,11 @@ class DsaQuestionController {
           },
           problemTemplates: true,
           problemTopics: true,
-          solution: true,
+          solution: {
+            where: {
+              problemId: dbProblem.id,
+            },
+          },
         },
       });
 

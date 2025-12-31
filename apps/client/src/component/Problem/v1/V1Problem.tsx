@@ -5,6 +5,7 @@ import TestCases from "./TestCases";
 import Description from "./Description";
 import Solution from "./Solution";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/component/ui/tabs";
+import Submission from "./Submission";
 
 function V1Problem({ data }: any) {
   /* Sidebar */
@@ -80,6 +81,7 @@ function V1Problem({ data }: any) {
               Description
             </TabsTrigger>
             <TabsTrigger value="solution">Solution</TabsTrigger>
+            <TabsTrigger value="submission">Submission</TabsTrigger>
           </TabsList>
 
           <div
@@ -96,6 +98,9 @@ function V1Problem({ data }: any) {
             </TabsContent>
             <TabsContent value="solution">
               <Solution content={data.solution} />
+            </TabsContent>
+            <TabsContent value="submission">
+              <Submission content={data.submission} />
             </TabsContent>
           </div>
         </Tabs>
@@ -122,7 +127,13 @@ function V1Problem({ data }: any) {
 
         {/* Test Cases */}
         <div
-          style={{ flex: `${100 - editorRatio} 0 0` }}
+          style={{
+            flex: `${100 - editorRatio} 0 0`,
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            //@ts-ignore
+            WebkitScrollbar: { display: "none" },
+          }}
           className="overflow-y-auto min-h-0"
         >
           <TestCases testCases={data.testCases} />
