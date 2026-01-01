@@ -16,8 +16,9 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getAllAdmins } from "@/api/admins/get-all-admins";
-
-type FieldType = "Admins" | "Partners" | "Institutions" | "Batches";
+import { getAllInstitutions } from "@/api/institutions/get-all-institutions";
+import { getAllVendors } from "@/api/vendors/get-all-vendors";
+type FieldType = "Admins" | "Vendors" | "Institutions" | "Batches";
 
 type Item = {
     id: number;
@@ -30,21 +31,33 @@ export default function HeroSection() {
 
     /* ---------------- ENTITY STATES ---------------- */
     const [admins, setAdmins] = useState([]);
-
     useEffect(() => {
         getAllAdmins(setAdmins);
         console.log(admins);
 
     }, []);
-    const [partners, setPartners] = useState<Item[]>([
-        { id: 1, name: "Partner A" },
-        { id: 2, name: "Partner B" },
-    ]);
+    const [institutions, setInstitutions] = useState([]);
+    useEffect(() => {
+        getAllInstitutions(setInstitutions);
+        console.log(institutions);
 
-    const [institutions, setInstitutions] = useState<Item[]>([
-        { id: 1, name: "Institution X" },
-        { id: 2, name: "Institution Y" },
-    ]);
+    }, []);
+    const [vendors, setVendors] = useState([]);
+    useEffect(() => {
+        getAllVendors(setVendors);
+        console.log(vendors);
+
+    }, []);
+
+    // const [partners, setPartners] = useState<Item[]>([
+    //     { id: 1, name: "Partner A" },
+    //     { id: 2, name: "Partner B" },
+    // ]);
+
+    // const [institutions, setInstitutions] = useState<Item[]>([
+    //     { id: 1, name: "Institution X" },
+    //     { id: 2, name: "Institution Y" },
+    // ]);
 
     const [batches, setBatches] = useState<Item[]>([
         { id: 1, name: "Batch 2024" },
@@ -67,8 +80,8 @@ export default function HeroSection() {
         switch (field) {
             case "Admins":
                 return admins;
-            case "Partners":
-                return partners;
+            case "Vendors":
+                return vendors;
             case "Institutions":
                 return institutions;
             case "Batches":
@@ -81,8 +94,8 @@ export default function HeroSection() {
             case "Admins":
                 setAdmins(updater);
                 break;
-            case "Partners":
-                setPartners(updater);
+            case "Vendors":
+                setVendors(updater);
                 break;
             case "Institutions":
                 setInstitutions(updater);
@@ -129,7 +142,7 @@ export default function HeroSection() {
     /* ---------------- ICONS ---------------- */
     const fieldIcons = {
         Admins: KeyRound,
-        Partners: Handshake,
+        Vendors: Handshake,
         Institutions: School,
         Batches: BookOpen,
     };
@@ -164,7 +177,7 @@ export default function HeroSection() {
 
             {/* Selector */}
             <div className="bg-divBg mr-40 ml-20 mt-4 flex rounded-2xl">
-                {(["Admins", "Partners", "Institutions", "Batches"] as FieldType[]).map(
+                {(["Admins", "Vendors", "Institutions", "Batches"] as FieldType[]).map(
                     (type, i) => {
                         const Icon = fieldIcons[type];
                         return (
