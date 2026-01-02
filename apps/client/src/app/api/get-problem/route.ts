@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
 export async function GET(req: NextRequest) {
   try {
@@ -11,14 +11,13 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const response = await axios.get(
+    const response = await axiosInstance.get(
       `${backendUrl}/api/v1/problems/get-all-dsa-problem`
     );
-
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {
     console.error("Error fetching problem:", error.message);
-
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to fetch problem" },
       { status: 500 }

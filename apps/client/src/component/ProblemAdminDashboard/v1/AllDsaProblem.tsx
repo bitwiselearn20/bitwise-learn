@@ -25,6 +25,7 @@ function AllDsaProblem() {
               name={question.name}
               difficulty={question.difficulty}
               solved={false}
+              isAdmin={true}
             />
           );
         })}

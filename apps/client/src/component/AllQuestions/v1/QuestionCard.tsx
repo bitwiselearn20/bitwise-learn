@@ -10,12 +10,14 @@ function QuestionCard({
   topics,
   difficulty,
   solved,
+  isAdmin,
 }: {
   id: string;
   name: string;
   topics: any[]; // array of topic objects
   difficulty: Difficulty;
   solved: boolean;
+  isAdmin: boolean;
 }) {
   // Flatten all tagNames into a single array
   const topicNames: string[] = topics.flatMap((topic) => topic.tagName || []);
@@ -37,7 +39,9 @@ function QuestionCard({
       {/* Title */}
       <div className="flex-1 max-w-[60%]">
         <Link
-          href={`/admin-dashboard/problems/${id}`}
+          href={
+            !isAdmin ? `/problems/${id}` : `/admin-dashboard/problems/${id}`
+          }
           className="text-md text-white group-hover:text-blue-400 truncate"
         >
           {name}

@@ -1,24 +1,28 @@
 "use client";
 
 import { User } from "lucide-react";
+import { useState } from "react";
+import ProblemSubmissionForm from "./ProblemSubmissionForm";
 
 function DashboardHero() {
+  const [showForm, setShowForm] = useState(false);
   return (
     <div className="w-full px-6 pt-6">
-      <HeroSection />
+      <HeroSection showForm={showForm} setShowForm={setShowForm} />
     </div>
   );
 }
 
 export default DashboardHero;
 
-function HeroSection() {
+function HeroSection({ showForm, setShowForm }: any) {
   const admin_name = "Britto Anand";
   const admin_email = "brittoanand@example.com";
 
   return (
     <div className="w-full rounded-2xlpx-8 py-10 flex flex-col md:flex-row items-center justify-between shadow-sm">
       {/* Left Content */}
+      {showForm && <ProblemSubmissionForm />}
       <div className="text-center md:text-left">
         <h1 className="text-4xl font-semibold">
           <span className="text-primaryBlue">Greetings,</span>{" "}
@@ -36,7 +40,10 @@ function HeroSection() {
           an option below to continue.
         </p>
 
-        <button className="bg-primaryBlue mt-4 text-white px-6 py-3 rounded-lg font-medium shadow-md">
+        <button
+          onClick={() => setShowForm(true)}
+          className="bg-primaryBlue mt-4 text-white px-6 py-3 rounded-lg font-medium shadow-md"
+        >
           Add New Question
         </button>
       </div>

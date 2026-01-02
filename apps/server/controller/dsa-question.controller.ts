@@ -19,7 +19,7 @@ class DsaQuestionController {
     try {
       const userId = req.user?.id;
       const data: ProblemBody = req.body;
-
+      console.log(data);
       if (!userId) throw new Error("kindly Login");
       if (!data) throw new Error("data is required");
 
@@ -176,10 +176,14 @@ class DsaQuestionController {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
+  //TODO: apply pagination here
   async getAdminDsaProblemById(req: Request, res: Response) {
     try {
       const problemId = req.params.id;
+      const userId = req.user?.id;
+
       if (!problemId) throw new Error("problem id is needed");
+      if (!userId) throw new Error("user id is needed");
 
       const dbProblem = await prismaClient.problem.findUnique({
         where: { id: problemId },
@@ -187,6 +191,10 @@ class DsaQuestionController {
 
       if (!dbProblem) throw new Error("db problem not found");
 
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
       const data = await prismaClient.problem.findUnique({
         where: { id: dbProblem.id },
         include: {

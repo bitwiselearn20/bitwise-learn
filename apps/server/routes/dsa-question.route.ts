@@ -13,6 +13,7 @@ problemsRouter.get(
 );
 problemsRouter.get(
   "/admin/get-dsa-problem/:id",
+  adminMiddleware,
   dsaQuestionController.getAdminDsaProblemById
 );
 
