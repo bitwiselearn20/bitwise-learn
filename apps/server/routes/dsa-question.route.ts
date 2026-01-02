@@ -13,7 +13,28 @@ problemsRouter.get(
 );
 problemsRouter.get(
   "/admin/get-dsa-problem/:id",
+  adminMiddleware,
   dsaQuestionController.getAdminDsaProblemById
+);
+problemsRouter.get(
+  "/admin/get-dsa-problem/testcases/:id",
+  adminMiddleware,
+  dsaQuestionController.getTestCaseById
+);
+problemsRouter.get(
+  "/admin/get-dsa-problem/solution/:id",
+  adminMiddleware,
+  dsaQuestionController.getProblemSolutionById
+);
+problemsRouter.get(
+  "/admin/get-dsa-problem/submission/:id",
+  adminMiddleware,
+  dsaQuestionController.getAllDsaSubmission
+);
+problemsRouter.get(
+  "/admin/get-dsa-problem/templates/:id",
+  adminMiddleware,
+  dsaQuestionController.getTemplateById
 );
 
 problemsRouter.get(

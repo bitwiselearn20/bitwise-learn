@@ -1,8 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import axiosInstance from "@/lib/axios";
+// /:id
 
-export async function GET(req: NextRequest) {
+import axiosInstance from "@/lib/axios";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await context.params;
+
     const backendUrl = process.env.BACKEND_URL;
     if (!backendUrl) {
       return NextResponse.json(
@@ -12,12 +19,13 @@ export async function GET(req: NextRequest) {
     }
 
     const response = await axiosInstance.get(
-      `${backendUrl}/api/v1/problems/get-all-dsa-problem`
+      `${backendUrl}/api/v1/problems/admin/get-dsa-problem/testcases/${id}`
     );
+
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {
     console.error("Error fetching problem:", error.message);
-    console.log(error);
+
     return NextResponse.json(
       { error: "Failed to fetch problem" },
       { status: 500 }
