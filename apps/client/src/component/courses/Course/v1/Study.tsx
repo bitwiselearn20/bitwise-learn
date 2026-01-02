@@ -1,3 +1,5 @@
+import WhatYouWillLearn from "./WhatYoullLearn";
+
 const colors = {
   primary_Bg: "bg-[#121313]",
   secondary_Bg: "bg-[#1E1E1E]",
@@ -18,9 +20,10 @@ const colors = {
 
 export default function Study() {
   return (
-    <div className="h-full w-full grid grid-cols-3 grid-rows-[auto_1fr] gap-5 overflow-hidden">
+    <div className="h-full w-full grid grid-cols-1 lg:grid-cols-3 grid-rows-[auto_1fr] gap-5 overflow-hidden">
 
-      <div className={`col-span-2 row-span-1 rounded-xl overflow-hidden ${colors.primary_Bg} aspect-video`}>
+      {/* VIDEO */}
+      <div className="lg:col-span-2 rounded-xl overflow-hidden bg-[#121313] aspect-video">
         <iframe
           src="https://www.youtube.com/embed/xR3V5Ow2dTI"
           className="w-full h-full"
@@ -29,26 +32,23 @@ export default function Study() {
         />
       </div>
 
-      <div className={`col-span-1 row-span-1 ${colors.primary_Bg} rounded-xl p-4 ${colors.special_Font} font-mono flex flex-col justify-start`}>
-        <h3 className="mb-3">What You’ll Learn</h3>
-        <ul className={`text-sm space-y-2 ${colors.secondary_Font}`}>
-          <li>HTML structure</li>
-          <li>Tags & attributes</li>
-          <li>First webpage</li>
-        </ul>
+      {/* WHAT YOU'LL LEARN */}
+      <div className="lg:col-span-1">
+        <WhatYouWillLearn />
       </div>
 
-      <div className={`col-span-3 row-span-1 ${colors.primary_Font} font-mono overflow-hidden`}>
+      {/* DESCRIPTION */}
+      <div className="lg:col-span-3 text-white font-mono overflow-hidden">
         <h2 className="text-xl mb-2">Getting Started with HTML</h2>
 
-        <div className={`flex items-center gap-3 mb-3 text-sm ${colors.secondary_Font}`}>
+        <div className="flex items-center gap-3 mb-3 text-sm text-gray-400">
           <span>John Doe</span>
           <span>•</span>
           <span>Beginner</span>
         </div>
 
-        <p className={`text-sm leading-relaxed ${colors.secondary_Font} pb-2 border-b-2 ${colors.border_Accent}`}>
-          Id sint voluptate incididunt occaecat qui mollit quis sint Lorem anim magna deserunt est anim velit. Lorem voluptate mollit est excepteur irure esse adipisicing ut elit id. Officia minim est quis adipisicing non do excepteur aute dolor. Labore voluptate nisi quis esse est voluptate do magna sint. Officia proident sint labore nisi irure esse consequat mollit amet consectetur do Lorem laborum.
+        <p className="text-sm leading-relaxed text-gray-400 pb-2 border-b border-gray-600">
+          Id sint voluptate incididunt occaecat qui mollit quis sint Lorem anim magna deserunt est anim velit...
         </p>
 
         <button className="mt-4 px-3 py-1 bg-black rounded-md text-sm w-fit">
