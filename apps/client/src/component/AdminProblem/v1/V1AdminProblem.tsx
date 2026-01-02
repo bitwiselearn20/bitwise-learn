@@ -16,7 +16,7 @@ function V1AdminProblem() {
     }
   }, []);
   return (
-    <div className="flex gap-4">
+    <div className="flex h-screen gap-4">
       <ProblemDescrption data={data} />
       <ProblemInfo />
     </div>

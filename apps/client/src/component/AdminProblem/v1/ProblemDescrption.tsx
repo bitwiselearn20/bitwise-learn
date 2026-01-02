@@ -39,8 +39,14 @@ function ProblemDescrption({ data }: { data: any }) {
 
   return (
     <div
-      className="relative h-screen border-r border-gray-800 mt-12 p-4 space-y-6 text-gray-300"
-      style={{ width }}
+      className="relative h-screen overflow-y-auto border-r border-gray-800 mt-12 p-4 space-y-6 text-gray-300"
+      style={{
+        width,
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+        //@ts-ignore
+        WebkitScrollbar: { display: "none" },
+      }}
     >
       {/* Resize Handle */}
       <div

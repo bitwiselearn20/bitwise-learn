@@ -506,6 +506,41 @@ class DsaQuestionController {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
+  async getTemplateById(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const problemId = req.params.id;
+
+      if (!userId) throw new Error("kindly Login");
+      if (!problemId) throw new Error("problemId is required");
+
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
+
+      const dbProblem = await prismaClient.problem.findFirst({
+        where: { id: problemId },
+        include: {
+          problemTopics: true,
+        },
+      });
+      if (!dbProblem) throw new Error("problem doesn't exists");
+
+      const testcases = await prismaClient.problemTemplate.findMany({
+        where: { problemId: dbProblem.id },
+      });
+
+      return res
+        .status(200)
+        .json(
+          apiResponse(200, "test template fetched successfully", testcases)
+        );
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
 
   // test-cases
   async addTestCaseToProblem(req: Request, res: Response) {
@@ -628,7 +663,39 @@ class DsaQuestionController {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
+  async getTestCaseById(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const problemId = req.params.id;
 
+      if (!userId) throw new Error("kindly Login");
+      if (!problemId) throw new Error("problemId is required");
+
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
+
+      const dbProblem = await prismaClient.problem.findFirst({
+        where: { id: problemId },
+        include: {
+          problemTopics: true,
+        },
+      });
+      if (!dbProblem) throw new Error("problem doesn't exists");
+
+      const testcases = await prismaClient.problemTestCase.findMany({
+        where: { problemId: dbProblem.id },
+      });
+
+      return res
+        .status(200)
+        .json(apiResponse(200, "test cases fetched successfully", testcases));
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
   // solution
   async addProblemSolution(req: Request, res: Response) {
     try {
@@ -745,6 +812,68 @@ class DsaQuestionController {
       return res
         .status(200)
         .json(apiResponse(200, "solution has been deleted", deletedSolution));
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
+  async getProblemSolutionById(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const problemId = req.params.id;
+
+      if (!userId) throw new Error("kindly Login");
+      if (!problemId) throw new Error("problemId is required");
+
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
+
+      const dbProblem = await prismaClient.problem.findFirst({
+        where: { id: problemId },
+        include: {
+          solution: true,
+        },
+      });
+      if (!dbProblem) throw new Error("problem doesn't exists");
+
+      const createdSolution = await prismaClient.problemSolution.findFirst({
+        where: { problemId: dbProblem.id },
+      });
+
+      return res
+        .status(200)
+        .json(apiResponse(200, "solution has been added", createdSolution));
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
+  async getAllDsaSubmission(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const problemId = req.params.id;
+
+      if (!userId) throw new Error("kindly Login");
+      if (!problemId) throw new Error("problemId is required");
+
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
+
+      const dbProblem = await prismaClient.problem.findFirst({
+        where: { id: problemId },
+        include: {
+          problemTopics: true,
+        },
+      });
+      if (!dbProblem) throw new Error("problem doesn't exists");
+      const problems = await prismaClient.problemSubmission.findMany({
+        where: { problemId: dbProblem.id },
+      });
+      return res.status(200).json(apiResponse(200, "data fetched", problems));
     } catch (error: any) {
       console.log(error);
       return res.status(200).json(apiResponse(500, error.message, null));

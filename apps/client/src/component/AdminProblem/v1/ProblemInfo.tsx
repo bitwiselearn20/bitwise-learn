@@ -9,14 +9,14 @@ function ProblemInfo() {
     <div className="text-white w-full">
       <Tabs defaultValue="solution" className="flex flex-col h-full">
         <TabsList className="border-b w-full border-neutral-700 bg-neutral-900 px-4">
+          <TabsTrigger value="solution">Solution</TabsTrigger>
           <TabsTrigger value="testcases" className="">
             Testcases
           </TabsTrigger>
           <TabsTrigger value="templates" className="">
             Templates
           </TabsTrigger>
-          <TabsTrigger value="solution">Solution</TabsTrigger>
-          <TabsTrigger value="submission">Submission</TabsTrigger>
+          <TabsTrigger value="general">General</TabsTrigger>
         </TabsList>
 
         <div
@@ -34,7 +34,7 @@ function ProblemInfo() {
           <TabsContent value="solution">
             <Solution />
           </TabsContent>
-          <TabsContent value="submission">
+          <TabsContent value="general">
             <Submissions />
           </TabsContent>
           <TabsContent value="templates">
