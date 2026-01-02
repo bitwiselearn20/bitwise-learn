@@ -1,8 +1,10 @@
+"use client"
 import V1HomeNav from "./V1HomeNav";
 import Image from "next/image";
 import bgIMG from "./V1bgIMG.png";
 import { Klee_One } from "next/font/google";
 import Chart from "./Chart.png";
+import { motion } from "framer-motion";
 
 import {
   Lightbulb,
@@ -19,6 +21,34 @@ const kleeOne = Klee_One({
 });
 
 function V1Home() {
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.18, // delay between cards
+      },
+    },
+  };
+  
+  const cardVariants = {
+    hidden: {
+      opacity: 0,
+      y: 40,
+      rotateX: -8,
+      scale: 0.96,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      scale: 1,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
+  
   return (
     <div className="relative min-h-screen overflow-hidden text-white">
       {/* Background */}
@@ -55,16 +85,24 @@ function V1Home() {
 
         {/* ================= CARDS ================= */}
         <section className={`${kleeOne.className} mt-16`}>
-          <div className="max-w-7xl mx-auto px-6 grid grid-cols-3 gap-8 items-start">
+          <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="max-w-7xl mx-auto px-6 grid grid-cols-3 gap-8 items-start">
             {/* ================= CARD 1 ================= */}
-            <div className="relative rounded-2xl px-6 py-10 bg-white/6 border 
-            border-white/12 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
-            transition-all duration-500 ease-out
-    hover:-translate-y-3
-    hover:rotate-y-6
-    hover:-rotate-x-3
-    transform-3d
-    perspective-[1000px]">
+            <motion.div
+  variants={cardVariants}
+  className="relative rounded-2xl px-6 py-10 bg-white/6 border 
+  border-white/12 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
+  transition-all duration-500 ease-out
+  hover:-translate-y-3
+  hover:rotate-y-6
+  hover:-rotate-x-3
+  transform-3d
+  perspective-[1000px]"
+>
+
               <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-white/[0.14] to-transparent pointer-events-none" />
 
               <h3 className="relative text-2xl font-medium tracking-wide text-white/90">
@@ -84,14 +122,18 @@ function V1Home() {
                 <br />
                 see your skills grow over time.
               </p>
-            </div>
+            </motion.div>
 
             {/* ================= CARD 2 ================= */}
-            <div className="relative flex justify-center transition-all duration-500 ease-out
-    hover:-translate-y-4
-    hover:-rotate-x-6
-transform-3d
-    perspective-[1000px]">
+            <motion.div
+  variants={cardVariants}
+  className="relative flex justify-center transition-all duration-500 ease-out
+  hover:-translate-y-4
+  hover:-rotate-x-6
+  transform-3d
+  perspective-[1000px]"
+>
+
               <div
                 className="relative w-full max-w-[360px] h-[360px]
     rounded-2xl px-6 py-6
@@ -184,20 +226,24 @@ transform-3d
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
 
 
 
             {/* ================= CARD 3 ================= */}
-            <div className="relative rounded-2xl px-6 py-6 bg-white/6 border border-white/12 
-            backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
-            transition-all duration-500 ease-out
-    hover:-translate-y-3
-    hover:-rotate-y-6
-    hover:-rotate-x-3
-    transform-3d
-    perspective-[1000px]">
+            <motion.div
+  variants={cardVariants}
+  className="relative rounded-2xl px-6 py-6 bg-white/6 border border-white/12 
+  backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.45)]
+  transition-all duration-500 ease-out
+  hover:-translate-y-3
+  hover:-rotate-y-6
+  hover:-rotate-x-3
+  transform-3d
+  perspective-[1000px]"
+>
+
               <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-white/[0.14] to-transparent pointer-events-none" />
 
               <h3 className="relative text-2xl font-medium tracking-wide text-white/90 flex items-center gap-2">
@@ -229,8 +275,8 @@ transform-3d
                 <br />
                 data and improve faster.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </section>
       </main>
     </div>
