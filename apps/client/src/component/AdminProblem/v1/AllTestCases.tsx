@@ -18,77 +18,90 @@ type TestCase = {
   updatedAt: string;
 };
 
-function AllTestCases() {
+export default function AllTestCases() {
   const param = useParams();
+  const problemId = param.id as string;
+
   const [data, setData] = useState<TestCase[]>([]);
   const [selectedTestCase, setSelectedTestCase] = useState<TestCase | null>(
     null
   );
-  const [showTestCaseForm, setShowTestCase] = useState(false);
+  const [showTestCaseForm, setShowTestCaseForm] = useState(false);
+
   useEffect(() => {
-    getAllProblemTestCases(setData, param.id as string);
-  }, [param.id]);
+    getAllProblemTestCases(setData, problemId);
+  }, [problemId]);
+
+  /* ---------------- CRUD HELPERS ---------------- */
+
+  const handleAdd = async (payload: any) => {
+    const created = await createTestCase(problemId, payload);
+    setData((prev) => [...prev, created]);
+    setShowTestCaseForm(false);
+  };
+
+  const handleUpdate = (updated: TestCase) => {
+    setData((prev) => prev.map((tc) => (tc.id === updated.id ? updated : tc)));
+    setSelectedTestCase(updated);
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteTestCase(id);
+    setData((prev) => prev.filter((tc) => tc.id !== id));
+    setSelectedTestCase(null);
+  };
 
   return (
     <div className="relative flex h-full text-gray-300">
+      {showTestCaseForm && (
+        <TestCaseForm
+          onClose={() => setShowTestCaseForm(false)}
+          onSave={handleAdd}
+        />
+      )}
+
       {/* TABLE */}
-      <div>
-        {showTestCaseForm && (
-          <TestCaseForm
-            onClose={() => setShowTestCase(false)}
-            onSave={(data) => createTestCase(param.id as string, data)}
-          />
-        )}
-      </div>
       <div className="flex-1 p-4">
-        <div className="flex  justify-between">
-          <h2 className="text-lg font-semibold text-white mb-4">Test Cases</h2>
+        <div className="flex justify-between mb-4">
+          <h2 className="text-lg font-semibold text-white">Test Cases</h2>
           <button
-            onClick={() => setShowTestCase(true)}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-500 active:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+            onClick={() => setShowTestCaseForm(true)}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
           >
-            Add New Testcases
+            Add New Testcase
           </button>
         </div>
+
         <div className="overflow-x-auto border border-neutral-700 rounded-lg">
           <table className="w-full text-sm">
             <thead className="bg-neutral-800 text-gray-400">
               <tr>
-                <th className="px-4 py-3 text-left">#</th>
-                <th className="px-4 py-3 text-left">Type</th>
-                <th className="px-4 py-3 text-left">Input</th>
-                <th className="px-4 py-3 text-left">Output</th>
+                <th className="px-4 py-3">#</th>
+                <th className="px-4 py-3">Type</th>
+                <th className="px-4 py-3">Input</th>
+                <th className="px-4 py-3">Output</th>
               </tr>
             </thead>
-
             <tbody>
-              {data.map((testCase, index) => (
+              {data.map((tc, i) => (
                 <tr
-                  key={testCase.id}
-                  onClick={() => setSelectedTestCase(testCase)}
-                  className="cursor-pointer border-t border-neutral-700 hover:bg-neutral-800 transition"
+                  key={tc.id}
+                  onClick={() => setSelectedTestCase(tc)}
+                  className="cursor-pointer border-t border-neutral-700 hover:bg-neutral-800"
                 >
-                  <td className="px-4 py-3">{index + 1}</td>
-                  <td className="px-4 py-3">
-                    <span className="px-2 py-1 text-xs rounded-md bg-neutral-700 text-gray-300">
-                      {testCase.testType}
-                    </span>
+                  <td className="px-4 py-3">{i + 1}</td>
+                  <td className="px-4 py-3">{tc.testType}</td>
+                  <td className="px-4 py-3 font-mono text-xs">
+                    {truncate(tc.input, 40)}
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-gray-400">
-                    {truncate(testCase.input, 40)}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-gray-400">
-                    {truncate(testCase.output, 40)}
+                  <td className="px-4 py-3 font-mono text-xs">
+                    {truncate(tc.output, 40)}
                   </td>
                 </tr>
               ))}
-
               {data.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={4}
-                    className="px-4 py-6 text-center text-gray-500"
-                  >
+                  <td colSpan={4} className="text-center py-6 text-gray-500">
                     No test cases found
                   </td>
                 </tr>
@@ -98,41 +111,43 @@ function AllTestCases() {
         </div>
       </div>
 
-      {/* RIGHT SIDEBAR */}
+      {/* SIDEBAR */}
       {selectedTestCase && (
         <EditableTestCaseSidebar
           testCase={selectedTestCase}
           onClose={() => setSelectedTestCase(null)}
-          onSaved={(updated) => {
-            setData((prev) =>
-              prev.map((tc) => (tc.id === updated.id ? updated : tc))
-            );
-            setSelectedTestCase(updated);
-          }}
+          onSaved={handleUpdate}
+          onDelete={handleDelete}
         />
       )}
     </div>
   );
 }
 
-export default AllTestCases;
-
 function EditableTestCaseSidebar({
   testCase,
   onClose,
   onSaved,
+  onDelete,
 }: {
   testCase: TestCase;
   onClose: () => void;
   onSaved: (tc: TestCase) => void;
+  onDelete: (id: string) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [inputFields, setInputFields] = useState<
-    { key: string; value: string }[]
-  >(() =>
-    Object.entries(JSON.parse(testCase.input)).map(([k, v]) => ({
+  const parsedInput = (() => {
+    try {
+      return JSON.parse(testCase.input);
+    } catch {
+      return {};
+    }
+  })();
+
+  const [inputFields, setInputFields] = useState(
+    Object.entries(parsedInput).map(([k, v]) => ({
       key: k,
       value: Array.isArray(v) ? JSON.stringify(v) : String(v),
     }))
@@ -140,124 +155,76 @@ function EditableTestCaseSidebar({
 
   const [output, setOutput] = useState(testCase.output);
 
-  /* ---------------- INPUT FIELD OPS ---------------- */
-  const updateField = (i: number, field: "key" | "value", value: string) => {
-    const copy = [...inputFields];
-    copy[i][field] = value;
-    setInputFields(copy);
-  };
-
-  const addField = () =>
-    setInputFields([...inputFields, { key: "", value: "" }]);
-
-  const removeField = (i: number) =>
-    setInputFields(inputFields.filter((_, idx) => idx !== i));
-
-  /* ---------------- SAVE ---------------- */
   const handleSave = async () => {
     setIsSaving(true);
 
-    const inputObj: Record<string, any> = {};
+    const input: Record<string, any> = {};
     inputFields.forEach(({ key, value }) => {
       try {
-        inputObj[key] = JSON.parse(value);
+        input[key] = JSON.parse(value);
       } catch {
-        inputObj[key] = value;
+        input[key] = value;
       }
     });
 
-    const updated = {
+    onSaved({
       ...testCase,
-      input: JSON.stringify(inputObj),
+      input: JSON.stringify(input),
       output,
-    };
-
-    // await updateTestCase(updated); 👈 hook API here
-    onSaved(updated);
+    });
 
     setIsSaving(false);
     setIsEditing(false);
   };
 
-  const cancelEdit = () => {
-    setInputFields(
-      Object.entries(JSON.parse(testCase.input)).map(([k, v]) => ({
-        key: k,
-        value: Array.isArray(v) ? JSON.stringify(v) : String(v),
-      }))
-    );
-    setOutput(testCase.output);
-    setIsEditing(false);
-  };
-
   return (
-    <div className="fixed right-0 top-0 h-screen w-[420px] bg-neutral-900 border-l border-neutral-800 z-50 flex flex-col">
-      {/* Header */}
-      <div className="flex justify-between px-4 py-3 border-b border-neutral-800">
+    <div className="fixed right-0 top-0 h-screen w-[420px] bg-neutral-900 border-l border-neutral-800 flex flex-col">
+      <div className="flex justify-between p-4 border-b border-neutral-800">
         <h3 className="text-white font-semibold">Test Case</h3>
         <button onClick={onClose}>
           <X size={18} />
         </button>
       </div>
 
-      {/* Content */}
-      <div className="p-4 space-y-4 overflow-y-auto text-sm">
-        <Detail label="ID" value={testCase.id} />
-        <Detail label="Type" value={testCase.testType} />
-
-        {/* INPUT */}
-        <div>
-          <p className="text-xs text-gray-500 mb-2">Input</p>
-
-          {inputFields.map((f, i) => (
-            <div key={i} className="flex gap-2 mb-2">
-              <input
-                disabled={!isEditing}
-                value={f.key}
-                onChange={(e) => updateField(i, "key", e.target.value)}
-                className="w-1/3 bg-neutral-800 p-2 rounded"
-                placeholder="key"
-              />
-              <input
-                disabled={!isEditing}
-                value={f.value}
-                onChange={(e) => updateField(i, "value", e.target.value)}
-                className="flex-1 bg-neutral-800 p-2 rounded font-mono"
-                placeholder="value"
-              />
-              {isEditing && (
-                <button onClick={() => removeField(i)} className="text-red-400">
-                  ✕
-                </button>
-              )}
-            </div>
-          ))}
-
-          {isEditing && (
-            <button onClick={addField} className="text-blue-400 text-xs mt-1">
-              + Add Field
-            </button>
-          )}
-        </div>
-
-        {/* OUTPUT */}
-        <div>
-          <p className="text-xs text-gray-500 mb-1">Output</p>
-          {isEditing ? (
-            <textarea
-              value={output}
-              onChange={(e) => setOutput(e.target.value)}
-              className="w-full bg-neutral-800 p-2 rounded font-mono text-xs"
-              rows={3}
+      <div className="p-4 space-y-4 overflow-y-auto">
+        {inputFields.map((f, i) => (
+          <div key={i} className="flex gap-2">
+            <input
+              disabled={!isEditing}
+              value={f.key}
+              onChange={(e) =>
+                setInputFields((prev) =>
+                  prev.map((x, idx) =>
+                    idx === i ? { ...x, key: e.target.value } : x
+                  )
+                )
+              }
+              className="w-1/3 bg-neutral-800 p-2 rounded"
             />
-          ) : (
-            <pre className="bg-neutral-800 p-3 rounded text-xs">{output}</pre>
-          )}
-        </div>
+            <input
+              disabled={!isEditing}
+              value={f.value}
+              onChange={(e) =>
+                setInputFields((prev) =>
+                  prev.map((x, idx) =>
+                    idx === i ? { ...x, value: e.target.value } : x
+                  )
+                )
+              }
+              className="flex-1 bg-neutral-800 p-2 rounded font-mono"
+            />
+          </div>
+        ))}
+
+        <textarea
+          disabled={!isEditing}
+          value={output}
+          onChange={(e) => setOutput(e.target.value)}
+          className="w-full bg-neutral-800 p-2 rounded font-mono"
+        />
       </div>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-neutral-800 flex flex-col gap-2">
+      <div className="p-4 border-t border-neutral-800 space-y-2">
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
@@ -266,26 +233,18 @@ function EditableTestCaseSidebar({
             Edit
           </button>
         ) : (
-          <>
-            <button
-              onClick={cancelEdit}
-              className="flex-1 bg-neutral-700 py-2 rounded"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="flex-1 bg-green-600 py-2 rounded"
-            >
-              {isSaving ? "Saving..." : "Save"}
-            </button>
-          </>
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="w-full bg-green-600 py-2 rounded"
+          >
+            Save
+          </button>
         )}
 
         <button
-          onClick={() => deleteTestCase(testCase.id)}
-          className=" w-full px-4 py-2 rounded-md border border-red-700 text-red-400 font-medium transition hover:bg-red-600 hover:text-white hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-neutral-900 active:bg-red-700"
+          onClick={() => onDelete(testCase.id)}
+          className="w-full border border-red-700 text-red-400 py-2 rounded hover:bg-red-600 hover:text-white"
         >
           Delete
         </button>

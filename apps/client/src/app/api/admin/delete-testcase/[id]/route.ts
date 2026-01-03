@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import axiosInstance from "@/lib/axios";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
@@ -7,7 +7,6 @@ export async function POST(
 ) {
   try {
     const { id } = await context.params;
-    let data = await req.json();
 
     const backendUrl = process.env.BACKEND_URL;
     if (!backendUrl) {
@@ -16,10 +15,9 @@ export async function POST(
         { status: 500 }
       );
     }
-    if (!Array.isArray(data)) data = [data];
-    const response = await axiosInstance.post(
-      `${backendUrl}/api/v1/problems/add-testcase-to-problem/${id}`,
-      data
+
+    const response = await axiosInstance.delete(
+      backendUrl + "/api/v1/problems/delete-testcase-to-problem/" + id
     );
 
     return NextResponse.json(response.data.data, { status: 200 });

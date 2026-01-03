@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import TestCaseSection from "@/component/Problem/v1/TestcaseSection";
-import MarkdownComponent from "@/component/Problem/v1/MarkdownComponent";
+import MarkdownEditor from "@/component/ui/MarkDownEditor";
 
 function ProblemDescrption({ data }: { data: any }) {
   if (!data) return null;
@@ -53,14 +53,17 @@ function ProblemDescrption({ data }: { data: any }) {
         onMouseDown={startResizing}
         className="absolute top-0 right-0 h-full w-1 cursor-col-resize bg-transparent hover:bg-blue-500/30"
       />
-
       {/* Problem Title */}
       <h1 className="text-xl font-semibold text-white">{name}</h1>
-
       {/* Problem Description */}
-      <MarkdownComponent content={description} />
+      //@ts-ignore
+      <MarkdownEditor
+        height={550}
+        value={description}
+        mode={"preview"}
+        hideToolbar={true}
+      />
       <TestCaseSection testCases={testCases} />
-
       {/* Topics */}
       {problemTopics?.length > 0 && (
         <div>
@@ -78,7 +81,6 @@ function ProblemDescrption({ data }: { data: any }) {
           </div>
         </div>
       )}
-
       {/* Hints */}
       {hints?.length > 0 && (
         <div>

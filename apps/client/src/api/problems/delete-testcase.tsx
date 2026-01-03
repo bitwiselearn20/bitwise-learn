@@ -1,7 +1,6 @@
 import axiosInstance from "@/lib/axios";
-
+// POST
 export const deleteTestCase = async (id: string) => {
-  const getProblem = await axiosInstance.get(
-    "/api/get-problem/testcases/" + id
-  );
+  const result = await axiosInstance.post("/api/admin/delete-testcase/" + id);
+  return result;
 };

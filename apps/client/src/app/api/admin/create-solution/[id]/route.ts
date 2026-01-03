@@ -16,9 +16,9 @@ export async function POST(
         { status: 500 }
       );
     }
-    if (!Array.isArray(data)) data = [data];
+
     const response = await axiosInstance.post(
-      `${backendUrl}/api/v1/problems/add-testcase-to-problem/${id}`,
+      `${backendUrl}/api/v1/problems/add-solution-to-problem/${id}`,
       data
     );
 

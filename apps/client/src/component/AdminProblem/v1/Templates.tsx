@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Editor } from "@monaco-editor/react";
 import ShowAddTemplateForm from "./ShowAddTemplateForm";
+import { createProblemTemplate } from "@/api/problems/create-template";
 
 type Template = {
   id: string;

@@ -28,14 +28,20 @@ Output:
   const removeHint = (i: number) =>
     setHints(hints.filter((_, idx) => idx !== i));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log({
       name,
       description,
       hints: hints.filter((h) => h.trim()),
     });
 
-    createProblem({ name, description, hints: hints.filter((h) => h.trim()) });
+    await createProblem({
+      name,
+      description,
+      hints: hints.filter((h) => h.trim()),
+    });
+
+    setOpen(false);
   };
 
   return (

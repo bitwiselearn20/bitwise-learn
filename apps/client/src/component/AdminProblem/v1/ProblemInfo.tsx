@@ -7,10 +7,10 @@ import Templates from "./Templates";
 function ProblemInfo({ content }: any) {
   return (
     <div className="text-white w-full">
-      <Tabs defaultValue="general" className="flex flex-col h-full">
+      <Tabs defaultValue="solution" className="flex flex-col h-full">
         <TabsList className="border-b w-full border-neutral-700 bg-neutral-900 px-4">
-          <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="solution">Solution</TabsTrigger>
+          <TabsTrigger value="general">Problem</TabsTrigger>
           <TabsTrigger value="testcases" className="">
             Testcases
           </TabsTrigger>

@@ -94,12 +94,12 @@ problemsRouter.post(
 problemsRouter.patch(
   "/update-testcase-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.addTestCaseToProblem
+  dsaQuestionController.updateTestCaseToProblem
 );
 problemsRouter.delete(
   "/delete-testcase-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.addTestCaseToProblem
+  dsaQuestionController.deleteTestCaseToProblem
 );
 problemsRouter.post(
   "/add-solution-to-problem/:id",

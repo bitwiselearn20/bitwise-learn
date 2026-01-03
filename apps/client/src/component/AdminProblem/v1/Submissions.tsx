@@ -1,4 +1,7 @@
-import MDEditor from "@uiw/react-md-editor";
+import { createTopic } from "@/api/problems/create-topic";
+import { updateDescription } from "@/api/problems/update-problem";
+import MarkdownEditor from "@/component/ui/MarkDownEditor";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 type SubmissionsProps = {
@@ -7,7 +10,7 @@ type SubmissionsProps = {
 
 function Submissions({ content }: SubmissionsProps) {
   if (!content) return null;
-
+  const param = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -48,11 +51,10 @@ function Submissions({ content }: SubmissionsProps) {
   const removeTopic = (tag: string) =>
     setTopics(topics.filter((t) => t !== tag));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
 
     const updatedData = {
-      ...content,
       name,
       description,
       difficulty,
@@ -66,7 +68,7 @@ function Submissions({ content }: SubmissionsProps) {
     };
 
     console.log("Saved Data:", updatedData);
-
+    await updateDescription(content.id as string, updatedData);
     setTimeout(() => {
       setIsSaving(false);
       setIsEditing(false);
@@ -119,17 +121,15 @@ function Submissions({ content }: SubmissionsProps) {
       <section>
         <h2 className="text-xl font-semibold mb-2">Description</h2>
         {isEditing ? (
-          <MDEditor
-            height={300}
-            //@ts-ignore
-            value={description as string}
-            onChange={(e: any) => setDescription(e.target.value as string)}
-            preview="live"
+          <MarkdownEditor
+            value={description}
+            setValue={setDescription}
+            mode={"edit"}
             hideToolbar={false}
-            spellCheck
           />
         ) : (
-          <p className="text-gray-200 whitespace-pre-line">{description}</p>
+          //@ts-ignore
+          <MarkdownEditor value={description} mode={"preview"} />
         )}
       </section>
 
@@ -137,23 +137,44 @@ function Submissions({ content }: SubmissionsProps) {
       <section>
         <h2 className="text-xl font-semibold mb-2">Topics</h2>
 
+        {topics.length === 0 && (
+          <div>
+            <div className="flex gap-2">
+              <input
+                value={newTopic}
+                onChange={(e) => setNewTopic(e.target.value)}
+                placeholder="Add topic"
+                className="bg-gray-800 px-3 py-1 rounded-md flex-1"
+              />
+              <button
+                onClick={() =>
+                  createTopic(param.id as string, { tagName: [newTopic] })
+                }
+                className="bg-blue-600 px-4 py-1 rounded-md"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        )}
         <div className="flex flex-wrap gap-2 mb-3">
-          {topics.map((tag) => (
-            <span
-              key={tag}
-              className="bg-gray-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
-            >
-              {tag}
-              {isEditing && (
-                <button
-                  onClick={() => removeTopic(tag)}
-                  className="text-red-400"
-                >
-                  ✕
-                </button>
-              )}
-            </span>
-          ))}
+          {topics.length > 0 &&
+            topics.map((tag) => (
+              <span
+                key={tag}
+                className="bg-gray-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+              >
+                {tag}
+                {isEditing && (
+                  <button
+                    onClick={() => removeTopic(tag)}
+                    className="text-red-400"
+                  >
+                    ✕
+                  </button>
+                )}
+              </span>
+            ))}
         </div>
 
         {isEditing && (

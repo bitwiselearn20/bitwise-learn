@@ -65,6 +65,8 @@ class DsaQuestionController {
       if (!problemId) throw new Error("problemId is required");
       if (!data) throw new Error("data is required");
 
+      console.log("==========================");
+      console.log(data);
       const dbAdmin = await prismaClient.user.findUnique({
         where: { id: userId },
       });
@@ -81,6 +83,7 @@ class DsaQuestionController {
         data: {
           description: data.description ?? dbProblem.description,
           hints: data.hints ?? dbProblem.hints,
+          difficulty: (data.difficulty as any) ?? dbProblem.difficulty,
         },
       });
 
@@ -258,8 +261,7 @@ class DsaQuestionController {
     try {
       const userId = req.user?.id;
       const problemId = req.params.id;
-      const data: string[] = req.body;
-
+      const data = req.body;
       if (!userId) throw new Error("kindly Login");
       if (!problemId) throw new Error("problemId is required");
       if (!data) throw new Error("data is required");
@@ -281,7 +283,7 @@ class DsaQuestionController {
       const createdProblemTopic = await prismaClient.problemTopic.create({
         data: {
           problemId: dbProblem.id,
-          tagName: data,
+          tagName: data.tagName,
         },
       });
 
@@ -299,7 +301,9 @@ class DsaQuestionController {
     try {
       const userId = req.user?.id;
       const problemTopicId = req.params.id;
-      const data: string[] = req.body;
+      const data = req.body;
+      console.log("================================");
+      console.log(data);
 
       if (!userId) throw new Error("kindly Login");
       if (!problemTopicId) throw new Error("problemId is required");
@@ -318,7 +322,7 @@ class DsaQuestionController {
       const updatedProblemTopic = await prismaClient.problemTopic.update({
         where: { id: dbProblemTopic.id },
         data: {
-          tagName: data,
+          tagName: data.tagName || [],
         },
       });
 
@@ -634,11 +638,9 @@ class DsaQuestionController {
     try {
       const userId = req.user?.id;
       const testcaseId = req.params.id;
-      const data: UpdatedProblemTestCaseBody = req.body;
 
       if (!userId) throw new Error("kindly Login");
       if (!testcaseId) throw new Error("problemId is required");
-      if (!data) throw new Error("data is required");
 
       const dbAdmin = await prismaClient.user.findUnique({
         where: { id: userId },

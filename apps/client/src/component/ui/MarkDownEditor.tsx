@@ -5,11 +5,13 @@ import MDEditor from "@uiw/react-md-editor";
 type Mode = "live" | "preview" | "edit";
 
 export default function MarkdownEditor({
+  height = 350,
   value,
   setValue,
   mode,
   hideToolbar = true,
 }: {
+  height: number;
   value: string;
   setValue: (val: string) => void;
   mode: Mode;
@@ -18,7 +20,7 @@ export default function MarkdownEditor({
   return (
     <div>
       <MDEditor
-        height={350}
+        height={height}
         value={value}
         onChange={(val) => setValue(val ?? "")}
         preview={mode}

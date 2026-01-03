@@ -1,43 +1,108 @@
-"use state";
+"use client";
+
 import { getProblemSolutionById } from "@/api/problems/get-problem-solution";
 import MDEditor from "@uiw/react-md-editor";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import AddSolution from "./AddSolution";
+import { updateSolution } from "@/api/problems/update-solution";
+
+type SolutionType = {
+  id: string;
+  solution: string;
+  videoSolution: string | null;
+  problemId: string;
+};
 
 function Solution() {
-  const param = useParams();
-  const [solution, setSolution] = useState("");
+  const params = useParams();
+  const problemId = params.id as string;
+
+  const [solutionForm, setShowSolutionForm] = useState(false);
+  const [solution, setSolution] = useState<SolutionType | null>(null);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    getProblemSolutionById(setSolution, param.id as string);
-    console.log(solution);
-  }, []);
+    getProblemSolutionById((data: SolutionType | null) => {
+      setSolution(data);
+    }, problemId);
+  }, [problemId]);
+
+  const handleSave = async () => {
+    if (!solution) return;
+
+    try {
+      setLoading(true);
+
+      await updateSolution(problemId, {
+        solution: solution.solution,
+        videoSolution: solution.videoSolution,
+      });
+
+      alert("Solution saved successfully ✅");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to save solution ❌");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (solution === null) {
+    return (
+      <div className="h-screen flex justify-end">
+        <button
+          onClick={() => setShowSolutionForm(true)}
+          className="inline-flex h-fit items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-500"
+        >
+          + Add New Solution
+        </button>
+
+        {solutionForm && (
+          <AddSolution stateFn={setShowSolutionForm} id={problemId} />
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen">
-      <div className="flex justify-end">
+      <div className="flex flex-col gap-4">
         <button
-          className="rounded-md bg-green-600 px-5 py-2 my-4 text-sm font-semibold text-white
-               shadow-sm transition hover:bg-green-700
-               focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          onClick={handleSave}
+          disabled={loading}
+          className="w-fit rounded-md bg-green-600 px-5 py-2 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-50"
         >
-          Save
+          {loading ? "Saving..." : "Save"}
         </button>
+
+        <input
+          type="text"
+          placeholder="Video solution URL"
+          value={solution.videoSolution ?? ""}
+          onChange={(e) =>
+            setSolution({
+              ...solution,
+              videoSolution: e.target.value,
+            })
+          }
+          className="rounded-md border bg-neutral-900 px-3 py-2 text-white"
+        />
       </div>
 
-      <MDEditor
-        height={600}
-        //@ts-ignore
-        value={(solution?.solution as string) || ""}
-        onChange={(e) => {}}
-        preview="live"
-        hideToolbar={false}
-        spellCheck
-      />
-      <div className="relative mt-32 aspect-video rounded-md overflow-hidden bg-slate-900">
-        <iframe
-          //@ts-ignore
-          src={solution?.videoSolution || "https://youtube.com"}
-          className="absolute inset-0 w-full h-full border-0"
-          allowFullScreen
+      <div className="mt-4" data-color-mode="dark">
+        <MDEditor
+          height={600}
+          value={solution.solution}
+          onChange={(value) =>
+            setSolution({
+              ...solution,
+              solution: value || "",
+            })
+          }
+          preview="live"
+          hideToolbar={false}
+          spellCheck
         />
       </div>
     </div>

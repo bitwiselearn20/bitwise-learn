@@ -140,6 +140,7 @@ export interface ProblemBody {
 export interface UpdateProblemBody {
   description?: string;
   hints?: string[];
+  difficulty?: string;
 }
 
 export interface ProblemTemplate {
