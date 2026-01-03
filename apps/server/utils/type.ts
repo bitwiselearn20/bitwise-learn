@@ -218,3 +218,17 @@ export interface UpdateVendorBody {
   websiteLink?: string;
   loginPassword?: string;
 }
+export interface CreateStudentBody {
+  name: string;
+  rollNumber: string;
+  email: string;
+  loginPassword: string;
+  batchId: string;
+}
+export interface UpdateStudentBody {
+  name?: string;
+  rollNumber?: string;
+  email?: string;
+  loginPassword?: string;
+  batchId?: string;
+}

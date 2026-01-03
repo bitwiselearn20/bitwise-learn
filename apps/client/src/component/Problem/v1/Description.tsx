@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import MarkdownComponent from "./MarkdownComponent";
 import { ChevronRight } from "lucide-react";
 import TestCaseSection from "./TestcaseSection";

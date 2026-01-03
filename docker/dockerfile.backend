@@ -1,1 +1,18 @@
 FROM oven/bun:alpine
+
+WORKDIR /repo
+
+COPY package.json bun.lock turbo.json ./
+COPY apps ./apps
+COPY packages ./packages
+
+RUN bun install
+
+WORKDIR /repo/packages/db
+RUN bunx prisma generate
+
+WORKDIR /repo/apps/server
+
+EXPOSE 3001
+
+CMD ["bun", "run", "dev"]

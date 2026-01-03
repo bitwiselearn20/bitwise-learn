@@ -1,5 +1,4 @@
 "use client";
-import SideBar from "@/component/general/SideBar";
 import ProblemInfo from "./ProblemInfo";
 import ProblemDescrption from "./ProblemDescrption";
 import { useParams } from "next/navigation";
@@ -14,14 +13,11 @@ function V1AdminProblem() {
     if (param) {
       getAdminProblemData(setData, param.id as string);
     }
-  });
+  }, []);
   return (
-    <div className="flex gap-4">
-      <SideBar />
-      <div>
-        <ProblemDescrption />
-        <ProblemInfo />
-      </div>
+    <div className="flex h-screen gap-4">
+      <ProblemDescrption data={data} />
+      <ProblemInfo content={data} />
     </div>
   );
 }

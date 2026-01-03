@@ -10,7 +10,7 @@ class VendorController {
             const data: CreateVendorBody = req.body;
             if (!data) throw new Error("Please Provide all required fields");
 
-            if (req.user.type !== "INSTITUTION") {
+            if (req.user.type !== "INSTITUTION" && req.user.type !== "SUPERADMIN") {
                 throw new Error("only institution can create vendors");
             }
             const existingVendor = await prismaClient.vendor.findFirst({
@@ -127,13 +127,16 @@ class VendorController {
             if (!req.user) throw new Error("user is not authenticated");
 
             const institutionId = req.user.id;
+            let whereClause: any = {};
 
-            if (req.user.type !== "INSTITUTION") {
+            if (req.user.type !== "INSTITUTION" && req.user.type != "SUPERADMIN") {
                 throw new Error("only institution can view vendors");
             }
-
+            if (req.user.type == "INSTITUTION") {
+                whereClause = { institutionId: req.user.id };
+            }
             const institutions = await prismaClient.vendor.findMany({
-                where: { institutionId: institutionId },
+                where: whereClause,
                 select: {
                     id: true,
                     name: true,

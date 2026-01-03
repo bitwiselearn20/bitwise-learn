@@ -1,13 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
-import {Menu,X} from "lucide-react"
+import { Menu,X} from "lucide-react"
+import Link from "next/link";
+import { Klee_One } from "next/font/google";
+
+const kleeOne = Klee_One({
+    subsets: ["latin"],
+    weight: ["400", "600"],
+  });
 
 const V1HomeNav = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="w-full text-white fixed top-0 left-0 z-50">
+    <nav className={`${kleeOne.className} w-full text-white fixed top-0 left-0 z-50`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-around">
         
         {/* Logo */}
@@ -20,16 +27,18 @@ const V1HomeNav = () => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6 text-xl font-light">
-          <a href="#" className="hover:text-blue-400 transition">Home</a>
-          <a href="#" className="hover:text-blue-400 transition">About</a>
-          <a href="#" className="hover:text-blue-400 transition">Contact</a>
+          <Link href="/" className="hover:text-blue-400 transition">Home</Link>
+          <Link href="/about" className="hover:text-blue-400 transition">About</Link>
+          <Link href="/contact" className="hover:text-blue-400 transition">Contact</Link>
         </div>
 
-        {/* Sign in button (desktop) */}
+        {/* Sign in button (desktop) */}  
         <div className="hidden md:block">
-        <button className="px-6 py-2.5 rounded-full bg-primaryBlue hover:bg-blue-500 transition text-base">
+          <Link 
+          href="/student-login"
+          className="px-6 py-2.5 rounded-full bg-primaryBlue hover:bg-blue-500 transition text-base">
             Sign in
-          </button>
+          </Link>
         </div>
 
         {/* Mobile menu button */}

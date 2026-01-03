@@ -5,7 +5,7 @@ import AllDsaProblem from "./AllDsaProblem";
 
 function V1ProblemAdminDashboard() {
   return (
-    <div className="flex gap-4">
+    <div className="relative flex gap-4">
       <SideBar />
       <div className="w-full">
         <DashboardHero />

@@ -2,7 +2,7 @@
 import SideBar from "@/component/general/SideBar"
 import HeroSection from "./HeroSection"
 
-export default function AdminDashboardV1(){
+export default function AdminDashboardV1() {
     return (
         <div className="flex">
             <div>

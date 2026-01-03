@@ -2,6 +2,7 @@
 
 import React from "react";
 import MarkdownComponent from "./MarkdownComponent";
+import MDEditor from "@uiw/react-md-editor";
 
 function Solution({ content }: any) {
   if (!content) {
@@ -30,7 +31,21 @@ function Solution({ content }: any) {
 
       {/* Written Solution */}
       <div className="space-y-2">
-        <MarkdownComponent content={content.solution} />
+        <MDEditor
+          height={700}
+          //@ts-ignore
+          value={content.solution as string}
+          onChange={() => {}}
+          preview="preview"
+          hideToolbar={true}
+          spellCheck
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            //@ts-ignore
+            WebkitScrollbar: { display: "none" },
+          }}
+        />
       </div>
     </div>
   );

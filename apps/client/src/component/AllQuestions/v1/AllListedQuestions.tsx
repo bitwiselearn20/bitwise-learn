@@ -1,33 +1,73 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect, useMemo, useState } from "react";
 import Filter from "./Filter";
 import QuestionCard from "./QuestionCard";
 import { getAllProblemData } from "@/api/problems/get-all-problems";
 
-type Difficulty = "easy" | "medium" | "hard";
+type Difficulty = "easy" | "medium" | "hard" | null;
+type Status = "solved" | "unsolved" | null;
 
 function AllListedQuestions() {
-  const [questions, setQuestions] = useState<any>([]);
+  const [questions, setQuestions] = useState<any[]>([]);
+
+  /* ---------------- FILTER STATE ---------------- */
+  const [query, setQuery] = useState("");
+  const [difficulty, setDifficulty] = useState<Difficulty>(null);
+  const [status, setStatus] = useState<Status>(null);
 
   useEffect(() => {
     getAllProblemData(setQuestions);
   }, []);
+
+  /* ---------------- FILTER LOGIC ---------------- */
+  const filteredQuestions = useMemo(() => {
+    return questions.filter((q) => {
+      // Search
+      if (query && !q.name.toLowerCase().includes(query.toLowerCase())) {
+        return false;
+      }
+
+      // Difficulty
+      if (difficulty && q.difficulty?.toLowerCase() !== difficulty) {
+        return false;
+      }
+
+      // Status (optional – depends on backend support)
+      if (status === "solved" && !q.solved) return false;
+      if (status === "unsolved" && q.solved) return false;
+
+      return true;
+    });
+  }, [questions, query, difficulty, status]);
+
   return (
     <div>
-      <Filter />
+      <Filter
+        query={query}
+        setQuery={setQuery}
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        status={status}
+        setStatus={setStatus}
+      />
+
       <div className="w-full">
-        {questions.map((question: any, index: number) => {
-          return (
-            <QuestionCard
-              key={index}
-              topics={question.problemTopics}
-              id={question.id}
-              name={question.name}
-              difficulty={question.difficulty}
-              solved={false}
-            />
-          );
-        })}
+        {filteredQuestions.length === 0 && (
+          <p className="text-center text-gray-400 py-10">No questions found</p>
+        )}
+
+        {filteredQuestions.map((question, index) => (
+          <QuestionCard
+            key={question.id ?? index}
+            topics={question.problemTopics}
+            id={question.id}
+            name={question.name}
+            difficulty={question.difficulty}
+            solved={question.solved ?? false}
+            isAdmin={false}
+          />
+        ))}
       </div>
     </div>
   );

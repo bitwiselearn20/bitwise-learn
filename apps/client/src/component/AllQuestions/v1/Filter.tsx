@@ -1,18 +1,29 @@
 "use client";
 
-import { useState } from "react";
 import { Search } from "lucide-react";
 
 type Difficulty = "easy" | "medium" | "hard" | null;
 type Status = "solved" | "unsolved" | null;
 
-function Filter() {
-  const [query, setQuery] = useState("");
-  const [difficulty, setDifficulty] = useState<Difficulty>(null);
-  const [status, setStatus] = useState<Status>(null);
+type FilterProps = {
+  query: string;
+  setQuery: (v: string) => void;
+  difficulty: Difficulty;
+  setDifficulty: (v: Difficulty) => void;
+  status: Status;
+  setStatus: (v: Status) => void;
+};
 
+function Filter({
+  query,
+  setQuery,
+  difficulty,
+  setDifficulty,
+  status,
+  setStatus,
+}: FilterProps) {
   return (
-    <div className="w-full bg-primary-bg  rounded-b-xl p-4 flex flex-wrap items-center gap-4">
+    <div className="w-full bg-primary-bg rounded-b-xl p-4 flex flex-wrap items-center gap-4">
       {/* Search */}
       <div className="relative flex-1 min-w-60">
         <Search
@@ -34,6 +45,7 @@ function Filter() {
         />
       </div>
 
+      {/* Difficulty */}
       <div className="flex items-center gap-2">
         <FilterPill
           label="Easy"

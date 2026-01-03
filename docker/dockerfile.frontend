@@ -1,1 +1,17 @@
 FROM oven/bun:alpine
+
+WORKDIR /repo
+
+COPY package.json bun.lock turbo.json ./
+COPY apps/client/package.json apps/client/
+COPY packages ./packages
+
+RUN bun install
+
+COPY . .
+
+WORKDIR /repo/apps/client
+
+EXPOSE 3000
+
+CMD ["bun", "run", "dev"]

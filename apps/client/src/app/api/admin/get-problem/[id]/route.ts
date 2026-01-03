@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
 export async function GET(
   req: NextRequest,
@@ -16,7 +16,7 @@ export async function GET(
       );
     }
 
-    const response = await axios.get(
+    const response = await axiosInstance.get(
       `${backendUrl}/api/v1/problems/admin/get-dsa-problem/${id}`
     );
 

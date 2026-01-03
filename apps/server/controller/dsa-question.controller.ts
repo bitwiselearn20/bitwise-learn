@@ -10,6 +10,7 @@ import type {
   UpdateProblemTemplate,
 } from "../utils/type";
 import prismaClient from "../utils/prisma";
+import type { ElementWithComputedPropertyName } from "typescript";
 /**
  * ProblemTestCase Problem
  */
@@ -19,7 +20,7 @@ class DsaQuestionController {
     try {
       const userId = req.user?.id;
       const data: ProblemBody = req.body;
-
+      console.log(data);
       if (!userId) throw new Error("kindly Login");
       if (!data) throw new Error("data is required");
 
@@ -176,10 +177,14 @@ class DsaQuestionController {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
+  //TODO: apply pagination here
   async getAdminDsaProblemById(req: Request, res: Response) {
     try {
       const problemId = req.params.id;
+      const userId = req.user?.id;
+
       if (!problemId) throw new Error("problem id is needed");
+      if (!userId) throw new Error("user id is needed");
 
       const dbProblem = await prismaClient.problem.findUnique({
         where: { id: problemId },
@@ -187,6 +192,10 @@ class DsaQuestionController {
 
       if (!dbProblem) throw new Error("db problem not found");
 
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
       const data = await prismaClient.problem.findUnique({
         where: { id: dbProblem.id },
         include: {
@@ -498,6 +507,41 @@ class DsaQuestionController {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
+  async getTemplateById(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const problemId = req.params.id;
+
+      if (!userId) throw new Error("kindly Login");
+      if (!problemId) throw new Error("problemId is required");
+
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
+
+      const dbProblem = await prismaClient.problem.findFirst({
+        where: { id: problemId },
+        include: {
+          problemTopics: true,
+        },
+      });
+      if (!dbProblem) throw new Error("problem doesn't exists");
+
+      const testcases = await prismaClient.problemTemplate.findMany({
+        where: { problemId: dbProblem.id },
+      });
+
+      return res
+        .status(200)
+        .json(
+          apiResponse(200, "test template fetched successfully", testcases)
+        );
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
 
   // test-cases
   async addTestCaseToProblem(req: Request, res: Response) {
@@ -620,7 +664,39 @@ class DsaQuestionController {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
+  async getTestCaseById(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const problemId = req.params.id;
 
+      if (!userId) throw new Error("kindly Login");
+      if (!problemId) throw new Error("problemId is required");
+
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
+
+      const dbProblem = await prismaClient.problem.findFirst({
+        where: { id: problemId },
+        include: {
+          problemTopics: true,
+        },
+      });
+      if (!dbProblem) throw new Error("problem doesn't exists");
+
+      const testcases = await prismaClient.problemTestCase.findMany({
+        where: { problemId: dbProblem.id },
+      });
+
+      return res
+        .status(200)
+        .json(apiResponse(200, "test cases fetched successfully", testcases));
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
   // solution
   async addProblemSolution(req: Request, res: Response) {
     try {
@@ -739,6 +815,163 @@ class DsaQuestionController {
         .json(apiResponse(200, "solution has been deleted", deletedSolution));
     } catch (error: any) {
       console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
+  async getProblemSolutionById(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const problemId = req.params.id;
+
+      if (!userId) throw new Error("kindly Login");
+      if (!problemId) throw new Error("problemId is required");
+
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
+
+      const dbProblem = await prismaClient.problem.findFirst({
+        where: { id: problemId },
+        include: {
+          solution: true,
+        },
+      });
+      if (!dbProblem) throw new Error("problem doesn't exists");
+
+      const createdSolution = await prismaClient.problemSolution.findFirst({
+        where: { problemId: dbProblem.id },
+      });
+
+      return res
+        .status(200)
+        .json(apiResponse(200, "solution has been added", createdSolution));
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
+  async getAllDsaSubmission(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+      const problemId = req.params.id;
+
+      if (!userId) throw new Error("kindly Login");
+      if (!problemId) throw new Error("problemId is required");
+
+      const dbAdmin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+      if (!dbAdmin) throw new Error("no such admin found!");
+
+      const dbProblem = await prismaClient.problem.findFirst({
+        where: { id: problemId },
+        include: {
+          problemTopics: true,
+        },
+      });
+      if (!dbProblem) throw new Error("problem doesn't exists");
+      const problems = await prismaClient.problemSubmission.findMany({
+        where: { problemId: dbProblem.id },
+      });
+      return res.status(200).json(apiResponse(200, "data fetched", problems));
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
+
+  async getAllQuestionInfo(req: Request, res: Response) {
+    try {
+      const grouped = await prismaClient.problem.groupBy({
+        by: ["difficulty"],
+        _count: {
+          _all: true,
+        },
+      });
+
+      const counts = {
+        EASY: 0,
+        MEDIUM: 0,
+        HARD: 0,
+      };
+
+      grouped.forEach((item) => {
+        counts[item.difficulty] = item._count._all;
+      });
+
+      const easy = counts.EASY;
+      const medium = counts.MEDIUM;
+      const hard = counts.HARD;
+
+      return res.status(200).json(
+        apiResponse(200, "data fetched", {
+          easy,
+          medium,
+          hard,
+          totalQuestion: easy + medium + hard,
+        })
+      );
+    } catch (error: any) {
+      console.error(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
+
+  async getAllQuestionInfoById(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id;
+
+      if (!userId) {
+        return res.status(401).json(apiResponse(401, "Unauthorized", null));
+      }
+
+      const dbStudent = await prismaClient.students.findFirst({
+        where: { id: userId },
+      });
+
+      if (!dbStudent) throw new Error("user not found!");
+
+      const grouped = await prismaClient.problemSubmission.groupBy({
+        by: ["problemId"],
+        where: {
+          studentId: userId,
+          status: "SUCCESS",
+        },
+      });
+
+      const solvedProblemIds = grouped.map((g) => g.problemId);
+
+      const difficultyCounts = await prismaClient.problem.groupBy({
+        by: ["difficulty"],
+        where: {
+          id: { in: solvedProblemIds },
+        },
+        _count: {
+          _all: true,
+        },
+      });
+
+      const counts = {
+        EASY: 0,
+        MEDIUM: 0,
+        HARD: 0,
+      };
+
+      difficultyCounts.forEach((item) => {
+        counts[item.difficulty] = item._count._all;
+      });
+
+      return res.status(200).json(
+        apiResponse(200, "data fetched", {
+          easy: counts.EASY,
+          medium: counts.MEDIUM,
+          hard: counts.HARD,
+          totalSolved: counts.EASY + counts.MEDIUM + counts.HARD,
+        })
+      );
+    } catch (error: any) {
+      console.error(error);
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }

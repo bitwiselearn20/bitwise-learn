@@ -16,13 +16,17 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getAllAdmins } from "@/api/admins/get-all-admins";
-
-type FieldType = "Admins" | "Partners" | "Institutions" | "Batches";
+import { getAllInstitutions } from "@/api/institutions/get-all-institutions";
+import { getAllVendors } from "@/api/vendors/get-all-vendors";
+import { getAllBatches } from "@/api/batches/get-all-batches";
+type FieldType = "Admins" | "Vendors" | "Institutions" | "Batches";
 
 type Item = {
     id: number;
-    name: string;
+    name?: string;
+    batchname?: string;
 };
+
 
 export default function HeroSection() {
     /* ---------------- API (UNCHANGED) ---------------- */
@@ -30,26 +34,29 @@ export default function HeroSection() {
 
     /* ---------------- ENTITY STATES ---------------- */
     const [admins, setAdmins] = useState([]);
-
     useEffect(() => {
         getAllAdmins(setAdmins);
         console.log(admins);
 
     }, []);
-    const [partners, setPartners] = useState<Item[]>([
-        { id: 1, name: "Partner A" },
-        { id: 2, name: "Partner B" },
-    ]);
+    const [institutions, setInstitutions] = useState([]);
+    useEffect(() => {
+        getAllInstitutions(setInstitutions);
+        console.log(institutions);
 
-    const [institutions, setInstitutions] = useState<Item[]>([
-        { id: 1, name: "Institution X" },
-        { id: 2, name: "Institution Y" },
-    ]);
+    }, []);
+    const [vendors, setVendors] = useState([]);
+    useEffect(() => {
+        getAllVendors(setVendors);
+        console.log(vendors);
 
-    const [batches, setBatches] = useState<Item[]>([
-        { id: 1, name: "Batch 2024" },
-        { id: 2, name: "Batch 2025" },
-    ]);
+    }, []);
+    const [batches, setBatches] = useState([]);
+    useEffect(() => {
+        getAllBatches(setBatches);
+        console.log(batches);
+
+    }, []);
 
     /* ---------------- UI STATES ---------------- */
     const [field, setField] = useState<FieldType>("Admins");
@@ -67,8 +74,8 @@ export default function HeroSection() {
         switch (field) {
             case "Admins":
                 return admins;
-            case "Partners":
-                return partners;
+            case "Vendors":
+                return vendors;
             case "Institutions":
                 return institutions;
             case "Batches":
@@ -81,8 +88,8 @@ export default function HeroSection() {
             case "Admins":
                 setAdmins(updater);
                 break;
-            case "Partners":
-                setPartners(updater);
+            case "Vendors":
+                setVendors(updater);
                 break;
             case "Institutions":
                 setInstitutions(updater);
@@ -95,20 +102,30 @@ export default function HeroSection() {
 
     const currentData = getCurrentData();
 
-    const filteredData = currentData.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const safeSearch = searchTerm.toLowerCase();
+
+    const filteredData = currentData.filter((item) => {
+        const valueToSearch = item.batchname ?? item.name ?? "";
+        return valueToSearch.toLowerCase().includes(safeSearch);
+    });
+
+
 
     /* ---------------- CRUD HANDLERS ---------------- */
     function handleEditSave(id: number) {
         setCurrentData((prev) =>
             prev.map((item) =>
-                item.id === id ? { ...item, name: editingValue } : item
+                item.id === id
+                    ? item.batchname !== undefined
+                        ? { ...item, batchname: editingValue }
+                        : { ...item, name: editingValue }
+                    : item
             )
         );
         setEditingId(null);
         setEditingValue("");
     }
+
 
     function handleDelete(id: number) {
         setCurrentData((prev) => prev.filter((item) => item.id !== id));
@@ -119,17 +136,20 @@ export default function HeroSection() {
 
         setCurrentData((prev) => [
             ...prev,
-            { id: Date.now(), name: newValue },
+            field === "Batches"
+                ? { id: Date.now(), batchname: newValue }
+                : { id: Date.now(), name: newValue },
         ]);
 
         setNewValue("");
         setIsAdding(false);
     }
 
+
     /* ---------------- ICONS ---------------- */
     const fieldIcons = {
         Admins: KeyRound,
-        Partners: Handshake,
+        Vendors: Handshake,
         Institutions: School,
         Batches: BookOpen,
     };
@@ -164,7 +184,7 @@ export default function HeroSection() {
 
             {/* Selector */}
             <div className="bg-divBg mr-40 ml-20 mt-4 flex rounded-2xl">
-                {(["Admins", "Partners", "Institutions", "Batches"] as FieldType[]).map(
+                {(["Admins", "Vendors", "Institutions", "Batches"] as FieldType[]).map(
                     (type, i) => {
                         const Icon = fieldIcons[type];
                         return (
@@ -252,47 +272,53 @@ export default function HeroSection() {
                         </div>
                     )}
 
-                    {filteredData.map((item) => (
-                        <div
-                            key={item.id}
-                            className="flex items-center justify-between bg-black/30 px-4 py-3 rounded-xl"
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
-                                    <User size={16} color="black" />
-                                </div>
-                                {editingId === item.id ? (
-                                    <input
-                                        value={editingValue}
-                                        onChange={(e) => setEditingValue(e.target.value)}
-                                        className="bg-transparent border-b border-primaryBlue outline-none text-white"
-                                        autoFocus
-                                        onBlur={() => handleEditSave(item.id)}
-                                    />
-                                ) : (
-                                    <span className="text-white">{item.name}</span>
-                                )}
-                            </div>
+                    {filteredData.map((item) => {
+                        const displayName = item.batchname ?? item.name;
 
-                            <div className="flex gap-4">
-                                <button
-                                    onClick={() => {
-                                        setEditingId(item.id);
-                                        setEditingValue(item.name);
-                                    }}
-                                    className="text-primaryBlue"
-                                >
-                                    <PenLine />
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(item.id)}
-                                    className="text-red-500"
-                                >
-                                    <Trash />
-                                </button>
+                        return (
+                            <div
+                                key={item.id}
+                                className="flex items-center justify-between bg-black/30 px-4 py-3 rounded-xl"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+                                        <User size={16} color="black" />
+                                    </div>
+
+                                    {editingId === item.id ? (
+                                        <input
+                                            value={editingValue}
+                                            onChange={(e) => setEditingValue(e.target.value)}
+                                            className="bg-transparent border-b border-primaryBlue outline-none text-white"
+                                            autoFocus
+                                            onBlur={() => handleEditSave(item.id)}
+                                        />
+                                    ) : (
+                                        <span className="text-white">{displayName}</span>
+                                    )}
+                                </div>
+
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => {
+                                            setEditingId(item.id);
+                                            setEditingValue(displayName);
+                                        }}
+                                        className="text-primaryBlue"
+                                    >
+                                        <PenLine />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(item.id)}
+                                        className="text-red-500"
+                                    >
+                                        <Trash />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
+
                 </div>
             </div>
         </>

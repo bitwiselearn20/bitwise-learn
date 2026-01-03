@@ -31,9 +31,6 @@ app.use(helmet());
 app.use("/api", limiter);
 app.use(hpp() as any);
 
-
-
-
 //express middlewares
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -84,7 +81,7 @@ declare global {
   }
 }
 // routes
-app.use("/api/v1", router)
+app.use("/api/v1", router);
 app.use("/api/v1/problems", problemsRouter);
 
 const errorHandler = (
