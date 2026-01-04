@@ -398,10 +398,10 @@ function V1Home() {
 
 
         {/* ================= BLACK → BLUE FADE ================= */}
-        <div className="h-64 bg-linear-to-b from-black via-black/70 to-blue-700/90" />
+        <div className="h-64 bg-linear-to-b from-black via-black/70 to-blue-400/90" />
 
         {/* ================= CTA SECTION ================= */}
-        <section className="relative min-h-[70vh] bg-linear-to-b from-blue-700/90 to-blue-800 flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[70vh] bg-linear-to-b from-blue-400/90 to-blue-600 flex items-center justify-center overflow-hidden">
 
           {/* subtle background glow */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_60%)] pointer-events-none" />
@@ -462,7 +462,7 @@ function V1Home() {
                   whileTap={{ scale: 0.95 }}
                   className="px-6 py-3 rounded-full border border-white/50 text-white font-medium backdrop-blur-sm"
                 >
-                  Contact Sales
+                  Contact Us
                 </motion.button>
               </Link>
             </motion.div>

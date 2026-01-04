@@ -19,10 +19,14 @@ const V1HomeNav = () => {
         
         {/* Logo */}
         <div className="text-4xl font-semibold">
-            <button>
+          <Link
+            href="/"
+          >
+            <button className="cursor-pointer">
                 <span className="text-primaryBlue">B</span>
                 <span >itwise</span> Learn
             </button>
+          </Link>
         </div>
 
         {/* Desktop Links */}
