@@ -6,6 +6,7 @@ import Description from "./Description";
 import Solution from "./Solution";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/component/ui/tabs";
 import Submission from "./Submission";
+import { EntityList } from "@/component/Institution-info/v1/EntityList";
 
 function V1Problem({ data }: any) {
   /* Sidebar */
@@ -140,6 +141,7 @@ function V1Problem({ data }: any) {
         </div>
       </div>
     </div>
+
   );
 }
 
