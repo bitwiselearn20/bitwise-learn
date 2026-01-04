@@ -1,0 +1,32 @@
+.carousel{
+    margin-right: 100px;
+    width : 150%;
+    display: flex;
+    overflow-x: hidden;
+}
+
+.carousel::-webkit-scrollbar{
+    display: none;
+}
+
+body{
+    overflow-x: hidden;
+}
+
+.group{
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1em;
+    animation: spin 10s infinite linear;
+    padding-right: 1em;
+}
+
+@keyframes spin{
+    from{
+        translate: 0;
+    }
+    to{
+        translate: -100%;
+    }
+}

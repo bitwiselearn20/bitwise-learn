@@ -3,7 +3,8 @@
 import V1HomeNav from "@/component/Home/V1/V1HomeNav";
 import { Klee_One } from "next/font/google";
 import { CheckCircle2, Mail, Phone } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion,Variants } from "framer-motion";
+import Footer from "@/component/general/Footer";
 
 const kleeOne = Klee_One({
     subsets: ["latin"],
@@ -19,7 +20,7 @@ const container = {
     },
 };
 
-const fadeUp = {
+const fadeUp : Variants = {
     hidden: { opacity: 0, y: 30 },
     show: {
         opacity: 1,
@@ -44,7 +45,7 @@ export default function ContactV1() {
                 variants={container}
                 initial="hidden"
                 animate="show"
-                className="text-white max-w-7xl mx-auto px-6 pt-32"
+                className="text-white max-w-7xl mx-auto px-6 pt-24"
             >
                 <motion.h1
                     variants={fadeUp}
@@ -161,6 +162,7 @@ export default function ContactV1() {
                     </motion.div>
                 </motion.div>
             </motion.div>
+            <Footer />
         </div>
     );
 }
