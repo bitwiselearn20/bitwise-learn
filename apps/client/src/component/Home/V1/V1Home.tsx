@@ -21,6 +21,7 @@ import {
   Star,
   GraduationCap,
 } from "lucide-react";
+import Footer from "@/component/general/Footer";
 
 const kleeOne = Klee_One({
   subsets: ["latin"],
@@ -470,6 +471,7 @@ function V1Home() {
         </section>
 
       </div>
+      <Footer />
     </div>
   );
 }
