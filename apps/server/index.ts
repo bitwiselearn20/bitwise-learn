@@ -14,7 +14,15 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import problemsRouter from "./routes/dsa-question.route";
 import type { JwtPayload } from "./utils/type";
-import router from "./routes";
+import {
+  adminRouter,
+  institutionRouter,
+  vendorRouter,
+  batchRouter,
+  teacherRouter,
+  authRouter,
+  studentRouter,
+} from "./routes";
 dotenv.config({ path: "../.env" });
 
 const app: Express = express();
@@ -81,7 +89,12 @@ declare global {
   }
 }
 // routes
-app.use("/api/v1", router);
+app.use("/api/v1/admins", adminRouter);
+app.use("/api/v1/institutions", institutionRouter);
+app.use("/api/v1/teachers", teacherRouter);
+app.use("/api/v1/students", studentRouter);
+app.use("/api/v1/batches", batchRouter);
+app.use("/api/v1/vendors", vendorRouter);
 app.use("/api/v1/problems", problemsRouter);
 
 const errorHandler = (

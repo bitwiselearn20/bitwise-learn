@@ -1,254 +1,174 @@
 "use client";
 
-import {
-    Plus,
-    Check,
-    Trash,
-    PenLine,
-    User,
-    KeyRound,
-    School,
-    Handshake,
-    BookOpen,
-    Search,
-    SlidersHorizontal,
-    MoreHorizontal,
-    X,
-} from "lucide-react";
 import { useEffect, useState } from "react";
-import { getAllAdmins } from "@/api/admins/get-all-admins";
-import { getAllInstitutions } from "@/api/institutions/get-all-institutions";
-import { getAllVendors } from "@/api/vendors/get-all-vendors";
-import { getAllBatches } from "@/api/batches/get-all-batches";
-import EntityDetailsModal from "./EntityDetailModal";
+import { getAllStats } from "@/api/admins/get-admin-stats";
+import { User } from "lucide-react";
+import Link from "next/link";
 
-type FieldType = "Admins" | "Vendors" | "Institutions" | "Batches";
+/* ---------------- TYPES ---------------- */
 
-type Item = {
-    id: number;
-    name?: string;
-    batchname?: string;
+type StatsMap = Record<string, number>;
+
+type HeaderProps = {
+  name: string;
+  email: string;
 };
 
+type EntityTabsProps = {
+  fields: string[];
+  data: StatsMap;
+};
+
+/* ---------------- HEADER ---------------- */
+function Header({ name, email }: HeaderProps) {
+  return (
+    <div className="flex justify-between p-4">
+      <div>
+        <span className="text-primaryBlue text-5xl">Greetings,</span>{" "}
+        <span className="text-white text-5xl">Admin</span>
+        <div className="mt-2 text-lg">
+          <span className="text-white">Enjoy managing</span>{" "}
+          <span className="text-primaryBlue">B</span>
+          <span className="text-white">itwise Learn</span>
+        </div>
+      </div>
+
+      <div className="flex mr-11">
+        <div className="p-8 bg-white rounded-full flex justify-center items-center">
+          <User size={35} color="black" />
+        </div>
+        <div className="text-white flex flex-col mt-3 ml-4">
+          <h1 className="text-3xl">{name}</h1>
+          <p>{email}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- URL MAP ---------------- */
+const URL_MAP: Record<string, string> = {
+  admins: "/admin-dashboard/admins",
+  institutions: "/admin-dashboard/institutions",
+  batches: "/admin-dashboard/batches",
+  vendors: "/admin-dashboard/vendors",
+};
+
+/* ---------------- HERO SECTION ---------------- */
 export default function HeroSection() {
-    /* ---------------- ENTITY STATES ---------------- */
-    const [admins, setAdmins] = useState<Item[]>([]);
-    const [institutions, setInstitutions] = useState<Item[]>([]);
-    const [vendors, setVendors] = useState<Item[]>([]);
-    const [batches, setBatches] = useState<Item[]>([]);
+  const [tabs, setTabs] = useState<StatsMap>({});
+  const [fields, setFields] = useState<string[]>([]);
 
-    useEffect(() => {
-        getAllAdmins(setAdmins);
-        getAllInstitutions(setInstitutions);
-        getAllVendors(setVendors);
-        getAllBatches(setBatches);
-    }, []);
+  useEffect(() => {
+    getAllStats(setTabs);
+  }, []);
 
-    /* ---------------- UI STATES ---------------- */
-    const [field, setField] = useState<FieldType>("Admins");
-    const [searchTerm, setSearchTerm] = useState("");
-    const [editingId, setEditingId] = useState<number | null>(null);
-    const [editingValue, setEditingValue] = useState("");
-    const [isAdding, setIsAdding] = useState(false);
-    const [newValue, setNewValue] = useState("");
+  useEffect(() => {
+    setFields(Object.keys(tabs));
+  }, [tabs]);
 
-    /* ---------------- MODAL STATE ---------------- */
-    const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-    const [currentUserRole] = useState<
-        "SUPER_ADMIN" | "ADMIN" | "INSTITUTION" | "TEACHER"
-    >("ADMIN");
+  return (
+    <>
+      <Header name="Britto Anand" email="brittoanand@example.com" />
 
-    const admin_name = "Britto Anand";
-    const admin_email = "brittoanand@example.com";
+      <EntityTabs fields={fields} data={tabs} />
+    </>
+  );
+}
 
-    /* ---------------- HELPERS ---------------- */
-    const getCurrentData = (): Item[] => {
-        switch (field) {
-            case "Admins":
-                return admins;
-            case "Vendors":
-                return vendors;
-            case "Institutions":
-                return institutions;
-            case "Batches":
-                return batches;
-        }
-    };
+/* ---------------- ENTITY TABS ---------------- */
+import { School, Handshake, Users, ShieldCheck } from "lucide-react";
 
-    const setCurrentData = (updater: (prev: Item[]) => Item[]) => {
-        switch (field) {
-            case "Admins":
-                setAdmins(updater);
-                break;
-            case "Vendors":
-                setVendors(updater);
-                break;
-            case "Institutions":
-                setInstitutions(updater);
-                break;
-            case "Batches":
-                setBatches(updater);
-                break;
-        }
-    };
+const ENTITY_META: Record<
+  string,
+  {
+    icon: any;
+    label: string;
+    tagline: string;
+    accent: string;
+  }
+> = {
+  institutions: {
+    icon: School,
+    label: "Institutions",
+    tagline: "Education centers associated with us",
+    accent: "from-blue-500/20 to-blue-500/5",
+  },
+  vendors: {
+    icon: Handshake,
+    label: "Vendors",
+    tagline: "Industry trainers who got involved",
+    accent: "from-emerald-500/20 to-emerald-500/5",
+  },
+  batches: {
+    icon: Users,
+    label: "Batches",
+    tagline: "Generations our platform benefits",
+    accent: "from-purple-500/20 to-purple-500/5",
+  },
+  admins: {
+    icon: ShieldCheck,
+    label: "Admins",
+    tagline: "People maintaining our platform",
+    accent: "from-orange-500/20 to-orange-500/5",
+  },
+};
 
-    const currentData = getCurrentData();
+function EntityTabs({ fields, data }: EntityTabsProps) {
+  if (!fields.length) {
+    return <p className="text-white/60 text-center mt-6">Loading dashboard…</p>;
+  }
 
-    const filteredData = currentData.filter((item) => {
-        const value = item.batchname ?? item.name ?? "";
-        return value.toLowerCase().includes(searchTerm.toLowerCase());
-    });
+  return (
+    <div className="mx-20 mt-8 grid grid-cols-2 gap-3">
+      {fields.map((field) => {
+        const meta = ENTITY_META[field];
+        const href = URL_MAP[field];
+        if (!meta || !href) return null;
 
-    /* ---------------- CRUD HANDLERS ---------------- */
-    function handleEditSave(id: number) {
-        setCurrentData((prev) =>
-            prev.map((item) =>
-                item.id === id
-                    ? item.batchname !== undefined
-                        ? { ...item, batchname: editingValue }
-                        : { ...item, name: editingValue }
-                    : item
-            )
+        const Icon = meta.icon;
+
+        return (
+          <Link
+            key={field}
+            href={href}
+            className="
+              group relative rounded-2xl p-6
+              bg-divBg overflow-hidden
+              hover:shadow-2xl hover:-translate-y-1
+              transition-all duration-300
+            "
+          >
+            {/* Gradient depth layer */}
+            <div
+              className={`absolute inset-0 bg-gradient-to-br ${meta.accent} opacity-0 group-hover:opacity-100 transition`}
+            />
+
+            {/* Content */}
+            <div className="relative z-10 flex flex-col gap-4">
+              {/* Icon + Count */}
+              <div className="flex items-center justify-between">
+                <div className="p-3 rounded-xl bg-black/30">
+                  <Icon className="text-primaryBlue" size={28} />
+                </div>
+                <span className="text-4xl font-bold text-white">
+                  {data[field] ?? 0}
+                </span>
+              </div>
+
+              {/* Text */}
+              <div>
+                <h3 className="text-white text-lg font-semibold">
+                  {meta.label}
+                </h3>
+                <p className="text-white/60 text-sm mt-1 leading-snug">
+                  {meta.tagline}
+                </p>
+              </div>
+            </div>
+          </Link>
         );
-        setEditingId(null);
-        setEditingValue("");
-    }
-
-    function handleDelete(id: number) {
-        setCurrentData((prev) => prev.filter((item) => item.id !== id));
-        setSelectedItem(null);
-    }
-
-    function handleAdd() {
-        if (!newValue.trim()) return;
-
-        setCurrentData((prev) => [
-            ...prev,
-            field === "Batches"
-                ? { id: Date.now(), batchname: newValue }
-                : { id: Date.now(), name: newValue },
-        ]);
-
-        setNewValue("");
-        setIsAdding(false);
-    }
-
-    /* ---------------- ICONS ---------------- */
-    const fieldIcons = {
-        Admins: KeyRound,
-        Vendors: Handshake,
-        Institutions: School,
-        Batches: BookOpen,
-    };
-
-    const ActiveIcon = fieldIcons[field];
-
-    return (
-        <>
-            {/* Top Section */}
-            <div className="flex justify-between p-4">
-                <div>
-                    <span className="text-primaryBlue text-5xl">Greetings,</span>{" "}
-                    <span className="text-white text-5xl">Admin</span>
-                    <div className="mt-2 text-lg">
-                        <span className="text-white">Enjoy managing</span>{" "}
-                        <span className="text-primaryBlue">B</span>
-                        <span className="text-white">itwise Learn</span>
-                    </div>
-                </div>
-
-                <div className="flex mr-11">
-                    <div className="p-8 bg-white rounded-full flex justify-center items-center">
-                        <User size={35} color="black" />
-                    </div>
-                    <div className="text-white flex flex-col mt-3 ml-4">
-                        <h1 className="text-3xl">{admin_name}</h1>
-                        <p>{admin_email}</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Selector */}
-            <div className="bg-divBg mr-40 ml-20 mt-4 flex rounded-2xl">
-                {(Object.keys(fieldIcons) as FieldType[]).map((type, i) => {
-                    const Icon = fieldIcons[type];
-                    return (
-                        <div key={type} className="relative flex flex-1 justify-center py-4">
-                            <button
-                                onClick={() => {
-                                    setField(type);
-                                    setSearchTerm("");
-                                }}
-                                className="flex flex-col items-center"
-                            >
-                                <Icon size={30} color="white" />
-                                <h1 className="text-white">{type}</h1>
-                            </button>
-                            {i !== 3 && (
-                                <div className="absolute right-0 top-1/2 h-12 w-[2px] bg-white -translate-y-1/2" />
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
-
-            {/* List */}
-            <div className="bg-divBg ml-5 mr-15 mt-6 rounded-2xl p-4 flex flex-col flex-1">
-                <div className="flex justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                        <ActiveIcon className="text-white" />
-                        <h1 className="text-white">{field}</h1>
-                    </div>
-                    <button onClick={() => setIsAdding(true)} className="text-primaryBlue">
-                        <Plus />
-                    </button>
-                </div>
-
-                <div className="flex-1 overflow-y-auto space-y-3 pr-2">
-                    {filteredData.map((item) => {
-                        const displayName = item.batchname ?? item.name;
-
-                        return (
-                            <div
-                                key={item.id}
-                                onClick={() => setSelectedItem(item)}
-                                className="flex items-center justify-between bg-black/30 px-4 py-3 rounded-xl cursor-pointer hover:bg-black/40 transition"
-                            >
-                                {/* Left section */}
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
-                                        <User size={16} color="black" />
-                                    </div>
-                                    <span className="text-white">{displayName}</span>
-                                </div>
-
-                                {/* Right actions */}
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation(); // ⛔ prevents modal opening
-                                        handleDelete(item.id);
-                                    }}
-                                    className="text-red-500 hover:scale-110 transition"
-                                >
-                                    <Trash size={18} />
-                                </button>
-                            </div>
-                        );
-                    })}
-
-                </div>
-            </div>
-
-            {/* MODAL */}
-            {selectedItem && (
-                <EntityDetailsModal
-                    entityType={field}
-                    data={selectedItem}
-                    role={currentUserRole}
-                    onClose={() => setSelectedItem(null)}
-                    onDelete={handleDelete}
-                />
-            )}
-        </>
-    );
+      })}
+    </div>
+  );
 }
