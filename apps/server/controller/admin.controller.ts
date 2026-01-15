@@ -5,6 +5,8 @@ import prismaClient from "../utils/prisma";
 import type { CreateAdminBody, UpdateAdminBody } from "../utils/type";
 import { createAbstractBuilder } from "typescript";
 import cloudinaryService from "../service/cloudinary.service";
+import { handleSendMail } from "../utils/nodemailer/mailHandler";
+import { generatePassword } from "../utils/nodemailer/GeneratePass";
 class AdminController {
     async createAdmin(req: Request, res: Response) {
         try {
@@ -30,7 +32,9 @@ class AdminController {
             });
 
             if (dbAdmin) throw new Error("admin with this email exists");
-            const hashedPassword = await hashPassword(data.password);
+            const generatedPassword = await generatePassword()
+            const hashedPassword = await hashPassword(generatedPassword);
+
             const createdAdmin = await prismaClient.user.create({
                 data: {
                     name: data.name,
@@ -40,7 +44,8 @@ class AdminController {
                     // createdBy: dbSuperAdmin.id,
                 },
             });
-
+            const email = data.email;
+            await handleSendMail(email, generatedPassword);
             if (!createdAdmin) throw new Error("error in creating admin");
             return res
                 .status(200)

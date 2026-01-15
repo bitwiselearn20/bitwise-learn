@@ -3,6 +3,8 @@ import { hashPassword } from "../utils/password";
 import apiResponse from "../utils/apiResponse";
 import prismaClient from "../utils/prisma";
 import type { CreateTeacherBody, UpdateTeacherBody } from "../utils/type";
+import { generatePassword } from "../utils/nodemailer/GeneratePass";
+import { handleSendMail } from "../utils/nodemailer/mailHandler";
 class TeacherController {
     async createTeacher(req: Request, res: Response) {
         try {
@@ -53,8 +55,8 @@ class TeacherController {
             })
             if (existingTeacher) throw new Error("teacher with this email already exists");
 
-
-            const hashedPassword = await hashPassword(data.loginPassword);
+            const loginPassword = generatePassword();
+            const hashedPassword = await hashPassword(loginPassword);
 
             const createdTeacher = await prismaClient.teacher.create({
                 data: {
@@ -67,6 +69,7 @@ class TeacherController {
                     vendorId: data.vendorId ?? null,
                 },
             });
+            await handleSendMail(data.email, loginPassword);
 
             return res
                 .status(200)

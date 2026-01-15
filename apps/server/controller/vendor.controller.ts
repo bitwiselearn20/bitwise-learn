@@ -3,6 +3,8 @@ import { hashPassword } from "../utils/password";
 import apiResponse from "../utils/apiResponse";
 import prismaClient from "../utils/prisma";
 import type { CreateVendorBody, UpdateVendorBody } from "../utils/type";
+import { generatePassword } from "../utils/nodemailer/GeneratePass";
+import { handleSendMail } from "../utils/nodemailer/mailHandler";
 class VendorController {
     async createVendor(req: Request, res: Response) {
         try {
@@ -17,7 +19,8 @@ class VendorController {
                 where: { email: data.email }
             })
             if (existingVendor) throw new Error("vendor with this email already exists");
-            const hashedPassword = await hashPassword(data.loginPassword);
+            const loginPassword = generatePassword();
+            const hashedPassword = await hashPassword(loginPassword);
 
             const createdVendor = await prismaClient.vendor.create({
                 data: {
@@ -34,6 +37,7 @@ class VendorController {
                     },
                 },
             });
+            await handleSendMail(data.email, loginPassword);
 
             if (!createdVendor) throw new Error("error in creating vendor");
             return res
@@ -59,6 +63,7 @@ class VendorController {
             const vendor = await prismaClient.vendor.findFirst({
                 where: { id: vendorId },
             });
+            if (!vendor) throw new Error("Vendor not found");
             if (vendor.institutionId !== institutionId) {
                 throw new Error("this vendor does not belongs to this institution");
             }
@@ -104,6 +109,8 @@ class VendorController {
             const vendor = await prismaClient.vendor.findFirst({
                 where: { id: vendorId },
             });
+            if (!vendor) throw new Error("vendor not found");
+
             if (vendor.institutionId !== institutionId) {
                 throw new Error("this vendor does not belongs to this institution");
             }
@@ -176,6 +183,8 @@ class VendorController {
                     updatedAt: true,
                 },
             });
+            if (!vendor) throw new Error("vendor not found");
+
             console.log("Institution Id is: ", vendor.institutionId);
             if (vendor.institutionId !== institutionId) {
                 throw new Error("this vendor does not belong to this institution");

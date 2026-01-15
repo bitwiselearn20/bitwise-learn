@@ -4,10 +4,21 @@ import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 
-router.post("/", authMiddleware, studentController.createStudent);
-router.get("/", authMiddleware, studentController.getAllStudents);
-router.get("/:id", authMiddleware, studentController.getStudentById);
-router.put("/:id", authMiddleware, studentController.updateStudent);
-router.delete("/:id", authMiddleware, studentController.deleteStudent);
-
+router.post("/create-student", authMiddleware, studentController.createStudent);
+router.get("/get-all-student", authMiddleware, studentController.getAllStudents);
+router.get(
+    "/get-student-by-id/:id",
+    authMiddleware,
+    studentController.getStudentById
+);
+router.put(
+    "/update-insitituion-by-id/:id",
+    authMiddleware,
+    studentController.updateStudent
+);
+router.delete(
+    "/delete-student-by-id/:id",
+    authMiddleware,
+    studentController.deleteStudent
+);
 export default router;

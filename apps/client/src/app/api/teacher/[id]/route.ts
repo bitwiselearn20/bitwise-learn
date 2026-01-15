@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import axiosInstance from "@/lib/axios";
+import axios from "axios";
 
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await context.params;
+
     const backendUrl = process.env.BACKEND_URL;
     if (!backendUrl) {
       return NextResponse.json(
@@ -11,15 +16,16 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const response = await axiosInstance.get(
-      `${backendUrl}/api/v1/teachers`
+    const response = await axios.get(
+      `${backendUrl}/api/v1/teachers/get-teacher-by-id/${id}`
     );
+
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {
-    console.error("Error fetching teachers:", error.message);
-    console.log(error);
+    console.error("Error fetching teacher:", error.message);
+
     return NextResponse.json(
-      { error: "Failed to fetch teachers" },
+      { error: "Failed to fetch teacher" },
       { status: 500 }
     );
   }

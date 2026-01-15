@@ -6,6 +6,8 @@ import type {
   CreateInstitutionBody,
   UpdateInstitutionBody,
 } from "../utils/type";
+import { generatePassword } from "../utils/nodemailer/GeneratePass";
+import { handleSendMail } from "../utils/nodemailer/mailHandler";
 
 class InstitutionController {
   async createInstitution(req: Request, res: Response) {
@@ -29,7 +31,8 @@ class InstitutionController {
       });
       if (existingInstitute)
         throw new Error("Institute with this email already exists");
-      const hashedPassword = await hashPassword(data.loginPassword);
+      const loginPassword = generatePassword();
+      const hashedPassword = await hashPassword(loginPassword);
 
       const createdInstitution = await prismaClient.institution.create({
         data: {
@@ -46,7 +49,7 @@ class InstitutionController {
           createdBy: dbAdmin.id,
         },
       });
-
+      await handleSendMail(data.email, loginPassword);
       if (!createdInstitution) throw new Error("error in creating institution");
       return res
         .status(200)

@@ -37,3 +37,7 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+#temp
+apps/client/src/component/reset-password/ResetPassword.tsx
+apps/client/src/app/reset-password/page.tsx

@@ -17,7 +17,7 @@ export async function GET(
         }
 
         const response = await axios.get(
-            `${backendUrl}/api/v1/institutions/${id}`
+            `${backendUrl}/api/v1/institutions/get-institution-by-id/${id}`
         );
 
         return NextResponse.json(response.data.data, { status: 200 });

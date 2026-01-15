@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
         }
 
         const response = await axios.get(
-            `${backendUrl}/api/v1/vendors`
+            `${backendUrl}/api/v1/vendors/get-all-vendor`
         );
 
         return NextResponse.json(response.data.data, { status: 200 });

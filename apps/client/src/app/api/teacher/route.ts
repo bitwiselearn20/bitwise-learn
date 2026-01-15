@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     }
 
     const response = await axiosInstance.get(
-      `${backendUrl}/api/v1/teachers`
+      `${backendUrl}/api/v1/teachers/get-all-teacher`
     );
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {

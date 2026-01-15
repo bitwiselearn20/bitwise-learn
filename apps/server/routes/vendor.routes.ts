@@ -1,13 +1,24 @@
 import { Router } from "express";
-import batchController from "../controller/vendor.controller";
+import vendorController from "../controller/vendor.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 
-router.post("/", authMiddleware, batchController.createVendor);
-router.get("/", authMiddleware, batchController.getAllVendors);
-router.get("/:id", authMiddleware, batchController.getVendorById);
-router.put("/:id", authMiddleware, batchController.updateVendor);
-router.delete("/:id", authMiddleware, batchController.deleteVendor);
-
+router.post("/create-vendor", authMiddleware, vendorController.createVendor);
+router.get("/get-all-vendor", authMiddleware, vendorController.getAllVendors);
+router.get(
+    "/get-vendor-by-id/:id",
+    authMiddleware,
+    vendorController.getVendorById
+);
+router.put(
+    "/update-insitituion-by-id/:id",
+    authMiddleware,
+    vendorController.updateVendor
+);
+router.delete(
+    "/delete-vendor-by-id/:id",
+    authMiddleware,
+    vendorController.deleteVendor
+);
 export default router;

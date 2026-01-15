@@ -4,10 +4,21 @@ import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 
-router.post("/", authMiddleware, institutionController.createInstitution);
-router.get("/", authMiddleware, institutionController.getAllInstitutions);
-router.get("/:id", authMiddleware, institutionController.getInstitutionById);
-router.put("/:id", authMiddleware, institutionController.updateInstitution);
-router.delete("/:id", authMiddleware, institutionController.deleteInstitution);
-
+router.post("/create-institution", authMiddleware, institutionController.createInstitution);
+router.get("/get-all-institution", authMiddleware, institutionController.getAllInstitutions);
+router.get(
+    "/get-institution-by-id/:id",
+    authMiddleware,
+    institutionController.getInstitutionById
+);
+router.put(
+    "/update-insitituion-by-id/:id",
+    authMiddleware,
+    institutionController.updateInstitution
+);
+router.delete(
+    "/delete-institution-by-id/:id",
+    authMiddleware,
+    institutionController.deleteInstitution
+);
 export default router;

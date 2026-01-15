@@ -64,7 +64,6 @@ export interface UpdateAssignment {
 export interface CreateAdminBody {
   name: string;
   email: string;
-  password: string;
 }
 
 export interface UpdateAdminBody {
