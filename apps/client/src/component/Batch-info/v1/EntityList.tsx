@@ -3,8 +3,8 @@
 import { useEffect, useState, useMemo } from "react";
 import { X } from "lucide-react";
 import { getAllStudents } from "@/api/students/get-all-students";
-import { getAllBatches } from "@/api/batches/get-all-batches";
-import { getAllVendors } from "@/api/vendors/get-all-vendors";
+import { getAllTeachers } from "@/api/teachers/get-all-teachers";
+// import { getAllAssessments } from "@/api/vendors/get-all-vendors";
 
 type EntityListProps = {
     type: string;
@@ -27,15 +27,14 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                             setEntities(Array.isArray(data) ? data : []);
                         });
                         break;
-                    case "Batches":
-                        await getAllBatches((data: any) => {
+                    case "Teachers":
+                        await getAllTeachers((data: any) => {
                             setEntities(Array.isArray(data) ? data : []);
                         });
                         break;
-                    case "Vendors":
-                        await getAllVendors((data: any) => {
-                            setEntities(Array.isArray(data) ? data : []);
-                        });
+                    case "Assessments":
+                        setEntities([]);
+                        break;
                         break;
                     case "Courses":
                         // TODO: Add courses API when available
@@ -67,13 +66,13 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                         entity.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         entity.email?.toLowerCase().includes(searchQuery.toLowerCase())
                     );
-                case "Batches":
+                case "Teachers":
                     return (
-                        entity.batchname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        entity.branch?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        entity.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        entity.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         entity.batchEndYear?.toLowerCase().includes(searchQuery.toLowerCase())
                     );
-                case "Vendors":
+                case "Assessments":
                     return (
                         entity.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         entity.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -90,22 +89,22 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
         });
     }, [entities, searchQuery, type]);
 
-    const getInitials = (name: string) => {
-        if (!name) return "??";
-        const parts = name.trim().split(" ");
-        if (parts.length >= 2) {
-            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-        }
-        return name.substring(0, 2).toUpperCase();
-    };
+    // const getInitials = (name: string) => {
+    //     if (!name) return "??";
+    //     const parts = name.trim().split(" ");
+    //     if (parts.length >= 2) {
+    //         return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    //     }
+    //     return name.substring(0, 2).toUpperCase();
+    // };
 
     const getDisplayName = (entity: any) => {
         switch (type) {
             case "Students":
                 return entity.name || "Unknown";
-            case "Batches":
-                return entity.batchname || "Unknown Batch";
-            case "Vendors":
+            case "Teachers":
+                return entity.name || "Unknown Batch";
+            case "Assessments":
                 return entity.name || "Unknown Vendor";
             case "Courses":
                 return entity.name || "Unknown Course";
@@ -114,20 +113,20 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
         }
     };
 
-    const getSubtitle = (entity: any) => {
-        switch (type) {
-            case "Students":
-                return entity.email;
-            case "Batches":
-                return `${entity.branch || ""} • ${entity.batchEndYear || ""}`.trim();
-            case "Vendors":
-                return entity.tagline || entity.email;
-            case "Courses":
-                return entity.instructorName || entity.description;
-            default:
-                return "";
-        }
-    };
+    // const getSubtitle = (entity: any) => {
+    //     switch (type) {
+    //         case "Students":
+    //             return entity.email;
+    //         case "Teachers":
+    //             return `${entity.branch || ""} • ${entity.batchEndYear || ""}`.trim();
+    //         case "Assessments":
+    //             return entity.tagline || entity.email;
+    //         case "Courses":
+    //             return entity.instructorName || entity.description;
+    //         default:
+    //             return "";
+    //     }
+    // };
 
     const getEntityKey = (entity: any) => {
         return entity.id || entity._id || Math.random().toString();
@@ -150,11 +149,11 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
     const getTableHeaders = () => {
         switch (type) {
             case "Students":
+                return ["Roll No.", "Name", "Email", "Created"];
+            case "Teachers":
                 return ["Name", "Email", "Phone", "Created"];
-            case "Batches":
-                return ["Batch Name", "Branch", "End Year", "Created"];
-            case "Vendors":
-                return ["Name", "Email", "Tagline", "Created"];
+            case "Assessments":
+                return ["Name", "Email", "Phone", "Created"];
             case "Courses":
                 return ["Name", "Instructor", "Level", "Created"];
             default:
@@ -166,23 +165,23 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
         switch (type) {
             case "Students":
                 return [
-                    entity.name || "Unknown",
+                    entity.rollNumber || "Unknown",
+                    entity.name || "—",
+                    entity.email || "—",
+                    formatDate(entity.createdAt),
+                ];
+            case "Teachers":
+                return [
+                    entity.name || "Unknown Teacher",
                     entity.email || "—",
                     entity.phoneNumber || "—",
                     formatDate(entity.createdAt),
                 ];
-            case "Batches":
-                return [
-                    entity.batchname || "Unknown Batch",
-                    entity.branch || "—",
-                    entity.batchEndYear || "—",
-                    formatDate(entity.createdAt),
-                ];
-            case "Vendors":
+            case "Assessments":
                 return [
                     entity.name || "Unknown Vendor",
                     entity.email || "—",
-                    entity.tagline || "—",
+                    entity.phoneNumber || "—",
                     formatDate(entity.createdAt),
                 ];
             case "Courses":

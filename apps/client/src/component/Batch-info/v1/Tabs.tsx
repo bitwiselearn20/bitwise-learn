@@ -4,7 +4,7 @@ type TabsProps = {
 };
 
 export const Tabs = ({ value, onValueChange }: TabsProps) => {
-    const tabs = ["Teachers", "Batches", "Vendors", "Courses"];
+    const tabs = ["Students", "Teachers", "Assessments", "Courses"];
 
     return (
         <div className="flex gap-4 mb-5 mt-5">

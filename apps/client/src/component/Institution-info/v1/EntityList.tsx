@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { getAllTeachers } from "@/api/teachers/get-all-teachers";
 import { getAllBatches } from "@/api/batches/get-all-batches";
@@ -12,10 +13,21 @@ type EntityListProps = {
 };
 
 export const EntityList = ({ type, institutionId }: EntityListProps) => {
+    const router = useRouter();
     const [entities, setEntities] = useState<any[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
     const [selectedEntity, setSelectedEntity] = useState<any | null>(null);
+
+    const handleSeeDetails = (entity: any) => {
+        if (type === "Batches") {
+            // Navigate to batch detail page
+            router.push(`/admin-dashboard/batches/${entity.id || entity._id}`);
+        } else {
+            // Open modal for other entity types
+            setSelectedEntity(entity);
+        }
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -57,9 +69,9 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
     const filteredEntities = useMemo(() => {
         // Ensure entities is always an array
         const safeEntities = Array.isArray(entities) ? entities : [];
-        
+
         if (!searchQuery) return safeEntities;
-        
+
         return safeEntities.filter((entity) => {
             switch (type) {
                 case "Teachers":
@@ -90,14 +102,6 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
         });
     }, [entities, searchQuery, type]);
 
-    const getInitials = (name: string) => {
-        if (!name) return "??";
-        const parts = name.trim().split(" ");
-        if (parts.length >= 2) {
-            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-        }
-        return name.substring(0, 2).toUpperCase();
-    };
 
     const getDisplayName = (entity: any) => {
         switch (type) {
@@ -111,21 +115,6 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
                 return entity.name || "Unknown Course";
             default:
                 return "Unknown";
-        }
-    };
-
-    const getSubtitle = (entity: any) => {
-        switch (type) {
-            case "Teachers":
-                return entity.email;
-            case "Batches":
-                return `${entity.branch || ""} • ${entity.batchEndYear || ""}`.trim();
-            case "Vendors":
-                return entity.tagline || entity.email;
-            case "Courses":
-                return entity.instructorName || entity.description;
-            default:
-                return "";
         }
     };
 
@@ -216,8 +205,8 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
                     </div>
                 ) : !filteredEntities || filteredEntities.length === 0 ? (
                     <div className="py-12 text-center text-sm text-white/50">
-                        {searchQuery 
-                            ? `No ${type.toLowerCase()} found` 
+                        {searchQuery
+                            ? `No ${type.toLowerCase()} found`
                             : `No ${type.toLowerCase()} available`}
                     </div>
                 ) : (
@@ -239,27 +228,25 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
                                     return (
                                         <tr
                                             key={getEntityKey(entity)}
-                                            className="text-sm text-white transition-colors hover:bg-primaryBlue/10"
+                                            className="text-sm text-white transition-colors"
                                         >
                                             {cells.map((cell, index) => (
                                                 <td
                                                     key={index}
-                                                    className={`px-6 py-4 ${
-                                                        index === 0 ? "font-medium" : ""
-                                                    } ${
-                                                        index === cells.length - 1
+                                                    className={`px-6 py-4 ${index === 0 ? "font-medium" : ""
+                                                        } ${index === cells.length - 1
                                                             ? "text-white/60"
                                                             : index === 0
-                                                            ? ""
-                                                            : "text-white/70 truncate"
-                                                    }`}
+                                                                ? ""
+                                                                : "text-white/70 truncate"
+                                                        }`}
                                                 >
                                                     {cell}
                                                 </td>
                                             ))}
                                             <td className="px-6 py-4 text-right">
                                                 <button
-                                                    onClick={() => setSelectedEntity(entity)}
+                                                    onClick={() => handleSeeDetails(entity)}
                                                     className="rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20"
                                                 >
                                                     See details
