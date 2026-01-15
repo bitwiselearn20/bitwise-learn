@@ -2,6 +2,7 @@
 
 import "./assignment.css";
 import { RefreshCcw, LogOut } from "lucide-react";
+import { Colors } from "@/component/general/Colors";
 
 type Props = {
   assignmentName: string;
@@ -16,15 +17,6 @@ type Props = {
   onSubmit: () => void;
   questionIds: string[];
   userAnswers: Record<string, string | null>;
-};
-
-const colors = {
-  primary_Bg: "bg-[#121313]",
-  secondary_Bg: "bg-[#1E1E1E]",
-  primary_Font: "text-[#FFFFFF]",
-  special_Border: "border-2 border-[#64ACFF]",
-  primary_Border: "border-2 border-[#1E1E1E]",
-  attempted_Border: "border-2 border-[#129274]",
 };
 
 export default function RightSection({
@@ -43,15 +35,15 @@ export default function RightSection({
 }: Props) {
   return (
     <div
-      className={`h-full w-full flex flex-col ${colors.primary_Font} ${colors.secondary_Bg} rounded-xl p-4`}
+      className={`h-full w-full flex flex-col ${Colors.text.primary} ${Colors.background.secondary} rounded-xl p-4 font-mono`}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={onExit}
-          className={`p-2 rounded-md hover:opacity-80 ${colors.primary_Bg}`}
+          className={`p-2 rounded-md hover:opacity-80 ${Colors.background.primary} group`}
         >
-          <LogOut />
+          <LogOut className="button-wrap-right"/>
         </button>
 
         <h1 className="text-lg font-semibold">
@@ -64,16 +56,16 @@ export default function RightSection({
         <div className="flex gap-3">
           <button
             onClick={onResetCurrentAnswer}
-            className={`p-2 rounded-md hover:opacity-80 ${colors.primary_Bg}`}
+            className={`p-2 rounded-md hover:opacity-80 ${Colors.background.primary} group`}
           >
             <RefreshCcw className="transition-transform duration-700 group-active:rotate-[-360deg]" />
           </button>
 
           <button
             onClick={onSubmit}
-            className={`${colors.primary_Bg} px-4 py-1 rounded-md hover:opacity-80`}
+            className={`${Colors.background.primary} px-4 py-1 rounded-md hover:opacity-80 group`}
           >
-            Submit
+            <p className="button-wrap-up">Submit</p>
           </button>
         </div>
       </div>
@@ -89,10 +81,10 @@ export default function RightSection({
               onClick={() => onSelectAnswer(choice)}
               className={`
                 flex items-center justify-between
-                ${colors.primary_Bg}
+                ${Colors.background.primary}
                 px-4 py-4 rounded-lg
                 transition-all
-                ${isSelected ? colors.special_Border : colors.primary_Border}
+                ${isSelected ? Colors.border.specialThick : Colors.border.fadedThick}
               `}
             >
               <span>{choice}</span>
@@ -113,13 +105,13 @@ export default function RightSection({
               key={i}
               onClick={() => onJumpToQuestion(i)}
               className={`
-                px-3 py-1 rounded-md ${colors.primary_Bg}
+                px-3 py-1 rounded-md ${Colors.background.primary}
                 ${
                   i === currentIndex
-                    ? colors.special_Border
+                    ? Colors.border.specialThick
                     : answered
-                    ? colors.attempted_Border
-                    : colors.primary_Border
+                    ? Colors.border.greenThick
+                    : Colors.border.fadedThick
                 }
               `}
             >

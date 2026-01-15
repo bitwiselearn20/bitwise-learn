@@ -31,7 +31,7 @@ export default function TestimonialCard({
 {/* Background glow */}
 <div
   className={`absolute inset-0 -z-10 rounded-2xl 
-  bg-linear-to-br ${accentColor}
+  bg-linear-to-br from-gray-900 to-gray-500
   opacity-20 blur-2xl`}
  />
 
