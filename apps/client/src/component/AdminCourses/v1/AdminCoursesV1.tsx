@@ -15,23 +15,8 @@ const dummyCourses: Course[] = [
     duration: "7d",
     instructor: "John Doe",
   },
-  {
-    id: "2",
-    name: "Modern JavaScript",
-    level: "Intermediate",
-    description: "Master modern JavaScript concepts and patterns.",
-    duration: "14d",
-    instructor: "Jane Smith",
-  },
-  {
-    id: "3",
-    name: "Advanced React",
-    level: "Advanced",
-    description: "Build scalable applications with React.",
-    duration: "21d",
-    instructor: "Alex Johnson",
-  },
 ];
+
 
 const colors = {
   primary_Bg: "bg-[#121313]",
