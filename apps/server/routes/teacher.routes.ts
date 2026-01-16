@@ -16,6 +16,11 @@ router.get(
     authMiddleware,
     teacherController.getTeacherByInstitute
 );
+router.get(
+    "/get-teacher-by-batch/:id",
+    authMiddleware,
+    teacherController.getTeacherByBatch
+);
 router.put(
     "/update-teacher-by-id/:id",
     authMiddleware,

@@ -243,6 +243,56 @@ class StudentController {
             return res.status(200).json(apiResponse(200, error.message, null));
         }
     }
+    async getStudentByBatch(req: Request, res: Response) {
+        try {
+            if (!req.user) throw new Error("user not authenticated");
+            const userId = req.user.id;
+            const batchId = req.params.id;
+
+            if (!batchId) throw new Error("batch id is required");
+
+            // const dbUser = await prismaClient.user.findFirst({
+            //     where: { id: userId },
+            // });
+            // if (!dbUser) throw new Error("no such user found");
+
+            const students = await prismaClient.student.findMany({
+                where: { batchId: batchId },
+                select: {
+                    id: true,
+                    name: true,
+                    rollNumber: true,
+                    email: true,
+                    batchId: true,
+                    instituteId: true,
+                    createdAt: true,
+                    updatedAt: true,
+                }
+            });
+            if (!students) throw new Error("students not found");
+
+            // if (req.user.type === "INSTITUTION" && student.instituteId !== userId) {
+            //     throw new Error("not authorized to view this student");
+            // }
+
+
+            if (
+                req.user.type !== "SUPERADMIN" &&
+                req.user.type !== "ADMIN"
+                // req.user.type !== "INSTITUTION" &&
+                // req.user.type !== "VENDOR"
+            ) {
+                throw new Error("not authorized");
+            }
+
+            return res
+                .status(200)
+                .json(apiResponse(200, "batch students fetched successfully", students));
+        } catch (error: any) {
+            console.log(error);
+            return res.status(200).json(apiResponse(200, error.message, null));
+        }
+    }
 
 }
 export default new StudentController();

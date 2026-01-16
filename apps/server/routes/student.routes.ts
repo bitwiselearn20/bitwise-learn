@@ -11,6 +11,11 @@ router.get(
     authMiddleware,
     studentController.getStudentById
 );
+router.get(
+    "/get-student-by-batch/:id",
+    authMiddleware,
+    studentController.getStudentByBatch
+);
 router.put(
     "/update-insitituion-by-id/:id",
     authMiddleware,

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { X } from "lucide-react";
+import { Pencil, Trash2, X } from "lucide-react";
 import { getAllStudents } from "@/api/students/get-all-students";
+import { getStudentsByBatch } from "@/api/students/get-students-by-batch";
 import { getAllTeachers } from "@/api/teachers/get-all-teachers";
+import { getTeachersByBatch } from "@/api/teachers/get-teachers-by-batch";
 // import { getAllAssessments } from "@/api/vendors/get-all-vendors";
 
 type EntityListProps = {
@@ -16,6 +18,48 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
     const [selectedEntity, setSelectedEntity] = useState<any | null>(null);
+    const [isEditing, setIsEditing] = useState(false)
+    const [editedEntity, setEditedEntity] = useState<any>(null)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+    const handleEdit = () => {
+        setEditedEntity({ ...selectedEntity }) // clone data
+        setIsEditing(true)
+    }
+
+    const handleFieldChange = (key: string, value: any) => {
+        setEditedEntity((prev: any) => ({
+            ...prev,
+            [key]: value,
+        }))
+    }
+
+    const handleSave = async () => {
+        try {
+            // TODO: UPDATE STUDENT API CALL GOES HERE
+            // await updateStudentApi(
+            //     editedEntity.id || editedEntity._id,
+            //     editedEntity
+            // )
+
+            setIsEditing(false)
+            setSelectedEntity(editedEntity) // update UI after success
+        } catch (error) {
+            console.error("Update failed", error)
+        }
+    }
+
+    const handleDelete = async () => {
+        try {
+            // TODO:  DELETE STUDENT API CALL GOES HERE
+            // await deleteStudentApi(selectedEntity.id || selectedEntity._id)
+
+            setShowDeleteConfirm(false)
+            setSelectedEntity(null)
+        } catch (error) {
+            console.error("Delete failed", error)
+        }
+    }
 
     useEffect(() => {
         setLoading(true);
@@ -23,14 +67,16 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
             try {
                 switch (type) {
                     case "Students":
-                        await getAllStudents((data: any) => {
+                        await getStudentsByBatch((data: any) => {
                             setEntities(Array.isArray(data) ? data : []);
-                        });
+                        }, batchId as string)
+                            ;
                         break;
                     case "Teachers":
-                        await getAllTeachers((data: any) => {
+                        await getTeachersByBatch((data: any) => {
                             setEntities(Array.isArray(data) ? data : []);
-                        });
+                        }, batchId as string)
+                            ;
                         break;
                     case "Assessments":
                         setEntities([]);
@@ -70,7 +116,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                     return (
                         entity.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         entity.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        entity.batchEndYear?.toLowerCase().includes(searchQuery.toLowerCase())
+                        entity.phoneNumber?.toLowerCase().includes(searchQuery.toLowerCase())
                     );
                 case "Assessments":
                     return (
@@ -273,44 +319,168 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
 
             {/* Details Modal */}
             {selectedEntity && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-divBg p-6 shadow-2xl">
-                        {/* Close Button */}
-                        <button
-                            onClick={() => setSelectedEntity(null)}
-                            className="absolute right-4 top-4 text-white/50 transition hover:text-white"
-                        >
-                            <X size={20} />
-                        </button>
+                <>
+                    {/* Details Modal */}
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                        <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-divBg p-6 shadow-2xl">
 
-                        {/* Header */}
-                        <div className="mb-6">
-                            <h2 className="text-xl font-semibold text-white">
-                                {type} Details
-                            </h2>
-                            <p className="mt-1 text-sm text-white/40">
-                                ID: {selectedEntity.id || selectedEntity._id || "N/A"}
-                            </p>
-                        </div>
+                            {/* Top Right Action Buttons */}
+                            <div className="absolute right-4 top-4 flex items-center gap-3">
+                                {!isEditing && (
+                                    <button
+                                        onClick={() => {
+                                            setEditedEntity({ ...selectedEntity })
+                                            setIsEditing(true)
+                                        }}
+                                        className="text-white/50 transition hover:text-primaryBlue"
+                                    >
+                                        <Pencil size={18} />
+                                    </button>
+                                )}
 
-                        {/* Content */}
-                        <div className="grid max-h-[60vh] grid-cols-1 gap-x-6 gap-y-5 overflow-y-auto pr-2 sm:grid-cols-2">
-                            {Object.entries(selectedEntity)
-                                .filter(([key]) => key !== "id" && key !== "_id")
-                                .map(([key, value]) => (
-                                    <div key={key}>
-                                        <p className="my-3 text-[11px] uppercase tracking-wide text-primaryBlue">
-                                            {key.replace(/_/g, " ")}
-                                        </p>
-                                        <p className="break-words text-sm text-white">
-                                            {formatValue(value)}
-                                        </p>
-                                    </div>
-                                ))}
+                                {!isEditing && (
+                                    <button
+                                        onClick={() => setShowDeleteConfirm(true)}
+                                        className="text-white/50 transition hover:text-red-500"
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
+                                )}
+
+                                {isEditing && (
+                                    <>
+                                        <button
+                                            onClick={async () => {
+                                                try {
+                                                    // TODO: UPDATE STUDENT API CALL GOES HERE
+                                                    // await updateStudentApi(
+                                                    //     editedEntity.id || editedEntity._id,
+                                                    //     editedEntity
+                                                    // )
+
+                                                    setSelectedEntity(editedEntity)
+                                                    setIsEditing(false)
+                                                    setEditedEntity(null)
+                                                } catch (err) {
+                                                    console.error("Update failed", err)
+                                                }
+                                            }}
+                                            className="rounded-md bg-primaryBlue px-3 py-1 text-sm text-white"
+                                        >
+                                            Save
+                                        </button>
+
+                                        <button
+                                            onClick={() => {
+                                                setIsEditing(false)
+                                                setEditedEntity(null)
+                                            }}
+                                            className="rounded-md bg-white/10 px-3 py-1 text-sm text-white"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </>
+                                )}
+
+                                <button
+                                    onClick={() => {
+                                        setSelectedEntity(null)
+                                        setIsEditing(false)
+                                        setEditedEntity(null)
+                                    }}
+                                    className="text-white/50 transition hover:text-white"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+
+                            {/* Header */}
+                            <div className="mb-6">
+                                <h2 className="text-xl font-semibold text-white">
+                                    {type} Details
+                                </h2>
+                                <p className="mt-1 text-sm text-white/40">
+                                    ID: {selectedEntity.id || selectedEntity._id || "N/A"}
+                                </p>
+                            </div>
+
+                            {/* Content */}
+                            <div className="grid max-h-[60vh] grid-cols-1 gap-x-6 gap-y-5 overflow-y-auto pr-2 sm:grid-cols-2">
+                                {Object.entries(isEditing ? editedEntity : selectedEntity)
+                                    .filter(([key]) => key !== "id" && key !== "_id")
+                                    .map(([key, value]) => (
+                                        <div key={key}>
+                                            <p className="my-3 text-[11px] uppercase tracking-wide text-primaryBlue">
+                                                {key.replace(/_/g, " ")}
+                                            </p>
+
+                                            {isEditing ? (
+                                                <input
+                                                    value={editedEntity[key] ?? ""}
+                                                    onChange={(e) =>
+                                                        setEditedEntity((prev: any) => ({
+                                                            ...prev,
+                                                            [key]: e.target.value,
+                                                        }))
+                                                    }
+                                                    className="w-full rounded-md bg-black/40 px-2 py-1 text-sm text-white outline-none focus:ring-1 focus:ring-primaryBlue"
+                                                />
+                                            ) : (
+                                                <p className="break-words text-sm text-white">
+                                                    {formatValue(value)}
+                                                </p>
+                                            )}
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    {/* Delete Confirmation Modal */}
+                    {showDeleteConfirm && (
+                        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70">
+                            <div className="w-full max-w-sm rounded-xl bg-divBg p-6 text-center">
+                                <h3 className="mb-2 text-lg font-semibold text-white">
+                                    Confirm Delete
+                                </h3>
+                                <p className="mb-6 text-sm text-white/60">
+                                    This action cannot be undone.
+                                </p>
+
+                                <div className="flex justify-center gap-4">
+                                    <button
+                                        onClick={() => setShowDeleteConfirm(false)}
+                                        className="rounded-md bg-white/10 px-4 py-2 text-white"
+                                    >
+                                        Cancel
+                                    </button>
+
+                                    <button
+                                        onClick={async () => {
+                                            try {
+                                                // TODO: DELETE STUDENT API CALL GOES HERE
+                                                // await deleteStudentApi(
+                                                //     selectedEntity.id || selectedEntity._id
+                                                // )
+
+                                                setShowDeleteConfirm(false)
+                                                setSelectedEntity(null)
+                                            } catch (err) {
+                                                console.error("Delete failed", err)
+                                            }
+                                        }}
+                                        className="rounded-md bg-red-500 px-4 py-2 text-white"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </>
             )}
+
+
         </>
     );
 };
