@@ -1,9 +1,15 @@
-import AddSection from "@/component/(admin-course-pages)/add-section/AddSection"
 import SideBar from "@/component/general/SideBar"
 import CourseForm from "@/component/(admin-course-pages)/course-form/CourseForm"
-import AddAssignment from "@/component/(admin-course-pages)/add-assignment/AddAssignment"
+import CourseBuilder from "@/component/(admin-course-pages)/course-builder/CourseBuilder";
+import { useState } from "react";
+
+
+type courseStep = "form" | "builder";
 
 export default function AdminCourse() {
+
+    const [step, setStep] = useState<courseStep>("form");
+
     return (
         <div className="flex h-screen overflow-hidden">
             {/* Sidebar */}
@@ -11,9 +17,12 @@ export default function AdminCourse() {
 
             {/* Main Content */}
             <main className="flex-1 overflow-y-auto px-10 py-10">
-                {/* <CourseForm />
-                <AddSection /> */}
-                <AddAssignment />
+
+                {/* {step === "form" && (
+                    <CourseForm onContinue={() => setStep("builder")} />
+                )} */}
+
+                {step === "builder" && <CourseBuilder />}
             </main>
         </div>
     )
