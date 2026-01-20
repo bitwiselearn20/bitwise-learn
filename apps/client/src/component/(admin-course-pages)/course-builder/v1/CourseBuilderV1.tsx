@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef } from "react";
 import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
-import AddAssignment from "../../add-assignment/AddAssignment";
 import AddSection from "../../add-section/v2/AddSectionV2";
 import { uploadThumbnail } from "@/api/courses/course/upload-thumbnail";
 import { uploadCertificate } from "@/api/courses/course/upload-certificate";
@@ -15,6 +14,7 @@ import PublishCourse from "../../publish-course/PublishCourse";
 import { publishCourse } from "@/api/courses/course/publish-course";
 import { createSection } from "@/api/courses/section/create-section";
 import { getSections } from "@/api/courses/section/get-section";
+import AddAssignment from "../../add-assignment/AddAssignment";
 
 type Props = {
   courseId: string;
@@ -97,15 +97,13 @@ const ConfirmDeleteModal = ({
   );
 };
 
-
-
 /* ---------------- Create Section Modal ---------------- */
 
 type CreateSectionModalProps = {
   open: boolean;
   onClose: () => void;
   onSubmit: (sectionName: string) => void;
-}
+};
 
 const CreateSectionModal = ({
   open,
@@ -120,15 +118,11 @@ const CreateSectionModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6">
         {/* Header */}
-        <h2 className="text-lg font-semibold text-white">
-          Create new section
-        </h2>
+        <h2 className="text-lg font-semibold text-white">Create new section</h2>
 
         {/* Input */}
         <div className="mt-4">
-          <label className="text-sm text-slate-400">
-            Section name
-          </label>
+          <label className="text-sm text-slate-400">Section name</label>
           <input
             type="text"
             value={sectionName}
@@ -173,7 +167,53 @@ const CreateSectionModal = ({
   );
 };
 
+/* ADD ASSIGNMENT MODAL */
 
+const AddAssignmentModal = ({
+  open,
+  onClose,
+  sectionId,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  sectionId: string;
+  children: React.ReactNode;
+}) => {
+  useEffect(() => {
+    if (!open) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [open]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="
+          w-full max-w-2xl
+          rounded-2xl
+          bg-slate-900
+          border border-slate-800
+          p-6
+          shadow-xl
+          animate-in
+          fade-in
+          zoom-in-95
+        "
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
 
 /* ---------------- Main Component ---------------- */
 
@@ -192,6 +232,8 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
     null,
   );
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showAddAssignment, setShowAddAssignment] = useState(false);
+  const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!courseId) return;
@@ -205,7 +247,6 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
     fetchCourse();
   }, [courseId]);
 
-
   useEffect(() => {
     if (!courseId) return;
 
@@ -218,7 +259,6 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
     fetchSections();
   }, [courseId]);
 
-  
   const CourseBuilderSkeleton = () => {
     return (
       <div className="p-4 pt-0 animate-pulse">
@@ -235,9 +275,7 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
 
         {/* Section */}
         <div className="mt-10 space-y-8">
-          <div
-            className="rounded-xl border border-slate-800 p-5 space-y-4"
-          >
+          <div className="rounded-xl border border-slate-800 p-5 space-y-4">
             <div className="h-5 w-40 bg-slate-800 rounded" />
             <div className="h-4 w-full bg-slate-800 rounded" />
             <div className="h-4 w-5/6 bg-slate-800 rounded" />
@@ -256,7 +294,6 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
     );
   };
 
-
   if (!course) {
     return <CourseBuilderSkeleton />;
   }
@@ -264,9 +301,6 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
   const courseName = course.name;
   const instructorName = course.instructorName;
   // const sections = course.courseSections || [];
-
-
-
 
   const handleThumbnailUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -355,7 +389,8 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
     },
     {
       label: "At least one section Needed",
-      satisfied: Array.isArray(course?.courseSections) &&
+      satisfied:
+        Array.isArray(course?.courseSections) &&
         course.courseSections.length > 0,
     },
     {
@@ -367,7 +402,6 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
       satisfied: Boolean(course?.certificate),
     },
   ];
-
 
   return (
     <div className="p-4 pt-0">
@@ -463,6 +497,14 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
         </button>
 
         <button
+          onClick={() => {
+            if (!sections.length) {
+              toast.error("Create a Section First !");
+              return;
+            }
+            setActiveSectionId(sections[0].id);
+            setShowAddAssignment(true);
+          }}
           className="px-3 py-1.5 text-sm rounded-md bg-slate-800 text-sky-300 hover:bg-slate-700 transition"
         >
           + Add Assignment
@@ -515,7 +557,6 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
         requirements={publishRequirements}
       />
 
-
       {/* create section modal  */}
       <CreateSectionModal
         open={showCreateSection}
@@ -530,12 +571,33 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
           } catch (error) {
             console.log(error);
             toast.error("Unable to create section");
-          }
-          finally {
+          } finally {
             setShowCreateSection(false);
           }
         }}
       />
+
+      {/*Add Assignment Modal */}
+      {showAddAssignment && activeSectionId && (
+        <AddAssignmentModal
+          open={showAddAssignment && !!activeSectionId}
+          sectionId={activeSectionId!}
+          onClose={() => {
+            setShowAddAssignment(false);
+            setActiveSectionId(null);
+          }}
+        >
+          <AddAssignment
+            sectionId={activeSectionId!}
+            onClose={async () => {
+              setShowAddAssignment(false);
+              setActiveSectionId(null);
+              const res = await getSections(courseId);
+              setSections(res.data);
+            }}
+          />
+        </AddAssignmentModal>
+      )}
     </div>
   );
 };

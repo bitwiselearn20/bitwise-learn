@@ -1,0 +1,2 @@
+cd packages/db
+bunx prisma generate

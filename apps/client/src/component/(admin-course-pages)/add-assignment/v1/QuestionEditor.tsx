@@ -13,7 +13,8 @@ export default function QuestionEditor({
   onNew,
   onSubmit,
   locked,
-  onEdit, // 👈 NEW PROP
+  onEdit, //  NEW PROP
+  onClose,
 }: any) {
   const updateOption = (id: string, key: string, value: any) => {
     saveQuestion({
@@ -49,6 +50,7 @@ export default function QuestionEditor({
           ) : (
             <XCircle
               size={30}
+              onClick={onClose}
               className="cursor-pointer text-neutral-600 hover:text-red-800 transition-colors duration-150"
             />
           )}

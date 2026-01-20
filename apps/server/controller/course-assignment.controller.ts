@@ -41,7 +41,7 @@ class CourseAssignmentController {
           description: data.description,
           sectionId: data.sectionId,
           marksPerQuestion: data.marksPerQuestion,
-          instrution: data.instruction,
+          instruction: data.instruction,
         },
       });
 
@@ -82,7 +82,7 @@ class CourseAssignmentController {
           description: data.description ?? dbAssignment.description,
           marksPerQuestion:
             data.marksPerQuestion ?? dbAssignment.marksPerQuestion,
-          instrution: data.instruction ?? dbAssignment.instrution,
+          instruction: data.instruction ?? dbAssignment.instruction,
         },
       });
 

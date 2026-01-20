@@ -24,16 +24,16 @@ class CouseContentController {
 
       if (!dbSection) throw new Error("invalid section id");
 
-      console.log(
-        {
-          name: data.name,
-          description: data.description,
-          sectionId: data.sectionId,
-          transcript: data.transcript,
-          videoUrl: data.videoUrl,
-          creatorId: dbAdmin.id,
-        },
-      )
+      if (!data.videoUrl) throw new Error("videoUrl is required");
+
+      console.log({
+        name: data.name,
+        description: data.description,
+        sectionId: data.sectionId,
+        transcript: data.transcript,
+        videoUrl: data.videoUrl,
+        creatorId: dbAdmin.id,
+      });
       const addedContent = await prismaClient.courseLearningContent.create({
         data: {
           name: data.name,
@@ -154,7 +154,7 @@ class CouseContentController {
       const fileLink = await cloudinaryService.uploadFile(
         req.file,
         "course_content",
-        uniqueFilename
+        uniqueFilename,
       );
       if (!fileLink) throw new Error("file upload failed");
 

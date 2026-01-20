@@ -118,7 +118,7 @@ model Batch {
   branch        String
   batchEndYear  String
   institutionId String       @db.ObjectId
-  institution    Institution  @relation(references: [id], fields: [institutionId])
+  institution   Institution  @relation(references: [id], fields: [institutionId])
   teachers      Teacher[]
   students      Student[]
   assessments   Assessment[]
@@ -212,7 +212,7 @@ model CourseLearningContent {
 model CourseProgress {
   id        String                @id @default(auto()) @map("_id") @db.ObjectId
   studentId String                @db.ObjectId
-  student   Student              @relation(references: [id], fields: [studentId])
+  student   Student               @relation(references: [id], fields: [studentId])
   contentId String                @db.ObjectId
   content   CourseLearningContent @relation(references: [id], fields: [contentId])
   createdAt DateTime              @default(now())
@@ -225,8 +225,8 @@ model CourseAssignemnt {
   id                        String                     @id @default(auto()) @map("_id") @db.ObjectId
   name                      String
   description               String
-  instrution                String
-  marksPerQuestion          String
+  instruction               String
+  marksPerQuestion          Int
   sectionId                 String                     @db.ObjectId
   section                   CourseSections             @relation(fields: [sectionId], references: [id])
   courseAssignemntQuestions CourseAssignemntQuestion[]
@@ -252,7 +252,7 @@ model CourseAssignemntSubmission {
   questionId    String                   @db.ObjectId
   question      CourseAssignemntQuestion @relation(references: [id], fields: [questionId])
   studentId     String                   @db.ObjectId
-  student       Student                 @relation(fields: [studentId], references: [id])
+  student       Student                  @relation(fields: [studentId], references: [id])
   answer        String[]
   marksObtained Int?
   isCorrect     Boolean?
@@ -314,7 +314,7 @@ model ProblemTemplate {
   language     LANGUAGES
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  students     Student? @relation(fields: [studentsId], references: [id])
+  students     Student?  @relation(fields: [studentsId], references: [id])
   studentsId   String?   @db.ObjectId
 }
 
@@ -346,7 +346,7 @@ model ProblemSubmission {
   memory  String?
   status  PROBLEM_STATUS
 
-  studentId String   @db.ObjectId
+  studentId String  @db.ObjectId
   student   Student @relation(fields: [studentId], references: [id])
 
   problemId String  @db.ObjectId
@@ -421,7 +421,7 @@ model AssessmentSubmission {
   assessmentId String     @db.ObjectId
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
 
-  studentId String   @db.ObjectId
+  studentId String  @db.ObjectId
   student   Student @relation(fields: [studentId], references: [id])
 
   startedAt                     DateTime                       @default(now())
