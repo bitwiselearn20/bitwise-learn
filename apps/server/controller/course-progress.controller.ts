@@ -11,7 +11,7 @@ class CourseProgressController {
       if (!studentId) throw new Error("studentId is required");
       if (!contentId) throw new Error("courseId is required");
 
-      const dbStudent = await prismaClient.students.findUnique({
+      const dbStudent = await prismaClient.student.findUnique({
         where: { id: studentId },
       });
 
@@ -54,37 +54,45 @@ class CourseProgressController {
   async unMarksAsDone(req: Request, res: Response) {
     try {
       const studentId = req.user?.id;
-      const progressId = req.params.id;
+      const contentId = req.params.id;
 
       if (!studentId) throw new Error("studentId is required");
-      if (!progressId) throw new Error("courseId is required");
+      if (!contentId) throw new Error("courseId is required");
 
-      const dbStudent = await prismaClient.students.findUnique({
+      const dbStudent = await prismaClient.student.findUnique({
         where: { id: studentId },
       });
 
       if (!dbStudent) throw new Error("student not found ");
 
+      const dbContent = await prismaClient.courseLearningContent.findUnique({
+        where: { id: contentId },
+      });
+      if (!dbContent) throw new Error("content couldnot be found");
+
       const alreadyDone = await prismaClient.courseProgress.findFirst({
         where: {
-          id: progressId,
+          studentId,
+          contentId,
         },
       });
 
       if (!alreadyDone)
         return res
           .status(200)
-          .json(apiResponse(200, "already not completed", null));
+          .json(apiResponse(200, "portion not completed", null));
 
-      const removedProgress = await prismaClient.courseProgress.delete({
+      const createdProgress = await prismaClient.courseProgress.delete({
         where: {
           id: alreadyDone.id,
         },
       });
 
-      if (!removedProgress) throw new Error("error in creating progress");
+      if (!createdProgress) throw new Error("error in creating progress");
 
-      return res.status(200).json(apiResponse(200, "progress removed", null));
+      return res
+        .status(200)
+        .json(apiResponse(200, "progress un-marked", createdProgress));
     } catch (error: any) {
       console.log(error);
       return res.status(200).json(apiResponse(200, error.message, null));
@@ -95,7 +103,7 @@ class CourseProgressController {
       const studentId = req.user?.id;
       if (!studentId) throw new Error("studentId is required");
 
-      const dbStudent = await prismaClient.students.findUnique({
+      const dbStudent = await prismaClient.student.findUnique({
         where: { id: studentId },
       });
 
@@ -168,7 +176,7 @@ class CourseProgressController {
       if (!studentId) throw new Error("studentId is required");
       if (!courseId) throw new Error("no courseId Found");
 
-      const dbStudent = await prismaClient.students.findUnique({
+      const dbStudent = await prismaClient.student.findUnique({
         where: { id: studentId },
       });
 
@@ -225,7 +233,7 @@ class CourseProgressController {
         apiResponse(200, "course info fetched", {
           overallProgress: overAllCompletionStatus,
           sectionInfo: individualSectionMap,
-        })
+        }),
       );
     } catch (error: any) {
       console.log(error);

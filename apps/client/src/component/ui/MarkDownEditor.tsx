@@ -29,7 +29,14 @@ export default function MarkdownEditor({
   theme: "light" | "dark";
 }) {
   return (
-    <div>
+    <div
+      style={{
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+        //@ts-ignore
+        WebkitScrollbar: { display: "none" },
+      }}
+    >
       <MDEditor
         data-color-mode="dark"
         height={height}
@@ -39,7 +46,13 @@ export default function MarkdownEditor({
         hideToolbar={hideToolbar}
         spellCheck
         className={mode !== "live" ? "bg-black text-white" : ""}
-        style={THEME_MAP[theme]}
+        style={{
+          ...THEME_MAP[theme],
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          //@ts-ignore
+          WebkitScrollbar: { display: "none" },
+        }}
       />
     </div>
   );

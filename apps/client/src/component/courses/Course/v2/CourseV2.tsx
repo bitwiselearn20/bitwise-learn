@@ -8,6 +8,8 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactViewAdobe from "react-adobe-embed";
 import View from "react-adobe-embed";
 import PdfViewer from "./PDFViewer";
+import { markAsDone, markAsUnDone } from "@/api/courses/course/course-progress";
+import MarkdownEditor from "@/component/ui/MarkDownEditor";
 
 /* ================= TYPES ================= */
 
@@ -54,7 +56,7 @@ export default function CourseV2() {
   const [studyMode, setStudyMode] = useState(false);
   const [showTranscript, setShowTranscript] = useState(true);
   const [showPDF, setShowPDF] = useState(true);
-  const [completedSection, showCompletedSection] = useState([]);
+  const [completedSection, setCompletedSection] = useState([]);
 
   const isResizing = useRef(false);
 
@@ -130,6 +132,24 @@ export default function CourseV2() {
     return () =>
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
+  const handleMarkAsDone = async () => {
+    if (!activeTopic) return;
+
+    if (activeTopic.isCompleted) {
+      //@ts-ignore
+      await markAsUnDone(activeTopic.id);
+
+      setCompletedSection((prev) =>
+        prev.filter((section) => section.id !== activeTopic.id),
+      );
+    } else {
+      //@ts-ignore
+      await markAsDone(activeTopic.id);
+
+      //@ts-ignore
+      setCompletedSection((prev) => [...prev, { id: activeTopic.id }]);
+    }
+  };
 
   /* ================= RENDER ================= */
 
@@ -199,6 +219,12 @@ export default function CourseV2() {
                   {showPDF ? "Show PDF" : "Hide PDF"}
                 </button>
               )}
+              <button
+                onClick={handleMarkAsDone}
+                className="px-3 py-2 bg-[#2a2a2a] text-gray-300 rounded"
+              >
+                Mark as Done
+              </button>
             </div>
           </div>
 
@@ -264,9 +290,15 @@ function LearningView({ topic, showPDF, studyMode }: any) {
           )}
         </div>
 
-        {!studyMode && topic.transcript ? (
-          <aside className="w-1/3 bg-[#1c1d1d] p-4 rounded-xl text-gray-300">
-            {topic.transcript}
+        {topic.transcript ? (
+          <aside className="w-full bg-[#1c1d1d] p-4 rounded-xl text-gray-300">
+            <MarkdownEditor
+              height={550}
+              value={topic.transcript}
+              mode={"preview"}
+              hideToolbar={true}
+              theme="dark"
+            />
           </aside>
         ) : (
           <aside className="w-full h-[25%] flex justify-center items-center pt-8 bg-[#1c1d1d] p-4 rounded-xl text-gray-300">
