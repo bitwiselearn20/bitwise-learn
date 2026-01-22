@@ -117,3 +117,7 @@ body{
 .no-scrollbar::-webkit-scrollbar{
   display: none;
 }
+
+select {
+  color-scheme: dark;
+}

@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 import { createAssessments } from "@/api/assessments/create-assessments";
 import { getAllAssessments } from "@/api/assessments/get-all-assessments";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 
 // colors ------------------------------------------------------------------
 const colors = {
@@ -21,6 +23,7 @@ const colors = {
 
 // types -------------------------------------------------------------------
 type CreateAssessment = {
+  id: string,
   name: string;
   description: string;
   instructions: string;
@@ -38,6 +41,7 @@ const AssessmentCard = ({
   assessment,
 }: {
   assessment: CreateAssessment;
+
 }) => {
   const statusStyles =
     assessment.status === "LIVE"
@@ -46,6 +50,12 @@ const AssessmentCard = ({
         ? "bg-red-500/15 text-red-400 border-red-500/30"
         : "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
 
+
+    const router = useRouter();
+
+    const handleClick = (assessmentId: string)=>{
+      router.push(`/admin-dashboard/assessments/${assessmentId}`);
+    }
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -93,8 +103,9 @@ const AssessmentCard = ({
           ${colors.primary_Hero} text-white
           hover:opacity-90 transition
         `}
+        onClick={()=> handleClick(assessment.id)}
       >
-        View Assessment
+        Edit Assessment
       </button>
     </motion.div>
   );
@@ -114,6 +125,7 @@ const AddAssessmentModal = ({
   onSubmit,
 }: AddAssessmentModalProps) => {
   const [form, setForm] = useState<CreateAssessment>({
+    id:"",
     name: "",
     description: "",
     instructions: "",
@@ -443,7 +455,7 @@ const AssessmentsV1 = () => {
   }
 
   useEffect(() => {
-    fetchAssessments();
+    const assessmentData = fetchAssessments();
   }, []);
 
   const filteredAssessments = assessments.filter((assessment) => {
