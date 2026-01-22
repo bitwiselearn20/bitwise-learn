@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import SideBar from "@/component/general/SideBar";
 import CourseBuilderV1 from "@/component/(admin-course-pages)/course-builder/v1/CourseBuilderV1";
 
 type PageProps = {
@@ -13,7 +12,6 @@ export default function AdminCourse({ params }: PageProps) {
 
   return (
     <div className="flex h-screen overflow-hidden ">
-      <SideBar />
       <main className="flex-1 overflow-y-auto px-10 py-10">
         <CourseBuilderV1 courseId={id} />
       </main>
