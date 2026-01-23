@@ -24,7 +24,8 @@ import {
   studentRouter,
   courseRouter,
   codeRouter,
-  assessmentRouter
+  assessmentRouter,
+  reportRouter,
 } from "./routes";
 dotenv.config({ path: "../.env" });
 
@@ -102,6 +103,7 @@ app.use("/api/v1/vendors", vendorRouter);
 app.use("/api/v1/problems", problemsRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/code", codeRouter);
+app.use("/api/v1/report", reportRouter);
 
 // For dev only
 app.use("/api/v1/assessments", assessmentRouter);

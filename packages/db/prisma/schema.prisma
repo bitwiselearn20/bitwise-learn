@@ -12,6 +12,11 @@ enum COURSE_STATUS {
   NOT_PUBLISHED
 }
 
+enum PROCTOR {
+  CHEATED
+  NOT_CHEATED
+}
+
 enum COURSE_LEVEL {
   BASIC
   INTERMEDIATE
@@ -418,9 +423,10 @@ model AssessmentSubmission {
   assessmentId String     @db.ObjectId
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
 
-  studentId String  @db.ObjectId
-  student   Student @relation(fields: [studentId], references: [id])
-
+  studentId                     String                         @db.ObjectId
+  student                       Student                        @relation(fields: [studentId], references: [id])
+  studentIp                     String
+  proctoringStatus              PROCTOR                        @default(NOT_CHEATED)
   startedAt                     DateTime                       @default(now())
   submittedAt                   DateTime?
   totalMarks                    Int?
