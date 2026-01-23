@@ -27,10 +27,11 @@ router.delete(
 router.get(
     "/get-assessment-section/:id",
     authMiddleware,
-    assessmentSectionController.getAssessmentSectionById,
-);
+    assessmentSectionController.getAllAssessmentSection
+  );
+  
 router.post(
-    "/add-assessment-section/:id",
+    "/add-assessment-section",
     authMiddleware,
     assessmentSectionController.createAssessmentSection,
 );
