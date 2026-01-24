@@ -68,7 +68,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
       // ✅ ADDED
       setFormError(
         error?.response?.data?.message ||
-          "Something went wrong while creating the course."
+          "Something went wrong while creating the course.",
       );
     } finally {
       setLoading(false);
@@ -164,11 +164,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
       </div>
 
       {/* ADDED ERROR UI */}
-      {formError && (
-        <p className="mt-4 text-sm text-red-400">
-          {formError}
-        </p>
-      )}
+      {formError && <p className="mt-4 text-sm text-red-400">{formError}</p>}
 
       {/* Action */}
       <div className="mt-8 flex justify-end">

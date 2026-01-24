@@ -187,7 +187,8 @@ function V1Home() {
                       />
                     </svg>
 
-                    <div className="absolute left-0 top-0 w-[120px] h-[80px]
+                    <div
+                      className="absolute left-0 top-0 w-[120px] h-[80px]
                       rounded-xl border-2 border-white
                       flex flex-col items-center justify-center gap-1 bg-black/20"
                     >
@@ -195,7 +196,8 @@ function V1Home() {
                       <span className="text-base">Lesson</span>
                     </div>
 
-                    <div className="absolute right-0 top-0 w-[120px] h-[80px]
+                    <div
+                      className="absolute right-0 top-0 w-[120px] h-[80px]
                       rounded-xl border-2 border-white
                       flex flex-col items-center justify-center gap-1 bg-black/20"
                     >
@@ -203,7 +205,8 @@ function V1Home() {
                       <span className="text-base">Task</span>
                     </div>
 
-                    <div className="absolute left-0 bottom-0 w-[120px] h-[80px]
+                    <div
+                      className="absolute left-0 bottom-0 w-[120px] h-[80px]
                       rounded-xl border-2 border-white
                       flex flex-col items-center justify-center gap-1 bg-black/20"
                     >
@@ -215,8 +218,8 @@ function V1Home() {
                       className="absolute left-[140px] bottom-[10px]
                       text-sm text-white/80 leading-relaxed max-w-[180px]"
                     >
-                      Follow a structured path with lessons,
-                      tasks and checkpoints
+                      Follow a structured path with lessons, tasks and
+                      checkpoints
                     </p>
                   </div>
                 </div>
@@ -278,7 +281,6 @@ function V1Home() {
           className={`${kleeOne.className} relative min-h-screen bg-black/90 flex items-center justify-center px-16`}
         >
           <div className="max-w-7xl w-full grid grid-cols-2 gap-16 items-center">
-
             {/* ================= LEFT SECTION ================= */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -294,10 +296,10 @@ function V1Home() {
 
               <div className="text-white/70 text-base leading-relaxed max-w-xl mb-8">
                 <p>
-                  We transform aspiring coders into job-ready developers. Bitwise Learn
-                  guides you through the journey from beginner to industry professional
-                  with well-planned courses, hands-on practice, and personalized
-                  mentorship.
+                  We transform aspiring coders into job-ready developers.
+                  Bitwise Learn guides you through the journey from beginner to
+                  industry professional with well-planned courses, hands-on
+                  practice, and personalized mentorship.
                 </p>
               </div>
 
@@ -363,11 +365,7 @@ function V1Home() {
               className="relative flex items-center justify-center"
             >
               <div className="relative w-[420px] h-[280px] rounded-2xl bg-linear-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur-xl shadow-[0_30px_80px_rgba(0,0,0,0.6)] flex items-center justify-center">
-                <Image
-                  src={studyIMG}
-                  alt="study.png"
-                  className="rounded-2xl"
-                />
+                <Image src={studyIMG} alt="study.png" className="rounded-2xl" />
               </div>
 
               {/* FLOATING STATS */}
@@ -397,13 +395,11 @@ function V1Home() {
           </div>
         </section>
 
-
         {/* ================= BLACK → BLUE FADE ================= */}
         <div className="h-64 bg-linear-to-b from-black via-black/70 to-blue-400/90" />
 
         {/* ================= CTA SECTION ================= */}
         <section className="relative min-h-[70vh] bg-linear-to-b from-blue-400/90 to-blue-600 flex items-center justify-center overflow-hidden">
-
           {/* subtle background glow */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_60%)] pointer-events-none" />
 
@@ -469,7 +465,6 @@ function V1Home() {
             </motion.div>
           </motion.div>
         </section>
-
       </div>
       <Footer />
     </div>

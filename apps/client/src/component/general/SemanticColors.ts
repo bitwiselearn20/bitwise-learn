@@ -21,7 +21,7 @@ export const Semantic = {
     special: Palette.custom_blue,
     black: Palette.custom_black,
   },
-  
+
   border: {
     default: Palette.custom_gray,
     faded: Palette.custom_gray_faded,

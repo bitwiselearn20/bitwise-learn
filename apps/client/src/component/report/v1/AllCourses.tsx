@@ -48,10 +48,7 @@ function AllCourses() {
         <tbody>
           {loading &&
             Array.from({ length: 5 }).map((_, i) => (
-              <tr
-                key={i}
-                className="border-b border-neutral-800 animate-pulse"
-              >
+              <tr key={i} className="border-b border-neutral-800 animate-pulse">
                 {Array.from({ length: 7 }).map((_, j) => (
                   <td key={j} className="px-4 py-4">
                     <div className="h-4 w-full rounded bg-neutral-700/60" />
@@ -75,9 +72,7 @@ function AllCourses() {
                   {course.instructorName}
                 </td>
 
-                <td className="px-4 py-3 text-neutral-300">
-                  {course.level}
-                </td>
+                <td className="px-4 py-3 text-neutral-300">{course.level}</td>
 
                 <td className="px-4 py-3 text-neutral-300">
                   {course.duration}
@@ -97,7 +92,7 @@ function AllCourses() {
                   <button
                     onClick={() =>
                       router.push(
-                        `/admin-dashboard/reports/courses/${course.id}`
+                        `/admin-dashboard/reports/courses/${course.id}`,
                       )
                     }
                     className="px-3 py-1.5 text-xs font-medium rounded-md
@@ -108,7 +103,6 @@ function AllCourses() {
                 </td>
               </tr>
             ))}
-
 
           {!loading && courses.length === 0 && (
             <tr>

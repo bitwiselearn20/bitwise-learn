@@ -22,18 +22,18 @@ router.get("/get-all-batch/:id",
     authMiddleware,
     batchController.getAllBatchesForInstitution);
 router.get(
-    "/get-batch-by-id/:id",
-    authMiddleware,
-    batchController.getBatchById
+  "/get-batch-by-id/:id",
+  authMiddleware,
+  batchController.getBatchById,
 );
 router.put(
-    "/update-batch-by-id/:id",
-    authMiddleware,
-    batchController.updateBatch
+  "/update-batch-by-id/:id",
+  authMiddleware,
+  batchController.updateBatch,
 );
 router.delete(
-    "/delete-batch-by-id/:id",
-    authMiddleware,
-    batchController.deleteBatch
+  "/delete-batch-by-id/:id",
+  authMiddleware,
+  batchController.deleteBatch,
 );
 export default router;

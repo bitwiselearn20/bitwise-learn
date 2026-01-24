@@ -1,30 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-    req: NextRequest,
-    context: {params:Promise<{id: string}>}
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> },
 ) {
-    try {
-        const { id } = await context.params;
-        const token = req.cookies.get("accessToken")?.value;
+  try {
+    const { id } = await context.params;
+    const token = req.cookies.get("accessToken")?.value;
 
-        const res = await fetch(
-            `${process.env.BACKEND_URL}/api/v1/courses/get-all-sections-by-course/${id}`,
-            {
-                method: "GET",
-                headers: {
-                    Authorization : token || "",
-                }
-            }
-        )
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/api/v1/courses/get-all-sections-by-course/${id}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: token || "",
+        },
+      },
+    );
 
-        const data = await res.json();
+    const data = await res.json();
 
-        return NextResponse.json(data, {status : res.status});
-    } catch (error: any) {
-        return NextResponse.json(
-            {message: error.message},
-            {status:500}
-        )
-    }
+    return NextResponse.json(data, { status: res.status });
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
 }

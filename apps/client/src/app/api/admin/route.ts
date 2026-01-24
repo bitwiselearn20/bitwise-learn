@@ -8,11 +8,11 @@ export async function GET(req: NextRequest) {
     if (!backendUrl) {
       return NextResponse.json(
         { error: "Backend URL not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
     const response = await axios.get(
-      `${backendUrl}/api/v1/admins/get-all-admin`
+      `${backendUrl}/api/v1/admins/get-all-admin`,
     );
 
     return NextResponse.json(response.data.data, { status: 200 });
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(
       { error: "Failed to fetch admins" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

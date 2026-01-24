@@ -30,41 +30,41 @@ export function useAntiCheatControls(started: boolean) {
     };
 
     const disableShortcuts = (e: KeyboardEvent) => {
-  if (!startedRef.current) return;
+      if (!startedRef.current) return;
 
-  const key = e.key.toLowerCase();
-  const ctrlOrCmd = e.ctrlKey || e.metaKey;
+      const key = e.key.toLowerCase();
+      const ctrlOrCmd = e.ctrlKey || e.metaKey;
 
-  if (ctrlOrCmd && ["c", "v", "x", "a"].includes(key)) {
-    e.preventDefault();
+      if (ctrlOrCmd && ["c", "v", "x", "a"].includes(key)) {
+        e.preventDefault();
 
-    toast.error("Copy / paste is disabled during the test.", {
-      duration: 750,
-      position: "top-right",
-      style: { background: "#000", color: "#fff" },
-    });
-    return;
-  }
+        toast.error("Copy / paste is disabled during the test.", {
+          duration: 750,
+          position: "top-right",
+          style: { background: "#000", color: "#fff" },
+        });
+        return;
+      }
 
-  if (key === "tab") {
-    e.preventDefault();
+      if (key === "tab") {
+        e.preventDefault();
 
-    toast.error("Tab navigation is disabled during the test.", {
-      duration: 750,
-      position: "top-right",
-      style: { background: "#000", color: "#fff" },
-    });
-    return;
-  }
+        toast.error("Tab navigation is disabled during the test.", {
+          duration: 750,
+          position: "top-right",
+          style: { background: "#000", color: "#fff" },
+        });
+        return;
+      }
 
-  if (e.metaKey) {
-    toast.error("System keys are restricted during the test.", {
-      duration: 750,
-      position: "top-right",
-      style: { background: "#000", color: "#fff" },
-    });
-  }
-};
+      if (e.metaKey) {
+        toast.error("System keys are restricted during the test.", {
+          duration: 750,
+          position: "top-right",
+          style: { background: "#000", color: "#fff" },
+        });
+      }
+    };
 
     document.addEventListener("contextmenu", disableContextMenu);
     document.addEventListener("copy", disableCopyPaste);

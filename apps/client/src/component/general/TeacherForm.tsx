@@ -28,13 +28,16 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
     batchId: "",
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof TeacherFormData, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof TeacherFormData, string>>
+  >({});
 
   const validators = useMemo(
     () => ({
       name: (value: string) => {
         if (!value.trim()) return "Name is required";
-        if (!/^[A-Za-z\s]+$/.test(value)) return "Only alphabets and spaces allowed";
+        if (!/^[A-Za-z\s]+$/.test(value))
+          return "Only alphabets and spaces allowed";
         return "";
       },
       email: (value: string) => {
@@ -57,7 +60,7 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
       },
       vendorId: () => "",
     }),
-    []
+    [],
   );
 
   const validateField = (key: keyof TeacherFormData, value: string) => {
@@ -74,12 +77,15 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     const nextData = { ...formData, [name]: value } as TeacherFormData;
     setFormData(nextData);
-    setErrors((prev) => ({ ...prev, [name]: validateField(name as keyof TeacherFormData, value) }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name as keyof TeacherFormData, value),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -89,7 +95,7 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
     setErrors(nextErrors);
 
     const hasError = Object.values(nextErrors).some(
-      (msg) => msg && msg.length > 0
+      (msg) => msg && msg.length > 0,
     );
     if (hasError) return;
 
@@ -99,13 +105,11 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
       await createTeacher(formData);
 
       toast.success("Teacher created successfully");
-
     } catch (error) {
       console.error("Failed to create teacher", error);
       toast.error("Failed to create teacher");
     }
   };
-
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -211,7 +215,14 @@ function Label({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Input({ label, error, ...props }: React.InputHTMLAttributes<HTMLInputElement> & { label: string; error?: string }) {
+function Input({
+  label,
+  error,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement> & {
+  label: string;
+  error?: string;
+}) {
   return (
     <div>
       <Label>{label}</Label>

@@ -53,9 +53,7 @@ export default function RightSection({
             }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className={`text-xl px-4 py-2 rounded-md ${
-              activeTab === "study"
-                ? "cursor-not-allowed"
-                : "cursor-pointer"
+              activeTab === "study" ? "cursor-not-allowed" : "cursor-pointer"
             }`}
           >
             Study

@@ -50,7 +50,7 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
   const [sectionError, setSectionError] = useState<string | null>(null);
 
   const [sectionName, setSectionName] = useState(
-    sectionData?.sectionName ?? ""
+    sectionData?.sectionName ?? "",
   );
 
   const [topics, setTopics] = useState<Topic[]>(
@@ -69,7 +69,7 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
           file: false,
         },
       },
-    ]
+    ],
   );
 
   /* ================= HELPERS ================= */
@@ -77,12 +77,12 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
   const updateTopic = (
     id: number,
     field: "title" | "description",
-    value: string
+    value: string,
   ) => {
     setTopics((prev) =>
       prev.map((topic) =>
-        topic.id === id ? { ...topic, [field]: value } : topic
-      )
+        topic.id === id ? { ...topic, [field]: value } : topic,
+      ),
     );
   };
 
@@ -117,20 +117,16 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
   const askDeleteTopic = (id: number) => {
     setTopics((prev) =>
       prev.map((topic) =>
-        topic.id === id
-          ? { ...topic, showDeleteConfirm: true }
-          : topic
-      )
+        topic.id === id ? { ...topic, showDeleteConfirm: true } : topic,
+      ),
     );
   };
 
   const cancelDeleteTopic = (id: number) => {
     setTopics((prev) =>
       prev.map((topic) =>
-        topic.id === id
-          ? { ...topic, showDeleteConfirm: false }
-          : topic
-      )
+        topic.id === id ? { ...topic, showDeleteConfirm: false } : topic,
+      ),
     );
   };
 
@@ -146,8 +142,8 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
       prev.map((topic) =>
         topic.id === id
           ? { ...topic, showContentOptions: !topic.showContentOptions }
-          : topic
-      )
+          : topic,
+      ),
     );
   };
 
@@ -159,8 +155,8 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
               ...topic,
               contents: { ...topic.contents, [type]: true },
             }
-          : topic
-      )
+          : topic,
+      ),
     );
   };
 
@@ -173,8 +169,8 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
       prev.map((topic) =>
         topic.id === id
           ? { ...topic, isCompleted: true, isEditing: false }
-          : topic
-      )
+          : topic,
+      ),
     );
   };
 
@@ -185,19 +181,17 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
       prev.map((topic) =>
         topic.id === id
           ? { ...topic, isCompleted: false, isEditing: true }
-          : topic
-      )
+          : topic,
+      ),
     );
   };
 
   const completeSection = () => {
-    const allTopicsCompleted = topics.every(
-      (topic) => topic.isCompleted
-    );
+    const allTopicsCompleted = topics.every((topic) => topic.isCompleted);
 
     if (!allTopicsCompleted) {
       setSectionError(
-        "Please complete all topics before completing the section."
+        "Please complete all topics before completing the section.",
       );
       return;
     }
@@ -224,7 +218,7 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
         ...topic,
         isCompleted: false,
         isEditing: true,
-      }))
+      })),
     );
   };
 
@@ -232,7 +226,6 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
 
   return (
     <div className="relative text-white bg-divBg h-full w-[90%] rounded-2xl px-8 py-6 shadow-xl border border-white/5">
-
       {/* DELETE SECTION BUTTON */}
       <button
         onClick={deleteSection}
@@ -247,9 +240,7 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex flex-col gap-3 w-full max-w-md">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-semibold">
-              Section {sectionNumber}
-            </h1>
+            <h1 className="text-2xl font-semibold">Section {sectionNumber}</h1>
             <span className="text-xs px-3 py-1 rounded-full bg-white/10 text-white/70">
               Curriculum
             </span>
@@ -313,35 +304,31 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
                 >
                   <CircleCheck
                     className={
-                      topic.isCompleted
-                        ? "text-green-400"
-                        : "text-white/30"
+                      topic.isCompleted ? "text-green-400" : "text-white/30"
                     }
                   />
                 </button>
               </div>
             </div>
 
-            {index > 0 &&
-              topic.showDeleteConfirm &&
-              !sectionCompleted && (
-                <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2 text-sm">
-                  <AlertTriangle size={16} className="text-red-400" />
-                  <span className="flex-1">Delete this topic?</span>
-                  <button
-                    onClick={() => confirmDeleteTopic(topic.id)}
-                    className="text-red-400 font-semibold"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => cancelDeleteTopic(topic.id)}
-                    className="text-white/70"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              )}
+            {index > 0 && topic.showDeleteConfirm && !sectionCompleted && (
+              <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2 text-sm">
+                <AlertTriangle size={16} className="text-red-400" />
+                <span className="flex-1">Delete this topic?</span>
+                <button
+                  onClick={() => confirmDeleteTopic(topic.id)}
+                  className="text-red-400 font-semibold"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => cancelDeleteTopic(topic.id)}
+                  className="text-white/70"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
 
             <div className="input-wrapper">
               <CircleCheck size={18} className="input-icon" />
@@ -349,9 +336,7 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
                 type="text"
                 value={topic.title}
                 disabled={!topic.isEditing || sectionCompleted}
-                onChange={(e) =>
-                  updateTopic(topic.id, "title", e.target.value)
-                }
+                onChange={(e) => updateTopic(topic.id, "title", e.target.value)}
                 placeholder="Title: Example Title"
                 className="w-full border border-white/15 bg-transparent rounded-xl px-3 py-2 text-sm placeholder:text-white/40 disabled:opacity-50"
               />
@@ -382,18 +367,16 @@ const AddSectionV1 = ({ sectionNumber, sectionData }: AddSectionProps) => {
               topic.isEditing &&
               !sectionCompleted && (
                 <div className="flex gap-3 pt-1">
-                  {(["video", "transcript", "file"] as const).map(
-                    (type) => (
-                      <button
-                        key={type}
-                        onClick={() => addContent(topic.id, type)}
-                        className="flex items-center gap-1 bg-primaryBlue/90 text-black px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-primaryBlue transition"
-                      >
-                        <CirclePlus size={14} />
-                        {type}
-                      </button>
-                    )
-                  )}
+                  {(["video", "transcript", "file"] as const).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => addContent(topic.id, type)}
+                      className="flex items-center gap-1 bg-primaryBlue/90 text-black px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-primaryBlue transition"
+                    >
+                      <CirclePlus size={14} />
+                      {type}
+                    </button>
+                  ))}
                 </div>
               )}
           </div>

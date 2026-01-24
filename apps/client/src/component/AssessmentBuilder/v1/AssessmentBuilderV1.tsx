@@ -215,7 +215,6 @@
 //   const [openCreateSection, setOpenCreateSection] = useState(false);
 //   const [sections, setSections] = useState<section[]>([]);
 
-
 //   const fetchAssessment = async () => {
 //     try {
 //       const res = await getAssessmentById(assessmentId);
@@ -229,8 +228,6 @@
 //     fetchAssessment();
 //   }, [assessmentId]);
 
-
-
 //   const fetchSections = async () => {
 //     try {
 //       const data = await getAssessmentSections(assessmentId);
@@ -239,11 +236,9 @@
 //     } catch (error: any) {
 //       console.error("Error fetching sections:", error);
 //       toast.error("Unable to fetch sections");
-//       setSections([]); 
+//       setSections([]);
 //     }
 //   };
-
-
 
 //   useEffect(() => {
 //     if (!assessmentId) return;
@@ -372,11 +367,7 @@ interface AddSectionModalProps {
   assessmentId: string;
 }
 
-const AddSectionModal = ({
-  open,
-  onClose,
-  onSubmit,
-}: AddSectionModalProps) => {
+const AddSectionModal = ({ open, onClose, onSubmit }: AddSectionModalProps) => {
   const [form, setForm] = useState({
     name: "",
     marksPerQuestion: 1,
@@ -406,17 +397,13 @@ const AddSectionModal = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6">
-        <h2 className="text-lg font-semibold text-white">
-          Create new section
-        </h2>
+        <h2 className="text-lg font-semibold text-white">Create new section</h2>
 
         <div className="mt-4">
           <label className="text-sm text-slate-400">Section name</label>
           <input
             value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
             className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-sm text-white border border-slate-700 focus:border-sky-500 outline-none"
           />
           {errors.name && (
@@ -425,9 +412,7 @@ const AddSectionModal = ({
         </div>
 
         <div className="mt-4">
-          <label className="text-sm text-slate-400">
-            Marks per question
-          </label>
+          <label className="text-sm text-slate-400">Marks per question</label>
           <input
             type="number"
             min={1}
@@ -483,8 +468,7 @@ const AddSectionModal = ({
 // -------------------------------------------------------------------------
 
 const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
-  const [assessmentData, setAssessmentData] =
-    useState<Assessment | null>(null);
+  const [assessmentData, setAssessmentData] = useState<Assessment | null>(null);
   const [openCreateSection, setOpenCreateSection] = useState(false);
   const [sections, setSections] = useState<Section[]>([]);
 
@@ -546,10 +530,8 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                     {section.name}
                   </h3>
                   <p className="text-sm text-white/60">
-                    {section.assessmentType === "NO_CODE"
-                      ? "MCQ"
-                      : "Code"}{" "}
-                    • {section.marksPerQuestion} marks/question
+                    {section.assessmentType === "NO_CODE" ? "MCQ" : "Code"} •{" "}
+                    {section.marksPerQuestion} marks/question
                   </p>
                 </div>
               </div>

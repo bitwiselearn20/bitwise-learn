@@ -46,7 +46,7 @@ export default function EntityDetailsModal({
   }
 
   const entries = Object.entries(editedData).filter(
-    ([key]) => key !== "id" // 👈 prevent editing ID
+    ([key]) => key !== "id", // 👈 prevent editing ID
   );
 
   return (

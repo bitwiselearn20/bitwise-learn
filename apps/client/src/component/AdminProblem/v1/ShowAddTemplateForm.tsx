@@ -26,7 +26,7 @@ function ShowAddTemplateForm({ onClose, onSave }: Props) {
   const [defaultCode, setDefaultCode] = useState("");
   const [functionBody, setFunctionBody] = useState("");
   const [activeTab, setActiveTab] = useState<"defaultCode" | "functionBody">(
-    "defaultCode"
+    "defaultCode",
   );
 
   const monacoLanguage = LANGUAGE_MAP[language] || "plaintext";

@@ -1,39 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import axiosInstance from "@/lib/axios";
 
-export async function POST(
-    req: NextRequest,
-) {
-    try {
-        const body = await req.json();
-        const token = req.headers.get("authorization");
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const token = req.headers.get("authorization");
 
-        const response = await axiosInstance.post(
-            `${process.env.BACKEND_URL}/api/v1/courses/add-content-to-section`,
-            body,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: token || "",
-                },
-            }
-        )
+    const response = await axiosInstance.post(
+      `${process.env.BACKEND_URL}/api/v1/courses/add-content-to-section`,
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token || "",
+        },
+      },
+    );
 
-        return NextResponse.json(response.data, {
-            status: response.status,
-        });
-    } catch (error: any) {
-        console.log("Topic error: ", error);
+    return NextResponse.json(response.data, {
+      status: response.status,
+    });
+  } catch (error: any) {
+    console.log("Topic error: ", error);
 
-        return NextResponse.json(
-            {
-                message:
-                    error.response?.data?.message ||
-                    error.message || "",
-            },
-            {
-                status: error.response?.status || 500,
-            }
-        );
-    }
+    return NextResponse.json(
+      {
+        message: error.response?.data?.message || error.message || "",
+      },
+      {
+        status: error.response?.status || 500,
+      },
+    );
+  }
 }

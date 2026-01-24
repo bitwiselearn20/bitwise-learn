@@ -13,10 +13,12 @@ class TeacherController {
       const data: CreateTeacherBody = req.body;
       if (!data) throw new Error("please provide all required fields");
 
-      if (req.user.type !== "SUPERADMIN" &&
+      if (
+        req.user.type !== "SUPERADMIN" &&
         req.user.type !== "ADMIN" &&
         req.user.type !== "INSTITUTION" &&
-        req.user.type !== "VENDOR") {
+        req.user.type !== "VENDOR"
+      ) {
         throw new Error("only institution or vendor can create teachers");
       }
 
@@ -90,10 +92,12 @@ class TeacherController {
 
       if (!teacherId) throw new Error("teacher id is required");
 
-      if (req.user.type !== "SUPERADMIN" &&
+      if (
+        req.user.type !== "SUPERADMIN" &&
         req.user.type !== "ADMIN" &&
         req.user.type !== "INSTITUTION" &&
-        req.user.type !== "VENDOR") {
+        req.user.type !== "VENDOR"
+      ) {
         throw new Error("only institution or vendor can update teachers");
       }
 

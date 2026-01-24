@@ -31,7 +31,12 @@ function V1AllInstitutions() {
 
   return (
     <div className="flex">
-      {addNew && <InstitutionForm openForm={setAddNew} onSubmit={handleCreateInstitution} />}
+      {addNew && (
+        <InstitutionForm
+          openForm={setAddNew}
+          onSubmit={handleCreateInstitution}
+        />
+      )}
       <div className="h-screen">
         <SideBar />
       </div>

@@ -5,126 +5,126 @@ const problemsRouter = Router();
 
 problemsRouter.get(
   "/get-all-dsa-problem/",
-  dsaQuestionController.getAllDsaProblem
+  dsaQuestionController.getAllDsaProblem,
 );
 problemsRouter.get(
   "/get-dsa-problem/:id/",
-  dsaQuestionController.getDsaProblemById
+  dsaQuestionController.getDsaProblemById,
 );
 problemsRouter.get(
   "/admin/get-dsa-problem/:id",
   adminMiddleware,
-  dsaQuestionController.getAdminDsaProblemById
+  dsaQuestionController.getAdminDsaProblemById,
 );
 problemsRouter.get(
   "/admin/get-dsa-problem/testcases/:id",
   adminMiddleware,
-  dsaQuestionController.getTestCaseById
+  dsaQuestionController.getTestCaseById,
 );
 problemsRouter.get(
   "/admin/get-dsa-problem/solution/:id",
   adminMiddleware,
-  dsaQuestionController.getProblemSolutionById
+  dsaQuestionController.getProblemSolutionById,
 );
 problemsRouter.get(
   "/admin/get-dsa-problem/submission/:id",
   adminMiddleware,
-  dsaQuestionController.getAllDsaSubmission
+  dsaQuestionController.getAllDsaSubmission,
 );
 problemsRouter.get(
   "/admin/get-dsa-problem/templates/:id",
   adminMiddleware,
-  dsaQuestionController.getTemplateById
+  dsaQuestionController.getTemplateById,
 );
 
 problemsRouter.get(
   "/get-dsa-problems-by-tag",
-  dsaQuestionController.getDsaProblemByTag
+  dsaQuestionController.getDsaProblemByTag,
 );
 problemsRouter.post(
   "/add-problem/",
   adminMiddleware,
-  dsaQuestionController.addDsaProblem
+  dsaQuestionController.addDsaProblem,
 );
 problemsRouter.patch(
   "/update-problem/:id",
   adminMiddleware,
-  dsaQuestionController.updateDsaProblem
+  dsaQuestionController.updateDsaProblem,
 );
 problemsRouter.delete(
   "/delete-problem/:id",
   adminMiddleware,
-  dsaQuestionController.deleteDsaProblem
+  dsaQuestionController.deleteDsaProblem,
 );
 problemsRouter.post(
   "/add-topic-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.addTopicToProblem
+  dsaQuestionController.addTopicToProblem,
 );
 problemsRouter.patch(
   "/update-topic-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.updateTopicToProblem
+  dsaQuestionController.updateTopicToProblem,
 );
 problemsRouter.delete(
   "/delete-topic-from-problem/:id",
   adminMiddleware,
-  dsaQuestionController.deleteTopicFromProblem
+  dsaQuestionController.deleteTopicFromProblem,
 );
 problemsRouter.post(
   "/add-template-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.addQuestionTemplate
+  dsaQuestionController.addQuestionTemplate,
 );
 problemsRouter.patch(
   "/update-template-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.updateQuestionTemplate
+  dsaQuestionController.updateQuestionTemplate,
 );
 problemsRouter.delete(
   "/delete-template-from-problem/:id",
   adminMiddleware,
-  dsaQuestionController.deleteQuestionTemplate
+  dsaQuestionController.deleteQuestionTemplate,
 );
 problemsRouter.post(
   "/add-testcase-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.addTestCaseToProblem
+  dsaQuestionController.addTestCaseToProblem,
 );
 problemsRouter.patch(
   "/update-testcase-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.updateTestCaseToProblem
+  dsaQuestionController.updateTestCaseToProblem,
 );
 problemsRouter.delete(
   "/delete-testcase-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.deleteTestCaseToProblem
+  dsaQuestionController.deleteTestCaseToProblem,
 );
 problemsRouter.post(
   "/add-solution-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.addProblemSolution
+  dsaQuestionController.addProblemSolution,
 );
 problemsRouter.patch(
   "/update-solution-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.updateProblemSolution
+  dsaQuestionController.updateProblemSolution,
 );
 problemsRouter.delete(
   "/delete-solution-to-problem/:id",
   adminMiddleware,
-  dsaQuestionController.removeProblemSolution
+  dsaQuestionController.removeProblemSolution,
 );
 problemsRouter.get(
   "/get-user-solved-questions/",
   adminMiddleware,
-  dsaQuestionController.getAllQuestionInfoById
+  dsaQuestionController.getAllQuestionInfoById,
 );
 problemsRouter.get(
   "/admin/get-user-solved-questions",
   adminMiddleware,
-  dsaQuestionController.getAllQuestionInfo
+  dsaQuestionController.getAllQuestionInfo,
 );
 
 export default problemsRouter;

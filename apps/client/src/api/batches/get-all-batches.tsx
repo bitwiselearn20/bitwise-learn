@@ -1,4 +1,4 @@
-import axiosInstance from "@/lib/axios"
+import axiosInstance from "@/lib/axios";
 
 export const getAllBatches = async (stateFn: any, paramId: string) => {
     // console.log("in batch func")

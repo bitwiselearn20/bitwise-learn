@@ -44,7 +44,7 @@ export default function SectionCard({
 }) {
   const [open, setOpen] = useState(false);
 
-  const completedCount = section.topics.filter(t => t.completed).length;
+  const completedCount = section.topics.filter((t) => t.completed).length;
   const totalCount = section.topics.length;
 
   return (
@@ -59,19 +59,14 @@ export default function SectionCard({
           <span className={`${colors.special_Font} font-bold`}>
             Section {section.id}:
           </span>
-          <span className={colors.primary_Font}>
-            {section.title}
-          </span>
+          <span className={colors.primary_Font}>{section.title}</span>
         </div>
 
         <div className="flex items-center gap-3">
           {section.locked ? (
             <Lock size={18} color={colors.special_Icon} />
           ) : (
-            <ProgressRing
-              completed={completedCount}
-              total={totalCount}
-            />
+            <ProgressRing completed={completedCount} total={totalCount} />
           )}
           <ChevronDown
             size={18}
@@ -96,10 +91,11 @@ export default function SectionCard({
   );
 }
 
-
 function TopicRow({ topic, onToggle }: { topic: Topic; onToggle: () => void }) {
   return (
-    <div className={`${colors.secondary_Bg} px-4 py-3 rounded-lg flex justify-between`}>
+    <div
+      className={`${colors.secondary_Bg} px-4 py-3 rounded-lg flex justify-between`}
+    >
       <span className="text-white font-mono">{topic.title}</span>
 
       <div className="flex gap-3 items-center">
@@ -116,7 +112,6 @@ function TopicRow({ topic, onToggle }: { topic: Topic; onToggle: () => void }) {
     </div>
   );
 }
-
 
 function ProgressRing({
   completed,

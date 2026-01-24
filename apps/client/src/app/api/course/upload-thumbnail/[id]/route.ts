@@ -2,15 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const {id} = await params;
+    const { id } = await params;
 
-    if(!id){
+    if (!id) {
       return NextResponse.json(
-        {message:"Course ID is missing"},
-        {status:400}
+        { message: "Course ID is missing" },
+        { status: 400 },
       );
     }
     const token = req.headers.get("authorization");
@@ -24,15 +24,12 @@ export async function POST(
           Authorization: token || "",
         },
         body: formData,
-      }
+      },
     );
 
     const data = await res.json();
     return NextResponse.json(data, { status: res.status });
   } catch (error: any) {
-    return NextResponse.json(
-      { message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

@@ -8,12 +8,12 @@ export async function POST(req: NextRequest) {
     if (!backendUrl) {
       return NextResponse.json(
         { error: "Backend URL not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     const response = await axiosInstance.get(
-      backendUrl + "/api/v1/admins/db-info"
+      backendUrl + "/api/v1/admins/db-info",
     );
     let filteredResponse = response.data.data;
 
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { error: "Failed to fetch problem" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

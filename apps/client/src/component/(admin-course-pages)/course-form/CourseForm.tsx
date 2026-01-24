@@ -5,7 +5,7 @@ type CourseFormProps = {
   onSuccess: () => void;
 };
 
-const CourseForm: React.FC<CourseFormProps> = ({ onClose,onSuccess }) => {
+const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
   return <CourseFormV1 onClose={onClose} onSuccess={onSuccess} />;
 };
 

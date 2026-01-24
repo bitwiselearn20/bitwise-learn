@@ -57,8 +57,8 @@ class InstitutionController {
           apiResponse(
             200,
             "institution created successfully",
-            createdInstitution
-          )
+            createdInstitution,
+          ),
         );
     } catch (error: any) {
       console.log(error);
@@ -131,8 +131,8 @@ class InstitutionController {
           apiResponse(
             200,
             "institution updated successfully",
-            updatedInstitution
-          )
+            updatedInstitution,
+          ),
         );
     } catch (error: any) {
       console.log(error);
@@ -175,8 +175,8 @@ class InstitutionController {
           apiResponse(
             200,
             "institution deleted successfully",
-            deletedInstitution
-          )
+            deletedInstitution,
+          ),
         );
     } catch (error: any) {
       console.log(error);
@@ -211,7 +211,7 @@ class InstitutionController {
       return res
         .status(200)
         .json(
-          apiResponse(200, "institutions fetched successfully", institutions)
+          apiResponse(200, "institutions fetched successfully", institutions),
         );
     } catch (error: any) {
       console.log(error);

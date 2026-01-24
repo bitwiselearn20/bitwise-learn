@@ -10,14 +10,14 @@ class CourseGradeController {
 
       if (!studentId) throw new Error("no new student found");
 
-      const dbStudent = await prismaClient.students.findUnique({
+      const dbStudent = await prismaClient.student.findUnique({
         where: { id: studentId },
       });
       if (!dbStudent) throw new Error("no such student found");
 
       const institutionId = dbStudent.instituteId;
       const enrolledCourses = await prismaClient.courseEnrollment.findMany({
-        where: { instituteId: institutionId },
+        where: { institutionId: institutionId },
       });
 
       const dbCourses = await prismaClient.course.findMany({
@@ -55,7 +55,7 @@ class CourseGradeController {
             assignment.courseAssignemntQuestions.forEach((question) => {
               const marksPerQuestion =
                 Number(
-                  question.courseAssignemntSubmissions[0]?.marksObtained
+                  question.courseAssignemntSubmissions[0]?.marksObtained,
                 ) || 0;
 
               // total possible marks
@@ -64,7 +64,7 @@ class CourseGradeController {
 
               // student's submission
               const submission = question.courseAssignemntSubmissions.find(
-                (s) => s.studentId === studentId
+                (s) => s.studentId === studentId,
               );
 
               const obtained = submission?.marksObtained ?? 0;
@@ -105,13 +105,13 @@ class CourseGradeController {
       if (!studentId) throw new Error("no new student found");
       if (!courseId) throw new Error("courseId is required");
 
-      const dbStudent = await prismaClient.students.findUnique({
+      const dbStudent = await prismaClient.student.findUnique({
         where: { id: studentId },
       });
       if (!dbStudent) throw new Error("no such student found");
 
       const dbCourse = await prismaClient.course.findUnique({
-        where: { id: courseId },
+        where: { id: courseId as string },
         select: {
           id: true,
           name: true,
@@ -151,7 +151,7 @@ class CourseGradeController {
             courseTotalMarks += marksPerQuestion;
 
             const submission = question.courseAssignemntSubmissions.find(
-              (s) => s.studentId === studentId
+              (s) => s.studentId === studentId,
             );
 
             const obtained = submission?.marksObtained ?? 0;
@@ -193,7 +193,7 @@ class CourseGradeController {
       if (!Array.isArray(data) || data.length === 0)
         throw new Error("submission data is required");
 
-      const dbStudent = await prismaClient.students.findUnique({
+      const dbStudent = await prismaClient.student.findUnique({
         where: { id: studentId },
       });
       if (!dbStudent) throw new Error("no such student found");

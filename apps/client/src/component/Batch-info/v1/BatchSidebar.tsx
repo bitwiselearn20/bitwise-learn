@@ -11,7 +11,6 @@ type BatchSidebarProps = {
 };
 
 const formatDate = (dateString: string | Date): string => {
-
   const date = new Date(dateString);
   const day = date.getDate();
   const month = date.toLocaleString("en-US", { month: "long" });
@@ -59,16 +58,14 @@ const InputField = ({
 const BatchSidebar = ({ batch }: BatchSidebarProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(batch);
-const router = useRouter();
+  const router = useRouter();
   useEffect(() => {
     setFormData(batch);
   }, [batch]);
 
   if (!batch) return null;
 
-  const formattedDate = batch.createdAt
-    ? formatDate(batch.createdAt)
-    : "";
+  const formattedDate = batch.createdAt ? formatDate(batch.createdAt) : "";
 
   const studentCount = batch?.students?.length ?? 0;
 
@@ -86,7 +83,7 @@ const router = useRouter();
         entity: "batch",
         data: formData,
       },
-      null
+      null,
     );
     setIsEditing(false);
   };
@@ -99,10 +96,9 @@ const router = useRouter();
           entity: "batch",
           data: "",
         },
-        null
+        null,
       );
       router.push("/admin-dashboard/batches");
-
     }
   };
 
@@ -117,9 +113,7 @@ const router = useRouter();
             onChange={(v) => handleChange("batchname", v)}
           />
         ) : (
-          <h1 className="text-2xl font-semibold">
-            {batch.batchname}
-          </h1>
+          <h1 className="text-2xl font-semibold">{batch.batchname}</h1>
         )}
       </div>
 
@@ -130,9 +124,7 @@ const router = useRouter();
           onChange={(v) => handleChange("branch", v)}
         />
       ) : (
-        <p className="text-sm text-gray-400 mb-6">
-          {batch.branch}
-        </p>
+        <p className="text-sm text-gray-400 mb-6">{batch.branch}</p>
       )}
 
       {/* Content */}
@@ -150,15 +142,9 @@ const router = useRouter();
               value={batch?.institution?.name ?? "—"}
             />
 
-            <InfoBlock
-              label="Number of Students"
-              value={studentCount}
-            />
+            <InfoBlock label="Number of Students" value={studentCount} />
 
-            <InfoBlock
-              label="Created At"
-              value={formattedDate}
-            />
+            <InfoBlock label="Created At" value={formattedDate} />
           </>
         ) : (
           <>
@@ -166,18 +152,9 @@ const router = useRouter();
               label="Institution"
               value={batch?.institution?.name ?? "—"}
             />
-            <InfoBlock
-              label="End Year"
-              value={batch.batchEndYear}
-            />
-            <InfoBlock
-              label="Number of Students"
-              value={studentCount}
-            />
-            <InfoBlock
-              label="Created At"
-              value={formattedDate}
-            />
+            <InfoBlock label="End Year" value={batch.batchEndYear} />
+            <InfoBlock label="Number of Students" value={studentCount} />
+            <InfoBlock label="Created At" value={formattedDate} />
           </>
         )}
       </div>

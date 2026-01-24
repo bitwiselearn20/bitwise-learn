@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CourseForm from "@/component/general/CourseForm";
 import TeacherForm from "@/component/general/TeacherForm";
 import { Plus, X } from "lucide-react";
@@ -6,8 +6,8 @@ import { useState } from "react";
 import StudentsForm from "./StudentsForm";
 import AssessmentsForm from "./AssessmentsForm";
 type TabsProps = {
-    value: string;
-    onValueChange: (value: string) => void;
+  value: string;
+  onValueChange: (value: string) => void;
 };
 const RenderComponent = ({ value }: { value: string }) => {
   switch (value) {
@@ -24,12 +24,12 @@ const RenderComponent = ({ value }: { value: string }) => {
   }
 };
 export const Tabs = ({ value, onValueChange }: TabsProps) => {
-    const [addNew, setAddNew] = useState(false);
-    const tabs = ["Students", "Teachers", "Assessments", "Courses"];
+  const [addNew, setAddNew] = useState(false);
+  const tabs = ["Students", "Teachers", "Assessments", "Courses"];
 
-    return (
-        <>
-        {addNew && (
+  return (
+    <>
+      {addNew && (
         <div className="fixed inset-0 z-50 bg-black/80 text-white flex justify-center items-center">
           <div className="relative bg-neutral-900 p-6 rounded-lg w-full max-w-3xl">
             <button
@@ -43,20 +43,21 @@ export const Tabs = ({ value, onValueChange }: TabsProps) => {
           </div>
         </div>
       )}
-       <div className="flex items-center gap-6"></div>
-        <div className="flex gap-4 mb-5 mt-5">
-            {tabs.map((tab) => (
-                <button
-                key={tab}
-                onClick={() => onValueChange(tab)}
-                className={`px-4 py-1.5 rounded-md text-md ${value === tab
-                    ? "bg-blue-500 text-white"
-                    : "text-gray-400 hover:text-white"
-                }`}
-                >
-                    {tab}
-                </button>
-            ))}
+      <div className="flex items-center gap-6"></div>
+      <div className="flex gap-4 mb-5 mt-5">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => onValueChange(tab)}
+            className={`px-4 py-1.5 rounded-md text-md ${
+              value === tab
+                ? "bg-blue-500 text-white"
+                : "text-gray-400 hover:text-white"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
 
         <button
           onClick={() => setAddNew(true)}
@@ -66,6 +67,6 @@ export const Tabs = ({ value, onValueChange }: TabsProps) => {
           Add New {value}
         </button>
       </div>
-                </>
-    );
+    </>
+  );
 };

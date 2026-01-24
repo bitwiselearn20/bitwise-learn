@@ -16,7 +16,7 @@ export default function TestCaseForm({
   onSave?: (data: any) => void;
 }) {
   const [testCaseType, setTestCaseType] = useState<"EXAMPLE" | "HIDDEN">(
-    "EXAMPLE"
+    "EXAMPLE",
   );
 
   const [inputFields, setInputFields] = useState<InputField[]>([
@@ -30,7 +30,7 @@ export default function TestCaseForm({
   const updateField = (
     index: number,
     field: "key" | "value",
-    value: string
+    value: string,
   ) => {
     const copy = [...inputFields];
     copy[index][field] = value;

@@ -10,17 +10,17 @@ router.get("/get-all-admin", authMiddleware, adminController.getAllAdmins);
 router.get(
   "/get-admin-by-id/:id",
   authMiddleware,
-  adminController.getAdminbyId
+  adminController.getAdminbyId,
 );
 router.put(
   "/update-admin-by-id/:id",
   authMiddleware,
-  adminController.updateAdmin
+  adminController.updateAdmin,
 );
 router.delete(
   "/delete-admin-by-id/:id",
   authMiddleware,
-  adminController.deleteAdmin
+  adminController.deleteAdmin,
 );
 router.get("/db-info", authMiddleware, superAdminController.getAllInformation);
 export default router;

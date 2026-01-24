@@ -28,7 +28,7 @@ type Props = {
       file?: string;
     }[];
   };
-  onAddAssignment: (sectionId: string,onCreated: ()=> void) => void;
+  onAddAssignment: (sectionId: string, onCreated: () => void) => void;
   onSectionDeleted: () => void;
 };
 
@@ -567,9 +567,8 @@ const AddSectionV2 = ({
   const [assignmentToDelete, setAssignmentToDelete] = useState<string | null>(
     null,
   );
-  const [deletingAssignment,setDeletingAssignment] = useState(false);
+  const [deletingAssignment, setDeletingAssignment] = useState(false);
   const [assignmentRefetchKey, setAssignmentRefetchKey] = useState(0);
-
 
   const handleDeleteTopic = async () => {
     if (!topicToDelete) return;
@@ -588,26 +587,24 @@ const AddSectionV2 = ({
     }
   };
 
-useEffect(() => {
-  if (activeTab !== "ASSIGNMENT") return;
+  useEffect(() => {
+    if (activeTab !== "ASSIGNMENT") return;
 
-  const fetchAssignments = async () => {
-    try {
-      setAssignmentLoading(true);
-      const res = await getAssignmentsBySection(sectionId);
-      setAssignments(res.data || []);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to Fetch Assignments");
-    } finally {
-      setAssignmentLoading(false);
-    }
-  };
+    const fetchAssignments = async () => {
+      try {
+        setAssignmentLoading(true);
+        const res = await getAssignmentsBySection(sectionId);
+        setAssignments(res.data || []);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to Fetch Assignments");
+      } finally {
+        setAssignmentLoading(false);
+      }
+    };
 
-  fetchAssignments();
-}, [activeTab, sectionId, assignmentRefetchKey]);
-
-
+    fetchAssignments();
+  }, [activeTab, sectionId, assignmentRefetchKey]);
 
   const handleDeleteAssignment = async () => {
     if (!assignmentToDelete) return;
@@ -879,10 +876,10 @@ useEffect(() => {
           + Add Topic
         </button>
         <button
-          onClick={() => 
-            onAddAssignment(sectionId,()=>{
+          onClick={() =>
+            onAddAssignment(sectionId, () => {
               setActiveTab("ASSIGNMENT");
-              setAssignmentRefetchKey((prev)=>prev+1);
+              setAssignmentRefetchKey((prev) => prev + 1);
             })
           }
           className="px-3 py-1.5 text-sm rounded-md bg-slate-800 text-sky-300 hover:bg-slate-700 transition"

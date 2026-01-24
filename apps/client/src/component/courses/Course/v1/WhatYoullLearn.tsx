@@ -9,9 +9,7 @@ const points = [
 export default function WhatYouWillLearn() {
   return (
     <div className="bg-[#121313] rounded-xl p-4">
-      <h3 className="mb-3 text-[#64ACFF] font-mono">
-        What You’ll Learn
-      </h3>
+      <h3 className="mb-3 text-[#64ACFF] font-mono">What You’ll Learn</h3>
 
       <ul className="space-y-3 text-sm">
         {points.map((item) => (

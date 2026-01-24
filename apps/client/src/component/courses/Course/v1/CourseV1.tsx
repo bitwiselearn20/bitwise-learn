@@ -65,10 +65,7 @@ export default function CourseV1() {
 
             {/* RIGHT – THIS MUST SCROLL */}
             <div className="lg:col-span-2 h-full overflow-y-auto">
-              <RightSection
-                studyMode={studyMode}
-                setStudyMode={setStudyMode}
-              />
+              <RightSection studyMode={studyMode} setStudyMode={setStudyMode} />
             </div>
           </motion.div>
         ) : (

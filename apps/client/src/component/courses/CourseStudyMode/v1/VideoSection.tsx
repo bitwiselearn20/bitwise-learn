@@ -1,8 +1,7 @@
 export default function VideoSection({ loading }: { loading: boolean }) {
   if (loading) {
     return (
-      <div className="w-full h-55 sm:h-75 lg:h-full bg-[#121313] animate-pulse flex items-center justify-center">
-      </div>
+      <div className="w-full h-55 sm:h-75 lg:h-full bg-[#121313] animate-pulse flex items-center justify-center"></div>
     );
   }
 

@@ -28,13 +28,12 @@ export default function TestimonialCard({
       "
     >
       {/* Accent glow */}
-{/* Background glow */}
-<div
-  className={`absolute inset-0 -z-10 rounded-2xl 
+      {/* Background glow */}
+      <div
+        className={`absolute inset-0 -z-10 rounded-2xl 
   bg-linear-to-br from-gray-900 to-gray-500
   opacity-20 blur-2xl`}
- />
-
+      />
 
       {/* Text */}
       <p className="relative z-10 text-sm leading-relaxed text-white/80 line-clamp-4">
@@ -51,12 +50,8 @@ export default function TestimonialCard({
         </div>
 
         <div className="leading-tight">
-          <p className="text-sm font-semibold text-white">
-            {name}
-          </p>
-          <p className="text-xs text-white/60">
-            {role}
-          </p>
+          <p className="text-sm font-semibold text-white">{name}</p>
+          <p className="text-xs text-white/60">{role}</p>
         </div>
       </div>
     </motion.div>

@@ -18,7 +18,7 @@ export const Colors = {
     special: `text-[${Semantic.text.special}]`,
     black: `text-[${Semantic.text.black}]`,
   },
-  
+
   border: {
     default: `border-t border-[${Semantic.border.default}]`,
     faded: `border-t border-${Semantic.border.faded}`,
@@ -29,7 +29,7 @@ export const Colors = {
     fadedThick: `border-2 border-${Semantic.border.faded}`,
     greenThick: `border-2 border-[${Semantic.border.green}]`,
     specialThick: `border-2 border-[${Semantic.border.special}]`,
-    
+
     defaultThin: `border border-[${Semantic.border.default}]`,
     fadedThin: `border border-${Semantic.border.faded}`,
     greenThin: `border border-[${Semantic.border.green}]`,

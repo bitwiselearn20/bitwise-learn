@@ -2,16 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const assessmentId = params.id;
     const token = req.headers.get("authorization");
-  
+
     if (!assessmentId) {
       return NextResponse.json(
         { message: "Assessment ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -22,7 +22,7 @@ export async function GET(
         headers: {
           Authorization: token || "",
         },
-      }
+      },
     );
 
     const data = await backendRes.json();
@@ -31,9 +31,6 @@ export async function GET(
       status: backendRes.status,
     });
   } catch (error: any) {
-    return NextResponse.json(
-      { message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

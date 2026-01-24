@@ -73,7 +73,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
       });
       if (!dbProblem) throw new Error("problem doesn't exists");
 
@@ -111,7 +111,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
       });
       if (!dbProblem) throw new Error("problem doesn't exists");
 
@@ -149,7 +149,7 @@ class DsaQuestionController {
       if (!problemId) throw new Error("problem id is needed");
 
       const dbProblem = await prismaClient.problem.findUnique({
-        where: { id: problemId },
+        where: { id: problemId as string },
       });
 
       if (!dbProblem) throw new Error("db problem not found");
@@ -190,7 +190,7 @@ class DsaQuestionController {
       if (!userId) throw new Error("user id is needed");
 
       const dbProblem = await prismaClient.problem.findUnique({
-        where: { id: problemId },
+        where: { id: problemId as string },
       });
 
       if (!dbProblem) throw new Error("db problem not found");
@@ -272,7 +272,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           problemTopics: true,
         },
@@ -315,7 +315,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblemTopic = await prismaClient.problemTopic.findFirst({
-        where: { id: problemTopicId },
+        where: { id: problemTopicId as string },
       });
       if (!dbProblemTopic) throw new Error("problem Topic doesn't exists");
 
@@ -350,7 +350,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblemTopic = await prismaClient.problemTopic.findFirst({
-        where: { id: problemTopicId },
+        where: { id: problemTopicId as string },
       });
       if (!dbProblemTopic) throw new Error("problem Topic doesn't exists");
 
@@ -386,7 +386,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           problemTopics: true,
         },
@@ -434,7 +434,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbTemplate = await prismaClient.problemTemplate.findFirst({
-        where: { id: templateId },
+        where: { id: templateId as string },
       });
 
       if (!dbTemplate) throw new Error("db Template doesn't exists");
@@ -474,7 +474,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           problemTopics: true,
         },
@@ -517,7 +517,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           problemTopics: true,
         },
@@ -556,7 +556,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           problemTopics: true,
         },
@@ -603,7 +603,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbTestcase = await prismaClient.problemTestCase.findFirst({
-        where: { id: testcaseId },
+        where: { id: testcaseId as string },
       });
       if (!dbTestcase) throw new Error("problem doesn't exists");
 
@@ -640,7 +640,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbTestcase = await prismaClient.problemTestCase.findFirst({
-        where: { id: testcaseId },
+        where: { id: testcaseId as string },
       });
       if (!dbTestcase) throw new Error("problem doesn't exists");
 
@@ -672,7 +672,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           problemTopics: true,
         },
@@ -708,7 +708,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           solution: true,
         },
@@ -790,7 +790,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           solution: true,
         },
@@ -826,7 +826,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           solution: true,
         },
@@ -859,7 +859,7 @@ class DsaQuestionController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
-        where: { id: problemId },
+        where: { id: problemId as string },
         include: {
           problemTopics: true,
         },

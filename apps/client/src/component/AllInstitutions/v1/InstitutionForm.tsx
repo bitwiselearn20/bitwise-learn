@@ -35,7 +35,9 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
     tagline: "",
     websiteLink: "",
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof VendorFormData, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof VendorFormData, string>>
+  >({});
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -99,7 +101,10 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
         newErrors.phoneNumber = "Phone number must be 10 digits";
       }
 
-      if (formData.secondaryPhoneNumber && !validatePhoneNumber(formData.secondaryPhoneNumber)) {
+      if (
+        formData.secondaryPhoneNumber &&
+        !validatePhoneNumber(formData.secondaryPhoneNumber)
+      ) {
         newErrors.secondaryPhoneNumber = "Phone number must be 10 digits";
       }
     }
@@ -123,7 +128,7 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -252,8 +257,9 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
                   value={formData.address}
                   onChange={handleChange}
                   rows={3}
-                  className={`mt-1 w-full rounded-lg border ${errors.address ? "border-red-500" : "border-white/10"
-                    } bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue`}
+                  className={`mt-1 w-full rounded-lg border ${
+                    errors.address ? "border-red-500" : "border-white/10"
+                  } bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue`}
                 />
                 {errors.address && (
                   <p className="mt-1 text-xs text-red-500">{errors.address}</p>
@@ -268,8 +274,6 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
               />
             </>
           )}
-
-
 
           {/* Actions */}
           <div className="flex justify-between pt-4">
@@ -322,14 +326,18 @@ function Input({
   label,
   error,
   ...props
-}: React.InputHTMLAttributes<HTMLInputElement> & { label: string; error?: string }) {
+}: React.InputHTMLAttributes<HTMLInputElement> & {
+  label: string;
+  error?: string;
+}) {
   return (
     <div>
       <Label>{label}</Label>
       <input
         {...props}
-        className={`mt-1 w-full rounded-lg border ${error ? "border-red-500" : "border-white/10"
-          } bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue`}
+        className={`mt-1 w-full rounded-lg border ${
+          error ? "border-red-500" : "border-white/10"
+        } bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue`}
       />
       {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>

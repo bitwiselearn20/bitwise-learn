@@ -9,7 +9,6 @@ import { getAllAssessments } from "@/api/assessments/get-all-assessments";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-
 // colors ------------------------------------------------------------------
 const colors = {
   primary_Bg: "bg-[#121313]",
@@ -23,7 +22,7 @@ const colors = {
 
 // types -------------------------------------------------------------------
 type CreateAssessment = {
-  id: string,
+  id: string;
   name: string;
   description: string;
   instructions: string;
@@ -37,12 +36,7 @@ type CreateAssessment = {
 // -------------------------------------------------------------------------
 // Assessment Card
 // -------------------------------------------------------------------------
-const AssessmentCard = ({
-  assessment,
-}: {
-  assessment: CreateAssessment;
-
-}) => {
+const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
   const statusStyles =
     assessment.status === "LIVE"
       ? "bg-green-500/15 text-green-400 border-green-500/30"
@@ -50,12 +44,11 @@ const AssessmentCard = ({
         ? "bg-red-500/15 text-red-400 border-red-500/30"
         : "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
 
+  const router = useRouter();
 
-    const router = useRouter();
-
-    const handleClick = (assessmentId: string)=>{
-      router.push(`/admin-dashboard/assessments/${assessmentId}`);
-    }
+  const handleClick = (assessmentId: string) => {
+    router.push(`/admin-dashboard/assessments/${assessmentId}`);
+  };
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -103,7 +96,7 @@ const AssessmentCard = ({
           ${colors.primary_Hero} text-white
           hover:opacity-90 transition
         `}
-        onClick={()=> handleClick(assessment.id)}
+        onClick={() => handleClick(assessment.id)}
       >
         Edit Assessment
       </button>
@@ -125,7 +118,7 @@ const AddAssessmentModal = ({
   onSubmit,
 }: AddAssessmentModalProps) => {
   const [form, setForm] = useState<CreateAssessment>({
-    id:"",
+    id: "",
     name: "",
     description: "",
     instructions: "",
@@ -145,8 +138,7 @@ const AddAssessmentModal = ({
 
   if (!open) return null;
 
-  const combineDateTime = (d: string, t: string) =>
-    d && t ? `${d}T${t}` : "";
+  const combineDateTime = (d: string, t: string) => (d && t ? `${d}T${t}` : "");
 
   const clearError = (field: string) => {
     if (errors[field]) {
@@ -161,7 +153,7 @@ const AddAssessmentModal = ({
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -182,10 +174,8 @@ const AddAssessmentModal = ({
       newErrors.description = "Description is required";
     if (!payload.instructions.trim())
       newErrors.instructions = "Instructions are required";
-    if (!payload.startTime)
-      newErrors.startTime = "Start date & time required";
-    if (!payload.endTime)
-      newErrors.endTime = "End date & time required";
+    if (!payload.startTime) newErrors.startTime = "Start date & time required";
+    if (!payload.endTime) newErrors.endTime = "End date & time required";
     if (!payload.batchId.trim()) newErrors.batchId = "Batch ID is required";
 
     if (Object.keys(newErrors).length > 0) {
@@ -275,7 +265,7 @@ const AddAssessmentModal = ({
               <input
                 type="date"
                 className={`${inputBase} mt-0 col-span-2 ${inputBorder(
-                  "startTime"
+                  "startTime",
                 )}`}
                 value={startDate}
                 onChange={(e) => {
@@ -303,7 +293,7 @@ const AddAssessmentModal = ({
               <input
                 type="date"
                 className={`${inputBase} mt-0 col-span-2 ${inputBorder(
-                  "endTime"
+                  "endTime",
                 )}`}
                 value={endDate}
                 onChange={(e) => {
@@ -358,11 +348,6 @@ const AddAssessmentModal = ({
     </div>
   );
 };
-
-
-
-
-
 
 // -------------------------------------------------------------------------
 // Skeleton Card
@@ -439,7 +424,6 @@ const AssessmentsV1 = () => {
   const [openCreateAssessment, setOpenCreateAssessment] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-
   const fetchAssessments = async () => {
     try {
       setLoading(true);
@@ -448,11 +432,10 @@ const AssessmentsV1 = () => {
     } catch (error) {
       console.log("Fetching Error: ", error);
       toast.error("Failed to load Assessments");
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     const assessmentData = fetchAssessments();
@@ -498,7 +481,9 @@ const AssessmentsV1 = () => {
             ${colors.special_Bg} text-white
             hover:opacity-90 transition
           `}
-          onClick={() => { setOpenCreateAssessment(true) }}
+          onClick={() => {
+            setOpenCreateAssessment(true);
+          }}
         >
           + Add Assessment
         </button>
@@ -512,9 +497,7 @@ const AssessmentsV1 = () => {
           ))}
         </div>
       ) : assessments.length === 0 ? (
-        <NoAssessmentState
-          onCreate={() => setOpenCreateAssessment(true)}
-        />
+        <NoAssessmentState onCreate={() => setOpenCreateAssessment(true)} />
       ) : filteredAssessments.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-4 pt-20 text-center">
           <Search size={40} className="text-[#64ACFF]" />
@@ -532,9 +515,6 @@ const AssessmentsV1 = () => {
           ))}
         </div>
       )}
-
-
-
 
       {/* Add Assessment pop-up Modal  */}
       <AddAssessmentModal
@@ -559,10 +539,8 @@ const AssessmentsV1 = () => {
               id: toastId,
             });
           }
-
         }}
       />
-
     </section>
   );
 };

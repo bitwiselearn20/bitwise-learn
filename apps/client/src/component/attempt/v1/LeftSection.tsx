@@ -25,20 +25,21 @@ export default function LeftSection({
       <div
         className={`${Colors.background.primary} p-4 rounded-lg mb-4 overflow-y-auto`}
       >
-        <p className="text-lg">
-          {question}
-        </p>
+        <p className="text-lg">{question}</p>
       </div>
 
       <div className="flex justify-between items-center">
-        <button onClick={onPrevious} disabled={currentIndex === 0}
+        <button
+          onClick={onPrevious}
+          disabled={currentIndex === 0}
           className={`${Colors.background.primary} group px-8 py-2 rounded-md hover:scale-105`}
         >
           <p className="button-wrap-left">Previous</p>
         </button>
         <div>
           <span>Question: </span>{" "}
-          <span className={`${Colors.text.special}`}>{currentIndex + 1}</span> <span> / </span>
+          <span className={`${Colors.text.special}`}>{currentIndex + 1}</span>{" "}
+          <span> / </span>
           <span>{totalQuestions}</span>
         </div>
         <button

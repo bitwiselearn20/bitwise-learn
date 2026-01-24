@@ -8,7 +8,6 @@ export default function CourseMeta({ loading }: { loading: boolean }) {
 
   return (
     <div className="flex items-start justify-between flex-wrap gap-4">
-
       {/* LEFT */}
       <div className="flex flex-col gap-2">
         {loading ? (
@@ -42,9 +41,7 @@ export default function CourseMeta({ loading }: { loading: boolean }) {
         >
           <div
             className={`h-5 w-5 rounded-md border flex items-center justify-center transition-all ${
-              completed
-                ? "bg-[#64ACFF] border-[#64ACFF]"
-                : "border-gray-500"
+              completed ? "bg-[#64ACFF] border-[#64ACFF]" : "border-gray-500"
             }`}
           >
             {completed && <Check size={14} className="text-black" />}

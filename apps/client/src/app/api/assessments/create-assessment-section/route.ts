@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     if (!body.assessmentId) {
       return NextResponse.json(
         { message: "Assessment ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -21,15 +21,12 @@ export async function POST(req: NextRequest) {
           Authorization: token || "",
         },
         body: JSON.stringify(body),
-      }
+      },
     );
 
     const data = await res.json();
     return NextResponse.json(data, { status: res.status });
   } catch (error: any) {
-    return NextResponse.json(
-      { message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

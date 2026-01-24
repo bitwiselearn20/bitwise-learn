@@ -24,9 +24,7 @@ export function Input({
 
   return (
     <div className="space-y-1">
-      <label className="block text-xs font-medium text-white/70">
-        {label}
-      </label>
+      <label className="block text-xs font-medium text-white/70">{label}</label>
 
       <input
         {...props}

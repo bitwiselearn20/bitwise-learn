@@ -256,7 +256,10 @@ export default function Assignments() {
                       Already Submitted
                     </button>
                   ) : (
-                    <button className="mt-2 bg-[#64ACFF] text-black text-xs py-2 rounded-md cursor-pointer" onClick={handleRoute}>
+                    <button
+                      className="mt-2 bg-[#64ACFF] text-black text-xs py-2 rounded-md cursor-pointer"
+                      onClick={handleRoute}
+                    >
                       Start Now
                     </button>
                   )}

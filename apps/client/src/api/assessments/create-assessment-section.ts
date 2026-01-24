@@ -8,11 +8,11 @@ type AssessmentSectionPayload = {
 };
 
 export const createAssessmentSection = async (
-  payload: AssessmentSectionPayload
+  payload: AssessmentSectionPayload,
 ) => {
   const res = await axiosInstance.post(
     "/api/assessments/create-assessment-section",
-    payload
+    payload,
   );
 
   return res.data.data;

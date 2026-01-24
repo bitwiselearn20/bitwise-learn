@@ -3,7 +3,7 @@
 import { Users, Monitor, FileText } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 
-const cardVariants : Variants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
@@ -16,7 +16,6 @@ export default function OurTeam() {
   return (
     <section className="w-full bg-bg py-10">
       <div className="max-w-7xl mx-auto px-6">
-        
         {/* Header */}
         <div className="text-center mb-14">
           <h2 className="text-3xl md:text-6xl font-semibold pt-16 text-white">
@@ -80,14 +79,10 @@ function TeamCard({
       </div>
 
       {/* Title */}
-      <h3 className="text-lg font-semibold text-white mb-3">
-        {title}
-      </h3>
+      <h3 className="text-lg font-semibold text-white mb-3">{title}</h3>
 
       {/* Description */}
-      <p className="text-sm leading-relaxed text-white/65">
-        {description}
-      </p>
+      <p className="text-sm leading-relaxed text-white/65">{description}</p>
     </motion.div>
   );
 }

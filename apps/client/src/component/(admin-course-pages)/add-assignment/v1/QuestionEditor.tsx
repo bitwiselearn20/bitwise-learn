@@ -20,7 +20,7 @@ export default function QuestionEditor({
     saveQuestion({
       ...question,
       options: question.options.map((o: any) =>
-        o.id === id ? { ...o, [key]: value } : o
+        o.id === id ? { ...o, [key]: value } : o,
       ),
     });
   };

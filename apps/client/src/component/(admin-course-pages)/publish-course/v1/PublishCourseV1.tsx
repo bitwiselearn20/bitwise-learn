@@ -125,14 +125,14 @@ const PublishCourseV1 = ({
               transition
               ${
                 isPublished
-                ? "bg-red-600 text-white hover:bg-red-500 cursor-pointer"
-                : allSatisfied
-                  ? "bg-blue-600 text-white hover:bg-blue-500 cursor-pointer"
-                  : "bg-blue-600/40 text-white/50 cursor-not-allowed"
+                  ? "bg-red-600 text-white hover:bg-red-500 cursor-pointer"
+                  : allSatisfied
+                    ? "bg-blue-600 text-white hover:bg-blue-500 cursor-pointer"
+                    : "bg-blue-600/40 text-white/50 cursor-not-allowed"
               }
             `}
           >
-            {isPublished?"UnPublish":"Publish Course"}
+            {isPublished ? "UnPublish" : "Publish Course"}
           </button>
         </div>
       </div>

@@ -8,7 +8,7 @@ interface PageProps {
 }
 
 const page = async ({ params }: PageProps) => {
-  const { id } = await params; 
+  const { id } = await params;
 
   return (
     <div className="flex h-screen overflow-hidden">

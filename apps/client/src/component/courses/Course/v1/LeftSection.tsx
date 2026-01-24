@@ -63,7 +63,7 @@ export default function LeftSection() {
       topic.completed = !topic.completed;
 
       const allCompleted = updated[sectionIndex].topics.every(
-        (t) => t.completed
+        (t) => t.completed,
       );
 
       if (allCompleted && updated[sectionIndex + 1]) {
@@ -148,9 +148,7 @@ export default function LeftSection() {
           </button>
         </div>
 
-        <div className="p-4 text-sm text-gray-400">
-          Sidebar content here
-        </div>
+        <div className="p-4 text-sm text-gray-400">Sidebar content here</div>
       </div>
     </div>
   );

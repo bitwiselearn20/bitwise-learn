@@ -23,7 +23,6 @@ const cardVariants: Variants = {
 };
 
 export default function TargetSegments() {
-
   return (
     <section className="w-full py-24 bg-[#121313]">
       <div className="max-w-7xl mx-auto px-6">

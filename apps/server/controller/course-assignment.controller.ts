@@ -70,7 +70,7 @@ class CourseAssignmentController {
 
       const dbAssignment = await prismaClient.courseAssignemnt.findFirst({
         where: {
-          id: assignemntId,
+          id: assignemntId as string,
         },
       });
 
@@ -112,7 +112,7 @@ class CourseAssignmentController {
 
       const dbAssignment = await prismaClient.courseAssignemnt.findFirst({
         where: {
-          id: assignemntId,
+          id: assignemntId as string,
         },
       });
 
@@ -149,7 +149,7 @@ class CourseAssignmentController {
 
       const dbSection = await prismaClient.courseSections.findFirst({
         where: {
-          id: sectionId,
+          id: sectionId as string,
           creatorId: userId,
         },
       });
@@ -158,7 +158,7 @@ class CourseAssignmentController {
 
       const dbAssignment = await prismaClient.courseAssignemnt.findMany({
         where: {
-          sectionId: sectionId,
+          sectionId: sectionId as string,
         },
         orderBy: {
           createdAt: "asc",
@@ -182,7 +182,7 @@ class CourseAssignmentController {
 
       const assignment = await prismaClient.courseAssignemnt.findFirst({
         where: {
-          id: assignmentId,
+          id: assignmentId as string,
           section: {
             creatorId: userId,
           },
@@ -266,7 +266,7 @@ class CourseAssignmentController {
 
       const dbQuestion = await prismaClient.courseAssignemntQuestion.findFirst({
         where: {
-          id: questionId,
+          id: questionId as string,
         },
       });
 
@@ -311,7 +311,7 @@ class CourseAssignmentController {
 
       const dbQuestion = await prismaClient.courseAssignemntQuestion.findFirst({
         where: {
-          id: questionId,
+          id: questionId as string,
         },
       });
 

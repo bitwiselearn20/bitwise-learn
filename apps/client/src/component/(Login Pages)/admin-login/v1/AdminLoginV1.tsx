@@ -81,9 +81,7 @@ function WelcomeTypewriter() {
       className="mt-8 text-xl text-neutral-400 h-5 text-center md:text-left"
     >
       {text.slice(0, adminIndex)}
-      <span className="text-primaryBlue">
-        {text.slice(adminIndex)}
-      </span>
+      <span className="text-primaryBlue">{text.slice(adminIndex)}</span>
     </motion.p>
   );
 }
@@ -110,10 +108,10 @@ export default function AdminLoginV1() {
       const payload = {
         email,
         password,
-        role:"ADMIN"
+        role: "ADMIN",
       };
 
-      await handleLogin({data:payload as any});
+      await handleLogin({ data: payload as any });
 
       console.log("LOGIN PAYLOAD:", payload);
       toast.success("login successfull");
@@ -139,7 +137,10 @@ export default function AdminLoginV1() {
         animate="show"
         className="flex-1 flex flex-col px-6 py-10 md:p-16"
       >
-        <motion.div variants={slideUp} className="flex justify-center md:justify-start">
+        <motion.div
+          variants={slideUp}
+          className="flex justify-center md:justify-start"
+        >
           <h1 className="text-3xl">
             <span className="text-primaryBlue font-bold">B</span>
             <span className="font-bold text-white">itwise</span>{" "}

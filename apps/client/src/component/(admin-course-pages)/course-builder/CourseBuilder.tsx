@@ -1,17 +1,17 @@
-import CourseBuilderV1 from './v1/CourseBuilderV1'
+import CourseBuilderV1 from "./v1/CourseBuilderV1";
 
 type PageProps = {
-  params:{
-    id:string;
+  params: {
+    id: string;
   };
 };
 
-const CourseBuilder = ({params}:PageProps) => {
+const CourseBuilder = ({ params }: PageProps) => {
   return (
     <div>
-        <CourseBuilderV1 courseId={params.id} />
+      <CourseBuilderV1 courseId={params.id} />
     </div>
-  )
-}
+  );
+};
 
-export default CourseBuilder
+export default CourseBuilder;

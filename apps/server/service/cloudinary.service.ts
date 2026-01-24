@@ -10,25 +10,24 @@ class CloudinaryService implements FileHandler {
     });
   }
   async uploadFile(
-  file: any,
-  folder: string,
-  filename: string
-): Promise<string | null> {
-  try {
-   if (!file || !file.buffer) {
+    file: any,
+    folder: string,
+    filename: string,
+  ): Promise<string | null> {
+    try {
+      if (!file || !file.buffer) {
         throw new Error("File with buffer is required");
       }
-      
+
       const fileBase64 = file.buffer.toString("base64");
       const dataUri = `data:${file.mimetype};base64,${fileBase64}`;
-
 
       // Upload to Cloudinary
       const result = await cloudinary.uploader.upload(dataUri, {
         folder: folder,
         resource_type: "auto",
         type: "upload",
-        filename_override:filename
+        filename_override: filename,
       });
 
       if (!result || !result.secure_url) {
@@ -36,12 +35,11 @@ class CloudinaryService implements FileHandler {
       }
 
       return result.secure_url;
-  } catch (error) {
-    console.log("UPLOAD FAILED:", error);
-    return null;
+    } catch (error) {
+      console.log("UPLOAD FAILED:", error);
+      return null;
+    }
   }
-}
-
 
   async deleteFile(fileUrl: string): Promise<string | null> {
     try {

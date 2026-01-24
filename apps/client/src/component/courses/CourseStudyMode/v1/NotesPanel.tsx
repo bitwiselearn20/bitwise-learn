@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export default function NotesPanel({loading}:{loading:boolean}) {
-
+export default function NotesPanel({ loading }: { loading: boolean }) {
   return (
     <div className="h-full flex flex-col bg-[#1E1E1E] rounded-xl overflow-hidden">
       {/* NOTES NAVBAR */}
@@ -11,9 +10,7 @@ export default function NotesPanel({loading}:{loading:boolean}) {
         {loading ? (
           <div className="h-6 w-40 bg-[#121313] rounded animate-pulse" />
         ) : (
-          <span className="text-xl font-mono text-blue-400">
-            Lecture Notes
-          </span>
+          <span className="text-xl font-mono text-blue-400">Lecture Notes</span>
         )}
 
         <div className="flex items-center gap-3 text-sm">
@@ -52,9 +49,9 @@ export default function NotesPanel({loading}:{loading:boolean}) {
                 Introduction to HTML
               </h3>
               <p>
-                HTML stands for HyperText Markup Language. It is used to structure
-                content on the web using elements such as headings, paragraphs,
-                links, images, and more.
+                HTML stands for HyperText Markup Language. It is used to
+                structure content on the web using elements such as headings,
+                paragraphs, links, images, and more.
               </p>
             </div>
 
@@ -74,7 +71,7 @@ export default function NotesPanel({loading}:{loading:boolean}) {
                 Basic HTML Document
               </h3>
               <pre className="bg-[#121313] p-3 rounded-md text-xs text-gray-300 overflow-x-auto">
-{`<!DOCTYPE html>
+                {`<!DOCTYPE html>
 <html>
   <head>
     <title>My First Page</title>
@@ -87,8 +84,8 @@ export default function NotesPanel({loading}:{loading:boolean}) {
             </div>
 
             <div className="text-xs text-gray-500 italic">
-              Notes provided by course coordinator. For detailed explanations, refer
-              to the full PDF.
+              Notes provided by course coordinator. For detailed explanations,
+              refer to the full PDF.
             </div>
           </>
         )}

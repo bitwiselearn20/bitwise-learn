@@ -43,7 +43,7 @@ export default function RightSection({
           onClick={onExit}
           className={`p-2 rounded-md hover:opacity-80 ${Colors.background.primary} group`}
         >
-          <LogOut className="button-wrap-right"/>
+          <LogOut className="button-wrap-right" />
         </button>
 
         <h1 className="text-lg font-semibold">
@@ -88,7 +88,9 @@ export default function RightSection({
               `}
             >
               <span>{choice}</span>
-              {isSelected && <span className="text-green-600 font-bold">✓</span>}
+              {isSelected && (
+                <span className="text-green-600 font-bold">✓</span>
+              )}
             </button>
           );
         })}
@@ -97,8 +99,7 @@ export default function RightSection({
       {/* Question Navigation */}
       <div className="flex gap-2 overflow-x-auto mt-auto no-scrollbar">
         {Array.from({ length: totalQuestions }).map((_, i) => {
-          const answered =
-            userAnswers[questionIds[i]] != null;
+          const answered = userAnswers[questionIds[i]] != null;
 
           return (
             <button
@@ -110,8 +111,8 @@ export default function RightSection({
                   i === currentIndex
                     ? Colors.border.specialThick
                     : answered
-                    ? Colors.border.greenThick
-                    : Colors.border.fadedThick
+                      ? Colors.border.greenThick
+                      : Colors.border.fadedThick
                 }
               `}
             >

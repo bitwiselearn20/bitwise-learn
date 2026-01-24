@@ -1,16 +1,13 @@
-import { Tabs, TabsContent, TabsList } from '@/component/ui/tabs'
-import { TabsTrigger } from '@radix-ui/react-tabs'
-import AllAssessments from './AllAssessments'
-import AllCourses from './AllCourses'
+import { Tabs, TabsContent, TabsList } from "@/component/ui/tabs";
+import { TabsTrigger } from "@radix-ui/react-tabs";
+import AllAssessments from "./AllAssessments";
+import AllCourses from "./AllCourses";
 
 function ReportHero() {
   return (
     <div className="h-screen w-full flex bg-neutral-900 text-white overflow-hidden">
       <div className="border-r border-neutral-800 w-full flex flex-col relative">
-        <Tabs
-          defaultValue="courses"
-          className="flex w-full flex-col h-full"
-        >
+        <Tabs defaultValue="courses" className="flex w-full flex-col h-full">
           <TabsList className="border-b w-full justify-evenly border-neutral-800 bg-neutral-900 px-6 py-3 flex gap-6">
             <TabsTrigger
               value="courses"
@@ -46,10 +43,10 @@ function ReportHero() {
           <div
             className="flex-1 overflow-y-auto px-8 py-6"
             style={{
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
               // @ts-ignore
-              WebkitScrollbar: { display: 'none' },
+              WebkitScrollbar: { display: "none" },
             }}
           >
             <TabsContent value="courses" className="animate-fadeIn">
@@ -63,7 +60,7 @@ function ReportHero() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
 
-export default ReportHero
+export default ReportHero;

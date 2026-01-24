@@ -15,7 +15,7 @@ function QuestionInfoSidebar() {
 
   const [solved, setSolved] = useState(0);
   const [hovered, setHovered] = useState<"easy" | "medium" | "hard" | null>(
-    null
+    null,
   );
 
   useEffect(() => {

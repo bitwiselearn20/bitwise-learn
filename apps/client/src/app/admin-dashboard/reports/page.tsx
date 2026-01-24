@@ -1,10 +1,8 @@
-import Report from '@/component/report/Report'
-import React from 'react'
+import Report from "@/component/report/Report";
+import React from "react";
 
 function page() {
-  return (
-    <Report />
-  )
+  return <Report />;
 }
 
-export default page
+export default page;

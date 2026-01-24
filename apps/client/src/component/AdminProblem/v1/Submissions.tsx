@@ -19,7 +19,7 @@ function Submissions({ content }: SubmissionsProps) {
   const [difficulty, setDifficulty] = useState(content.difficulty);
   const [hints, setHints] = useState<string[]>(content.hints || []);
   const [topics, setTopics] = useState<string[]>(
-    content.problemTopics?.[0]?.tagName || []
+    content.problemTopics?.[0]?.tagName || [],
   );
   const [newTopic, setNewTopic] = useState("");
 

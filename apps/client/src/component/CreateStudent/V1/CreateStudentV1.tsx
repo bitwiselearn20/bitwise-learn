@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { Input } from "./Input";
 
-
 type StudentForm = {
   name: string;
   rollNumber: string;
@@ -39,11 +38,7 @@ export default function CreateStudentV1({
   };
 
   const isValid = useMemo(() => {
-    return (
-      form.name.trim() &&
-    form.rollNumber.trim() &&
-      isPrimaryEmailValid
-    );
+    return form.name.trim() && form.rollNumber.trim() && isPrimaryEmailValid;
   }, [form, isPrimaryEmailValid]);
 
   const handleSubmit = () => {
@@ -65,9 +60,7 @@ export default function CreateStudentV1({
         className={`w-full max-w-lg rounded-2xl bg-[#0B1324] p-6 shadow-xl
         animate-modal-in ${shake ? "animate-shake" : ""}`}
       >
-        <h2 className="text-lg font-semibold text-white mb-4">
-          New Student
-        </h2>
+        <h2 className="text-lg font-semibold text-white mb-4">New Student</h2>
 
         <div className="space-y-4">
           <Input

@@ -67,7 +67,7 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourse = await prismaClient.course.findFirst({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
 
       if (!dbCourse) throw new Error("no courseId found!");
@@ -116,7 +116,7 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourse = await prismaClient.course.findFirst({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
 
       if (!dbCourse) throw new Error("no courseId found!");
@@ -165,7 +165,7 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourse = await prismaClient.course.findFirst({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
 
       if (!dbCourse) throw new Error("no courseId found!");
@@ -208,7 +208,7 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourse = await prismaClient.course.findFirst({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
 
       if (!dbCourse) throw new Error("no courseId found!");
@@ -275,7 +275,7 @@ class CoursesController {
 
       if (!dbAdmin) throw new Error("no such user found!");
       const dbCourse = await prismaClient.course.findUnique({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
 
       if (!dbCourse) throw new Error("no course found!");
@@ -316,7 +316,7 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourse = await prismaClient.course.findFirst({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
 
       if (!dbCourse) throw new Error("no courseId found!");
@@ -355,7 +355,7 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourse = await prismaClient.course.findFirst({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
 
       if (!dbCourse) throw new Error("no course found!");
@@ -398,7 +398,7 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourseSection = await prismaClient.courseSections.findFirst({
-        where: { id: courseSectionId },
+        where: { id: courseSectionId as string },
       });
 
       if (!dbCourseSection) throw new Error("no such course section found!");
@@ -427,7 +427,7 @@ class CoursesController {
       const courseSectionId = req.params.id;
 
       if (!userId) throw new Error("userId is required");
-      if(!courseSectionId) throw new Error("Section ID is Required");
+      if (!courseSectionId) throw new Error("Section ID is Required");
 
       const dbAdmin = await prismaClient.user.findFirst({
         where: { id: userId },
@@ -436,7 +436,7 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourseSection = await prismaClient.courseSections.findFirst({
-        where: { id: courseSectionId },
+        where: { id: courseSectionId as string },
       });
 
       if (!dbCourseSection) throw new Error("no such course section found!");
@@ -472,13 +472,13 @@ class CoursesController {
       if (!dbAdmin) throw new Error("no such user found!");
 
       const dbCourse = await prismaClient.course.findUnique({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
 
       if (!dbCourse) throw new Error("no course found!");
 
       const sections = await prismaClient.courseSections.findMany({
-        where: { courseId: courseId },
+        where: { courseId: dbCourse.id },
         include: {
           courseAssignemnts: true,
           courseLearningContents: true,
@@ -509,7 +509,7 @@ class CoursesController {
 
       if (!dbAdmin) throw new Error("no such user found!");
       const dbSection = await prismaClient.courseSections.findUnique({
-        where: { id: sectionId },
+        where: { id: sectionId as string },
       });
 
       if (!dbSection) throw new Error("no course found!");

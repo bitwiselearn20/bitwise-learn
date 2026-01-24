@@ -4,7 +4,7 @@ import { deleteCourseById } from "@/api/courses/course/delete-course-by-id";
 import { getCourseById } from "@/api/courses/course/get-course-by-id";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useRef } from "react";
-import { Trash2,ChevronLeft } from "lucide-react";
+import { Trash2, ChevronLeft } from "lucide-react";
 import toast from "react-hot-toast";
 import AddSection from "../../add-section/v2/AddSectionV2";
 import { uploadThumbnail } from "@/api/courses/course/upload-thumbnail";
@@ -192,7 +192,6 @@ const AddAssignmentPopup = ({
     </div>
   );
 };
-
 
 const CourseSidebar = ({
   course,
@@ -652,7 +651,7 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
               onClick={() => router.push("/admin-dashboard/courses")}
               className="flex items-center gap-1 text-2xl text-slate-400 hover:text-white transition cursor-pointer mt-1"
             >
-              <ChevronLeft size={28}/>
+              <ChevronLeft size={28} />
             </button>
 
             <h1 className="text-white text-2xl">
@@ -809,11 +808,11 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
           <AddAssignmentPopup
             open={showAddAssignment}
             onClose={async () => {
-                setShowAddAssignment(false);
-                setActiveSectionId(null);
-                const res = await getSections(courseId);
-                setSections(res.data);
-              }}
+              setShowAddAssignment(false);
+              setActiveSectionId(null);
+              const res = await getSections(courseId);
+              setSections(res.data);
+            }}
           >
             <AddAssignment
               sectionId={activeSectionId}

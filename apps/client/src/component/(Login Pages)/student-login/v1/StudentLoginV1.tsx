@@ -84,7 +84,7 @@ function WelcomeTypewriter() {
         </span>
       ) : (
         <span key={i}>{part}</span>
-      )
+      ),
     );
   };
 
@@ -120,7 +120,7 @@ export default function AdminLoginV1() {
     try {
       setLoading(true);
       await handleLogin({ data: payload });
-      router.push("/dashboard")
+      router.push("/dashboard");
     } catch (err) {
       console.error("Login failed", err);
     } finally {
@@ -142,7 +142,10 @@ export default function AdminLoginV1() {
         animate="show"
         className="flex-1 flex flex-col px-6 py-10 md:p-16"
       >
-        <motion.div variants={slideUp} className="flex justify-center md:justify-start">
+        <motion.div
+          variants={slideUp}
+          className="flex justify-center md:justify-start"
+        >
           <h1 className="text-3xl">
             <span className="text-primaryBlue font-bold">B</span>
             <span className="font-bold text-white">itwise</span>{" "}
@@ -263,4 +266,3 @@ export default function AdminLoginV1() {
     </motion.div>
   );
 }
-

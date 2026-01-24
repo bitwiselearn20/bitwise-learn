@@ -69,7 +69,7 @@ class CouseContentController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbContent = await prismaClient.courseLearningContent.findFirst({
-        where: { id: contentId },
+        where: { id: contentId as string },
       });
 
       if (!dbContent) throw new Error("invalid section id");
@@ -109,12 +109,12 @@ class CouseContentController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbContent = await prismaClient.courseLearningContent.findFirst({
-        where: { id: contentId },
+        where: { id: contentId as string },
       });
 
       if (!dbContent) throw new Error("invalid section id");
 
-      if(dbContent.file){
+      if (dbContent.file) {
         await cloudinaryService.deleteFile(dbContent.file);
       }
 
@@ -148,7 +148,7 @@ class CouseContentController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbContent = await prismaClient.courseLearningContent.findFirst({
-        where: { id: contentId },
+        where: { id: contentId as string },
       });
 
       if (!dbContent) throw new Error("invalid section id");
@@ -195,7 +195,7 @@ class CouseContentController {
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbContent = await prismaClient.courseLearningContent.findFirst({
-        where: { id: contentId },
+        where: { id: contentId as string },
       });
 
       if (!dbContent) throw new Error("invalid section id");

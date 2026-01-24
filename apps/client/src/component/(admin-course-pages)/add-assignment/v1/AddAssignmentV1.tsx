@@ -53,9 +53,7 @@ export default function AddAssignmentV1({
 
   return (
     <div className="my-[-8] flex justify-center">
-      <div
-        className={`rounded-xl w-[93%] max-w-3xl p-2`}
-      >
+      <div className={`rounded-xl w-[93%] max-w-3xl p-2`}>
         <AssignmentInfo
           assignment={assignment}
           setAssignment={setAssignment}

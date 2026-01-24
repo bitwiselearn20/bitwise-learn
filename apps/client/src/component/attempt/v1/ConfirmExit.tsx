@@ -16,9 +16,7 @@ export default function ConfirmExit({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="w-95 rounded-xl bg-neutral-900 p-6 text-white shadow-xl">
-        <h2 className="text-lg font-semibold text-red-500">
-          Exit Assignment?
-        </h2>
+        <h2 className="text-lg font-semibold text-red-500">Exit Assignment?</h2>
 
         <p className="mt-2 text-sm text-neutral-400">
           Your progress will be lost and the assignment may be auto-submitted.

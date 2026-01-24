@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { Input } from "./Input";
 
-
 type VendorForm = {
   name: string;
   email: string;
@@ -78,9 +77,7 @@ export default function CreateVendorV1({
         className={`w-full max-w-lg rounded-2xl bg-[#0B1324] p-6 shadow-xl
         animate-modal-in ${shake ? "animate-shake" : ""}`}
       >
-        <h2 className="text-lg font-semibold text-white mb-4">
-          New vendor
-        </h2>
+        <h2 className="text-lg font-semibold text-white mb-4">New vendor</h2>
 
         <div className="space-y-4">
           <Input
@@ -123,9 +120,7 @@ export default function CreateVendorV1({
             placeholder="Optional"
             value={form.secondaryEmail}
             onChange={handleChange}
-            isInvalid={
-              !!form.secondaryEmail && !isSecondaryEmailValid
-            }
+            isInvalid={!!form.secondaryEmail && !isSecondaryEmailValid}
             errorMessage="Invalid email format"
           />
 

@@ -18,14 +18,14 @@ class CourseProgressController {
       if (!dbStudent) throw new Error("student not found ");
 
       const dbContent = await prismaClient.courseLearningContent.findUnique({
-        where: { id: contentId },
+        where: { id: contentId as string },
       });
       if (!dbContent) throw new Error("content couldnot be found");
 
       const alreadyDone = await prismaClient.courseProgress.findFirst({
         where: {
           studentId,
-          contentId,
+          contentId: dbContent.id,
         },
       });
 
@@ -66,14 +66,14 @@ class CourseProgressController {
       if (!dbStudent) throw new Error("student not found ");
 
       const dbContent = await prismaClient.courseLearningContent.findUnique({
-        where: { id: contentId },
+        where: { id: contentId as string },
       });
       if (!dbContent) throw new Error("content couldnot be found");
 
       const alreadyDone = await prismaClient.courseProgress.findFirst({
         where: {
           studentId,
-          contentId,
+          contentId: dbContent.id,
         },
       });
 
@@ -112,7 +112,7 @@ class CourseProgressController {
       const insitutionId = dbStudent.instituteId;
 
       const dbCourses = await prismaClient.courseEnrollment.findMany({
-        where: { instituteId: insitutionId },
+        where: { institutionId: insitutionId },
         select: { courseId: true },
       });
 
@@ -183,7 +183,7 @@ class CourseProgressController {
       if (!dbStudent) throw new Error("student not found ");
 
       const dbCourse = await prismaClient.course.findUnique({
-        where: { id: courseId },
+        where: { id: courseId as string },
       });
       if (!dbCourse) throw new Error("db course not found");
 

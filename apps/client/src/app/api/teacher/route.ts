@@ -7,12 +7,12 @@ export async function GET(req: NextRequest) {
     if (!backendUrl) {
       return NextResponse.json(
         { error: "Backend URL not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     const response = await axiosInstance.get(
-      `${backendUrl}/api/v1/teachers/get-all-teacher`
+      `${backendUrl}/api/v1/teachers/get-all-teacher`,
     );
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     console.log(error);
     return NextResponse.json(
       { error: "Failed to fetch teachers" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

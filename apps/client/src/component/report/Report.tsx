@@ -1,9 +1,7 @@
-import ReportV1 from './v1/ReportV1'
+import ReportV1 from "./v1/ReportV1";
 
 function Report() {
-  return (
-    <ReportV1/>
-  )
+  return <ReportV1 />;
 }
 
-export default Report
+export default Report;

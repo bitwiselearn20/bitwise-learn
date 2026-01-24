@@ -1,6 +1,12 @@
 export interface JwtPayload {
   id: string;
-  type: "SUPERADMIN" | "ADMIN" | "INSTITUTION" | "VENDOR" | "TEACHER" | "STUDENT";
+  type:
+    | "SUPERADMIN"
+    | "ADMIN"
+    | "INSTITUTION"
+    | "VENDOR"
+    | "TEACHER"
+    | "STUDENT";
 }
 export interface CourseBody {
   name: string;
@@ -265,14 +271,13 @@ export interface UpdateAssessmentSection {
 }
 
 export interface CreateAssessmentQuestionBody {
-  question: string,
-  options: string[],
-  problem?: string,
-  maxMarks: number,
+  question: string;
+  options: string[];
+  problem?: string;
+  maxMarks: number;
 }
 export interface UpdateAssessmentQuestionBody {
-  question?: string,
-  options: string[],
-  problem?: string,
-  maxMarks?: number,
+  question?: string;
+  options: string[];
+  maxMarks?: number;
 }

@@ -94,7 +94,7 @@ function WelcomeTypewriter() {
         </span>
       ) : (
         <span key={i}>{part}</span>
-      )
+      ),
     );
   };
 
@@ -131,10 +131,10 @@ export default function AdminLoginV1() {
       const payload = {
         email,
         password,
-        role
+        role,
       };
 
-      const response = await handleLogin({data:payload});
+      const response = await handleLogin({ data: payload });
       toast.success("login successful");
     } catch (err) {
       setError("Invalid email or password");

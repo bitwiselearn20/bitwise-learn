@@ -6,7 +6,6 @@ import RightSection from "./RightSection";
 import { Course } from "./CourseCard";
 import SideBar from "@/component/general/SideBar";
 
-
 const colors = {
   primary_Bg: "bg-[#121313]",
   secondary_Bg: "bg-[#1E1E1E]",

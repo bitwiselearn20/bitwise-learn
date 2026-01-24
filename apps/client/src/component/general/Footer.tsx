@@ -1,6 +1,6 @@
 import { Facebook, Github, Instagram, Linkedin } from "lucide-react";
 import Link from "next/link";
-import BitwiseImage from "@/app/images/BitwiseImage.png"
+import BitwiseImage from "@/app/images/BitwiseImage.png";
 import { Colors } from "./Colors";
 
 export default function Footer() {
@@ -22,16 +22,32 @@ export default function Footer() {
             Learn, Code, Grow.
           </p>
           <div className="flex space-x-4">
-            <a href="#" aria-label="Facebook" className={`transition-colors ${Colors.text.primary} hover:text-blue-600`}>
+            <a
+              href="#"
+              aria-label="Facebook"
+              className={`transition-colors ${Colors.text.primary} hover:text-blue-600`}
+            >
               <Facebook size={22} />
             </a>
-            <a href="#" aria-label="X" className={`transition-colors ${Colors.text.primary} hover:text-gray-300`}>
+            <a
+              href="#"
+              aria-label="X"
+              className={`transition-colors ${Colors.text.primary} hover:text-gray-300`}
+            >
               <Github size={22} />
             </a>
-            <a href="#" aria-label="Instagram" className={`transition-colors ${Colors.text.primary} hover:text-yellow-400`}>
+            <a
+              href="#"
+              aria-label="Instagram"
+              className={`transition-colors ${Colors.text.primary} hover:text-yellow-400`}
+            >
               <Instagram size={22} />
             </a>
-            <a href="#" aria-label="LinkedIn" className={`transition-colors ${Colors.text.primary} hover:text-blue-400`}>
+            <a
+              href="#"
+              aria-label="LinkedIn"
+              className={`transition-colors ${Colors.text.primary} hover:text-blue-400`}
+            >
               <Linkedin size={22} />
             </a>
           </div>
@@ -72,7 +88,7 @@ export default function Footer() {
                     {item}
                   </a>
                 </li>
-              )
+              ),
             )}
           </ul>
         </div>

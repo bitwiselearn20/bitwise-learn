@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     if (!backendUrl) {
       return NextResponse.json(
         { message: "Backend URL not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -22,14 +22,14 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     console.error(
       "Get solved questions error:",
-      error?.response?.data || error
+      error?.response?.data || error,
     );
 
     return NextResponse.json(
       {
         message: error?.response?.data?.message || "Something went wrong",
       },
-      { status: error?.response?.status || 500 }
+      { status: error?.response?.status || 500 },
     );
   }
 }

@@ -8,7 +8,7 @@ import {
   LayoutDashboard,
   ClipboardCheck,
   LogOut,
-  LibraryBig
+  LibraryBig,
 } from "lucide-react";
 
 const MIN_WIDTH = 60;

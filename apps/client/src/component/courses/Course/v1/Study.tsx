@@ -21,7 +21,6 @@ const colors = {
 export default function Study() {
   return (
     <div className="h-full w-full grid grid-cols-1 lg:grid-cols-3 grid-rows-[auto_1fr] gap-5 overflow-hidden">
-
       {/* VIDEO */}
       <div className="lg:col-span-2 rounded-xl overflow-hidden bg-[#121313] aspect-video">
         <iframe
@@ -48,14 +47,14 @@ export default function Study() {
         </div>
 
         <p className="text-sm leading-relaxed text-gray-400 pb-2 border-b border-gray-600">
-          Id sint voluptate incididunt occaecat qui mollit quis sint Lorem anim magna deserunt est anim velit...
+          Id sint voluptate incididunt occaecat qui mollit quis sint Lorem anim
+          magna deserunt est anim velit...
         </p>
 
         <button className="mt-4 px-3 py-1 bg-black rounded-md text-sm w-fit">
           🔗 Resources
         </button>
       </div>
-
     </div>
   );
 }

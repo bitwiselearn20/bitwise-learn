@@ -32,7 +32,6 @@ function OngoingCourses() {
       <p className="mt-1 text-xl text-white/60">
         Continue where you left off or pick an ongoing course
       </p>
-
       {/* Courses */}
       <div className="mt-12 flex gap-4 overflow-x-auto scrollbar-hide pb-2">
         {courses.map((course) => (

@@ -1,5 +1,5 @@
-import Assessments from "@/component/Assessments/Assessments"
-import SideBar from "@/component/general/SideBar"
+import Assessments from "@/component/Assessments/Assessments";
+import SideBar from "@/component/general/SideBar";
 
 const page = () => {
   return (
@@ -9,7 +9,7 @@ const page = () => {
         <Assessments />
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

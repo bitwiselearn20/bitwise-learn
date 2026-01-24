@@ -43,7 +43,7 @@ export function verifyAccessToken(accessToken: string) {
   try {
     return jwt.verify(
       accessToken,
-      process.env.JWT_ACCESS_SECRET as string
+      process.env.JWT_ACCESS_SECRET as string,
     ) as JwtPayload;
   } catch (error) {
     throw new Error("invalid or expired access token");
@@ -53,7 +53,7 @@ export function verifyRefreshToken(refreshToken: string) {
   try {
     const decoded = jwt.verify(
       refreshToken,
-      process.env.JWT_REFRESH_SECRET as string
+      process.env.JWT_REFRESH_SECRET as string,
     ) as JwtPayload;
 
     return decoded;

@@ -7,12 +7,12 @@ export async function GET(req: NextRequest) {
     if (!backendUrl) {
       return NextResponse.json(
         { error: "Backend URL not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     const response = await axiosInstance.get(
-      `${backendUrl}/api/v1/problems/get-all-dsa-problem`
+      `${backendUrl}/api/v1/problems/get-all-dsa-problem`,
     );
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     console.log(error);
     return NextResponse.json(
       { error: "Failed to fetch problem" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

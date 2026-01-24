@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     console.error("Error handling request:", error);
     return NextResponse.json(
       { success: false, message: error.message || "Something went wrong" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

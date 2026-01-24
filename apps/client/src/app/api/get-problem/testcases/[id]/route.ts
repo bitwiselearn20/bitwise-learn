@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await context.params;
@@ -14,12 +14,12 @@ export async function GET(
     if (!backendUrl) {
       return NextResponse.json(
         { error: "Backend URL not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     const response = await axiosInstance.get(
-      `${backendUrl}/api/v1/problems/admin/get-dsa-problem/testcases/${id}`
+      `${backendUrl}/api/v1/problems/admin/get-dsa-problem/testcases/${id}`,
     );
 
     return NextResponse.json(response.data.data, { status: 200 });
@@ -28,7 +28,7 @@ export async function GET(
 
     return NextResponse.json(
       { error: "Failed to fetch problem" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -11,6 +11,6 @@ export const updateDescription = async (id: string, data: any) => {
     "/api/admin/update-topic/" + data.problemTopics[0].id,
     {
       tagName: data.problemTopics[0].tagName,
-    }
+    },
   );
 };
