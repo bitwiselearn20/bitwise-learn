@@ -6,6 +6,7 @@ import { X, Pencil, Save, Trash } from "lucide-react";
 
 import { getAllTeachers } from "@/api/teachers/get-all-teachers";
 import { getAllBatches } from "@/api/batches/get-all-batches";
+
 import { getAllVendors } from "@/api/vendors/get-all-vendors";
 import { deleteEntity, updateEntity } from "@/api/institutions/entity";
 import { getTeacherByInstitute } from "@/api/teachers/get-teachers-by-institute";
@@ -58,7 +59,9 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
             }, institutionId as string);
             break;
           case "Batches":
-            await getAllBatches((data: any) => setEntities(data || []));
+            await getAllBatches((data: any) => {
+              setEntities(Array.isArray(data) ? data : []);
+            }, institutionId as string);
             break;
           case "Vendors":
             await getAllVendors((data: any) => setEntities(data || []));

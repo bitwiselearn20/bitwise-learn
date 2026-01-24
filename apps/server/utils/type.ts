@@ -192,6 +192,7 @@ export interface CreateBatchBody {
   batchname: string;
   branch: string;
   batchEndYear: string;
+  institutionId: string;
 }
 export interface UpdateBatchBody {
   batchname?: string;

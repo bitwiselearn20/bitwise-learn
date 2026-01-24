@@ -11,7 +11,7 @@ class BatchController {
             const data: CreateBatchBody = req.body;
             if (!data) throw new Error("Please Provide all required fields");
 
-            if (req.user.type !== "INSTITUTION") {
+            if (req.user.type === "STUDENT") {
                 throw new Error("only institution can create batches");
             }
             const existingBatch = await prismaClient.batch.findFirst({
@@ -24,7 +24,7 @@ class BatchController {
                     batchname: data.batchname,
                     branch: data.branch,
                     batchEndYear: data.batchEndYear,
-                    institutionId: req.user.id,
+                    institutionId: data.institutionId,
                 },
             });
 
@@ -111,19 +111,18 @@ class BatchController {
             return res.status(200).json(apiResponse(200, error.message, null));
         }
     }
-    async getAllBatches(req: Request, res: Response) {
+    async getAllBatchesForInstitution(req: Request, res: Response) {
         try {
             if (!req.user) throw new Error("user is not authenticated");
 
-            const institutionId = req.user.id;
-            let whereClause: any = {};
+            const institutionId = req.params.id;
             if (req.user.type !== "INSTITUTION" && req.user.type !== "SUPERADMIN") {
                 throw new Error("only institution can view batches");
             }
-            if (req.user.type === "INSTITUTION") whereClause = { institutionId: institutionId };
+            // if (req.user.type === "INSTITUTION") whereClause = { institutionId: institutionId };
 
             const institutions = await prismaClient.batch.findMany({
-                where: whereClause,
+                where: { institutionId: institutionId },
                 select: {
                     id: true,
                     batchname: true,
