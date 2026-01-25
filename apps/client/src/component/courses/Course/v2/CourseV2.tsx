@@ -10,6 +10,8 @@ import View from "react-adobe-embed";
 import PdfViewer from "./PDFViewer";
 import { markAsDone, markAsUnDone } from "@/api/courses/course/course-progress";
 import MarkdownEditor from "@/component/ui/MarkDownEditor";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 
 /* ================= TYPES ================= */
 
@@ -39,6 +41,9 @@ type Section = {
   courseLearningContents: Topic[];
   courseAssignemnts: Assignment[];
 };
+
+const Colors = useColors();
+
 
 /* ================= COMPONENT ================= */
 
@@ -154,13 +159,13 @@ export default function CourseV2() {
   /* ================= RENDER ================= */
 
   return (
-    <div className="min-h-screen bg-[#121313] p-4">
+    <div className={`min-h-screen ${Colors.background.primary} p-4`}>
       <motion.div className="flex gap-4 h-[calc(100vh-2rem)]">
         {/* ================= LEFT SIDEBAR ================= */}
         {!studyMode && (
           <aside
             style={{ width: sidebarWidth }}
-            className="relative bg-[#1a1b1b] rounded-lg shrink-0 overflow-hidden"
+            className={`relative ${Colors.background.secondary} rounded-lg shrink-0 overflow-hidden`}
           >
             <SectionNav
               sections={sections}
@@ -191,10 +196,10 @@ export default function CourseV2() {
         )}
 
         {/* ================= RIGHT CONTENT ================= */}
-        <div className="flex-1 bg-[#161717] rounded-xl h-[95svh] overflow-hidden flex flex-col">
+        <div className={`flex-1 ${Colors.background.secondary} rounded-xl h-[95svh] overflow-hidden flex flex-col`}>
           {/* HEADER */}
-          <div className="p-6 border-b border-[#2a2a2a] bg-[#1a1b1b] flex justify-between">
-            <h2 className="text-white text-lg font-semibold">
+          <div className={`p-6 ${Colors.background.secondary} flex justify-between`}>
+            <h2 className={`${Colors.text.primary} text-lg font-semibold`}>
               {mode === "LEARNING" ? activeTopic?.name : activeAssignment?.name}
             </h2>
             <div className="w-1/3 flex gap-4 flex-end">
@@ -204,7 +209,7 @@ export default function CourseV2() {
                     setStudyMode((p) => !p);
                     toggleStudyMode();
                   }}
-                  className="px-3 py-2 bg-[#2a2a2a] text-gray-300 rounded"
+                  className={`px-3 py-2 ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special} cursor-pointer rounded-lg`}
                 >
                   {studyMode ? "Exit Study Mode" : "Study Mode"}
                 </button>
@@ -214,14 +219,14 @@ export default function CourseV2() {
                   onClick={() => {
                     setShowPDF((p) => !p);
                   }}
-                  className="px-3 py-2 bg-[#2a2a2a] text-gray-300 rounded"
+                  className={`px-3 py-2 ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special} cursor-pointer rounded-lg`}
                 >
-                  {showPDF ? "Show PDF" : "Hide PDF"}
+                  {showPDF ? "Hide PDF" : "Show PDF"}
                 </button>
               )}
               <button
                 onClick={handleMarkAsDone}
-                className="px-3 py-2 bg-[#2a2a2a] text-gray-300 rounded"
+                className={`px-3 py-2 ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special} cursor-pointer rounded-lg`}
               >
                 Mark as Done
               </button>
@@ -253,16 +258,16 @@ export default function CourseV2() {
               <AssignmentView assignment={activeAssignment} />
             )}
             {mode === "ASSIGNEMENT" && !activeAssignment && (
-              <div className="w-full h-fit mt-36 flex flex-col items-center justify-center text-center gap-3 text-gray-400">
-                <div className="p-4 rounded-full bg-[#1c1d1d]">
-                  <Book size={32} className="text-gray-300" />
+              <div className={`w-full h-fit mt-36 flex flex-col items-center justify-center text-center gap-3 ${Colors.text.secondary}`}>
+                <div className={`p-4 rounded-full ${Colors.background.primary}`}>
+                  <Book size={32} className={Colors.text.primary} />
                 </div>
 
-                <p className="text-lg font-medium text-gray-300">
+                <p className={`text-lg font-medium ${Colors.text.primary}`}>
                   No assignments yet
                 </p>
 
-                <p className="text-sm text-gray-500 max-w-xs">
+                <p className={`text-sm ${Colors.text.secondary} max-w-xs`}>
                   You’ll see your assignments here once they’re added.
                 </p>
               </div>
@@ -277,10 +282,14 @@ export default function CourseV2() {
 /* ================= LEARNING VIEW ================= */
 
 function LearningView({ topic, showPDF, studyMode }: any) {
+const { theme } = useTheme();
+  const markdownTheme: "light" | "dark" =
+  theme === "Dark" ? "dark" : "light";
+
   return (
     <div className="flex gap-6">
       <div className="flex-1 space-y-6">
-        <div className="aspect-video bg-black rounded-xl overflow-hidden">
+        <div className={`aspect-video  rounded-xl overflow-hidden ${Colors.background.primary}`}>
           {topic.videoUrl && (
             <iframe
               src={topic.videoUrl || ""}
@@ -291,17 +300,17 @@ function LearningView({ topic, showPDF, studyMode }: any) {
         </div>
 
         {topic.transcript ? (
-          <aside className="w-full bg-[#1c1d1d] p-4 rounded-xl text-gray-300">
+          <aside className={`w-full ${Colors.background.primary} p-4 rounded-xl ${Colors.text.secondary}`}>
             <MarkdownEditor
               height={550}
               value={topic.transcript}
               mode={"preview"}
               hideToolbar={true}
-              theme="dark"
+              theme={markdownTheme}
             />
           </aside>
         ) : (
-          <aside className="w-full h-[25%] flex justify-center items-center pt-8 bg-[#1c1d1d] p-4 rounded-xl text-gray-300">
+          <aside className={`w-full h-[25%] flex justify-center items-center pt-8 ${Colors.background.secondary} p-4 rounded-xl ${Colors.text.secondary}`}>
             No Transcripts yet
           </aside>
         )}
@@ -344,21 +353,21 @@ function AssignmentView({ assignment }: { assignment: Assignment }) {
       animate={{ opacity: 1 }}
       className="max-w-4xl mx-auto space-y-6"
     >
-      <div className="bg-[#1a1b1b] p-6 rounded-xl">
-        <h3 className="text-white text-xl font-semibold mb-2">
+      <div className={` p-6 rounded-xl ${Colors.background.secondary}`}>
+        <h3 className={`text-xl font-semibold mb-2 ${Colors.text.primary}`}>
           {assignment.name}
         </h3>
-        <p className="text-gray-400">{assignment.description}</p>
+        <p className={`${Colors.text.secondary}`}>{assignment.description}</p>
       </div>
 
-      <div className="bg-[#141515] p-6 rounded-xl">
-        <h4 className="text-white font-medium mb-2">Instructions</h4>
-        <p className="text-gray-300 whitespace-pre-line">
+      <div className={` p-6 rounded-xl ${Colors.background.primary}`}>
+        <h4 className={` font-medium mb-2 ${Colors.text.primary}`}>Instructions</h4>
+        <p className={`${Colors.text.secondary} whitespace-pre-line`}>
           {assignment.instruction}
         </p>
       </div>
 
-      <div className="text-gray-400">
+      <div className={` ${Colors.text.secondary}`}>
         Marks per question: {assignment.marksPerQuestion}
       </div>
     </motion.div>
@@ -400,21 +409,19 @@ function SectionNav({
   return (
     <nav className="h-full overflow-y-auto p-4 space-y-4">
       {/* Mode Switch */}
-      <div className="flex mb-6 justify-center gap-4 text-white">
+      <div className={`flex mb-6 justify-center gap-4 ${Colors.text.primary}`}>
         <button
           onClick={() => setMode("LEARNING")}
-          className={`px-3 py-1.5 rounded-md ${
-            mode === "LEARNING" ? "bg-primaryBlue text-white" : "bg-[#1c1d1d]"
+          className={`px-3 py-1.5 rounded-md cursor-pointer ${
+            mode === "LEARNING" ? `${Colors.background.special} ${Colors.text.primary}` : `${Colors.background.primary} ${Colors.text.primary}`
           }`}
         >
           Learning
         </button>
         <button
           onClick={() => setMode("ASSIGNEMENT")}
-          className={`px-3 py-1.5 rounded-md ${
-            mode === "ASSIGNEMENT"
-              ? "bg-primaryBlue text-white"
-              : "bg-[#1c1d1d]"
+          className={`px-3 py-1.5 rounded-md cursor-pointer ${
+            mode === "ASSIGNEMENT" ? `${Colors.background.special} ${Colors.text.primary}` : `${Colors.background.primary} ${Colors.text.primary}`
           }`}
         >
           Assignments
@@ -424,12 +431,12 @@ function SectionNav({
       {sections.map((section) => (
         <div
           key={section.id}
-          className="bg-[#141515] rounded-lg overflow-hidden"
+          className={`rounded-lg overflow-hidden ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special}`}
         >
           {/* Section Header */}
           <button
             onClick={() => onToggleSection(section.id)}
-            className="w-full px-4 py-3 flex justify-between items-center text-white hover:bg-[#1c1d1d]"
+            className={`w-full px-4 py-3 flex justify-between items-center cursor-pointer ${Colors.hover.special}`}
           >
             <span>{section.name}</span>
             <ChevronDown
@@ -441,34 +448,34 @@ function SectionNav({
 
           {/* Section Content */}
           {section.isOpen && (
-            <div className="bg-[#101111]">
+            <div className={`${Colors.background.primary} ${Colors.text.primary}`}>
               {mode === "LEARNING" ? (
                 section.courseLearningContents.length > 0 ? (
                   section.courseLearningContents.map((t) => (
                     <button
                       key={t.id}
                       onClick={() => onSelectTopic(t)}
-                      className="flex items-center w-full px-6 py-2 text-gray-300 hover:bg-[#1c1d1d]"
+                      className={`flex items-center w-full px-6 py-2 cursor-pointer ${Colors.hover.special}`}
                     >
                       {fetchIcon(t.id)}
                       {t.name}
                     </button>
                   ))
                 ) : (
-                  <div className="px-6 py-2 text-gray-500">No topics yet</div>
+                  <div className={`px-6 py-2 ${Colors.text.secondary}`}>No topics yet</div>
                 )
               ) : section.courseAssignemnts.length > 0 ? (
                 section.courseAssignemnts.map((a) => (
                   <button
                     key={a.id}
                     onClick={() => onSelectAssignment(a)}
-                    className="flex items-center w-full px-6 py-2 text-gray-300 hover:bg-[#1c1d1d]"
+                    className={`flex items-center w-full px-6 py-2 cursor-pointer ${Colors.hover.special}`}
                   >
                     {a.name}
                   </button>
                 ))
               ) : (
-                <div className="px-6 py-2 text-gray-500">
+                <div className={`px-6 py-2 ${Colors.text.secondary}`}>
                   No assignments yet
                 </div>
               )}

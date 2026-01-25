@@ -1,6 +1,8 @@
 "use client";
 
-import { Colors } from "@/component/general/Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+
+
 
 export default function AssignmentInfo({
   assignment,
@@ -11,6 +13,7 @@ export default function AssignmentInfo({
 }: any) {
   const update = (key: string, value: any) =>
     setAssignment({ ...assignment, [key]: value });
+  const Colors = useColors();
 
   return (
     <div

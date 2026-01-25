@@ -1,9 +1,11 @@
 import { Facebook, Github, Instagram, Linkedin } from "lucide-react";
 import Link from "next/link";
 import BitwiseImage from "@/app/images/BitwiseImage.png";
-import { Colors } from "./Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 export default function Footer() {
+  const Colors = useColors();
+
   return (
     <footer
       className={`${Colors.background.primary} ${Colors.border.default} backdrop-blur-lg py-8 px-6 transition-colors duration-300`}

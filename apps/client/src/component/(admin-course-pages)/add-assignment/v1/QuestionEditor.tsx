@@ -1,7 +1,9 @@
 import { v4 as uuid } from "uuid";
 import { Plus, XCircle } from "lucide-react";
 import QuestionNavigation from "./QuestionNavigation";
-import { Colors } from "@/component/general/Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+
+const Colors = useColors();
 
 export default function QuestionEditor({
   question,

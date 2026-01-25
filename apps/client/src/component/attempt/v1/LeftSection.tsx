@@ -1,5 +1,5 @@
 import React from "react";
-import { Colors } from "@/component/general/Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 import "./assignment.css";
 
@@ -10,6 +10,8 @@ type Props = {
   onNext: () => void;
   onPrevious: () => void;
 };
+
+const Colors = useColors();
 
 export default function LeftSection({
   question,

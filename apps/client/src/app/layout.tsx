@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
+import { ThemeProvider } from "@/component/general/(Color Manager)/ThemeController";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ThemeProvider>
         {children}
+        </ThemeProvider>
         <Toaster position="top-right" />
         <Script
           src="https://acrobatservices.adobe.com/view-sdk/viewer.js"

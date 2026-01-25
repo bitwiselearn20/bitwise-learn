@@ -1,11 +1,14 @@
 "use client";
 
 import MDEditor from "@uiw/react-md-editor";
+import { useColors } from "../general/(Color Manager)/useColors";
+
+const Colors = useColors();
 
 type Mode = "live" | "preview" | "edit";
 export const THEME_MAP = {
   light: {
-    backgroundColor: "white",
+    backgroundColor: "#dbe4e8",
     color: "black",
   },
   dark: {
@@ -38,14 +41,14 @@ export default function MarkdownEditor({
       }}
     >
       <MDEditor
-        data-color-mode="dark"
+        data-color-mode={theme}
         height={height}
         value={value}
         onChange={(val) => setValue(val ?? "")}
         preview={mode}
         hideToolbar={hideToolbar}
         spellCheck
-        className={mode !== "live" ? "bg-black text-white" : ""}
+        className={mode !== "live" ? `${Colors.background.primary} ${Colors.text.primary}` : ""}
         style={{
           ...THEME_MAP[theme],
           scrollbarWidth: "none",

@@ -6,6 +6,48 @@
     --color-primaryBlue: #64ACFF;
 }
 
+:root {
+  /* -------- BACKGROUND -------- */
+  --bg-primary: #121313;
+  --bg-secondary: #1E1E1E;
+  --bg-accent: #B1AAA6;
+  --bg-special: #64ACFF;
+
+  /* -------- HERO -------- */
+  --hero-primary: #129274;
+  --hero-primary-faded: rgba(18,146,116,0.24);
+  --hero-secondary: #64ACFF;
+  --hero-secondary-faded: rgba(100,172,255,0.56);
+
+  /* -------- TEXT -------- */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B1AAA6;
+  --text-special: #64ACFF;
+  --text-black: #000000;
+
+  /* -------- BORDER -------- */
+  --border-default: #B1AAA6;
+  --border-faded: rgba(255,255,255,0.15);
+  --border-special: #64ACFF;
+  --border-green: #129274;
+
+  /* -------- ICON -------- */
+  --icon-primary: #FFFFFF;
+  --icon-secondary: #000000;
+  --icon-special: #64ACFF;
+
+  /* -------- ACCENT -------- */
+  --accent-primary: #121313;
+  --accent-secondary: #129274;
+  --accent-special: #64ACFF;
+
+  /* -------- HOVER -------- */
+  --hover-special: rgba(100,172,255,0.56);
+  --hover-text-special: rgba(100,172,255,0.56);
+}
+
+
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

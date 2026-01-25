@@ -3,7 +3,9 @@
 import { useState } from "react";
 import AddMCQ from "./AddMCQ";
 import AddCodeQuestion from "./AddCodeQuestion";
-import { Colors } from "@/component/general/Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+
+const Colors = useColors();
 
 type QuestionType = "MCQ" | "CODE" | null;
 

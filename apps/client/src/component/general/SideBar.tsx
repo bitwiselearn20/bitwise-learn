@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   NotebookPen,
@@ -10,14 +10,18 @@ import {
   LogOut,
   LibraryBig,
 } from "lucide-react";
+import ThemeSwitcher from "./(Color Manager)/ThemeSwitcher";
+import { useColors } from "./(Color Manager)/useColors";
 
 const MIN_WIDTH = 60;
 const MAX_WIDTH = 420;
+const Colors = useColors();
 
 export default function SideBar() {
   const [width, setWidth] = useState(220);
   const isResizing = useRef(false);
   const sidebarRef = useRef<HTMLElement | null>(null);
+
 
   const isCollapsed = width <= 80;
 
@@ -58,13 +62,11 @@ export default function SideBar() {
     <aside
       ref={sidebarRef}
       style={{ width }}
-      className="
-        relative shrink-0
+      className={`relative shrink-0
         h-full
-        border-r border-white/10
-        bg-primary-bg text-white
-        flex flex-col
-      "
+        border-r border-white/10 ${Colors.background.primary}
+         ${Colors.text.primary}
+        flex flex-col`}
     >
       {/* Logo */}
       <div className="px-4 py-6 flex justify-center">
@@ -114,16 +116,19 @@ export default function SideBar() {
 
       {/* Logout */}
       <div className="mt-auto px-2 py-4">
+        <ThemeSwitcher />
         <button
           className={`
             w-full flex items-center
             ${isCollapsed ? "justify-center px-2" : "gap-3 px-4"}
             py-2.5 rounded-lg
             text-sm font-medium
-            text-white/70
+            ${Colors.text.secondary}
             hover:text-red-400
             hover:bg-red-500/10
             transition-all
+            cursor-pointer
+            active:scale-95
           `}
         >
           <LogOut size={18} />
@@ -163,9 +168,8 @@ function NavLink({
           ${collapsed ? "justify-center px-2" : "gap-3 px-4"}
           py-2.5 rounded-lg
           text-sm font-medium
-          text-white/80
-          hover:text-white
-          hover:bg-white/10
+          ${Colors.text.secondary}
+          ${Colors.hover.special}
           transition-all
         `}
       >

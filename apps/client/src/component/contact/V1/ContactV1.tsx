@@ -114,7 +114,7 @@ export default function ContactV1() {
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"
-                  className="px-10 py-3 rounded-xl bg-primaryBlue text-black font-semibold
+                  className="px-10 mb-10 py-3 rounded-xl bg-primaryBlue text-black font-semibold
                     hover:bg-blue-500 transition shadow-[0_8px_25px_rgba(59,130,246,0.4)]"
                 >
                   Connect with us

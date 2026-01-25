@@ -1,5 +1,7 @@
-import { Colors } from "@/component/general/Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 import React from "react";
+
+const Colors = useColors();
 
 export default function QuestionNavigation({
   index,

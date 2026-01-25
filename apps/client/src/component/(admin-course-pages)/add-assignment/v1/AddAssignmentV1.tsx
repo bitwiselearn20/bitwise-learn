@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import AssignmentInfo from "./AssignmentInfo";
-import { Colors } from "@/component/general/Colors";
 import { addAssignmentToSection } from "@/api/courses/assignment/add-assignment-to-section";
 import toast from "react-hot-toast";
 

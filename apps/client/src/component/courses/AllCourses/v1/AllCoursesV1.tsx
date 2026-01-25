@@ -8,6 +8,7 @@ import SideBar from "@/component/general/SideBar";
 import Link from "next/link";
 import { useRef } from "react";
 import axiosInstance from "@/lib/axios";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type CourseLevel = "Basic" | "Intermediate" | "Advanced" | "ALL";
 
@@ -21,6 +22,8 @@ interface Course {
   thumbnail?: string | null;
   instructorName: string;
 }
+
+const Colors = useColors();
 
 export const getAllCourses = async () => {
   const res = await axiosInstance.get("/api/course");
@@ -46,7 +49,7 @@ function CourseCard({ course }: { course: Course }) {
 
   const levelStyles =
     course.level === "Basic"
-      ? "text-gray-300"
+      ? Colors.text.primary
       : course.level === "Intermediate"
         ? "text-yellow-400"
         : "text-red-400";
@@ -54,12 +57,12 @@ function CourseCard({ course }: { course: Course }) {
   return (
     <div
       onClick={() => router.push(`/courses/${course.id}`)}
-      className="bg-divBg rounded-xl p-4 flex flex-col gap-3 cursor-pointer
-      hover:scale-[1.02] hover:bg-[#1a1a1a]
+      className={`${Colors.background.secondary} rounded-xl p-4 flex flex-col gap-3 cursor-pointer
+      hover:scale-[1.02]
       border border-transparent hover:border-[#64ACFF]/40
-      transition-all duration-300"
+      transition-all duration-300`}
     >
-      <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black/20">
+      <div className={`${Colors.background.primary} relative w-full aspect-video rounded-lg overflow-hidden`}>
         <Image
           src={course.thumbnail || "/images/jsCard.jpg"}
           alt={course.name}
@@ -69,24 +72,24 @@ function CourseCard({ course }: { course: Course }) {
         />
       </div>
 
-      <h3 className="text-lg font-semibold">{course.name}</h3>
+      <h3 className={`${Colors.text.primary} text-lg font-semibold`}>{course.name}</h3>
 
       <div className="flex items-center justify-between text-xs">
         <span
-          className={`px-2 py-0.5 rounded-md bg-white/5 font-medium ${levelStyles}`}
+          className={`px-2 py-0.5 rounded-md ${Colors.background.primary} font-medium ${levelStyles}`}
         >
           {course.level.charAt(0) + course.level.slice(1).toLowerCase()}
         </span>
 
         {course.duration && (
-          <span className="text-gray-500 flex items-center gap-2">
+          <span className={`${Colors.text.secondary} flex items-center gap-2`}>
             <Clock size={18} />
             {course.duration}
           </span>
         )}
       </div>
 
-      <p className="text-sm text-gray-300 leading-relaxed line-clamp-3">
+      <p className={`${Colors.text.secondary} text-sm line-clamp-2`}>
         {course.description}
       </p>
 
@@ -94,7 +97,7 @@ function CourseCard({ course }: { course: Course }) {
         <div className="w-7 h-7 rounded-full bg-yellow-400 flex items-center justify-center text-black font-semibold">
           {course.instructorName.charAt(0)}
         </div>
-        <span className="text-sm text-gray-300 font-medium">
+        <span className={`${Colors.text.primary} text-sm font-medium`}>
           {course.instructorName}
         </span>
       </div>
@@ -105,20 +108,20 @@ function CourseCard({ course }: { course: Course }) {
 /* ---------- Skeleton ---------- */
 function CourseSkeleton() {
   return (
-    <div className="bg-divBg rounded-xl p-4 flex flex-col gap-4 animate-pulse">
-      <div className="h-40 bg-white/10 rounded-lg" />
-      <div className="h-5 w-3/4 bg-white/10 rounded" />
+    <div className={` rounded-xl p-4 flex flex-col gap-4 animate-pulse ${Colors.background.secondary}`}>
+      <div className={`h-40 ${Colors.background.primary} rounded-lg`} />
+      <div className={`h-5 w-3/4 ${Colors.background.primary} rounded`} />
       <div className="flex justify-between">
-        <div className="h-4 w-20 bg-white/10 rounded" />
-        <div className="h-4 w-16 bg-white/10 rounded" />
+        <div className={`h-4 w-20 ${Colors.background.primary} rounded`} />
+        <div className={`h-4 w-16 ${Colors.background.primary} rounded`} />
       </div>
       <div className="space-y-2">
-        <div className="h-4 bg-white/10 rounded" />
-        <div className="h-4 w-5/6 bg-white/10 rounded" />
+        <div className={`h-4 ${Colors.background.primary} rounded`} />
+        <div className={`h-4 w-5/6 ${Colors.background.primary} rounded`} />
       </div>
       <div className="flex justify-end gap-2 mt-auto">
-        <div className="w-7 h-7 bg-white/10 rounded-full" />
-        <div className="h-4 w-20 bg-white/10 rounded" />
+        <div className={`w-7 h-7 ${Colors.background.primary} rounded-full`} />
+        <div className={`h-4 w-20 ${Colors.background.primary} rounded`} />
       </div>
     </div>
   );
@@ -135,10 +138,10 @@ function NoCoursesFound() {
         </div>
       </div>
 
-      <h3 className="mt-6 text-2xl font-semibold text-gray-200">
+      <h3 className={`mt-6 text-2xl font-semibold ${Colors.text.primary}`}>
         No courses found
       </h3>
-      <p className="text-sm text-gray-400 mt-1 max-w-sm">
+      <p className={`text-sm ${Colors.text.secondary} mt-1 max-w-sm`}>
         No matching courses found. Try adjusting your search.
       </p>
     </div>
@@ -218,13 +221,13 @@ export default function AllCoursesV1() {
   }, [courses, search, level]);
 
   return (
-    <div className="flex h-screen bg-[#0f0f0f] text-white">
+    <div className={`flex h-screen ${Colors.background.primary} ${Colors.text.primary}`}>
       <SideBar />
 
       <main className="flex-1 p-6 overflow-y-auto">
         <header className="flex items-center gap-10 mb-5">
           {/* Search */}
-          <div className="w-1/2 bg-[#1a1a1a] rounded-lg px-4 py-2 flex items-center gap-2">
+          <div className={`w-1/2 ${Colors.background.secondary} rounded-lg px-4 py-2 flex items-center gap-2`}>
             <Search size={18} />
             <input
               value={search}
@@ -238,14 +241,14 @@ export default function AllCoursesV1() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setOpen(!open)}
-              className="bg-divBg px-4 py-2 rounded-xl flex items-center gap-2 text-sm cursor-pointer"
+              className={`${Colors.background.secondary} px-4 py-2 rounded-xl flex items-center gap-2 text-sm cursor-pointer`}
             >
               {level === "ALL" ? "All Levels" : level}
               {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>
 
             {open && (
-              <div className="absolute right-0 mt-2 w-40 bg-[#0f0f0f] rounded-xl border border-white/10 shadow-lg overflow-hidden z-50">
+              <div className={`absolute right-0 mt-2 w-40 ${Colors.background.secondary} rounded-xl border border-white/10 shadow-lg overflow-hidden z-50`}>
                 {["ALL", "Basic", "Intermediate", "Advanced"].map((l) => (
                   <button
                     key={l}
@@ -266,7 +269,7 @@ export default function AllCoursesV1() {
         <div className="flex mb-5 text-xl gap-1 items-center">
           <Link
             href="/learning"
-            className="font-semibold text-gray-400 hover:text-gray-300"
+            className={`font-semibold ${Colors.text.secondary} ${Colors.hover.textSpecial}`}
           >
             My Learnings
           </Link>

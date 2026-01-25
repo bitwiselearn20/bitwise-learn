@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import LeftSection from "./LeftSection";
 import RightSection from "./RightSection";
 import { useRouter } from "next/navigation";
-import { Colors } from "@/component/general/Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 import toast from "react-hot-toast";
 
 import { dummyAssignmentData } from "../../assignment/DummyData/dummyData";
@@ -14,6 +14,8 @@ import ConfirmExit from "./ConfirmExit";
 import { useFullscreenEnforcer } from "./Proctoring/FullScreenEnforcer";
 import { useTabSwitchCounter } from "./Proctoring/TabSwitchCounter";
 import { useAntiCheatControls } from "./Proctoring/AntiCheat";
+
+const Colors = useColors();
 
 export default function AttemptV1({ assignmentId }: { assignmentId: string }) {
   const [started, setStarted] = useState(false);

@@ -2,7 +2,7 @@
 
 import "./assignment.css";
 import { RefreshCcw, LogOut } from "lucide-react";
-import { Colors } from "@/component/general/Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Props = {
   assignmentName: string;
@@ -18,6 +18,8 @@ type Props = {
   questionIds: string[];
   userAnswers: Record<string, string | null>;
 };
+
+const Colors = useColors();
 
 export default function RightSection({
   assignmentName,

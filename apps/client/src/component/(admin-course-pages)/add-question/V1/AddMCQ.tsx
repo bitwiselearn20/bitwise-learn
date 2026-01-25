@@ -1,7 +1,9 @@
 "use client";
 
-import { Colors } from "@/component/general/Colors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { useState } from "react";
+
+const Colors = useColors();
 
 const AddMCQ = () => {
   const [question, setQuestion] = useState("");
