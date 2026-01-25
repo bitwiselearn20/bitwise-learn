@@ -3,7 +3,6 @@ import { hashPassword } from "../utils/password";
 import apiResponse from "../utils/apiResponse";
 import prismaClient from "../utils/prisma";
 import type { CreateBatchBody, UpdateBatchBody } from "../utils/type";
-// import type { CreateTeacherBody, UpdateTeacherBody } from "../utils/type";
 class BatchController {
   async createBatch(req: Request, res: Response) {
     try {
@@ -11,7 +10,7 @@ class BatchController {
       const data: CreateBatchBody = req.body;
       if (!data) throw new Error("Please Provide all required fields");
 
-      if (req.user.type !== "INSTITUTION") {
+      if (req.user.type === "STUDENT") {
         throw new Error("only institution can create batches");
       }
       const existingBatch = await prismaClient.batch.findFirst({
@@ -24,7 +23,7 @@ class BatchController {
           batchname: data.batchname,
           branch: data.branch,
           batchEndYear: data.batchEndYear,
-          institutionId: req.user.id,
+          institutionId: data.institutionId,
         },
       });
 

@@ -6,6 +6,7 @@ import { useState } from "react";
 import StudentsForm from "./StudentsForm";
 import AssessmentsForm from "./AssessmentsForm";
 import { useParams } from "next/navigation";
+import CreateStudent from "@/component/CreateStudent/CreateStudent";
 type TabsProps = {
   value: string;
   onValueChange: (value: string) => void;
@@ -16,7 +17,7 @@ const RenderComponent = ({ value }: { value: string }) => {
     case "Teachers":
       return <TeacherForm />;
     case "Students":
-      return <StudentsForm />;
+      return <CreateStudent />;
     case "Courses":
       return <CourseForm batchId={params.batchId as string} />;
     case "Assessments":
@@ -51,11 +52,10 @@ export const Tabs = ({ value, onValueChange }: TabsProps) => {
           <button
             key={tab}
             onClick={() => onValueChange(tab)}
-            className={`px-4 py-1.5 rounded-md text-md ${
-              value === tab
+            className={`px-4 py-1.5 rounded-md text-md ${value === tab
                 ? "bg-blue-500 text-white"
                 : "text-gray-400 hover:text-white"
-            }`}
+              }`}
           >
             {tab}
           </button>

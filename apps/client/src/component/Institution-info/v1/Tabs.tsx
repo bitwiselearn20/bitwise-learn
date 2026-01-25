@@ -1,37 +1,47 @@
 import BatchesForm from "@/component/general/BatchesForm";
 import TeacherForm from "@/component/general/TeacherForm";
 import { Plus, X } from "lucide-react";
-import { useParams } from "next/navigation";
 import { useState } from "react";
 
 type TabsProps = {
   value: string;
   onValueChange: (value: string) => void;
   institutionId: string;
+  onBatchCreated?: () => void;
 };
 
 type RenderComponentProps = {
   value: string;
   institutionId: string;
-  onClose: () => void;
+  onClose: (value?: boolean) => void;
+  onBatchCreated?: () => void;
 };
 
 const RenderComponent = ({
   value,
   institutionId,
   onClose,
+  onBatchCreated,
 }: RenderComponentProps) => {
   switch (value) {
     case "Teachers":
       return <TeacherForm openForm={onClose} institutionId={institutionId} />;
     case "Batches":
-      return <BatchesForm />;
+      return (
+        <BatchesForm
+          openForm={onClose}
+          institutionId={institutionId}
+          onSubmit={() => {
+            onBatchCreated?.();
+          }}
+        />
+      );
     default:
       return null;
   }
 };
 
-export const Tabs = ({ value, onValueChange, institutionId }: TabsProps) => {
+export const Tabs = ({ value, onValueChange, institutionId, onBatchCreated }: TabsProps) => {
   const [addNew, setAddNew] = useState(false);
   const tabs = ["Teachers", "Batches"];
 
@@ -51,6 +61,7 @@ export const Tabs = ({ value, onValueChange, institutionId }: TabsProps) => {
               value={value}
               institutionId={institutionId}
               onClose={() => setAddNew(false)}
+              onBatchCreated={onBatchCreated}
             />
           </div>
         </div>
@@ -62,11 +73,10 @@ export const Tabs = ({ value, onValueChange, institutionId }: TabsProps) => {
             <button
               key={tab}
               onClick={() => onValueChange(tab)}
-              className={`px-4 py-1.5 rounded-md text-md transition ${
-                value === tab
+              className={`px-4 py-1.5 rounded-md text-md transition ${value === tab
                   ? "bg-blue-500 text-white"
                   : "text-gray-400 hover:text-white"
-              }`}
+                }`}
             >
               {tab}
             </button>
