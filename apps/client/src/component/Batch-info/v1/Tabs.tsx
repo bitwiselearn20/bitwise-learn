@@ -35,12 +35,11 @@ const RenderComponent = ({
   onClose: (value?: boolean) => void;
   onStudentCreated?: () => void;
 }) => {
-  const params = useParams();
-  const batchId = params.id as string;
-
   switch (value) {
     case "Teachers":
-      return <TeacherForm openForm={onClose} institutionId={institutionId || ""} />;
+      return (
+        <TeacherForm openForm={onClose} institutionId={institutionId || ""} />
+      );
     case "Students":
       return (
         <BatchStudentForm
@@ -69,13 +68,11 @@ export const Tabs = ({
   batchName,
   institutionId,
   onStudentCreated,
-}: TabsProps) => 
+}: TabsProps) => {
   const [addNew, setAddNew] = useState(false);
   const tabs = ["Students", "Teachers", "Assessments", "Courses"];
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const params = useParams();
-  const batchId = params.id as string;
 
   const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -88,7 +85,7 @@ export const Tabs = ({
       formData.append("file", file);
       formData.append("batchId", batchId);
 
-      await uploadBatches(params.id as string, file, "STUDENT", null);
+      await uploadBatches(batchId as string, file, "STUDENT", null);
 
       toast.success("Students uploaded successfully", {
         id: "bulk-upload",
