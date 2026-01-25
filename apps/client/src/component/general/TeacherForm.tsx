@@ -1,36 +1,57 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import { X } from "lucide-react";
+import React, { useMemo, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { createTeacher } from "@/api/teachers/create-teacher";
+import { getAllBatches } from "@/api/batches/get-all-batches";
 type TeacherFormData = {
   name: string;
   email: string;
   phoneNumber: string;
-  instituteId: string;
-  vendorId?: string;
   batchId: string;
+};
+
+type Batch = {
+  id: string;
+  batchname: string;
+  branch: string;
+  batchEndYear: string;
 };
 
 type Props = {
   openForm: (value: boolean) => void;
+  institutionId: string;
   onSubmit?: (data: TeacherFormData) => void;
 };
 
-export default function TeacherForm({ openForm, onSubmit }: Props) {
+export default function TeacherForm({ openForm, institutionId, onSubmit }: Props) {
   const [formData, setFormData] = useState<TeacherFormData>({
     name: "",
     email: "",
     phoneNumber: "",
-    instituteId: "",
-    vendorId: "",
     batchId: "",
   });
+
+  const [batches, setBatches] = useState<Batch[]>([]);
+  const [loadingBatches, setLoadingBatches] = useState(false);
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof TeacherFormData, string>>
   >({});
+
+  useEffect(() => {
+    if (institutionId) {
+      setLoadingBatches(true);
+      getAllBatches((data: Batch[]) => {
+        setBatches(data || []);
+        setLoadingBatches(false);
+      }, institutionId).catch((error) => {
+        console.error("Failed to fetch batches:", error);
+        toast.error("Failed to load batches");
+        setLoadingBatches(false);
+      });
+    }
+  }, [institutionId]);
 
   const validators = useMemo(
     () => ({
@@ -50,15 +71,10 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
         if (!/^\d+$/.test(value)) return "Phone number must be digits only";
         return "";
       },
-      instituteId: (value: string) => {
-        if (!value.trim()) return "Institute ID is required";
-        return "";
-      },
       batchId: (value: string) => {
-        if (!value.trim()) return "Batch ID is required";
+        if (!value.trim()) return "Batch is required";
         return "";
       },
-      vendorId: () => "",
     }),
     [],
   );
@@ -77,7 +93,7 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     const nextData = { ...formData, [name]: value } as TeacherFormData;
@@ -100,11 +116,15 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
     if (hasError) return;
 
     try {
-      onSubmit?.(formData);
-
-      await createTeacher(formData);
+      await createTeacher({
+        ...formData,
+        instituteId: institutionId,
+      });
 
       toast.success("Teacher created successfully");
+      onSubmit?.(formData);
+      openForm(false);
+
     } catch (error) {
       console.error("Failed to create teacher", error);
       toast.error("Failed to create teacher");
@@ -112,98 +132,90 @@ export default function TeacherForm({ openForm, onSubmit }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-divBg p-6 shadow-2xl">
-        <button
-          onClick={() => openForm(false)}
-          className="absolute right-4 top-4 text-white/50 hover:text-white"
-        >
-          <X size={20} />
-        </button>
+    <>
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-white mt-1">
+          Create Teacher
+        </h2>
+        <p className="text-xs text-white/50 mt-1">
+          Fill the details to create a teacher profile.
+        </p>
+      </div>
 
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-white mt-1">
-            Create Teacher
-          </h2>
-          <p className="text-xs text-white/50 mt-1">
-            Fill the details to create a teacher profile.
-          </p>
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          label="Name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Enter full name"
+          required
+          error={errors.name}
+        />
+        <Input
+          label="Email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="teacher@example.com"
+          required
+          error={errors.email}
+        />
+        <Input
+          label="Phone Number"
+          name="phoneNumber"
+          type="tel"
+          value={formData.phoneNumber}
+          onChange={handleChange}
+          placeholder="Enter phone number"
+          required
+          error={errors.phoneNumber}
+        />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter full name"
-            required
-            error={errors.name}
-          />
-          <Input
-            label="Email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="teacher@example.com"
-            required
-            error={errors.email}
-          />
-          <Input
-            label="Phone Number"
-            name="phoneNumber"
-            type="tel"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            placeholder="Enter phone number"
-            required
-            error={errors.phoneNumber}
-          />
-          <Input
-            label="Institute ID"
-            name="instituteId"
-            value={formData.instituteId}
-            onChange={handleChange}
-            placeholder="e.g., INST-123"
-            required
-            error={errors.instituteId}
-          />
-          <Input
-            label="Vendor ID"
-            name="vendorId"
-            value={formData.vendorId ?? ""}
-            onChange={handleChange}
-            placeholder="e.g., VNDR-123"
-          />
-          <Input
-            label="Batch ID"
+        <div>
+          <Label>Batch</Label>
+          <select
             name="batchId"
             value={formData.batchId}
             onChange={handleChange}
-            placeholder="e.g., BATCH-001"
-            required
-            error={errors.batchId}
-          />
+            disabled={loadingBatches || batches.length === 0}
+            className={`mt-1 w-full rounded-lg border bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue ${errors.batchId ? "border-red-500 focus:ring-red-500" : "border-white/10"} disabled:opacity-50 disabled:cursor-not-allowed`}
+            style={{
+              colorScheme: 'dark',
+            }}
+          >
+            <option value="" className="bg-black text-white">
+              {loadingBatches ? "Loading batches..." : "Select a batch"}
+            </option>
+            {batches.map((batch) => (
+              <option key={batch.id} value={batch.id} className="bg-black text-white">
+                {batch.batchname} - {batch.branch} ({batch.batchEndYear})
+              </option>
+            ))}
+          </select>
+          {errors.batchId ? (
+            <p className="mt-1 text-xs text-red-400">{errors.batchId}</p>
+          ) : null}
+        </div>
 
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => openForm(false)}
-              className="text-sm text-white/60 hover:text-white"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="rounded-md bg-primaryBlue px-4 py-2 text-sm font-semibold text-white"
-            >
-              Create Teacher
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => openForm(false)}
+            className="text-sm text-white/60 hover:text-white"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="rounded-md bg-primaryBlue px-4 py-2 text-sm font-semibold text-white"
+          >
+            Create Teacher
+          </button>
+        </div>
+      </form>
+    </>
   );
 }
 

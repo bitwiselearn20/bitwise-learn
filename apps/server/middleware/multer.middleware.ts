@@ -1,7 +1,7 @@
 import multer from "multer";
 
 const fileFilter = (req: any, file: any, cb: any) => {
-  const allowedExtensions = /\.(pdf|ppt|png|jpg|jpeg)$/i; // Case-insensitive
+  const allowedExtensions = /\.(pdf|ppt|png|jpg|jpeg|xlsv|ods)$/i; // Case-insensitive
 
   if (!allowedExtensions.test(file.originalname)) {
     req.fileValidationError =

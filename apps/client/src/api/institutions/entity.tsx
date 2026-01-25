@@ -21,6 +21,9 @@ const getUrl = (id: string, entity: string, operation: string) => {
     case "admin":
       url = `/api/admin/admins/${id}/${operation}`;
       break;
+    case "courses":
+      url = `/api/admin/admins/${id}/${operation}`;
+      break;
   }
   return url;
 };

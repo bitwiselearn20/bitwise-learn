@@ -5,6 +5,8 @@ import { Pencil, Trash2, X } from "lucide-react";
 import { getStudentsByBatch } from "@/api/students/get-students-by-batch";
 import { getTeachersByBatch } from "@/api/teachers/get-teachers-by-batch";
 import { deleteEntity, updateEntity } from "@/api/institutions/entity";
+import { getCourseEnrollments } from "@/api/courses/course/enrollments/get-all-enrollment";
+import { allBatchCourses } from "@/api/courses/course/enrollments/get-all-batch-courses";
 // import { getAllAssessments } from "@/api/vendors/get-all-vendors";
 
 type EntityListProps = {
@@ -86,7 +88,8 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
             break;
           case "Courses":
             // TODO: Add courses API when available
-            setEntities([]);
+            const data = await allBatchCourses(batchId as string);
+            setEntities(data);
             break;
           default:
             setEntities([]);
@@ -130,8 +133,10 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
           );
         case "Courses":
           return (
-            entity.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            entity.description
+            entity.course.name
+              ?.toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
+            entity.course.description
               ?.toLowerCase()
               .includes(searchQuery.toLowerCase())
           );
@@ -151,6 +156,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
   // };
 
   const getDisplayName = (entity: any) => {
+    console.log(entity.course.name);
     switch (type) {
       case "Students":
         return entity.name || "Unknown";
@@ -159,7 +165,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
       case "Assessments":
         return entity.name || "Unknown Vendor";
       case "Courses":
-        return entity.name || "Unknown Course";
+        return entity.course.name || "Unknown Course";
       default:
         return "Unknown";
     }
@@ -411,7 +417,14 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
               {/* Content */}
               <div className="grid max-h-[60vh] grid-cols-1 gap-x-6 gap-y-5 overflow-y-auto pr-2 sm:grid-cols-2">
                 {Object.entries(isEditing ? editedEntity : selectedEntity)
-                  .filter(([key]) => key !== "id" && key !== "_id")
+                  .filter(
+                    ([key]) =>
+                      key !== "id" &&
+                      key !== "_id" &&
+                      key != "thumbnail" &&
+                      key != "certificate" &&
+                      key != "createdBy",
+                  )
                   .map(([key, value]) => (
                     <div key={key}>
                       <p className="my-3 text-[11px] uppercase tracking-wide text-primaryBlue">

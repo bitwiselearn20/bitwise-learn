@@ -2,11 +2,12 @@ import SideBar from "@/component/general/SideBar";
 import AllListedQuestions from "./AllListedQuestions";
 import OnGoingingCourses from "./OnGoingingCourses";
 import QuestionInforSidebar from "./QuestionInforSidebar";
+import StudentSideBar from "@/component/general/StudentSidebar";
 
 function V1AllComponents() {
   return (
     <div className="flex h-screen bg-primary-bg">
-      <SideBar />
+      <StudentSideBar />
       <div className="w-full">
         <div className="flex gap-4">
           <OnGoingingCourses />

@@ -248,6 +248,25 @@ class CodeRunnerController {
       return res.status(500).json(apiResponse(500, error.message, null));
     }
   }
+  async compileCode(req: Request, res: Response) {
+    try {
+      const { language, code, input } = req.body;
+      if (!language || !code) {
+        throw new Error("missing required field");
+      }
+      console.log(input);
+      const result = await CodeExecution.compileCompilerCode(
+        code,
+        language,
+        input,
+      );
+
+      return res.status(200).json(apiResponse(200, "success", result));
+    } catch (error: any) {
+      console.error(error);
+      return res.status(500).json(apiResponse(500, error.message, null));
+    }
+  }
 }
 
 export default new CodeRunnerController();

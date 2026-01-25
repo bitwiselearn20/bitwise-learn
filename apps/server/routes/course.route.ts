@@ -192,8 +192,13 @@ router.get(
   authMiddleware,
   courseEnrollmentController.getAllEnrollmentsById,
 );
+router.get(
+  "/get-course-enrollments-by-batch/:id",
+  authMiddleware,
+  courseEnrollmentController.getAllEnrollmentsByBatch,
+);
 router.post(
-  "/add-course-enrollment/:id",
+  "/add-course-enrollment/",
   authMiddleware,
   courseEnrollmentController.addEnrollment,
 );

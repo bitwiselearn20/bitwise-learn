@@ -33,13 +33,6 @@ export default function Footer() {
             </a>
             <a
               href="#"
-              aria-label="X"
-              className={`transition-colors ${Colors.text.primary} hover:text-gray-300`}
-            >
-              <Github size={22} />
-            </a>
-            <a
-              href="#"
               aria-label="Instagram"
               className={`transition-colors ${Colors.text.primary} hover:text-yellow-400`}
             >

@@ -31,12 +31,13 @@ class AssessmentQuestionController {
 
       let createdAssessmentQuestion;
 
-      if (data.problem) {
+      if (!data.problem) {
         createdAssessmentQuestion =
           await prismaClient.assessmentQuestion.create({
             data: {
               question: data.question,
               options: data.options,
+              correctOption: data.correctOption,
               maxMarks: data.maxMarks,
               sectionId: dbSection.id,
             },
@@ -57,6 +58,7 @@ class AssessmentQuestionController {
                 },
               },
               options: [],
+
             },
           });
       }
@@ -102,6 +104,7 @@ class AssessmentQuestionController {
           data: {
             maxMarks: data.maxMarks ?? dbQuestion.maxMarks,
             options: data.options ?? dbQuestion.options,
+            correctOption: data.correctOption ?? dbQuestion.correctOption,
             question: data.question ?? dbQuestion.question,
           },
         });
@@ -121,7 +124,7 @@ class AssessmentQuestionController {
       return res.status(200).json(apiResponse(200, error.message, null));
     }
   }
-  async deleteAssessmentSection(req: Request, res: Response) {
+  async deleteAssessmentQuestion(req: Request, res: Response) {
     try {
       const questionId = req.params.id;
       if (!req.user) throw new Error("User not authenticated");
@@ -176,7 +179,7 @@ class AssessmentQuestionController {
 
       const questions = await prismaClient.assessmentQuestion.findMany({
         where: {
-          id: dbSection.id,
+          sectionId: dbSection.id,
         },
       });
 

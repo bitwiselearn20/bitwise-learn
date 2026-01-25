@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const assessmentId = params.id;
+    const assessmentId = (await params).id;
     const token = req.headers.get("authorization");
 
     if (!assessmentId) {
@@ -16,7 +16,7 @@ export async function GET(
     }
 
     const backendRes = await fetch(
-      `${process.env.BACKEND_URL}/api/v1/assessments/get-assessment-section/${assessmentId}`,
+      `${process.env.BACKEND_URL}/api/v1/assessments/get-sections-for-assessment/${assessmentId}`,
       {
         method: "GET",
         headers: {

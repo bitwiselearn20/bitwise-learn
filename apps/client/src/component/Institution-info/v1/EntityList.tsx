@@ -28,10 +28,10 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
 
   /* ----------------------------- Helpers ----------------------------- */
 
-  const isEditableEntity = type === "Teachers" || type === "Vendors";
+  const isEditableEntity = type === "Teachers";
 
   const backendEntityType =
-    type === "Teachers" ? "teacher" : type === "Vendors" ? "vendor" : null;
+    type === "Teachers" ? "teacher" : null;
 
   const formatDate = (date?: string) =>
     date ? new Date(date).toLocaleDateString() : "—";
@@ -63,9 +63,6 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
               setEntities(Array.isArray(data) ? data : []);
             }, institutionId as string);
             break;
-          case "Vendors":
-            await getAllVendors((data: any) => setEntities(data || []));
-            break;
           default:
             setEntities([]);
         }
@@ -78,7 +75,7 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
     };
 
     fetchData();
-  }, [type]);
+  }, [type, institutionId]);
 
   /* ----------------------------- Filtering ----------------------------- */
 
@@ -92,13 +89,6 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
         return (
           entity.name?.toLowerCase().includes(q) ||
           entity.email?.toLowerCase().includes(q)
-        );
-
-      if (type === "Vendors")
-        return (
-          entity.name?.toLowerCase().includes(q) ||
-          entity.email?.toLowerCase().includes(q) ||
-          entity.tagline?.toLowerCase().includes(q)
         );
 
       if (type === "Batches")

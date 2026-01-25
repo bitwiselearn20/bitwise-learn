@@ -2,12 +2,14 @@
 
 import { getAllProblemTestCases } from "@/api/problems/get-all-testcases";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { deleteTestCase } from "@/api/problems/delete-testcase";
 import TestCaseForm from "./TestCaseForm";
 import { createTestCase } from "@/api/problems/create-testcase";
 import { updateProblemTestcase } from "@/api/problems/update-testcase";
+import { uploadBatches } from "@/api/batches/create-batches";
+import toast from "react-hot-toast";
 
 type TestCase = {
   id: string;
@@ -28,13 +30,39 @@ export default function AllTestCases() {
     null,
   );
   const [showTestCaseForm, setShowTestCaseForm] = useState(false);
-
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     getAllProblemTestCases(setData, problemId);
   }, [problemId]);
 
   /* ---------------- CRUD HELPERS ---------------- */
+  const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
 
+      toast.loading("Uploading students...", { id: "bulk-upload" });
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("batchId", param.id as string);
+
+      await uploadBatches(param.id as string, file, "TESTCASE", null);
+
+      toast.success("Students uploaded successfully", {
+        id: "bulk-upload",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Bulk upload failed", {
+        id: "bulk-upload",
+      });
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
   const handleAdd = async (payload: any) => {
     const created = await createTestCase(problemId, payload);
     setData((prev) => [...prev, created]);
@@ -61,17 +89,31 @@ export default function AllTestCases() {
           onSave={handleAdd}
         />
       )}
-
+      <input
+        type="file"
+        accept=".csv,.xlsx,.ods"
+        ref={fileInputRef}
+        onChange={handleBulkUpload}
+        hidden
+      />
       {/* TABLE */}
       <div className="flex-1 p-4">
         <div className="flex justify-between mb-4">
           <h2 className="text-lg font-semibold text-white">Test Cases</h2>
-          <button
-            onClick={() => setShowTestCaseForm(true)}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
-          >
-            Add New Testcase
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+            >
+              Bulk Upload
+            </button>
+            <button
+              onClick={() => setShowTestCaseForm(true)}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+            >
+              Add New Testcase
+            </button>
+          </div>
         </div>
 
         <div className="overflow-x-auto border border-neutral-700 rounded-lg">

@@ -9,11 +9,14 @@ class StudentController {
   async createStudent(req: Request, res: Response) {
     try {
       if (!req.user) throw new Error("user is not authenticated");
-      const institutionId = req.user.id;
       const data: CreateStudentBody = req.body;
       if (!data) throw new Error("please provide all required fields");
 
-      if (req.user.type !== "INSTITUTION") {
+      const institutionId = data.institutionId;
+      if (!institutionId) {
+        throw new Error("institutionId is required");
+      }
+      if (req.user.type === "STUDENT") {
         throw new Error("only institution can create students");
       }
 
@@ -75,7 +78,7 @@ class StudentController {
       }
 
       const student = await prismaClient.student.findFirst({
-        where: { id: studentId },
+        where: { id: studentId as string },
       });
       if (!student) throw new Error("student not found");
 
@@ -85,7 +88,7 @@ class StudentController {
       }
 
       const updatedStudent = await prismaClient.student.update({
-        where: { id: studentId },
+        where: { id: studentId as string },
         data: {
           name: data.name ?? student.name,
           rollNumber: data.rollNumber ?? student.rollNumber,
@@ -130,7 +133,7 @@ class StudentController {
       }
 
       const student = await prismaClient.student.findFirst({
-        where: { id: studentId },
+        where: { id: studentId as string },
       });
       if (!student) throw new Error("student not found");
 
@@ -141,7 +144,7 @@ class StudentController {
       }
 
       const deletedStudent = await prismaClient.student.delete({
-        where: { id: studentId },
+        where: { id: studentId as string },
       });
       if (!deletedStudent) throw new Error("Error deleting student");
 
@@ -211,7 +214,7 @@ class StudentController {
       // if (!dbUser) throw new Error("no such user found");
 
       const student = await prismaClient.student.findFirst({
-        where: { id: studentId },
+        where: { id: studentId as string },
       });
       if (!student) throw new Error("student not found");
 
@@ -250,7 +253,7 @@ class StudentController {
       // if (!dbUser) throw new Error("no such user found");
 
       const students = await prismaClient.student.findMany({
-        where: { batchId: batchId },
+        where: { batchId: batchId as string },
         select: {
           id: true,
           name: true,

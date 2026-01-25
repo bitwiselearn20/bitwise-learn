@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import axiosInstance from "@/lib/axios";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
+import StudentSideBar from "@/component/general/StudentSidebar";
 
 type CourseLevel = "Basic" | "Intermediate" | "Advanced" | "ALL";
 
@@ -221,8 +222,8 @@ export default function AllCoursesV1() {
   }, [courses, search, level]);
 
   return (
-    <div className={`flex h-screen ${Colors.background.primary} ${Colors.text.primary}`}>
-      <SideBar />
+    <div className="flex h-screen bg-[#0f0f0f] text-white">
+      <StudentSideBar />
 
       <main className="flex-1 p-6 overflow-y-auto">
         <header className="flex items-center gap-10 mb-5">

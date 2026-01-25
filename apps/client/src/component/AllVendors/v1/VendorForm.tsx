@@ -5,10 +5,10 @@ import { X } from "lucide-react";
 
 type Props = {
   openForm: (value: boolean) => void;
-  onSubmit?: (data: InstitutionFormData) => void;
+  onSubmit?: (data: VendorFormData) => void;
 };
 
-type InstitutionFormData = {
+type VendorFormData = {
   name: string;
   email: string;
   secondaryEmail?: string;
@@ -16,14 +16,13 @@ type InstitutionFormData = {
   phoneNumber: string;
   secondaryPhoneNumber?: string;
   websiteLink: string;
-  loginPassword: string;
 };
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 2;
 
 export default function VendorForm({ openForm, onSubmit }: Props) {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<InstitutionFormData>({
+  const [formData, setFormData] = useState<VendorFormData>({
     name: "",
     email: "",
     secondaryEmail: "",
@@ -31,7 +30,6 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
     phoneNumber: "",
     secondaryPhoneNumber: "",
     websiteLink: "",
-    loginPassword: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,16 +131,6 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
             </>
           )}
 
-          {/* STEP 3 — Security */}
-          {step === 3 && (
-            <Input
-              label="Login Password"
-              name="loginPassword"
-              type="password"
-              value={formData.loginPassword}
-              onChange={handleChange}
-            />
-          )}
 
           {/* Actions */}
           <div className="flex justify-between pt-4">
@@ -161,7 +149,11 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
             {step < TOTAL_STEPS ? (
               <button
                 type="button"
-                onClick={next}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  next();
+                }}
                 className="rounded-md bg-primaryBlue px-4 py-2 text-sm font-semibold text-white transition hover:bg-primaryBlue/90"
               >
                 Continue

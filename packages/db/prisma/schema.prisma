@@ -92,7 +92,8 @@ model Institution {
   secondaryPhoneNumber String?
   createdBy            String             @db.ObjectId
   creator              User               @relation(references: [id], fields: [createdBy])
-  vendors              Vendor[]
+  createdByVendorId    String?            @db.ObjectId
+  createdByVendor      Vendor?            @relation("VendorCreatedInstitutions", fields: [createdByVendorId], references: [id])
   batches              Batch[]
   teachers             Teacher[]
   students             Student[]
@@ -102,19 +103,18 @@ model Institution {
 }
 
 model Vendor {
-  id                   String      @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String        @id @default(auto()) @map("_id") @db.ObjectId
   name                 String
   email                String
   secondaryEmail       String?
   tagline              String
   phoneNumber          String
   secondaryPhoneNumber String?
+  createdInstitutions  Institution[] @relation("VendorCreatedInstitutions")
   websiteLink          String
   loginPassword        String
-  institutionId        String      @db.ObjectId
-  creator              Institution @relation(references: [id], fields: [institutionId])
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
 }
 
 model Batch {
@@ -151,7 +151,7 @@ model Teacher {
 model Student {
   id                          String                       @id @default(auto()) @map("_id") @db.ObjectId
   name                        String
-  rollNumber                  String                       @unique
+  rollNumber                  String
   email                       String                       @unique
   loginPassword               String
   batchId                     String                       @db.ObjectId
@@ -396,7 +396,7 @@ model AssessmentSection {
   assessmentType   ASSESSMENT_TYPE
 
   assessmentId String     @db.ObjectId
-  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
 
   questions AssessmentQuestion[]
   createdAt DateTime             @default(now())
@@ -404,12 +404,12 @@ model AssessmentSection {
 }
 
 model AssessmentQuestion {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  question String?
-  options  String[]
-
-  sectionId String            @db.ObjectId
-  section   AssessmentSection @relation(fields: [sectionId], references: [id])
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  question      String?
+  options       String[]
+  correctOption Int?
+  sectionId     String            @db.ObjectId
+  section       AssessmentSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 
   problemId String?  @db.ObjectId
   problem   Problem? @relation(fields: [problemId], references: [id])
@@ -424,7 +424,7 @@ model AssessmentSubmission {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   assessmentId String     @db.ObjectId
-  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
 
   studentId                     String                         @db.ObjectId
   student                       Student                        @relation(fields: [studentId], references: [id])
@@ -445,7 +445,7 @@ model AssessmentQuestionSubmission {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   questionId String             @db.ObjectId
-  question   AssessmentQuestion @relation(fields: [questionId], references: [id])
+  question   AssessmentQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   answer                 String?
   marksObtained          Int?

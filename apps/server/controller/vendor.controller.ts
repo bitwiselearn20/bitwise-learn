@@ -33,9 +33,7 @@ class VendorController {
           secondaryPhoneNumber: data.secondaryPhoneNumber ?? null,
           websiteLink: data.websiteLink,
           loginPassword: hashedPassword,
-          creator: {
-            connect: { id: req.user.id },
-          },
+
         },
       });
       await handleSendMail(data.email, loginPassword);
@@ -69,11 +67,7 @@ class VendorController {
         where: { id: vendorId },
       });
       if (!vendor) throw new Error("Vendor not found");
-      if (req.user.type !== "SUPERADMIN" && req.user.type !== "ADMIN") {
-        if (vendor.institutionId !== institutionId) {
-          throw new Error("this vendor does not belongs to this institution");
-        }
-      }
+
 
       const updatedVendor = await prismaClient.vendor.update({
         where: { id: vendorId },
@@ -117,9 +111,7 @@ class VendorController {
       });
       if (!vendor) throw new Error("vendor not found");
 
-      if (vendor.institutionId !== institutionId) {
-        throw new Error("this vendor does not belongs to this institution");
-      }
+
 
       const deletedVendor = await prismaClient.vendor.delete({
         where: { id: vendorId },
@@ -182,7 +174,6 @@ class VendorController {
           id: true,
           name: true,
           email: true,
-          institutionId: true,
           phoneNumber: true,
           createdAt: true,
           updatedAt: true,
@@ -190,10 +181,6 @@ class VendorController {
       });
       if (!vendor) throw new Error("vendor not found");
 
-      console.log("Institution Id is: ", vendor.institutionId);
-      if (vendor.institutionId !== institutionId) {
-        throw new Error("this vendor does not belong to this institution");
-      }
 
       if (!vendor) {
         throw new Error("vendor not found");

@@ -42,14 +42,38 @@ class CourseEnrollment {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
+  async getAllEnrollmentsByBatch(req: Request, res: Response) {
+    try {
+      const batchId = req.params.id;
+      const dbBatch = await prismaClient.batch.findUnique({
+        where: { id: batchId as string },
+      });
+
+      if (!dbBatch) throw new Error("course not found");
+
+      const getEnrollment = await prismaClient.courseEnrollment.findMany({
+        where: { batchId: dbBatch.id },
+        select: {
+          course: true,
+        },
+      });
+
+      return res
+        .status(200)
+        .json(apiResponse(200, "fetched enrollments", getEnrollment));
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
+    }
+  }
   async addEnrollment(req: Request, res: Response) {
     try {
-      const courseId = req.params.id;
-      const instituteId = req.body.instituteId;
+      const courseId = req.body.courses;
       const batchId = req.body.batchId;
 
+      console.log(req.body);
       if (!courseId) throw new Error("course id is required");
-      if (!instituteId) throw new Error("institute id is required");
+      if (!batchId) throw new Error("institute id is required");
 
       const dbCourse = await prismaClient.course.findUnique({
         where: { id: courseId as string },
@@ -57,17 +81,17 @@ class CourseEnrollment {
 
       if (!dbCourse) throw new Error("course not found");
 
-      const dbInstitute = await prismaClient.institution.findUnique({
-        where: { id: instituteId as string },
-      });
-
-      if (!dbInstitute) throw new Error("institute not found");
-
       const dbBatch = await prismaClient.batch.findUnique({
         where: { id: batchId as string },
       });
 
       if (!dbBatch) throw new Error("batch not found");
+
+      const dbInstitute = await prismaClient.institution.findUnique({
+        where: { id: dbBatch.institutionId },
+      });
+
+      if (!dbInstitute) throw new Error("institute not found");
 
       const getEnrollment = await prismaClient.courseEnrollment.findFirst({
         where: {

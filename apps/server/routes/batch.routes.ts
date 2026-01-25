@@ -4,7 +4,7 @@ import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 router.post("/create-batch", authMiddleware, BatchController.createBatch);
-router.get("/get-all-batch", authMiddleware, BatchController.getAllBatches);
+router.get("/get-all-batch/:id", authMiddleware, BatchController.getAllBatches);
 router.get(
   "/get-batch-by-id/:id",
   authMiddleware,

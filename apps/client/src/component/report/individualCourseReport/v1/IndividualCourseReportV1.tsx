@@ -1,7 +1,7 @@
 "use client";
 
 import { getStudentData } from "@/api/reports/get-student-data";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   BarChart,
@@ -34,6 +34,7 @@ type Student = {
 };
 
 const COLORS = ["#10b981", "#ef4444"];
+const PAGE_SIZE = 100; // Number of students per page
 
 function IndividualCourseReportV1({
   courseId,
@@ -43,6 +44,8 @@ function IndividualCourseReportV1({
   batchId: string;
 }) {
   const [students, setStudents] = useState<Student[]>([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -52,31 +55,32 @@ function IndividualCourseReportV1({
     loadData();
   }, [courseId, batchId]);
 
-  /* ------------------ Derived Metrics ------------------ */
+  /* ------------------ Filters ------------------ */
+  const filteredStudents = useMemo(() => {
+    if (!searchTerm.trim()) return students;
+    return students.filter(
+      (s) =>
+        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.rollNumber.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [students, searchTerm]);
+
+  /* ------------------ Pagination ------------------ */
+  const totalPages = Math.ceil(filteredStudents.length / PAGE_SIZE);
+  const paginatedStudents = useMemo(() => {
+    const start = pageNumber * PAGE_SIZE;
+    return filteredStudents.slice(start, start + PAGE_SIZE);
+  }, [filteredStudents, pageNumber]);
 
   const totalStudents = students.length;
-
-  const progressChartData = students.map((s) => ({
-    name: s.name.split(" ")[0],
-    progress: s.courseProgresses.length,
-  }));
-
   const submittedCount = students.filter(
     (s) => s.courseAssignemntSubmissions.length > 0,
   ).length;
-
   const notSubmittedCount = totalStudents - submittedCount;
-
-  const assignmentStats = [
-    { name: "Submitted", value: submittedCount },
-    { name: "Pending", value: notSubmittedCount },
-  ];
-
   const submissionRate =
     totalStudents > 0
       ? ((submittedCount / totalStudents) * 100).toFixed(1)
       : "0";
-
   const avgProgress =
     totalStudents > 0
       ? (
@@ -85,7 +89,15 @@ function IndividualCourseReportV1({
         ).toFixed(1)
       : "0";
 
-  /* ------------------ Tooltips ------------------ */
+  const progressChartData = students.map((s) => ({
+    name: s.name.split(" ")[0],
+    progress: s.courseProgresses.length,
+  }));
+
+  const assignmentStats = [
+    { name: "Submitted", value: submittedCount },
+    { name: "Pending", value: notSubmittedCount },
+  ];
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload?.length) {
@@ -98,8 +110,6 @@ function IndividualCourseReportV1({
     }
     return null;
   };
-
-  /* ------------------ UI ------------------ */
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white p-6">
@@ -192,11 +202,25 @@ function IndividualCourseReportV1({
           </Card>
         </div>
 
-        {/* Table */}
+        {/* Search + Table */}
         <div className="rounded-lg border border-zinc-800 bg-zinc-900">
-          <div className="flex items-center gap-2 p-5 border-b border-zinc-800">
-            <ClipboardList size={18} />
-            <h2 className="font-medium">Student Summary</h2>
+          <div className="flex items-center justify-between gap-2 p-5 border-b border-zinc-800">
+            <div className="flex items-center gap-2">
+              <ClipboardList size={18} />
+              <h2 className="font-medium">Student Summary</h2>
+            </div>
+
+            {/* Search input */}
+            <input
+              type="text"
+              placeholder="Search by name or roll number"
+              className="rounded bg-zinc-800/60 text-sm p-2 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setPageNumber(0); // Reset page when searching
+              }}
+            />
           </div>
 
           <table className="w-full text-sm">
@@ -210,7 +234,7 @@ function IndividualCourseReportV1({
               </tr>
             </thead>
             <tbody>
-              {students.map((s) => (
+              {paginatedStudents.map((s) => (
                 <tr
                   key={s.id}
                   className="border-t border-zinc-800 hover:bg-zinc-800/40"
@@ -232,8 +256,38 @@ function IndividualCourseReportV1({
                   </td>
                 </tr>
               ))}
+              {paginatedStudents.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="text-center p-4 text-zinc-400">
+                    No students found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
+
+          {/* Pagination controls */}
+          <div className="flex justify-between items-center p-4 border-t border-zinc-800">
+            <button
+              disabled={pageNumber === 0}
+              onClick={() => setPageNumber((p) => Math.max(0, p - 1))}
+              className="px-4 py-2 rounded bg-zinc-800 disabled:opacity-40"
+            >
+              Prev
+            </button>
+            <span className="text-sm text-zinc-400">
+              Page {pageNumber + 1} of {totalPages || 1}
+            </span>
+            <button
+              disabled={pageNumber + 1 >= totalPages}
+              onClick={() =>
+                setPageNumber((p) => Math.min(p + 1, totalPages - 1))
+              }
+              className="px-4 py-2 rounded bg-zinc-800 disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -241,7 +295,6 @@ function IndividualCourseReportV1({
 }
 
 /* ------------------ Reusable Components ------------------ */
-
 function StatCard({
   title,
   value,

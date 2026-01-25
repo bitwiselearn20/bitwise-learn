@@ -4,12 +4,13 @@ import AdminBatchInfo from "./v1/V1BatchInfo";
 
 type BatchInfoProps = {
   batch: any;
+  institutionId: any
 };
 
-function BatchInfo({ batch }: BatchInfoProps) {
+function BatchInfo({ batch, institutionId }: BatchInfoProps) {
   return (
     <div>
-      <AdminBatchInfo batch={batch} />
+      <AdminBatchInfo batch={batch} institutionId={institutionId} />
     </div>
   );
 }

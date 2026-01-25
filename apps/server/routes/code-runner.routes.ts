@@ -4,6 +4,7 @@ import { authMiddleware } from "../middleware/auth.middleware";
 const router = Router();
 
 router.post("/run", codeRunnerController.runCode);
+router.post("/compile", codeRunnerController.compileCode);
 router.post("/submit", authMiddleware, codeRunnerController.submitCode);
 
 export default router;

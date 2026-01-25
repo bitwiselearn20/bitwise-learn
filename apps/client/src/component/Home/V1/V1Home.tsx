@@ -396,10 +396,10 @@ function V1Home() {
         </section>
 
         {/* ================= BLACK → BLUE FADE ================= */}
-        <div className="h-64 bg-linear-to-b from-black via-black/70 to-blue-400/90" />
+        <div className="h-64 bg-linear-to-b from-black via-black/70 to-blue-300/90" />
 
         {/* ================= CTA SECTION ================= */}
-        <section className="relative min-h-[70vh] bg-linear-to-b from-blue-400/90 to-blue-600 flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[70vh] bg-linear-to-b from-blue-300/90 to-blue-400 flex items-center justify-center overflow-hidden">
           {/* subtle background glow */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_60%)] pointer-events-none" />
 

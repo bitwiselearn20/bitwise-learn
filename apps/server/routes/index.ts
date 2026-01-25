@@ -9,6 +9,7 @@ import courseRouter from "./course.route";
 import codeRouter from "./code-runner.routes";
 import assessmentRouter from "./assessment.routes";
 import reportRouter from "./report.routes";
+import bulkUploadRouter from "./bulk-upload.routes";
 export {
   codeRouter,
   adminRouter,
@@ -21,4 +22,5 @@ export {
   courseRouter,
   assessmentRouter,
   reportRouter,
+  bulkUploadRouter,
 };
