@@ -5,7 +5,9 @@ import SideBar from "@/component/general/SideBar";
 import React, { useEffect, useState } from "react";
 import DashboardInfo from "./DashboardInfo";
 import { Plus } from "lucide-react";
-import VendorForm from "./VendorForm";
+import AdminForm from "./AdminForm";
+import { createAdmin } from "@/api/admins/create-admin";
+import toast from "react-hot-toast";
 
 function V1AllAdmins() {
   const [data, setData] = useState([]);
@@ -14,9 +16,20 @@ function V1AllAdmins() {
   useEffect(() => {
     getAllAdmins(setData);
   }, []);
+  const handleCreateAdmin = async (data: any) => {
+    try {
+      await createAdmin(data);
+      setAddNew(false);
+      toast.success("Admin Created Successfully");
+      getAllAdmins(setData);
+    } catch (err) {
+      toast.error("Error creating Admin");
+      console.error(err);
+    }
+  };
   return (
     <div className="flex">
-      {addNew && <VendorForm openForm={setAddNew} />}
+      {addNew && <AdminForm openForm={setAddNew} onSubmit={handleCreateAdmin} />}
       <div className="h-screen">
         <SideBar />
       </div>
