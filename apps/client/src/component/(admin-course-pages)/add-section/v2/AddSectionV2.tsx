@@ -12,6 +12,7 @@ import Link from "next/link";
 import { getAssignmentsBySection } from "@/api/courses/assignment/get-section-assignments";
 import { updateAssignment } from "@/api/courses/assignment/update-assignment";
 import { deleteAssignmentById } from "@/api/courses/assignment/delete-assignment";
+import QuestionEditorWrapper from "../../add-assignment/v1/QuestionEditorWrapper";
 
 type Props = {
   sectionNumber: number;
@@ -956,31 +957,13 @@ const AddSectionV2 = ({
       />
       {selectedAssignment && isAssignmentModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-2xl rounded-2xl bg-slate-900 border border-slate-800 p-6">
-            <h2 className="text-xl font-semibold text-white">
-              {selectedAssignment.name}
-            </h2>
-
-            <p className="mt-2 text-sm text-slate-400">
-              {selectedAssignment.description}
-            </p>
-
-            <div className="mt-6 text-sm text-slate-500">
-              Questions UI will come here
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => {
+              <QuestionEditorWrapper
+                assignmentId={selectedAssignment.id}
+                onClose={() => {
                   setIsAssignmentModalOpen(false);
                   setSelectedAssignment(null);
                 }}
-                className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+              />
         </div>
       )}
       {selectedAssignment && (

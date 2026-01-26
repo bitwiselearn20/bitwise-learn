@@ -251,7 +251,7 @@ model CourseAssignemntQuestion {
   options                     String[]
   correctAnswer               String[]
   assignmentId                String                       @db.ObjectId
-  assignment                  CourseAssignemnt             @relation(fields: [assignmentId], references: [id])
+  assignment                  CourseAssignemnt             @relation(fields: [assignmentId], references: [id],onDelete: Cascade)
   type                        ASSIGNMENT_TYPE              @default(SCQ)
   courseAssignemntSubmissions CourseAssignemntSubmission[]
   createdAt                   DateTime                     @default(now())
@@ -261,7 +261,7 @@ model CourseAssignemntQuestion {
 model CourseAssignemntSubmission {
   id            String                   @id @default(auto()) @map("_id") @db.ObjectId
   questionId    String                   @db.ObjectId
-  question      CourseAssignemntQuestion @relation(references: [id], fields: [questionId])
+  question      CourseAssignemntQuestion @relation(references: [id], fields: [questionId],onDelete: Cascade)
   studentId     String                   @db.ObjectId
   student       Student                  @relation(fields: [studentId], references: [id])
   answer        String[]

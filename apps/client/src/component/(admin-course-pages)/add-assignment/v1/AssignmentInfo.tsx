@@ -31,7 +31,7 @@ export default function AssignmentInfo({
     >
       {/* Header */}
       <div className="flex flex-col gap-1 border-b border-white/10 pb-4">
-        <h1 className={`${Colors.text.primary} text-2xl font-semibold`}>
+        <h1 className={`text-white text-2xl font-semibold`}>
           Create Assignment
         </h1>
         <p className="text-sm text-white/50">

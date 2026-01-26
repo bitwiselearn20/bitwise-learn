@@ -173,35 +173,50 @@ class CourseAssignmentController {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
-  async getAssignmentById(req: Request, res: Response) {
-    try {
-      if (!req.user) throw new Error("user not authenticated");
+async getAssignmentById(req: Request, res: Response) {
+  try {
+    if (!req.user) throw new Error("user not authenticated");
 
-      const userId = req.user.id;
-      const assignmentId = req.params.id;
+    const userId = req.user.id;
+    const assignmentId = req.params.id;
 
-      const assignment = await prismaClient.courseAssignemnt.findFirst({
-        where: {
-          id: assignmentId as string,
-          section: {
-            creatorId: userId,
-          },
+    const assignment = await prismaClient.courseAssignemnt.findUnique({
+      where: {
+        id: assignmentId as string,
+        section: {
+          creatorId: userId,
         },
-        include: {
-          courseAssignemntQuestions: true,
-        },
-      });
+      },
+      include: {
+        courseAssignemntQuestions: true,
+      },
+    });
 
-      if (!assignment) throw new Error("assignment not found");
+    if (!assignment) throw new Error("assignment not found");
 
-      return res
-        .status(200)
-        .json(apiResponse(200, "assignment fetched", assignment));
-    } catch (error: any) {
-      console.log(error);
-      return res.status(500).json(apiResponse(500, error.message, null));
-    }
+    const mappedAssignment = {
+      ...assignment,
+      courseAssignmentQuestions: assignment.courseAssignemntQuestions.map(
+        (q) => ({
+          id: q.id,
+          question: q.question,
+          options: q.options.map((opt: string) => ({
+            text: opt,
+          })),
+          correctAnswer: q.correctAnswer,
+          type: q.type,
+        }),
+      ),
+    };
+
+    return res
+      .status(200)
+      .json(apiResponse(200, "assignment fetched", mappedAssignment));
+  } catch (error: any) {
+    console.log(error);
+    return res.status(500).json(apiResponse(500, error.message, null));
   }
+}
 
   async addCourseAssignemntQuestion(req: Request, res: Response) {
     try {
