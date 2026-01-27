@@ -5,6 +5,7 @@ import { useState } from "react";
 import { createCourse } from "@/api/courses/course/create-course";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type CourseFormData = {
   name: string;
@@ -22,6 +23,7 @@ type CourseFormProps = {
 const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const Colors = useColors();
 
   // ADDED
   const [formError, setFormError] = useState<string | null>(null);
@@ -76,14 +78,14 @@ const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div className="w-full rounded-2xl bg-[#1E1E1E] p-8 text-white shadow-2xl relative">
+    <div className={`w-full rounded-2xl p-8 ${Colors.text.primary} shadow-2xl relative ${Colors.background.secondary}`}>
       {/* Close Button */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onClose();
         }}
-        className="absolute right-4 top-4 z-10 rounded-full p-2 hover:bg-neutral-800 transition-colors"
+        className={`absolute right-4 top-4 z-10 rounded-full p-2 cursor-pointer transition-colors ${Colors.background.primary}`}
         aria-label="Close"
       >
         <X size={18} />
@@ -99,7 +101,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
             setFormData({ ...formData, name: e.target.value });
             setFormError(null); // ADDED
           }}
-          className="w-full rounded-lg bg-neutral-900 px-4 py-3 outline-none focus:ring-1 focus:ring-[#64ACFF]"
+            className={`w-full rounded-lg ${Colors.background.primary} px-4 py-3 outline-none focus:ring-1 focus:ring-[#64ACFF]`}
           placeholder="Course title"
         />
 
@@ -111,7 +113,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
             setFormData({ ...formData, description: e.target.value });
             setFormError(null); // ADDED
           }}
-          className="w-full rounded-lg bg-neutral-900 px-4 py-3 outline-none focus:ring-1 focus:ring-[#64ACFF]"
+          className={`w-full rounded-lg ${Colors.background.primary} px-4 py-3 outline-none focus:ring-1 focus:ring-[#64ACFF]`}
           placeholder="Course description"
         />
 
@@ -127,7 +129,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
                   level: lvl as CourseFormData["level"],
                 })
               }
-              className={`rounded-lg border px-4 py-3 text-sm transition
+              className={`rounded-lg border px-4 py-3 text-sm transition cursor-pointer
                 ${
                   formData.level === lvl
                     ? "border-[#64ACFF] bg-[#64ACFF]/20"
@@ -147,7 +149,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
             setFormData({ ...formData, duration: e.target.value });
             setFormError(null); // ADDED
           }}
-          className="w-full rounded-lg bg-neutral-900 px-4 py-3 outline-none focus:ring-1 focus:ring-[#64ACFF]"
+          className={`w-full rounded-lg ${Colors.background.primary} px-4 py-3 outline-none focus:ring-1 focus:ring-[#64ACFF]`}
           placeholder="Duration (e.g. 10 hours)"
         />
 
@@ -158,7 +160,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onClose, onSuccess }) => {
             setFormData({ ...formData, instructorName: e.target.value });
             setFormError(null); // ADDED
           }}
-          className="w-full rounded-lg bg-neutral-900 px-4 py-3 outline-none focus:ring-1 focus:ring-[#64ACFF]"
+          className={`w-full rounded-lg ${Colors.background.primary} px-4 py-3 outline-none focus:ring-1 focus:ring-[#64ACFF]`}
           placeholder="Instructor name"
         />
       </div>

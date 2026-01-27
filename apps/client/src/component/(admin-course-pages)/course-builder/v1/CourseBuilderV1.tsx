@@ -16,10 +16,12 @@ import { createSection } from "@/api/courses/section/create-section";
 import { getSections } from "@/api/courses/section/get-section";
 import AddAssignment from "../../add-assignment/AddAssignment";
 import { updateCourse } from "@/api/courses/course/update-course";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Props = {
   courseId: string;
 };
+const Colors = useColors();
 
 /* ---------------- Delete Confirmation Modal ---------------- */
 
@@ -58,30 +60,30 @@ const ConfirmDeleteModal = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="
+        className={`
           w-full max-w-sm
           rounded-2xl
-          bg-slate-900
-          border border-slate-800
+          ${Colors.background.secondary}
+          ${Colors.border.defaultThick}
           p-6
           shadow-xl
           animate-in
           fade-in
           zoom-in-95
-        "
+          `}
       >
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
           Delete this course?
         </h2>
 
-        <p className="mt-2 text-sm text-slate-400">
+        <p className={`mt-2 text-sm ${Colors.text.secondary}`}>
           This action is permanent and cannot be undone.
         </p>
 
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer"
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} transition cursor-pointer`}
           >
             Cancel
           </button>
@@ -117,25 +119,25 @@ const CreateSectionModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6">
+      <div className={`w-full max-w-sm rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThick} p-6`}>
         {/* Header */}
-        <h2 className="text-lg font-semibold text-white">Create new section</h2>
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>Create new section</h2>
 
         {/* Input */}
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Section name</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Section name</label>
           <input
             type="text"
             value={sectionName}
             onChange={(e) => setSectionName(e.target.value)}
             placeholder="e.g. Introduction"
-            className="
+            className={`
               mt-2 w-full rounded-lg
-              bg-slate-800 border border-slate-700
-              px-3 py-2 text-sm text-white
-              placeholder:text-slate-500
+              ${Colors.background.primary} ${Colors.border.defaultThick}
+              px-3 py-2 text-sm ${Colors.text.primary}
+              placeholder:text-neutral-500
               focus:outline-none focus:border-sky-500
-            "
+            `}
             autoFocus
           />
         </div>
@@ -147,7 +149,7 @@ const CreateSectionModal = ({
               setSectionName("");
               onClose();
             }}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} transition cursor-pointer`}
           >
             Cancel
           </button>
@@ -158,7 +160,7 @@ const CreateSectionModal = ({
               onSubmit(sectionName.trim());
               setSectionName("");
             }}
-            className="px-4 py-2 rounded-lg bg-sky-600 text-black font-medium hover:bg-sky-500 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.special} ${Colors.border.defaultThick} ${Colors.text.primary} ${Colors.hover.special} transition cursor-pointer`}
           >
             Create
           </button>
@@ -204,23 +206,23 @@ const CourseSidebar = ({
 }) => {
   return (
     <aside
-      className="
+      className={`
       w-90
       h-full
-      border-r border-slate-800
-      bg-slate-900/60
+      ${Colors.border.defaultThick}
+      ${Colors.background.secondary}
       backdrop-blur-xl
       px-6 py-6
       flex flex-col gap-6
       rounded-lg
-    "
+        `}
     >
       {/* Thumbnail */}
-      <div className="w-full h-45 rounded-xl overflow-hidden border border-slate-800">
+      <div className="w-full h-45 rounded-xl overflow-hidden ">
         {course.thumbnail ? (
           <img src={course.thumbnail} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-slate-500">
+          <div className={`w-full h-full flex items-center justify-center ${Colors.text.secondary}`}>
             No Thumbnail
           </div>
         )}
@@ -228,11 +230,11 @@ const CourseSidebar = ({
 
       {/* Title */}
       <div className="space-y-1.5">
-        <h2 className="text-lg font-semibold text-white">{course.name}</h2>
-        <p className="text-xs text-slate-500 leading-relaxed">
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>{course.name}</h2>
+        <p className={`text-xs ${Colors.text.secondary} leading-relaxed`}>
           {course.description}
         </p>
-        <p className="text-sm text-slate-400">{course.instructorName}</p>
+        <p className={`text-sm ${Colors.text.secondary}`}>{course.instructorName}</p>
       </div>
 
       {/* Status */}
@@ -250,28 +252,28 @@ const CourseSidebar = ({
       {/* Meta */}
       <div className="space-y-3 text-sm">
         <div className="flex justify-between">
-          <span className="text-slate-400">Level</span>
-          <span className="text-slate-200">{course.level}</span>
+          <span className={`${Colors.text.primary} font-semibold`}>Level</span>
+          <span className={`${Colors.text.secondary}`}>{course.level}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-slate-400">Duration</span>
-          <span className="text-slate-200">{course.duration || "-"}</span>
+          <span className={`${Colors.text.primary} font-semibold`}>Duration</span>
+          <span className={`${Colors.text.secondary}`}>{course.duration || "-"}</span>
         </div>
       </div>
       <button
         onClick={onEdit}
-        className="
+        className={`
     mt-auto
     self-end
     px-6 py-2
     text-sm
     rounded-md
-    bg-sky-600
-    text-white
-    hover:bg-sky-500
+    ${Colors.background.special}
+    ${Colors.text.primary}
+    ${Colors.hover.special}
     transition
     cursor-pointer
-  "
+          `}
       >
         Edit
       </button>
@@ -335,48 +337,48 @@ const EditCourseModal = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="
+        className={`
           w-full max-w-md
           rounded-2xl
-          bg-slate-900
-          border border-slate-800
+          ${Colors.background.secondary}
+          ${Colors.border.defaultThick}
           p-6
           shadow-xl
           animate-in fade-in zoom-in-95
-        "
+        `}
       >
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
           Edit course details
         </h2>
 
         {/* Instructor */}
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Instructor name</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Instructor name</label>
           <input
             value={instructorName}
             onChange={(e) => setInstructorName(e.target.value)}
-            className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className={`mt-2 w-full rounded-lg ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:border-sky-500`}
           />
         </div>
 
         {/* Description */}
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Description</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
-            className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className={`mt-2 w-full rounded-lg ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:border-sky-500`}
           />
         </div>
 
         {/* Level */}
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Level</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Level</label>
           <select
             value={level}
             onChange={(e) => setLevel(e.target.value as any)}
-            className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className={`mt-2 w-full rounded-lg ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:border-sky-500`}
           >
             <option value="BASIC">Basic</option>
             <option value="INTERMEDIATE">Intermediate</option>
@@ -386,12 +388,12 @@ const EditCourseModal = ({
 
         {/* Duration */}
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Duration</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Duration</label>
           <input
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
             placeholder="e.g. 6 weeks"
-            className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className={`mt-2 w-full rounded-lg ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:border-sky-500`}
           />
         </div>
 
@@ -399,7 +401,7 @@ const EditCourseModal = ({
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} transition cursor-pointer`}
           >
             Cancel
           </button>
@@ -407,7 +409,7 @@ const EditCourseModal = ({
           <button
             disabled={saving}
             onClick={handleSave}
-            className="px-4 py-2 rounded-lg bg-sky-600 text-black font-medium hover:bg-sky-500 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.special} ${Colors.border.defaultThick} ${Colors.text.primary} ${Colors.hover.special} transition cursor-pointer`}
           >
             Save
           </button>
@@ -468,32 +470,32 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
       <div className="p-4 pt-0 animate-pulse">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div className="h-7 w-64 bg-slate-800 rounded" />
+          <div className={`h-7 w-64 ${Colors.background.secondary} rounded`} />
 
           <div className="flex gap-3 mt-4">
-            <div className="h-9 w-36 bg-slate-800 rounded-md" />
-            <div className="h-9 w-36 bg-slate-800 rounded-md" />
-            <div className="h-9 w-24 bg-slate-800 rounded-md" />
+            <div className={`h-9 w-36 ${Colors.background.secondary} rounded-md`} />
+            <div className={`h-9 w-36 ${Colors.background.secondary} rounded-md`} />
+            <div className={`h-9 w-24 ${Colors.background.secondary} rounded-md`} />
           </div>
         </div>
 
         {/* Section */}
         <div className="mt-10 space-y-8">
           <div className="rounded-xl border border-slate-800 p-5 space-y-4">
-            <div className="h-5 w-40 bg-slate-800 rounded" />
-            <div className="h-4 w-full bg-slate-800 rounded" />
-            <div className="h-4 w-5/6 bg-slate-800 rounded" />
+            <div className={`h-5 w-40 ${Colors.background.secondary} rounded`} />
+            <div className={`h-4 w-full ${Colors.background.secondary} rounded`} />
+            <div className={`h-4 w-5/6 ${Colors.background.secondary} rounded`} />
           </div>
         </div>
 
         {/* Add buttons */}
         <div className="flex gap-3 mt-6">
-          <div className="h-9 w-32 bg-slate-800 rounded-md" />
-          <div className="h-9 w-40 bg-slate-800 rounded-md" />
+          <div className={`h-9 w-32 ${Colors.background.secondary} rounded-md`} />
+          <div className={`h-9 w-40 ${Colors.background.secondary} rounded-md`} />
         </div>
 
         {/* Floating delete button */}
-        <div className="fixed bottom-6 right-6 h-12 w-28 bg-slate-800 rounded-full" />
+        <div className={`fixed bottom-6 right-6 h-12 w-28 ${Colors.background.secondary} rounded-full`} />
       </div>
     );
   };
@@ -613,7 +615,7 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
   ];
 
   return (
-    <div className="flex min-h-screen overflow-hidden">
+    <div className={`flex min-h-screen overflow-hidden`}>
       <CourseSidebar
         course={course}
         isPublished={isPublished}
@@ -645,16 +647,16 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
           }}
         />
         {/* top nav */}
-        <div className="sticky top-0 z-40 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+        <div className="sticky top-0 z-40 backdrop-blur border-b border-neutral-500 px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3 justify-center">
             <button
               onClick={() => router.push("/admin-dashboard/courses")}
-              className="flex items-center gap-1 text-2xl text-slate-400 hover:text-white transition cursor-pointer mt-1"
+              className={`flex items-center gap-1 text-2xl ${Colors.text.special} transition cursor-pointer mt-1`}
             >
               <ChevronLeft size={28} />
             </button>
 
-            <h1 className="text-white text-2xl">
+            <h1 className={` ${Colors.text.primary} text-2xl`}>
               {courseName} by {instructorName}
             </h1>
           </div>
@@ -662,14 +664,14 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
           <div className="flex gap-3 mt-4">
             <button
               onClick={() => certificateInputRef.current?.click()}
-              className="px-3 py-1.5 text-sm rounded-md border border-slate-700 text-sky-300 hover:border-sky-500 transition cursor-pointer"
+              className={`px-3 py-1.5 text-sm rounded-md ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} transition cursor-pointer`}
             >
               <div className="flex items-center gap-2">
                 <FileText size={16} />
                 Upload Certificate
               </div>
               {certificateFileName && (
-                <p className="mt-1 text-xs text-slate-400 truncate max-w-45">
+                <p className={`mt-1 text-xs ${Colors.text.secondary} truncate max-w-45`}>
                   {certificateFileName}
                 </p>
               )}
@@ -677,14 +679,14 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
 
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="px-3 py-1.5 text-sm rounded-md border border-slate-700 text-sky-300 hover:border-sky-500 transition cursor-pointer"
+              className={`px-3 py-1.5 text-sm rounded-md ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} transition cursor-pointer`}
             >
               <div className="flex items-center gap-2">
                 <FileImage size={16} />
                 Upload Thumbnail
               </div>
               {thumbnailFileName && (
-                <p className="mt-1 text-xs text-slate-400 truncate max-w-45">
+                <p className={`mt-1 text-xs ${Colors.text.secondary} truncate max-w-45`}>
                   {thumbnailFileName}
                 </p>
               )}
@@ -694,11 +696,7 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
               onClick={() => setShowPublishModal(true)}
               className={`
     px-4 py-1.5 text-sm rounded-md font-medium transition cursor-pointer
-    ${
-      isPublished
-        ? "bg-sky-600 text-white hover:bg-sky-500"
-        : "bg-sky-600 text-black hover:bg-sky-500"
-    }
+    ${Colors.text.primary} ${Colors.background.special} ${Colors.hover.special}
   `}
             >
               {isPublished ? "UnPublish" : "Publish"}
@@ -730,7 +728,8 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
         <div className="flex gap-3 mt-6">
           <button
             onClick={() => setShowCreateSection(true)}
-            className="px-3 py-1.5 text-sm rounded-md bg-slate-800 text-sky-300 hover:bg-slate-700 transition"
+            className={`    px-4 py-1.5 text-sm rounded-md font-medium transition cursor-pointer
+    ${Colors.text.primary} ${Colors.background.special} ${Colors.hover.special}`}
           >
             + Add Section
           </button>
@@ -739,19 +738,19 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
         {/* Floating Delete Button */}
         <button
           onClick={() => setShowDeleteConfirm(true)}
-          className="
+          className={`
           fixed bottom-6 right-6
           flex items-center gap-2
           px-4 py-3
           rounded-full
-          bg-red-500/15
+          ${Colors.background.secondary}
           backdrop-blur-md
           border border-red-500/30
           text-red-300
           shadow-lg
           hover:border-red-400/60
           hover:shadow-[0_0_18px_rgba(239,68,68,0.25)]
-          hover:scale-102 transition cursor-pointer"
+          hover:scale-102 transition cursor-pointer`}
         >
           <Trash2 size={18} />
           Delete

@@ -3,10 +3,14 @@ import AllListedQuestions from "./AllListedQuestions";
 import OnGoingingCourses from "./OnGoingingCourses";
 import QuestionInforSidebar from "./QuestionInforSidebar";
 import StudentSideBar from "@/component/general/StudentSidebar";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+
 
 function V1AllComponents() {
+  const Colors = useColors();
+
   return (
-    <div className="flex h-screen bg-primary-bg">
+    <div className={`flex h-screen ${Colors.background.primary}`}>
       <StudentSideBar />
       <div className="w-full">
         <div className="flex gap-4">

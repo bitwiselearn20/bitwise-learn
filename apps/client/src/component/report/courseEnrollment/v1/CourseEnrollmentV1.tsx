@@ -1,6 +1,7 @@
 "use client";
 
 import { getCourseEnrollments } from "@/api/courses/course/enrollments/get-all-enrollment";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { Eye, Search, Filter, Building2, Layers } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,6 +36,7 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [courseInfo, setCourseInfo] = useState<CourseInfo>({});
   const [loading, setLoading] = useState(true);
+  const Colors = useColors();
 
   // 🔎 Filters
   const [search, setSearch] = useState("");
@@ -83,8 +85,8 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
   }, [filteredEnrollments]);
 
   return (
-    <div className="flex gap-6 text-white h-full">
-      <aside className="w-[320px] ml-4 mt-4 shrink-0 border border-neutral-800 bg-neutral-900 rounded-xl overflow-hidden sticky top-4 h-fit">
+    <div className={`flex gap-6  h-screen ${Colors.text.primary} ${Colors.background.secondary}`}>
+      <aside className={`w-[320px] ml-4 mt-4 shrink-0 border ${Colors.border.defaultThin} ${Colors.background.primary} rounded-xl overflow-hidden sticky top-4 h-fit`}>
         {courseInfo.thumbnail && (
           <div className="h-40 w-full overflow-hidden">
             <Image
@@ -100,7 +102,7 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
         <div className="p-5 space-y-4 mt-4">
           <div>
             <h2 className="text-lg font-semibold">{courseInfo.name}</h2>
-            <p className="text-sm text-neutral-400 mt-1">
+            <p className={`text-sm ${Colors.text.secondary} mt-1`}>
               {courseInfo.level} • {courseInfo.duration}
             </p>
           </div>
@@ -111,18 +113,18 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
 
           <div className="space-y-3 text-sm">
             <div>
-              <p className="text-neutral-500">Instructor</p>
-              <p className="text-neutral-200">{courseInfo.instructorName}</p>
+              <p className={`text-sm ${Colors.text.primary} font-semibold`}>Instructor</p>
+              <p className={`${Colors.text.secondary}`}>{courseInfo.instructorName}</p>
             </div>
 
             <div>
-              <p className="text-neutral-500">Description</p>
-              <p className="text-neutral-300">{courseInfo.description}</p>
+              <p className={`text-sm ${Colors.text.primary} font-semibold`}>Description</p>
+              <p className={`${Colors.text.secondary}`}>{courseInfo.description}</p>
             </div>
 
             <div>
-              <p className="text-neutral-500">Total Enrollments</p>
-              <p className="font-semibold">
+              <p className={`text-sm ${Colors.text.primary} font-semibold`}>Total Enrollments</p>
+              <p className={`${Colors.text.secondary}`}>
                 {loading ? "—" : enrollments.length}
               </p>
             </div>
@@ -130,18 +132,20 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
         </div>
       </aside>
 
-      <section className="flex-1 mt-4 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-neutral-900 border border-neutral-800 rounded-lg p-4">
+      <section className="flex-1 mt-4">
+        <div className="mx-auto w-full max-w-[90%] space-y-4">
+
+        <div className={`flex flex-wrap items-center justify-between gap-3 rounded-lg p-4 ${Colors.background.primary} ${Colors.border.defaultThin}`}>
           <div className="flex gap-3 flex-wrap">
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-neutral-500" />
+              <Search className={`absolute left-3 top-2.5 h-4 w-4 ${Colors.text.special}`} />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search institution, batch or branch..."
-                className="pl-9 pr-4 py-2 text-sm rounded-md bg-neutral-800 border border-neutral-700
-                           text-white placeholder:text-neutral-500 focus:outline-none"
+                className={`pl-9 pr-4 py-2 text-sm rounded-md ${Colors.background.secondary} ${Colors.border.defaultThin}
+                ${Colors.text.primary} placeholder:text-neutral-500 focus:outline-none`}
               />
             </div>
 
@@ -149,7 +153,7 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
             <select
               value={institution}
               onChange={(e) => setInstitution(e.target.value)}
-              className="px-3 py-2 text-sm rounded-md bg-neutral-800 border border-neutral-700"
+              className={`px-3 py-2 text-sm rounded-md ${Colors.background.secondary} ${Colors.border.defaultThin} ${Colors.text.primary} focus:outline-none`}
             >
               <option value="all">All Institutions</option>
               {institutions.map((inst) => (
@@ -160,15 +164,15 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
             </select>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-neutral-400">
+          <div className={`flex items-center gap-2 text-sm ${Colors.text.secondary}`}>
             <Filter className="h-4 w-4" />
             {filteredEnrollments.length} enrollments
           </div>
         </div>
-        <div className="border border-neutral-800 rounded-xl overflow-hidden">
+        <div className={` ${Colors.border.defaultThin} rounded-xl overflow-hidden`}>
           <table className="w-full">
-            <thead className="bg-neutral-900 border-b border-neutral-800">
-              <tr className="text-left text-sm text-neutral-400">
+            <thead className={`${Colors.background.primary} ${Colors.border.defaultThin}`}>
+              <tr className={`text-left text-sm ${Colors.text.primary}`}>
                 <th className="px-4 py-3">Institution</th>
                 <th className="px-4 py-3">Batch</th>
                 <th className="px-4 py-3">Branch</th>
@@ -183,13 +187,13 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
                     <>
                       <tr
                         key={institutionName}
-                        className="bg-neutral-900/60 text-neutral-300"
+                        className={`${Colors.text.secondary} ${Colors.background.primary}`}
                       >
                         <td colSpan={4} className="px-4 py-3 font-medium">
                           <div className="flex items-center gap-2">
-                            <Building2 className="h-4 w-4" />
+                            <Building2 className={`h-4 w-4 ${Colors.text.special}`} />
                             {institutionName}
-                            <span className="ml-2 text-xs text-neutral-500">
+                            <span className={`ml-2 text-xs ${Colors.text.secondary}`}>
                               ({items.length} batches)
                             </span>
                           </div>
@@ -199,17 +203,17 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
                       {/* Rows */}
                       {items.map((item) => (
                         <tr
-                          key={item.batch.id}
-                          className="border-b border-neutral-800 text-sm hover:bg-neutral-800/40"
+                        key={item.batch.id}
+                          className={`border-b border-neutral-800 text-sm ${Colors.hover.special}`}
                         >
                           <td className="px-4 py-3"></td>
-                          <td className="px-4 py-3">{item.batch.batchname}</td>
-                          <td className="px-4 py-3 text-neutral-300">
+                          <td className={`px-4 py-3 ${Colors.text.secondary}`}>{item.batch.batchname}</td>
+                          <td className={`px-4 py-3 ${Colors.text.secondary}`}>
                             {item.batch.branch}
                           </td>
                           <td className="px-4 py-3">
                             <Link
-                              className="inline-flex items-center gap-1 text-sm text-neutral-300 hover:text-white"
+                              className={`inline-flex items-center gap-1 text-sm ${Colors.text.primary} ${Colors.hover.textSpecial}`}
                               href={`/admin-dashboard/reports/courses/${courseId}/${item.batch.id}`}
                             >
                               <Eye className="h-4 w-4" />
@@ -226,7 +230,7 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
                 <tr>
                   <td
                     colSpan={4}
-                    className="px-4 py-10 text-center text-neutral-500"
+                    className={`px-4 py-10 text-center ${Colors.text.secondary}`}
                   >
                     No matching enrollments found
                   </td>
@@ -235,6 +239,7 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
             </tbody>
           </table>
         </div>
+              </div>
       </section>
     </div>
   );

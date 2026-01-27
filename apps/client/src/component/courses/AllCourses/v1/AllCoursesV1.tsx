@@ -222,19 +222,19 @@ export default function AllCoursesV1() {
   }, [courses, search, level]);
 
   return (
-    <div className="flex h-screen bg-[#0f0f0f] text-white">
+    <div className={`flex h-screen ${Colors.background.primary} ${Colors.text.primary}`}>
       <StudentSideBar />
 
       <main className="flex-1 p-6 overflow-y-auto">
         <header className="flex items-center gap-10 mb-5">
           {/* Search */}
           <div className={`w-1/2 ${Colors.background.secondary} rounded-lg px-4 py-2 flex items-center gap-2`}>
-            <Search size={18} />
+            <Search size={18} className={Colors.text.special} />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search courses..."
-              className="bg-transparent outline-none w-full text-sm"
+              className={`bg-transparent outline-none w-full text-sm ${Colors.text.primary}`}
             />
           </div>
 

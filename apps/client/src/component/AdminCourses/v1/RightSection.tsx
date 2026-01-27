@@ -10,26 +10,9 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useRef } from "react";
 import CourseForm from "@/component/(admin-course-pages)/course-form/CourseForm";
 import toast from "react-hot-toast";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
-const colors = {
-  primary_Bg: "bg-[#121313]",
-  secondary_Bg: "bg-[#1E1E1E]",
-  special_Bg: "bg-[#64ACFF]",
-  primary_Hero: "bg-[#129274]",
-  primary_Hero_Faded: "bg-[rgb(18, 146, 116, 0.24)]",
-  secondary_Hero: "bg-[#64ACFF]",
-  secondary_Hero_Faded: "bg-[rgb(100, 172, 255, 0.56)]",
-  primary_Font: "text-[#FFFFFF]",
-  secondary_Font: "text-[#B1AAA6]",
-  special_Font: "text-[#64ACFF]",
-  accent: "#B1AAA6",
-  accent_Faded: "bg-[rgb(177, 170, 166, 0.41)]",
-  primary_Icon: "white",
-  secondary_Icon: "black",
-  special_Icon: "#64ACFF",
-
-  border: "border-t-2 border-[#B1AAA6]",
-};
+const Colors = useColors();
 
 const RightSection = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -104,28 +87,32 @@ const RightSection = () => {
   const CourseSkeleton = () => {
     return (
       <div
-        className="
-        rounded-xl p-4 flex flex-col gap-4
-        bg-[#1E1E1E] animate-pulse
-      "
+        className={`
+                  rounded-xl p-4 flex flex-col gap-4
+        ${Colors.background.secondary} animate-pulse
+          `}
       >
-        <div className="h-40 w-full rounded-lg bg-white/10" />
+        <div
+          className={`h-40 w-full rounded-lg ${Colors.background.primary}`}
+        />
 
-        <div className="h-5 w-3/4 rounded bg-white/10" />
+        <div className={`h-5 w-3/4 rounded ${Colors.background.primary}`} />
 
         <div className="flex justify-between">
-          <div className="h-4 w-20 rounded bg-white/10" />
-          <div className="h-4 w-16 rounded bg-white/10" />
+          <div className={`h-4 w-20 rounded ${Colors.background.primary}`} />
+          <div className={`h-4 w-16 rounded ${Colors.background.primary}`} />
         </div>
 
         <div className="space-y-2">
-          <div className="h-4 rounded bg-white/10" />
-          <div className="h-4 w-5/6 rounded bg-white/10" />
+          <div className={`h-4 rounded ${Colors.background.primary}`} />
+          <div className={`h-4 w-5/6 rounded ${Colors.background.primary}`} />
         </div>
 
         <div className="flex justify-end gap-2 mt-auto">
-          <div className="w-7 h-7 rounded-full bg-white/10" />
-          <div className="h-4 w-20 rounded bg-white/10" />
+          <div
+            className={`w-7 h-7 rounded-full ${Colors.background.primary}`}
+          />
+          <div className={`h-4 w-20 rounded ${Colors.background.primary}`} />
         </div>
       </div>
     );
@@ -141,7 +128,7 @@ const RightSection = () => {
 
       {/* MODAL CONTENT */}
       <div
-        className="relative z-50 w-full max-w-2xl rounded-2xl bg-[#121313] shadow-2xl p-1"
+        className={`relative z-50 w-full max-w-2xl rounded-2xl ${Colors.background.secondary} shadow-2xl p-1`}
         onClick={(e) => e.stopPropagation()} //  IMPORTANT
       >
         <CourseForm
@@ -163,7 +150,7 @@ const RightSection = () => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className={`text-xl font-semibold ${colors.primary_Font}`}
+            className={`text-xl font-semibold ${Colors.text.primary}`}
           >
             Looks like you haven&apos;t created any Courses
           </motion.p>
@@ -182,7 +169,7 @@ const RightSection = () => {
           </motion.div>
 
           {/* Sub Text */}
-          <p className={`max-w-md text-sm ${colors.secondary_Font}`}>
+          <p className={`max-w-md text-sm ${Colors.text.secondary}`}>
             Start by creating your first course to organize lessons,
             assignments, and evaluations in one place.
           </p>
@@ -192,7 +179,7 @@ const RightSection = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => setShowCourseForm(true)}
-            className={`rounded-md ${colors.special_Bg} px-6 py-2 font-medium ${colors.primary_Font}`}
+            className={`rounded-md ${Colors.background.special} px-6 py-2 font-medium ${Colors.text.primary}`}
           >
             + Create your first course
           </motion.button>
@@ -205,7 +192,7 @@ const RightSection = () => {
             <div className="relative w-full sm:w-96">
               <Search
                 size={18}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-font"
+                className={`absolute left-3 top-1/2 -translate-y-1/2 ${Colors.text.secondary}`}
               />
 
               <input
@@ -213,7 +200,7 @@ const RightSection = () => {
                 placeholder="Search courses..."
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                className={`w-full rounded-md ${colors.secondary_Bg} pl-10 pr-4 py-2 text-sm outline-none ${colors.primary_Font}`}
+                className={`w-full rounded-md ${Colors.background.secondary} pl-10 pr-4 py-2 text-sm outline-none ${Colors.text.primary}`}
               />
             </div>
 
@@ -221,7 +208,7 @@ const RightSection = () => {
               {/* Add Course */}
               <button
                 onClick={() => setShowCourseForm(true)}
-                className={`rounded-md ${colors.special_Bg} px-4 py-2 text-sm font-medium ${colors.primary_Font} hover:opacity-90 cursor-pointer`}
+                className={`rounded-md ${Colors.background.special} px-4 py-2 text-sm font-medium ${Colors.text.primary} hover:opacity-90 cursor-pointer`}
               >
                 + Add Course
               </button>
@@ -232,7 +219,7 @@ const RightSection = () => {
                   onClick={() => setOpen((p) => !p)}
                   className={`
       flex items-center gap-2 px-4 py-2 rounded-md
-      ${colors.secondary_Bg} ${colors.primary_Font}
+      ${Colors.background.secondary} ${Colors.text.primary}
       text-sm font-medium border border-neutral-700
       hover:border-neutral-500 transition cursor-pointer
     `}
@@ -245,16 +232,15 @@ const RightSection = () => {
 
                 {open && (
                   <div
-                    className="
-        absolute right-0 mt-2 w-44
-        rounded-xl bg-[#121313]
-        border border-white/10
-        shadow-lg overflow-hidden z-50
-      "
+                    className={`
+                              absolute right-0 mt-2 w-44
+        rounded-xl ${Colors.background.secondary}
+        border ${Colors.border.defaultThick}
+        shadow-lg overflow-hidden z-50`}
                   >
                     {[
                       { label: "All Levels", value: "ALL" },
-                      { label: "Basic", value: "BASIC", color: "text-white" },
+                      { label: "Basic", value: "BASIC", color: Colors.text.primary },
                       {
                         label: "Intermediate",
                         value: "INTERMEDIATE",
@@ -275,7 +261,7 @@ const RightSection = () => {
                         className={`
             w-full px-4 py-2 text-left text-sm
             hover:bg-white/5 transition
-            ${item.color ?? colors.primary_Font}
+            ${item.color ?? Colors.text.primary}
           `}
                       >
                         {item.label}
@@ -311,7 +297,7 @@ const RightSection = () => {
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="flex h-20 w-20 items-center justify-center rounded-full bg-[#64ACFF] text-black font-bold text-xl shadow-lg"
+                  className={`flex h-20 w-20 items-center justify-center rounded-full ${Colors.background.special} ${Colors.text.black} font-bold text-xl shadow-lg`}
                 >
                   <Search size={40} />
                 </motion.div>
@@ -319,11 +305,11 @@ const RightSection = () => {
 
               {/* Text */}
               <div className="flex flex-col gap-2">
-                <p className={`text-xl font-semibold ${colors.primary_Font}`}>
+                <p className={`text-xl font-semibold ${Colors.text.primary}`}>
                   No matching courses found
                 </p>
 
-                <p className={`max-w-md text-sm ${colors.secondary_Font}`}>
+                <p className={`max-w-md text-sm ${Colors.text.secondary}`}>
                   We couldn’t find any courses that match your search. Try
                   adjusting the keywords or explore a different topic.
                 </p>

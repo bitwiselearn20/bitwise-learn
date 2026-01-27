@@ -1,24 +1,17 @@
 "use client";
 
 // imports -----------------------------------------------------------------
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Search, ClipboardList, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { createAssessments } from "@/api/assessments/create-assessments";
 import { getAllAssessments } from "@/api/assessments/get-all-assessments";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useColors } from "../../general/(Color Manager)/useColors";
 
 // colors ------------------------------------------------------------------
-const colors = {
-  primary_Bg: "bg-[#121313]",
-  secondary_Bg: "bg-[#1E1E1E]",
-  special_Bg: "bg-[#64ACFF]",
-  primary_Hero: "bg-[#129274]",
-  primary_Font: "text-[#FFFFFF]",
-  secondary_Font: "text-[#B1AAA6]",
-  border: "border border-white/10",
-};
+const Colors = useColors();
 
 // types -------------------------------------------------------------------
 type CreateAssessment = {
@@ -55,13 +48,13 @@ const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
       transition={{ duration: 0.2 }}
       className={`
         rounded-xl p-4 flex flex-col gap-4
-        ${colors.secondary_Bg}
-        ${colors.border}
+        ${Colors.background.secondary}
+        ${Colors.border.fadedThick}
         hover:border-white/20 transition
       `}
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className={`text-lg font-semibold ${colors.primary_Font}`}>
+        <h3 className={`text-lg font-semibold ${Colors.text.primary}`}>
           {assessment.name}
         </h3>
 
@@ -74,7 +67,7 @@ const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
         )}
       </div>
 
-      <p className={`text-sm leading-relaxed ${colors.secondary_Font}`}>
+      <p className={`text-sm leading-relaxed ${Colors.text.secondary}`}>
         {assessment.description}
       </p>
 
@@ -93,8 +86,8 @@ const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
       <button
         className={`
           mt-auto w-full rounded-md py-2 text-sm font-medium
-          ${colors.primary_Hero} text-white
-          hover:opacity-90 transition
+          ${Colors.background.special} ${Colors.text.primary}
+          hover:opacity-90 transition cursor-pointer
         `}
         onClick={() => handleClick(assessment.id)}
       >
@@ -188,12 +181,7 @@ const AddAssessmentModal = ({
   };
 
   const inputBase =
-    "mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none transition";
-
-  const inputBorder = (field: string) =>
-    errors[field]
-      ? "border border-red-500 focus:border-red-500"
-      : "border border-slate-700 focus:border-sky-500";
+    `mt-1 w-full rounded-lg ${Colors.background.primary} px-3 py-2 text-sm ${Colors.text.primary} placeholder:text-slate-500 focus:outline-none transition`;
 
   const errorText = (field: string) =>
     errors[field] ? (
@@ -201,57 +189,57 @@ const AddAssessmentModal = ({
     ) : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm no-scollbar">
       <div
-        className="
-          w-full max-w-lg
-          max-h-[85vh] overflow-y-auto
-          rounded-2xl bg-slate-900
+        className={`
+                    w-full max-w-lg
+          max-h-[85vh]
+          rounded-2xl ${Colors.background.secondary} no-scollbar
           border border-slate-800
           p-5
-        "
+          `}
       >
-        <h2 className="text-lg font-semibold text-white mb-3">
+        <h2 className="text-lg font-semibold ${Colors.text.primary} mb-3">
           Create new assessment
         </h2>
 
         {/* Name */}
         <div className="mt-3">
-          <label className="text-sm text-slate-400">Assessment name</label>
+          <label className={`text-sm ${Colors.text.primary}`}>Assessment name</label>
           <input
             name="name"
             value={form.name}
             onChange={handleChange}
             placeholder="e.g. JavaScript Fundamentals"
-            className={`${inputBase} ${inputBorder("name")}`}
+            className={`${inputBase} `}
           />
           {errorText("name")}
         </div>
 
         {/* Description */}
         <div className="mt-3">
-          <label className="text-sm text-slate-400">Description</label>
+          <label className={`text-sm ${Colors.text.primary}`}>Description</label>
           <textarea
             name="description"
             value={form.description}
             onChange={handleChange}
             rows={2}
             placeholder="Brief description of the assessment"
-            className={`${inputBase} resize-none ${inputBorder("description")}`}
+            className={`${inputBase} resize-none `}
           />
           {errorText("description")}
         </div>
 
         {/* Instructions */}
         <div className="mt-3">
-          <label className="text-sm text-slate-400">Instructions</label>
+          <label className={`text-sm ${Colors.text.primary}`}>Instructions</label>
           <textarea
             name="instructions"
             value={form.instructions}
             onChange={handleChange}
             rows={2}
             placeholder="Instructions for students"
-            className={`${inputBase} resize-none ${inputBorder("instructions")}`}
+            className={`${inputBase} resize-none `}
           />
           {errorText("instructions")}
         </div>
@@ -260,12 +248,11 @@ const AddAssessmentModal = ({
         <div className="mt-4 space-y-3">
           {/* Start */}
           <div>
-            <label className="text-sm text-slate-400">Start time</label>
+            <label className={`text-sm ${Colors.text.primary}`}>Start time</label>
             <div className="grid grid-cols-3 gap-2 mt-1">
               <input
                 type="date"
-                className={`${inputBase} mt-0 col-span-2 ${inputBorder(
-                  "startTime",
+                className={`${inputBase} mt-0 col-span-2 artTime",
                 )}`}
                 value={startDate}
                 onChange={(e) => {
@@ -275,7 +262,7 @@ const AddAssessmentModal = ({
               />
               <input
                 type="time"
-                className={`${inputBase} mt-0 ${inputBorder("startTime")}`}
+                className={`${inputBase} mt-0 `}
                 value={startClock}
                 onChange={(e) => {
                   setStartClock(e.target.value);
@@ -288,12 +275,11 @@ const AddAssessmentModal = ({
 
           {/* End */}
           <div>
-            <label className="text-sm text-slate-400">End time</label>
+            <label className={`text-sm ${Colors.text.primary}`}>End time</label>
             <div className="grid grid-cols-3 gap-2 mt-1">
               <input
                 type="date"
-                className={`${inputBase} mt-0 col-span-2 ${inputBorder(
-                  "endTime",
+                className={`${inputBase} mt-0 col-span-2 dTime",
                 )}`}
                 value={endDate}
                 onChange={(e) => {
@@ -303,7 +289,7 @@ const AddAssessmentModal = ({
               />
               <input
                 type="time"
-                className={`${inputBase} mt-0 ${inputBorder("endTime")}`}
+                className={`${inputBase} mt-0 `}
                 value={endClock}
                 onChange={(e) => {
                   setEndClock(e.target.value);
@@ -317,29 +303,29 @@ const AddAssessmentModal = ({
 
         {/* Batch ID */}
         <div className="mt-3">
-          <label className="text-sm text-slate-400">Batch ID</label>
+          <label className={`text-sm ${Colors.text.primary}`}>Batch ID</label>
           <input
             name="batchId"
             value={form.batchId}
             onChange={handleChange}
             placeholder="e.g. batch-1"
-            className={`${inputBase} ${inputBorder("batchId")}`}
+            className={`${inputBase} `}
           />
           {errorText("batchId")}
         </div>
 
         {/* Actions */}
-        <div className="mt-5 flex justify-end gap-3 sticky bottom-0 bg-slate-900 pt-3">
+        <div className={`mt-5 flex justify-end gap-3 sticky bottom-0 pt-3`}>
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700"
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special}`}
           >
             Cancel
           </button>
 
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 rounded-lg bg-sky-600 text-black font-medium hover:bg-sky-500"
+            className={`px-4 py-2 rounded-lg ${Colors.background.special} ${Colors.text.primary} font-medium ${Colors.hover.special}`}
           >
             Create Assessment
           </button>
@@ -356,8 +342,8 @@ const AssessmentSkeleton = () => (
   <div
     className={`
       rounded-xl p-4 flex flex-col gap-4
-      ${colors.secondary_Bg}
-      ${colors.border}
+      ${Colors.background.secondary}
+      ${Colors.border.defaultThin}
       animate-pulse
     `}
   >
@@ -389,14 +375,14 @@ const NoAssessmentState = ({ onCreate }: NoAssessmentStateProps) => (
       transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
       className="flex h-20 w-20 items-center justify-center rounded-full bg-[#64ACFF]"
     >
-      <ClipboardList size={40} className="text-white" />
+      <ClipboardList size={40} className="${Colors.text.primary}" />
     </motion.div>
 
-    <p className={`text-xl font-semibold ${colors.primary_Font}`}>
+    <p className={`text-xl font-semibold ${Colors.text.primary}`}>
       No assessments created yet
     </p>
 
-    <p className={`max-w-md text-sm ${colors.secondary_Font}`}>
+    <p className={`max-w-md text-sm ${Colors.text.secondary}`}>
       Create assessments to evaluate learners, track progress, and measure
       understanding across topics.
     </p>
@@ -404,7 +390,7 @@ const NoAssessmentState = ({ onCreate }: NoAssessmentStateProps) => (
     <button
       className={`
         rounded-md px-6 py-2 font-medium
-        ${colors.special_Bg} text-white
+        ${Colors.background.special} ${Colors.text.primary}
         hover:opacity-90 transition
       `}
       onClick={onCreate}
@@ -468,7 +454,7 @@ const AssessmentsV1 = () => {
             onChange={(e) => setSearchText(e.target.value)}
             className={`
               w-full rounded-md pl-10 pr-4 py-2 text-sm
-              ${colors.secondary_Bg} ${colors.primary_Font}
+              ${Colors.background.secondary} ${Colors.text.primary}
               outline-none border border-white/10
               focus:border-white/20 transition
             `}
@@ -478,7 +464,7 @@ const AssessmentsV1 = () => {
         <button
           className={`
             rounded-md px-4 py-2 text-sm font-medium
-            ${colors.special_Bg} text-white
+            ${Colors.background.special} ${Colors.text.primary}
             hover:opacity-90 transition
           `}
           onClick={() => {
@@ -501,10 +487,10 @@ const AssessmentsV1 = () => {
       ) : filteredAssessments.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-4 pt-20 text-center">
           <Search size={40} className="text-[#64ACFF]" />
-          <p className={`text-xl font-semibold ${colors.primary_Font}`}>
+          <p className={`text-xl font-semibold ${Colors.text.primary}`}>
             No matching assessments found
           </p>
-          <p className={`text-sm ${colors.secondary_Font}`}>
+          <p className={`text-sm ${Colors.text.secondary}`}>
             Try adjusting your search keywords.
           </p>
         </div>

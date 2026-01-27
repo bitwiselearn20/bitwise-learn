@@ -12,10 +12,13 @@ import {
   User,
 } from "lucide-react";
 import { useStudent } from "@/store/studentStore";
+import { useColors } from "./(Color Manager)/useColors";
+import ThemeSwitcher from "./(Color Manager)/ThemeSwitcher";
 
 
 const MIN_WIDTH = 60;
 const MAX_WIDTH = 420;
+const Colors = useColors();
 
 export default function StudentSideBar() {
   const [width, setWidth] = useState(220);
@@ -63,21 +66,18 @@ export default function StudentSideBar() {
     <aside
       ref={sidebarRef}
       style={{ width }}
-      className="
+      className={`
         relative shrink-0 h-full
-        border-r border-white/10
-        bg-primary-bg text-white
-        flex flex-col
-      "
+        ${Colors.border.fadedRight}
+        ${Colors.background.primary} ${Colors.text.primary}
+        flex flex-col`}
     >
       {/* PROFILE */}
-      <div className="px-4 pt-6 pb-4 flex flex-col items-center">
+      <div className={`px-4 pt-6 pb-4 flex flex-col items-center ${Colors.text.primary}`}>
         <div
-          className="
-            h-16 w-16 rounded-full
-            bg-white/10 flex items-center justify-center
-            text-primaryBlue
-          "
+          className={`h-16 w-16 rounded-full
+            ${Colors.background.secondary} flex items-center justify-center
+            ${Colors.text.special}`}
         >
           <User size={28} />
         </div>
@@ -87,7 +87,7 @@ export default function StudentSideBar() {
             <p className="text-sm font-semibold">
               {studentInfo?.name || "Student"}
             </p>
-            <p className="text-xs text-white/50">
+            <p className={`text-xs ${Colors.text.secondary}`}>
               {studentInfo?.batch.batchname}
             </p>
           </div>
@@ -128,8 +128,10 @@ export default function StudentSideBar() {
         />
       </nav>
 
+
       {/* LOGOUT */}
       <div className="mt-auto px-2 py-4">
+      <ThemeSwitcher />
         <button
           onClick={logout}
           className={`
@@ -137,10 +139,11 @@ export default function StudentSideBar() {
             ${isCollapsed ? "justify-center px-2" : "gap-3 px-4"}
             py-2.5 rounded-lg
             text-sm font-medium
-            text-white/70
+            ${Colors.text.secondary}
             hover:text-red-400
             hover:bg-red-500/10
             transition-all
+            cursor-pointer
           `}
         >
           <LogOut size={18} />
@@ -180,9 +183,9 @@ function NavLink({
           ${collapsed ? "justify-center px-2" : "gap-3 px-4"}
           py-2.5 rounded-lg
           text-sm font-medium
-          text-white/80
-          hover:text-white
-          hover:bg-white/10
+          ${Colors.text.secondary}
+          ${Colors.hover.special}
+          ${Colors.text.primary}
           transition-all
         `}
       >

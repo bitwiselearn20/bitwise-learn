@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllStats } from "@/api/admins/get-admin-stats";
 import { User } from "lucide-react";
 import Link from "next/link";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 /* ---------------- TYPES ---------------- */
 
@@ -19,17 +20,19 @@ type EntityTabsProps = {
   data: StatsMap;
 };
 
+const Colors = useColors();
+
 /* ---------------- HEADER ---------------- */
 function Header({ name, email }: HeaderProps) {
   return (
     <div className="flex justify-between p-4">
       <div>
-        <span className="text-primaryBlue text-5xl">Greetings,</span>{" "}
-        <span className="text-white text-5xl">Admin</span>
+        <span className={`text-5xl ${Colors.text.special}`}>Greetings,</span>{" "}
+        <span className={`text-5xl ${Colors.text.primary}`}>Admin</span>
         <div className="mt-2 text-lg">
-          <span className="text-white">Enjoy managing</span>{" "}
-          <span className="text-primaryBlue">B</span>
-          <span className="text-white">itwise Learn</span>
+          <span className={`${Colors.text.primary}`}>Enjoy managing</span>{" "}
+          <span className={`${Colors.text.special}`}>B</span>
+          <span className={`${Colors.text.primary}`}>itwise Learn</span>
         </div>
       </div>
 
@@ -37,8 +40,8 @@ function Header({ name, email }: HeaderProps) {
         <div className="p-8 bg-white rounded-full flex justify-center items-center">
           <User size={35} color="black" />
         </div>
-        <div className="text-white flex flex-col mt-3 ml-4">
-          <h1 className="text-3xl">{name}</h1>
+        <div className={` ${Colors.text.primary} flex flex-col mt-3 ml-4`}>
+          <h1 className={`${Colors.text.primary} text-3xl`}>{name}</h1>
           <p>{email}</p>
         </div>
       </div>
@@ -132,12 +135,12 @@ function EntityTabs({ fields, data }: EntityTabsProps) {
           <Link
             key={field}
             href={href}
-            className="
-              group relative rounded-2xl p-6
-              bg-divBg overflow-hidden
+            className={`
+                            group relative rounded-2xl p-6
+              ${Colors.background.secondary} overflow-hidden
               hover:shadow-2xl hover:-translate-y-1
               transition-all duration-300
-            "
+              `}
           >
             {/* Gradient depth layer */}
             <div
@@ -148,20 +151,20 @@ function EntityTabs({ fields, data }: EntityTabsProps) {
             <div className="relative z-10 flex flex-col gap-4">
               {/* Icon + Count */}
               <div className="flex items-center justify-between">
-                <div className="p-3 rounded-xl bg-black/30">
-                  <Icon className="text-primaryBlue" size={28} />
+                <div className={`p-3 rounded-xl ${Colors.background.primary}`}>
+                  <Icon className={`text-primaryBlue`} size={28} />
                 </div>
-                <span className="text-4xl font-bold text-white">
+                <span className={`text-3xl font-bold ${Colors.text.primary}`}>
                   {data[field] ?? 0}
                 </span>
               </div>
 
               {/* Text */}
               <div>
-                <h3 className="text-white text-lg font-semibold">
+                <h3 className={`text-lg font-semibold ${Colors.text.primary}`}>
                   {meta.label}
                 </h3>
-                <p className="text-white/60 text-sm mt-1 leading-snug">
+                <p className={`text-sm mt-1 leading-snug ${Colors.text.secondary}`}>
                   {meta.tagline}
                 </p>
               </div>

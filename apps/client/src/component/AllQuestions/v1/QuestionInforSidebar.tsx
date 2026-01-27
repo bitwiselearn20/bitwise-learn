@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 
 const RADIUS = 80;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+const Colors = useColors();
 
 function QuestionInfoSidebar() {
   const [question, setQuestion] = useState({
@@ -12,6 +16,7 @@ function QuestionInfoSidebar() {
     hard: 20,
     totalQuestion: 300,
   });
+  const { theme } = useTheme();
 
   const [solved, setSolved] = useState(0);
   const [hovered, setHovered] = useState<"easy" | "medium" | "hard" | null>(
@@ -31,8 +36,8 @@ function QuestionInfoSidebar() {
   const hardLength = CIRCUMFERENCE * hardPercent;
 
   return (
-    <div className="w-1/3 mt-3 bg-secondary-bg h-95 border-white/10 border-2  rounded-xl p-6">
-      <h2 className="text-white text-lg font-semibold mb-6">Problems Solved</h2>
+    <div className={`w-1/3 mt-3 ${Colors.background.secondary} h-95 ${Colors.border.faded} border-2  rounded-xl p-6`}>
+      <h2 className={`text-lg font-semibold mb-6 ${Colors.text.primary}`}>Problems Solved</h2>
 
       {/* Ring */}
       <div className="relative w-44 h-44 mx-auto">
@@ -42,7 +47,7 @@ function QuestionInfoSidebar() {
             cx="88"
             cy="88"
             r={RADIUS}
-            stroke="rgba(255,255,255,0.1)"
+            stroke={theme === "Dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
             strokeWidth="10"
             fill="none"
           />
@@ -97,11 +102,11 @@ function QuestionInfoSidebar() {
         </svg>
 
         {/* Center Info */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+        <div className={`absolute inset-0 flex flex-col items-center justify-center ${Colors.text.primary}`}>
           {hovered ? (
             <>
               <span className="text-3xl font-bold">{question[hovered]}</span>
-              <span className="text-sm capitalize text-white/70">
+              <span className={`text-sm ${Colors.text.secondary}`}>
                 {hovered}
               </span>
             </>
@@ -110,7 +115,7 @@ function QuestionInfoSidebar() {
               <span className="text-3xl font-bold">
                 {solved}/{question.totalQuestion}
               </span>
-              <span className="text-sm text-white/60">Solved</span>
+              <span className={`text-sm ${Colors.text.secondary}`}>Solved</span>
             </>
           )}
         </div>
@@ -136,7 +141,7 @@ function StatRow({
   color: string;
 }) {
   return (
-    <div className="flex items-center justify-between text-sm text-white">
+    <div className={`flex items-center justify-between text-sm ${Colors.text.primary}`}>
       <div className="flex items-center gap-2">
         <span className={`w-2 h-2 rounded-full ${color}`} />
         <span>{label}</span>

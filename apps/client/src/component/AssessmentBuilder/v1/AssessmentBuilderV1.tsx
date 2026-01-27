@@ -5,6 +5,7 @@ import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import AddAssessmentCode from "./AddCODEAssessmentQuestion";
 import AddAssessmentMCQ from "./AddMCQAssessmentQuestion";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 // all the api's for this component
 import { createAssessmentSection } from "@/api/assessments/create-assessment-section";
@@ -63,6 +64,8 @@ interface AddSectionModalProps {
   }) => void;
 }
 
+const Colors = useColors();
+
 const AddSectionModal = ({ open, onClose, onSubmit }: AddSectionModalProps) => {
   const [form, setForm] = useState({
     name: "",
@@ -74,21 +77,21 @@ const AddSectionModal = ({ open, onClose, onSubmit }: AddSectionModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6">
-        <h2 className="text-lg font-semibold text-white">Create new section</h2>
+      <div className={`w-full max-w-sm rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThin} p-6`}>
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>Create new section</h2>
 
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Section name</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Section name</label>
           <input
             value={form.name}
             placeholder="XYZ Section..."
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-sm text-white border border-slate-700 outline-none"
+            className={`mt-1 w-full rounded-lg ${Colors.background.primary} px-3 py-2 text-sm ${Colors.text.primary} border ${Colors.border.defaultThin} outline-none`}
           />
         </div>
 
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Marks per question</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Marks per question</label>
           <input
             type="number"
             min={1}
@@ -99,12 +102,12 @@ const AddSectionModal = ({ open, onClose, onSubmit }: AddSectionModalProps) => {
                 marksPerQuestion: Number(e.target.value),
               })
             }
-            className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-sm text-white border border-slate-700 outline-none"
+            className={`mt-1 w-full rounded-lg ${Colors.background.primary} px-3 py-2 text-sm ${Colors.text.primary} border ${Colors.border.defaultThin} outline-none`}
           />
         </div>
 
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Assessment type</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Assessment type</label>
           <select
             value={form.assessmentType}
             onChange={(e) =>
@@ -113,7 +116,7 @@ const AddSectionModal = ({ open, onClose, onSubmit }: AddSectionModalProps) => {
                 assessmentType: e.target.value as "CODE" | "NO_CODE",
               })
             }
-            className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-sm text-white border border-slate-700 outline-none"
+            className={`mt-1 w-full rounded-lg ${Colors.background.primary} px-3 py-2 text-sm ${Colors.text.primary} border ${Colors.border.defaultThin} outline-none`}
           >
             <option value="NO_CODE">MCQ</option>
             <option value="CODE">Code</option>
@@ -123,7 +126,7 @@ const AddSectionModal = ({ open, onClose, onSubmit }: AddSectionModalProps) => {
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300"
+            className={`rounded-md ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} px-4 py-2 text-sm transition disabled:opacity-60 cursor-pointer`}
           >
             Cancel
           </button>
@@ -137,7 +140,7 @@ const AddSectionModal = ({ open, onClose, onSubmit }: AddSectionModalProps) => {
               });
               onClose();
             }}
-            className="px-4 py-2 rounded-lg bg-sky-600 text-black font-medium"
+            className={`px-4 py-2 rounded-lg ${Colors.background.special} ${Colors.text.primary} font-medium cursor-pointer`}
           >
             Create Section
           </button>
@@ -193,35 +196,35 @@ const DeleteSectionModal = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-xl
-                   border border-white/10 bg-[#121313] p-6"
+        className={`w-full max-w-md rounded-xl p-6 ${Colors.background.secondary} ${Colors.border.defaultThin}`}
       >
         {/* Header */}
         <div className="mb-5">
-          <h2 className="text-lg font-semibold text-white">Delete section?</h2>
+          <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
+            Delete section?
+          </h2>
         </div>
 
         {/* Message */}
-        <div className="text-sm text-white/70 leading-relaxed">
+        <div className={`text-sm ${Colors.text.secondary} leading-relaxed`}>
           Are you sure you want to delete this section?
           <br />
-          <span className="text-white/40">
+          <span className={`${Colors.text.secondary}`}>
             All questions inside this section will be permanently removed.
           </span>
         </div>
 
         {/* Divider */}
-        <div className="my-6 h-px bg-white/10" />
+        <div className={`my-6 h-px ${Colors.border.defaultThin}`} />
 
         {/* Actions */}
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
             disabled={loading}
-            className="rounded-md bg-[#181A1A] px-4 py-2
-                       text-sm text-white/80
-                       hover:bg-[#1F1F1F]
-                       transition disabled:opacity-60"
+            className={`rounded-md ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} px-4 py-2
+                       text-sm
+                       transition disabled:opacity-60 cursor-pointer`}
           >
             Cancel
           </button>
@@ -233,7 +236,7 @@ const DeleteSectionModal = ({
                        px-4 py-2 text-sm font-medium
                        text-red-400
                        hover:border-red-500 hover:text-red-300
-                       transition disabled:opacity-60"
+                       transition disabled:opacity-60 cursor-pointer"
           >
             {loading ? "Deleting..." : "Delete section"}
           </button>
@@ -284,57 +287,56 @@ const DeleteAssessmentModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center
-                 bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-xl
-                   border border-white/10 bg-[#121313] p-6"
-      >
-        <div className="mb-5">
-          <h2 className="text-lg font-semibold text-white">
-            Delete assessment?
-          </h2>
-        </div>
+  className="fixed inset-0 z-50 flex items-center justify-center
+             bg-black/70 backdrop-blur-sm"
+  onClick={onClose}
+>
+  <div
+    onClick={(e) => e.stopPropagation()}
+    className={`w-full max-w-md rounded-xl p-6
+                ${Colors.background.secondary}
+                ${Colors.border.defaultThin}`}
+  >
+    <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
+      Delete assessment?
+    </h2>
 
-        <div className="text-sm text-white/70 leading-relaxed">
-          Are you sure you want to delete this assessment?
-          <br />
-          <span className="text-white/40">
-            All sections and questions will be permanently removed.
-          </span>
-        </div>
-
-        <div className="my-6 h-px bg-white/10" />
-
-        <div className="flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            disabled={loading}
-            className="rounded-md bg-[#181A1A] px-4 py-2
-                       text-sm text-white/80
-                       hover:bg-[#1F1F1F]
-                       transition disabled:opacity-60"
-          >
-            Cancel
-          </button>
-
-          <button
-            onClick={handleDelete}
-            disabled={loading}
-            className="rounded-md border border-red-500/30
-                       px-4 py-2 text-sm font-medium
-                       text-red-400
-                       hover:border-red-500 hover:text-red-300
-                       transition disabled:opacity-60"
-          >
-            {loading ? "Deleting..." : "Delete assessment"}
-          </button>
-        </div>
-      </div>
+    <div className={`mt-3 text-sm ${Colors.text.secondary}`}>
+      Are you sure you want to delete this assessment?
+      <br />
+      <span className={Colors.text.secondary}>
+        All sections and questions will be permanently removed.
+      </span>
     </div>
+
+    <div className={`my-6 h-px ${Colors.border.defaultThin}`} />
+
+    <div className="flex justify-end gap-3">
+      <button
+        onClick={onClose}
+        disabled={loading}
+        className={`rounded-md px-4 py-2 text-sm cursor-pointer
+                    ${Colors.border.specialThick}
+                    ${Colors.text.special}
+                    ${Colors.hover.special}`}
+      >
+        Cancel
+      </button>
+
+      <button
+        onClick={handleDelete}
+        disabled={loading}
+        className="rounded-md border border-red-500/30
+                   px-4 py-2 text-sm font-medium
+                   text-red-400
+                   hover:border-red-500 hover:text-red-300 cursor-pointer"
+      >
+        {loading ? "Deleting..." : "Delete assessment"}
+      </button>
+    </div>
+  </div>
+</div>
+
   );
 };
 
@@ -384,33 +386,39 @@ const DeleteQuestionModal = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-xl
-                   border border-white/10 bg-[#121313] p-6"
+        className={`w-full max-w-md rounded-xl
+                   border border-white/10 ${Colors.background.secondary} p-6`}
       >
         {/* Header */}
         <div className="mb-5">
-          <h2 className="text-lg font-semibold text-white">Delete question?</h2>
+
+          <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
+            Delete question?
+          </h2>
         </div>
 
         {/* Message */}
-        <div className="text-sm text-white/70 leading-relaxed">
+        <div className={`text-sm ${Colors.text.secondary} leading-relaxed`}>
           Are you sure you want to delete this question?
           <br />
-          <span className="text-white/40">This action cannot be undone.</span>
+
+          <span className={Colors.text.secondary}>
+            This action cannot be undone.
+          </span>
         </div>
 
         {/* Divider */}
-        <div className="my-6 h-px bg-white/10" />
+        <div className={`my-6 h-px ${Colors.border.defaultThin}`} />
 
         {/* Actions */}
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
             disabled={loading}
-            className="rounded-md bg-[#181A1A] px-4 py-2
-                       text-sm text-white/80
-                       hover:bg-[#1F1F1F]
-                       transition disabled:opacity-60"
+        className={`rounded-md px-4 py-2 text-sm
+                    ${Colors.border.specialThick}
+                    ${Colors.text.special}
+                    ${Colors.hover.special} cursor-pointer`}
           >
             Cancel
           </button>
@@ -422,7 +430,7 @@ const DeleteQuestionModal = ({
                        px-4 py-2 text-sm font-medium
                        text-red-400
                        hover:border-red-500 hover:text-red-300
-                       transition disabled:opacity-60"
+                       transition disabled:opacity-60 cursor-pointer"
           >
             {loading ? "Deleting..." : "Delete question"}
           </button>
@@ -484,28 +492,34 @@ const UpdateSectionModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6">
-        <h2 className="text-lg font-semibold text-white">Edit section</h2>
+
+      <div className={`w-full max-w-sm rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThin} p-6`}>
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
+          Edit section
+        </h2>
 
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Section name</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Section name</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2
-                       text-sm text-white border border-slate-700 outline-none"
+            className={`mt-1 w-full rounded-lg ${Colors.background.primary} px-3 py-2
+                       text-sm ${Colors.text.primary} ${Colors.border.defaultThin} outline-none`}
           />
         </div>
 
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Marks per question</label>
+
+          <label className={`text-sm ${Colors.text.secondary}`}>
+            Marks per question
+          </label>
           <input
             type="number"
             min={1}
             value={marks}
             onChange={(e) => setMarks(Number(e.target.value))}
-            className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2
-                       text-sm text-white border border-slate-700 outline-none"
+            className={`mt-1 w-full rounded-lg ${Colors.background.primary} px-3 py-2
+                       text-sm ${Colors.text.primary} ${Colors.border.defaultThin} outline-none`}
           />
         </div>
 
@@ -513,7 +527,10 @@ const UpdateSectionModal = ({
           <button
             onClick={onClose}
             disabled={loading}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300"
+        className={`rounded-md px-4 py-2 text-sm
+                    ${Colors.border.specialThick}
+                    ${Colors.text.special}
+                    ${Colors.hover.special} cursor-pointer`}
           >
             Cancel
           </button>
@@ -521,8 +538,8 @@ const UpdateSectionModal = ({
           <button
             onClick={handleUpdate}
             disabled={loading}
-            className="px-4 py-2 rounded-lg bg-[#1DA1F2]
-                       text-black font-medium"
+            className={`px-4 py-2 rounded-lg ${Colors.background.special}
+                       ${Colors.text.primary} font-medium cursor-pointer hover:opacity-80`}
           >
             {loading ? "Updating..." : "Update section"}
           </button>
@@ -590,19 +607,19 @@ const UpdateQuestionModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-xl border border-white/10 bg-[#121313] p-6">
-        <h2 className="text-lg font-semibold text-white mb-4">Edit question</h2>
+
+      <div className={`w-full max-w-lg rounded-xl border border-white/10 ${Colors.background.secondary} p-6`}>
+        <h2 className={`text-lg font-semibold ${Colors.text.primary} mb-4`}>
+          Edit question
+        </h2>
 
         {/* Question */}
-        {text && (
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Question text"
-            className="w-full rounded-lg bg-[#181A1A] border border-white/10
-                     px-3 py-2 text-sm text-white outline-none mb-4"
-          />
-        )}
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Question text"
+          className={`w-full rounded-lg ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.primary} outline-none mb-4`}
+        />
 
         {/* Options */}
         <div className="space-y-2">
@@ -615,8 +632,7 @@ const UpdateQuestionModal = ({
                   updated[idx] = e.target.value;
                   setOptions(updated);
                 }}
-                className="flex-1 rounded bg-[#181A1A] border border-white/10
-                           px-3 py-2 text-sm text-white outline-none"
+          className={`flex-1 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.primary} outline-none`}
               />
 
               <input
@@ -636,8 +652,7 @@ const UpdateQuestionModal = ({
             min={1}
             value={marks}
             onChange={(e) => setMarks(Number(e.target.value))}
-            className="mt-1 w-full rounded bg-[#181A1A] border border-white/10
-                       px-3 py-2 text-sm text-white outline-none"
+            className={`mt-1 w-full rounded ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.primary} outline-none`}
           />
         </div>
 
@@ -646,7 +661,10 @@ const UpdateQuestionModal = ({
           <button
             onClick={onClose}
             disabled={loading}
-            className="rounded-md bg-[#181A1A] px-4 py-2 text-sm text-white/80"
+        className={`rounded-md px-4 py-2 text-sm
+                    ${Colors.border.specialThick}
+                    ${Colors.text.special}
+                    ${Colors.hover.special}`}
           >
             Cancel
           </button>
@@ -654,8 +672,8 @@ const UpdateQuestionModal = ({
           <button
             onClick={handleUpdate}
             disabled={loading}
-            className="rounded-md bg-[#1DA1F2] px-4 py-2
-                       text-sm font-medium text-black"
+            className={`px-4 py-2 rounded-lg ${Colors.background.special}
+                       ${Colors.text.primary} font-medium cursor-pointer hover:opacity-80`}
           >
             {loading ? "Updating..." : "Update question"}
           </button>
@@ -713,41 +731,41 @@ const PublishAssessmentModal = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-xl
-                   border border-white/10 bg-[#121313] p-6"
+        className={`w-full max-w-md rounded-xl
+                   border ${Colors.border.defaultThin} ${Colors.background.secondary} p-6`}
       >
         {/* Header */}
         <div className="mb-5">
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
             Publish assessment?
           </h2>
         </div>
 
         {/* Message */}
-        <div className="text-sm text-white/70 leading-relaxed">
+        <div className={`text-sm ${Colors.text.secondary} leading-relaxed`}>
           You are about to publish{" "}
-          <span className="text-white font-medium">
+          <span className={`${Colors.text.primary} font-medium`}>
             {assessmentName || "this assessment"}
           </span>
           .
           <br />
-          <span className="text-white/40">
+          <span className={`${Colors.text.secondary}`}>
             Once published, editing sections or questions will be restricted.
           </span>
         </div>
 
         {/* Divider */}
-        <div className="my-6 h-px bg-white/10" />
+        <div className={`my-6 h-px ${Colors.border.defaultThin}`} />
 
         {/* Actions */}
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
             disabled={loading}
-            className="rounded-md bg-[#181A1A] px-4 py-2
-                       text-sm text-white/80
-                       hover:bg-[#1F1F1F]
-                       transition disabled:opacity-60"
+        className={`rounded-md px-4 py-2 text-sm
+                    ${Colors.border.specialThick}
+                    ${Colors.text.special}
+                    ${Colors.hover.special}`}
           >
             Cancel
           </button>
@@ -755,11 +773,8 @@ const PublishAssessmentModal = ({
           <button
             onClick={handlePublish}
             disabled={loading}
-            className="rounded-md bg-[#1DA1F2]
-                       px-4 py-2 text-sm font-medium
-                       text-black
-                       hover:bg-[#1DA1F2]/90
-                       transition disabled:opacity-60"
+            className={`px-4 py-2 rounded-lg ${Colors.background.special}
+                       ${Colors.text.primary} font-medium cursor-pointer hover:opacity-80`}
           >
             {loading ? "Publishing..." : "Publish"}
           </button>
@@ -881,17 +896,17 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
   }, [assessmentId]);
 
   return (
-    <div className="w-full">
+    <div className={`w-full`}>
       {/* Header */}
       <div className="flex items-center justify-between px-1 py-4">
-        <h1 className="text-xl font-semibold text-white">
+        <h1 className={`text-xl font-semibold ${Colors.text.primary}`}>
           {assessmentData?.name || "Untitled Assessment"}
         </h1>
 
         <div className="flex gap-3">
           <button
             onClick={() => setOpenCreateSection(true)}
-            className="rounded-md border border-dashed border-white/20 px-6 py-3 text-sm text-white/70 hover:border-[#1DA1F2]"
+            className={`rounded-md border border-dashed ${Colors.border.defaultThin} px-6 py-3 text-sm ${Colors.text.primary} hover:border-[#1DA1F2] cursor-pointer`}
           >
             + Add Section
           </button>
@@ -920,7 +935,7 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
           return (
             <div
               key={section.id}
-              className="rounded-xl border border-white/10 bg-[#121313]"
+              className={`rounded-xl border ${Colors.border.defaultThin} ${Colors.background.secondary}`}
             >
               <div
                 className="flex items-center justify-between p-5 cursor-pointer"
@@ -933,10 +948,10 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                 }}
               >
                 <div>
-                  <h3 className="text-lg font-semibold text-white">
+                  <h3 className={`text-lg font-semibold ${Colors.text.primary}`}>
                     {section.name}
                   </h3>
-                  <p className="text-sm text-white/60">
+                  <p className={`text-sm ${Colors.text.secondary}`}>
                     {section.assessmentType === "NO_CODE" ? "MCQ" : "Code"} •{" "}
                     {section.marksPerQuestion} marks/question
                   </p>
@@ -955,8 +970,8 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                         ? setShowAddMCQ(true)
                         : setShowAddCODE(true);
                     }}
-                    className="rounded-md bg-[#1DA1F2] px-4 py-2 text-sm font-medium text-black
-               hover:bg-[#1DA1F2]/90 transition"
+                    className={`rounded-md ${Colors.background.special} ${Colors.text.primary} px-4 py-2 text-sm font-medium cursor-pointer
+               hover:opacity-80 transition`}
                   >
                     + Add Question
                   </button>
@@ -968,11 +983,11 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                       setSelectedSection(section);
                       setShowUpdateSection(true);
                     }}
-                    className="rounded-md border border-white/10 bg-[#181A1A]
-                            px-3 py-2 text-sm text-white/80
-                            hover:border-[#1DA1F2] hover:text-white
-                            transition"
-                  >
+
+                    className={`rounded-md border ${Colors.border.defaultThin} ${Colors.background.secondary}
+                            px-3 py-2 text-sm ${Colors.text.secondary}
+                            ${Colors.hover.special} hover:text-white
+                            transition cursor-pointer`}>
                     Edit
                   </button>
 
@@ -988,8 +1003,8 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                     className="rounded-full border border-red-500/20 bg-red-500/10
                               px-2 py-2 text-sm text-red-400
                               hover:bg-red-500/20 hover:text-red-300
-                              transition"
-                  >
+
+                              transition cursor-pointer">
                     <Trash className="h-4 w-4" />
                   </button>
                 </div>
@@ -999,17 +1014,19 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
               {isOpen && (
                 <div className="border-t border-white/10 px-5 py-4 space-y-4">
                   {loadingSections[section.id!] ? (
-                    <p className="text-sm text-white/50">Loading questions…</p>
+                    <p className={`text-sm ${Colors.text.secondary}`}>Loading questions…</p>
                   ) : questionsBySection[section.id!]?.length ? (
                     questionsBySection[section.id!].map((q, i) => (
                       <div
                         key={q.id}
-                        className="rounded-xl border border-white/10 bg-[#181A1A] p-4 space-y-3"
+                        className={`rounded-xl ${Colors.background.primary} ${Colors.border.defaultThin} p-4 space-y-3`}
                       >
                         <div className="flex justify-between items-start">
-                          <p className="text-sm font-medium text-white">
+
+                          <p className={`text-sm font-medium ${Colors.text.primary}`}>
                             {i + 1}.{" "}
                             {q.question || q.problem?.name || "Code Question"}
+
                           </p>
                           <div className="flex gap-2">
                             <button
@@ -1018,8 +1035,10 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                                 setSelectedQuestion(q);
                                 setShowUpdateQuestion(true);
                               }}
-                              className="px-3 py-1 text-xs rounded bg-slate-700 text-white"
-                            >
+
+                              className={`px-3 py-1 text-xs rounded ${Colors.text.secondary} ${Colors.border.defaultThin} ${Colors.background.secondary}
+                            ${Colors.hover.special} hover:text-white
+                            transition cursor-pointer`}>
                               Edit
                             </button>
 
@@ -1029,8 +1048,7 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                                 setDeleteQuestionId(q.id);
                                 setShowDeleteQuestion(true);
                               }}
-                              className="px-3 py-1 text-xs rounded bg-red-500/20 text-red-400"
-                            >
+                              className="px-3 py-1 text-xs rounded bg-red-500/20 text-red-400 cursor-pointer">
                               Delete
                             </button>
                           </div>
@@ -1045,10 +1063,10 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                               <div
                                 key={idx}
                                 className={`rounded-lg border px-3 py-2 text-xs flex items-center justify-between
-                                  ${
-                                    isCorrect
-                                      ? "border-green-500 bg-green-500/10 text-green-400"
-                                      : "border-white/10 bg-[#121313] text-white/70"
+
+                                  ${isCorrect
+                                    ? "border-green-500 bg-green-500/10 text-green-400"
+                                    : `${Colors.border.defaultThin} ${Colors.text.primary} ${Colors.background.secondary}`
                                   }`}
                               >
                                 <span>{opt}</span>
@@ -1063,13 +1081,13 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                           })}
                         </div>
 
-                        <p className="text-xs text-white/40">
+                        <p className={`text-xs ${Colors.text.secondary}`}>
                           Max Marks: {q.maxMarks}
                         </p>
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-white/50">
+                    <p className={`text-sm ${Colors.text.secondary}`}>
                       No questions added yet.
                     </p>
                   )}
@@ -1083,13 +1101,13 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
       {/* Delete Assessment Floating Button */}
       <button
         onClick={() => setShowDeleteAssessment(true)}
-        className="fixed bottom-6 right-6 z-40
+        className={`fixed bottom-6 right-6 z-40
              flex items-center gap-2
              rounded-full border border-red-500/30
-             bg-[#121313] px-5 py-3
+             ${Colors.background.secondary} px-5 py-3
              text-sm font-medium text-red-400
              hover:border-red-500 hover:text-red-300
-             shadow-lg transition"
+             shadow-lg transition cursor-pointer`}
       >
         <Trash className="h-4 w-4" />
         Delete assessment

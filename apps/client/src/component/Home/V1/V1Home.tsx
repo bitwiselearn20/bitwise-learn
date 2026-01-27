@@ -22,6 +22,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 import Footer from "@/component/general/Footer";
+import Contributors from "@/component/Contributors/Contributors";
 
 const kleeOne = Klee_One({
   subsets: ["latin"],
@@ -395,6 +396,10 @@ function V1Home() {
           </div>
         </section>
 
+        <section className="bg-black/90">
+          <Contributors />
+        </section>
+
         {/* ================= BLACK → BLUE FADE ================= */}
         <div className="h-64 bg-linear-to-b from-black via-black/70 to-blue-300/90" />
 
@@ -466,6 +471,7 @@ function V1Home() {
           </motion.div>
         </section>
       </div>
+
       <Footer />
     </div>
   );

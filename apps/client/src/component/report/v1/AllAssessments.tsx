@@ -10,6 +10,8 @@ import {
   PlayCircle,
   CheckCircle,
 } from "lucide-react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+
 
 type Assessment = {
   id: string;
@@ -31,6 +33,7 @@ function AllAssessments() {
   const [status, setStatus] = useState<"all" | Assessment["status"]>("all");
 
   const router = useRouter();
+  const Colors = useColors();
 
   useEffect(() => {
     async function handleLoad() {
@@ -56,17 +59,17 @@ function AllAssessments() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-neutral-900 border border-neutral-800 rounded-lg p-4">
+      <div className={`flex flex-wrap items-center justify-between gap-3 rounded-lg p-4 ${Colors.background.primary} ${Colors.text.primary} ${Colors.border.defaultThin}`}>
         <div className="flex items-center gap-3 flex-wrap">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-neutral-500" />
+            <Search className={`absolute left-3 top-2.5 h-4 w-4 ${Colors.text.secondary}`} />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search assessments..."
-              className="pl-9 pr-4 py-2 text-sm rounded-md bg-neutral-800 border border-neutral-700
-                         text-white placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600"
+              className={`pl-9 pr-4 py-2 text-sm rounded-md ${Colors.background.secondary} border ${Colors.border.defaultThin}
+                         ${Colors.text.primary} placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600`}
             />
           </div>
 
@@ -76,8 +79,8 @@ function AllAssessments() {
             onChange={(e) =>
               setStatus(e.target.value as "all" | Assessment["status"])
             }
-            className="px-3 py-2 text-sm rounded-md bg-neutral-800 border border-neutral-700
-                       text-neutral-200 focus:outline-none"
+            className={`px-3 py-2 text-sm rounded-md ${Colors.background.secondary} ${Colors.border.defaultThin}
+                       ${Colors.text.secondary} focus:outline-none`}
           >
             <option value="all">All Status</option>
             <option value="UPCOMING">Upcoming</option>
@@ -87,16 +90,16 @@ function AllAssessments() {
         </div>
 
         {/* Result Count */}
-        <div className="flex items-center gap-2 text-sm text-neutral-400">
+        <div className={`flex items-center gap-2 text-sm ${Colors.text.secondary}`}>
           <Filter className="h-4 w-4" />
           {filteredAssessments.length} results
         </div>
       </div>
 
       <div className="w-full overflow-x-auto">
-        <table className="w-full border border-neutral-800 rounded-lg overflow-hidden">
-          <thead className="bg-neutral-900 border-b border-neutral-800">
-            <tr className="text-left text-sm text-neutral-400">
+        <table className="w-full rounded-lg">
+          <thead className={`${Colors.background.primary} ${Colors.border.defaultThick}`}>
+            <tr className={`text-left text-sm ${Colors.text.secondary}`}>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Description</th>
               <th className="px-4 py-3">Start Time</th>
@@ -115,7 +118,7 @@ function AllAssessments() {
                   className="border-b border-neutral-800 animate-pulse"
                 >
                   {Array.from({ length: 7 }).map((_, j) => (
-                    <td key={j} className="px-4 py-4">
+                    <td key={j} className={`px-4 py-4 ${Colors.text.secondary}`}>
                       <div className="h-4 w-full rounded bg-neutral-700/60" />
                     </td>
                   ))}
@@ -126,25 +129,25 @@ function AllAssessments() {
               filteredAssessments.map((assessment) => (
                 <tr
                   key={assessment.id}
-                  className="border-b border-neutral-800 text-sm hover:bg-neutral-800/40 transition"
+                  className={`border-b border-neutral-800 text-sm ${Colors.hover.special} transition ${Colors.background.secondary} `}
                 >
-                  <td className="px-4 py-3 font-medium text-white">
+                  <td className={`px-4 py-3 font-medium ${Colors.text.primary}`}>
                     {assessment.name}
                   </td>
 
-                  <td className="px-4 py-3 text-neutral-300 line-clamp-2">
+                  <td className={`px-4 py-3 ${Colors.text.secondary} line-clamp-2`}>
                     {assessment.description}
                   </td>
 
-                  <td className="px-4 py-3 text-neutral-300">
+                  <td className={`px-4 py-3 ${Colors.text.secondary}`}>
                     {new Date(assessment.startTime).toLocaleString()}
                   </td>
 
-                  <td className="px-4 py-3 text-neutral-300">
+                  <td className={`px-4 py-3 ${Colors.text.secondary}`}>
                     {new Date(assessment.endTime).toLocaleString()}
                   </td>
 
-                  <td className="px-4 py-3 text-neutral-300">
+                  <td className={`px-4 py-3 ${Colors.text.secondary}`}>
                     {assessment.individualSectionTimeLimit
                       ? `${assessment.individualSectionTimeLimit} mins`
                       : "—"}
@@ -182,7 +185,7 @@ function AllAssessments() {
                     )}
                   </td>
 
-                  <td className="px-4 py-3 text-right">
+                  <td className={`px-4 py-3 text-right ${Colors.text.secondary}`}>
                     {assessment.status === "ENDED" && (
                       <button
                         onClick={() =>
@@ -190,8 +193,8 @@ function AllAssessments() {
                             `/admin-dashboard/reports/assessment/${assessment.id}`,
                           )
                         }
-                        className="px-3 py-1.5 text-xs font-medium rounded-md
-                                   bg-neutral-700 hover:bg-neutral-600 text-white transition"
+                      className={`px-3 py-1.5 text-xs font-medium rounded-md cursor-pointer
+                                 ${Colors.border.specialThin} ${Colors.hover.special}  ${Colors.text.special} transition`}
                       >
                         View
                       </button>
@@ -204,7 +207,7 @@ function AllAssessments() {
               <tr>
                 <td
                   colSpan={7}
-                  className="px-4 py-10 text-center text-neutral-500"
+                  className={`px-4 py-10 text-center ${Colors.text.secondary}`}
                 >
                   No matching assessments found
                 </td>

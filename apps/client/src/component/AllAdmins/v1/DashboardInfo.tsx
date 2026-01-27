@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, Pencil, Trash2 } from "lucide-react";
 import { deleteEntity, updateEntity } from "@/api/institutions/entity";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type UserData = {
   id: string;
@@ -46,6 +47,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
   const [selected, setSelected] = useState<UserData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UserData | null>(null);
+  const Colors = useColors();
 
   /* ------------------ HANDLERS ------------------ */
 
@@ -99,7 +101,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
 
   if (!Array.isArray(data) || data.length === 0) {
     return (
-      <div className="py-12 text-center text-sm text-white/50">
+      <div className={`py-12 text-center text-sm ${Colors.text.secondary}`}>
         No users found
       </div>
     );
@@ -108,10 +110,10 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
   return (
     <>
       {/* Table */}
-      <div className="w-full overflow-y-auto border bg-divBg shadow-lg">
+      <div className={`mx-auto max-w-3/4 overflow-y-auto ${Colors.border.defaultThick} rounded-lg ${Colors.background.secondary} shadow-lg`}>
         <table className="w-full">
-          <thead className="bg-black/30">
-            <tr className="text-left text-[11px] font-semibold uppercase tracking-wide text-white/40">
+          <thead className={`${Colors.background.primary}`}>
+            <tr className={`text-left text-[11px] font-semibold uppercase tracking-wide ${Colors.text.primary}`}>
               <th className="px-6 py-4">Name</th>
               <th className="px-6 py-4">Email</th>
               <th className="px-6 py-4">Role</th>
@@ -124,19 +126,19 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
             {data.map((user) => (
               <tr
                 key={user.id}
-                className="text-sm text-white transition hover:bg-primaryBlue/10"
+                className={`text-sm ${Colors.text.primary} transition hover:bg-primaryBlue/10`}
               >
-                <td className="px-6 py-4 font-medium">{user.name}</td>
+                <td className={`px-6 py-4 font-medium ${Colors.text.primary}`}>{user.name}</td>
 
-                <td className="px-6 py-4 text-white/70">{user.email}</td>
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>{user.email}</td>
 
                 <td className="px-6 py-4">
-                  <span className="rounded-md bg-primaryBlue/20 px-2 py-1 text-xs font-semibold text-primaryBlue">
+                  <span className={`rounded-md bg-primaryBlue/20 px-2 py-1 text-xs font-semibold ${Colors.text.special}`}>
                     {user.ROLE}
                   </span>
                 </td>
 
-                <td className="px-6 py-4 text-white/60">
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>
                   {formatDate(user.createdAt)}
                 </td>
 
@@ -146,7 +148,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
                       setSelected(user);
                       setIsEditing(false);
                     }}
-                    className="rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20"
+                    className={`rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium ${Colors.text.special} transition hover:bg-primaryBlue/20 cursor-pointer`}
                   >
                     See details
                   </button>
@@ -160,11 +162,11 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
       {/* Modal */}
       {selected && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-divBg p-6 shadow-2xl">
+          <div className={`relative w-full max-w-xl rounded-2xl border border-white/10 ${Colors.background.secondary} p-6 shadow-2xl`}>
             {/* Close */}
             <button
               onClick={() => setSelected(null)}
-              className="absolute right-4 top-4 text-white/50 transition hover:text-white"
+              className={`absolute right-4 top-4 ${Colors.text.primary} transition hover:text-red-500 cursor-pointer`}
             >
               <X size={20} />
             </button>
@@ -172,26 +174,25 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
             {/* Header */}
             <div className="mb-6 mt-6 flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className={`text-xl font-semibold ${Colors.text.primary}`}>
                   User Details
                 </h2>
-                <p className="mt-1 text-sm text-white/40">ID: {selected.id}</p>
+                <p className={`mt-1 text-sm ${Colors.text.secondary}`}>ID: {selected.id}</p>
               </div>
-
               {/* Actions */}
               <div className="flex gap-2">
                 {isEditing ? (
                   <>
                     <button
                       onClick={handleSubmit}
-                      className="rounded-md bg-primaryBlue px-4 py-1.5 text-xs font-semibold text-white hover:opacity-90"
+                      className={`rounded-md ${Colors.background.special} px-4 py-1.5 text-xs font-semibold ${Colors.text.primary} hover:opacity-90 cursor-pointer`}
                     >
                       Save
                     </button>
 
                     <button
                       onClick={handleCancel}
-                      className="rounded-md border border-white/20 px-4 py-1.5 text-xs text-white/70 hover:bg-white/10"
+                      className={`rounded-md border border-white/20 px-4 py-1.5 text-xs ${Colors.text.secondary} ${Colors.hover.textSpecial} cursor-pointer`}
                     >
                       Cancel
                     </button>
@@ -200,14 +201,14 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
                   <>
                     <button
                       onClick={handleEdit}
-                      className="flex items-center gap-1 rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20"
+                      className="flex items-center gap-1 rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20 cursor-pointer"
                     >
                       <Pencil size={14} />
                       Edit
                     </button>
                     <button
                       onClick={handleDelete}
-                      className="flex items-center gap-1 rounded-md border border-red-500/40 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
+                      className="flex items-center gap-1 rounded-md border border-red-500/40 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20 cursor-pointer"
                     >
                       <Trash2 size={14} />
                       Delete
@@ -229,7 +230,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
 
                   return (
                     <div key={key}>
-                      <p className="mb-1 mt-2 text-[11px] uppercase tracking-wide text-primaryBlue">
+                        <p className={`mb-1 mt-2 text-[11px] uppercase tracking-wide ${Colors.text.special}`}>
                         {key.replace(/_/g, " ")}
                       </p>
 
@@ -239,10 +240,10 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
                           onChange={(e) =>
                             handleChange(key as keyof UserData, e.target.value)
                           }
-                          className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-primaryBlue"
+                          className={`w-full rounded-md border border-white/10 ${Colors.background.primary} px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:ring-1 focus:ring-primaryBlue`}
                         />
                       ) : (
-                        <p className="break-words text-sm text-white">
+                        <p className={`break-words text-sm ${Colors.text.primary}`}>
                           {formatValue(value)}
                         </p>
                       )}

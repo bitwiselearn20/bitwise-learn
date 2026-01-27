@@ -4,13 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import Filter from "./Filter";
 import QuestionCard from "./QuestionCard";
 import { getAllProblemData } from "@/api/problems/get-all-problems";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Difficulty = "easy" | "medium" | "hard" | null;
 type Status = "solved" | "unsolved" | null;
 
 function AllListedQuestions() {
   const [questions, setQuestions] = useState<any[]>([]);
-
+  const Colors = useColors();
   /* ---------------- FILTER STATE ---------------- */
   const [query, setQuery] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty>(null);
@@ -54,7 +55,7 @@ function AllListedQuestions() {
 
       <div className="w-full">
         {filteredQuestions.length === 0 && (
-          <p className="text-center text-gray-400 py-10">No questions found</p>
+          <p className={`text-center ${Colors.text.secondary} py-10`}>No questions found</p>
         )}
 
         {filteredQuestions.map((question, index) => (

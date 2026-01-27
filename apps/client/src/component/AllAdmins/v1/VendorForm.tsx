@@ -6,17 +6,13 @@ import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Props = {
   openForm: (value: boolean) => void;
-  onSubmit?: (data: VendorFormData) => void;
+  onSubmit?: (data: AuthFormData) => void;
 };
 
-type VendorFormData = {
+type AuthFormData = {
   name: string;
   email: string;
-  secondaryEmail?: string;
-  tagline: string;
-  phoneNumber: string;
-  secondaryPhoneNumber?: string;
-  websiteLink: string;
+  password: string;
 };
 
 const TOTAL_STEPS = 2;
@@ -24,14 +20,10 @@ const Colors = useColors();
 
 export default function VendorForm({ openForm, onSubmit }: Props) {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<VendorFormData>({
+  const [formData, setFormData] = useState<AuthFormData>({
     name: "",
     email: "",
-    secondaryEmail: "",
-    tagline: "",
-    phoneNumber: "",
-    secondaryPhoneNumber: "",
-    websiteLink: "",
+    password: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,8 +31,8 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const next = () => setStep((s) => Math.min(s + 1, TOTAL_STEPS));
-  const back = () => setStep((s) => Math.max(s - 1, 1));
+  const next = () => setStep(2);
+  const back = () => setStep(1);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +41,7 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className={`relative w-full max-w-md rounded-2xl border ${Colors.border.defaultThin} ${Colors.background.secondary} p-6 shadow-2xl`}>
+      <div className={`relative w-full max-w-sm rounded-2xl border ${Colors.border.defaultThin} ${Colors.background.secondary} p-6 shadow-2xl`}>
         {/* Close */}
         <button
           onClick={() => openForm(false)}
@@ -63,13 +55,11 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
           <p className={`text-xs ${Colors.text.special}`}>
             Step {step} of {TOTAL_STEPS}
           </p>
-          <h2 className={`mt-1 text-lg font-semibold ${Colors.text.primary}`}>
-            Create Vendor
-          </h2>
+          <h2 className={`mt-1 text-lg font-semibold ${Colors.text.primary}`}>Create User</h2>
         </div>
 
         {/* Progress */}
-        <div className={`mb-6 h-1 w-full rounded ${Colors.background.primary}`}>
+        <div className="mb-6 h-1 w-full rounded bg-white/10">
           <div
             className={`h-1 rounded ${Colors.background.special} transition-all`}
             style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
@@ -77,62 +67,35 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* STEP 1 — Identity */}
+          {/* STEP 1 */}
           {step === 1 && (
             <>
               <Input
-                label="Vendor Name"
+                label="Name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
               />
               <Input
-                label="Tagline"
-                name="tagline"
-                value={formData.tagline}
-                onChange={handleChange}
-              />
-              <Input
-                label="Website Link"
-                name="websiteLink"
-                value={formData.websiteLink}
-                onChange={handleChange}
-              />
-            </>
-          )}
-
-          {/* STEP 2 — Contact */}
-          {step === 2 && (
-            <>
-              <Input
-                label="Primary Email"
+                label="Email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
               />
-              <Input
-                label="Secondary Email"
-                name="secondaryEmail"
-                type="email"
-                value={formData.secondaryEmail}
-                onChange={handleChange}
-              />
-              <Input
-                label="Phone Number"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-              />
-              <Input
-                label="Secondary Phone"
-                name="secondaryPhoneNumber"
-                value={formData.secondaryPhoneNumber}
-                onChange={handleChange}
-              />
             </>
           )}
 
+          {/* STEP 2 */}
+          {step === 2 && (
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          )}
 
           {/* Actions */}
           <div className="flex justify-between pt-4">
@@ -151,11 +114,7 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
             {step < TOTAL_STEPS ? (
               <button
                 type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  next();
-                }}
+                onClick={next}
                 className={`rounded-md ${Colors.background.special} px-4 py-2 text-sm font-semibold ${Colors.text.primary} transition hover:bg-primaryBlue/90 cursor-pointer`}
               >
                 Continue
@@ -165,7 +124,7 @@ export default function VendorForm({ openForm, onSubmit }: Props) {
                 type="submit"
                 className={`rounded-md ${Colors.background.special} px-4 py-2 text-sm font-semibold ${Colors.text.primary} transition hover:bg-primaryBlue/90 cursor-pointer`}
               >
-                Create Vendor
+                Create User
               </button>
             )}
           </div>

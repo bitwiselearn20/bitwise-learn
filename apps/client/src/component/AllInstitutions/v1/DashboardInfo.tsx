@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type EntityData = {
   id: string;
@@ -23,6 +24,7 @@ function formatDate(date?: string) {
 
 function DashboardInfo({ data }: Props) {
   const router = useRouter();
+  const Colors = useColors();
 
   const handleSeeDetails = (institutionId: string) => {
     router.push(`/admin-dashboard/institutions/${institutionId}`);
@@ -30,7 +32,7 @@ function DashboardInfo({ data }: Props) {
 
   if (!Array.isArray(data) || data.length === 0) {
     return (
-      <div className="py-12 mt-12 text-center text-sm text-white/50">
+      <div className={`py-12 mt-12 text-center text-sm ${Colors.text.secondary}`}>
         No data available
       </div>
     );
@@ -40,7 +42,7 @@ function DashboardInfo({ data }: Props) {
     <>
       {/* Table Container */}
       <div
-        className="w-full overflow-y-auto overflow-x-hidden border border-white/10 bg-divBg shadow-lg"
+        className={`mx-auto max-w-6xl w-full overflow-y-auto overflow-x-hidden ${Colors.border.fadedThick} ${Colors.background.secondary} shadow-lg`}
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",
@@ -50,8 +52,8 @@ function DashboardInfo({ data }: Props) {
       >
         <table className="w-full border-collapse">
           {/* Header */}
-          <thead className="bg-black/30">
-            <tr className="text-left text-[11px] font-semibold uppercase tracking-wide text-white/40">
+          <thead className={`${Colors.background.primary}`}>
+            <tr className={`text-left text-[11px] font-semibold uppercase tracking-wide ${Colors.text.secondary}`}>
               <th className="px-6 py-4">Name</th>
               <th className="px-6 py-4">Email</th>
               <th className="px-6 py-4">Created</th>
@@ -64,24 +66,24 @@ function DashboardInfo({ data }: Props) {
             {data.map((item) => (
               <tr
                 key={item.id}
-                className="text-sm text-white transition-colors hover:bg-primaryBlue/10"
+                className={`text-sm ${Colors.text.primary} transition-colors ${Colors.hover.special}`}
               >
                 <td className="px-6 py-4 font-medium truncate">
                   {item.name || "Unnamed"}
                 </td>
 
-                <td className="px-6 py-4 truncate text-white/70">
+                <td className={`px-6 py-4 truncate ${Colors.text.secondary}`}>
                   {item.email || "—"}
                 </td>
 
-                <td className="px-6 py-4 text-white/60">
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>
                   {formatDate(item.createdAt)}
                 </td>
 
                 <td className="px-6 py-4 text-right">
                   <button
                     onClick={() => handleSeeDetails(item.id)}
-                    className="rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20"
+                    className="rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20 cursor-pointer"
                   >
                     See details
                   </button>

@@ -4,6 +4,7 @@ import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import ProblemSubmissionForm from "./ProblemSubmissionForm";
 import { getAllProblemCount } from "@/api/problems/get-problem-count";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type ProblemCount = {
   easy: number;
@@ -11,6 +12,8 @@ type ProblemCount = {
   hard: number;
   totalQuestion: number;
 };
+
+const Colors = useColors();
 
 function DashboardHero() {
   const [showForm, setShowForm] = useState(false);
@@ -35,22 +38,22 @@ function HeroSection({ showForm, setShowForm }: any) {
   }, []);
 
   return (
-    <div className="w-full rounded-2xl px-8 py-10 flex flex-col md:flex-row items-center justify-between bg-secondary-bg shadow-sm">
+    <div className={`w-full rounded-2xl px-8 py-10 flex flex-col md:flex-row items-center justify-between ${Colors.background.secondary} shadow-sm`}>
       {showForm && <ProblemSubmissionForm setOpen={setShowForm} />}
 
       {/* LEFT */}
       <div className="text-center md:text-left space-y-4">
         <h1 className="text-4xl font-semibold">
-          <span className="text-primaryBlue">Greetings,</span>{" "}
-          <span className="text-white">Admin</span>
+          <span className={`${Colors.text.special}`}>Greetings,</span>{" "}
+          <span className={`${Colors.text.primary}`}>Admin</span>
         </h1>
 
-        <p className="text-lg text-white">
+        <p className={`${Colors.text.primary} text-lg`}>
           Enjoy managing{" "}
-          <span className="text-primaryBlue font-semibold">Bitwise Learn</span>
+          <span className={`${Colors.text.special} font-semibold`}>Bitwise Learn</span>
         </p>
 
-        <p className="text-white max-w-lg text-base leading-relaxed">
+        <p className={`${Colors.text.primary} max-w-lg text-base leading-relaxed`}>
           Want to <span className="font-medium">add a new question</span> or{" "}
           <span className="font-medium">update an existing one</span>? Select an
           option below to continue.
@@ -58,7 +61,7 @@ function HeroSection({ showForm, setShowForm }: any) {
 
         <button
           onClick={() => setShowForm(true)}
-          className="bg-primaryBlue mt-6 text-white px-6 py-3 rounded-lg font-medium shadow-md hover:opacity-90"
+          className={`${Colors.background.special} mt-6 ${Colors.text.primary} px-6 py-3 rounded-lg font-medium shadow-md hover:opacity-90`}
         >
           Add New Question
         </button>
@@ -70,9 +73,9 @@ function HeroSection({ showForm, setShowForm }: any) {
           <User size={30} className="text-black" />
         </div>
 
-        <div className="text-white">
-          <h2 className="text-xl font-medium">{admin_name}</h2>
-          <p className="text-sm opacity-90">{admin_email}</p>
+        <div className={`${Colors.text.primary} text-center`}>
+          <h2 className={` ${Colors.text.primary} text-xl font-medium`}>{admin_name}</h2>
+          <p className={`${Colors.text.secondary} text-sm opacity-90`}>{admin_email}</p>
         </div>
 
         {/* STATS */}

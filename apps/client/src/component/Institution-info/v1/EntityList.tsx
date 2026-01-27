@@ -10,10 +10,13 @@ import { getAllBatches } from "@/api/batches/get-all-batches";
 import { getAllVendors } from "@/api/vendors/get-all-vendors";
 import { deleteEntity, updateEntity } from "@/api/institutions/entity";
 import { getTeacherByInstitute } from "@/api/teachers/get-teachers-by-institute";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 type EntityListProps = {
   type: string;
   institutionId?: string;
 };
+
+const Colors = useColors();
 
 export const EntityList = ({ type, institutionId }: EntityListProps) => {
   const router = useRouter();
@@ -165,21 +168,21 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
       <div className="rounded-xl p-4 mr-4">
         <input
           placeholder={`Search ${type.toLowerCase()}`}
-          className="w-full mb-4 bg-[#141414] border border-gray-700 rounded-md px-3 py-2 text-sm text-white outline-none"
+          className={`w-full mb-4 border border-gray-700 rounded-md px-3 py-2 text-sm outline-none focus:border-primaryBlue ${Colors.background.secondary} ${Colors.text.primary}`}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
         {loading ? (
-          <div className="py-12 text-center text-white/50">Loading...</div>
+          <div className={`py-12 text-center ${Colors.text.secondary}`}>Loading...</div>
         ) : filteredEntities.length === 0 ? (
-          <div className="py-12 text-center text-white/50">
+          <div className={`py-12 text-center ${Colors.text.secondary}`}>
             No {type.toLowerCase()} found
           </div>
         ) : (
-          <div className="border border-white/10 bg-divBg">
+          <div className={`border ${Colors.border.defaultThick} ${Colors.background.secondary} rounded-lg overflow-hidden`}>
             <table className="w-full">
-              <thead className="bg-black/30 text-xs text-white/40">
+              <thead className={`${Colors.background.primary} text-xs ${Colors.text.primary}`}>
                 <tr>
                   <th className="px-6 py-4 text-left">Name</th>
                   <th className="px-6 py-4 text-left">Created</th>
@@ -189,16 +192,16 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
               <tbody className="divide-y divide-white/5">
                 {filteredEntities.map((entity) => (
                   <tr key={entity.id || entity._id}>
-                    <td className="px-6 py-4 text-white font-medium">
+                    <td className={`px-6 py-4  font-medium ${Colors.text.primary}`}>
                       {entity.name || entity.batchname}
                     </td>
-                    <td className="px-6 py-4 text-white/60">
+                    <td className={`px-6 py-4 ${Colors.text.secondary}`}>
                       {formatDate(entity.createdAt)}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button
                         onClick={() => handleSeeDetails(entity)}
-                        className="border border-primaryBlue/40 px-3 py-1.5 text-xs text-primaryBlue hover:bg-primaryBlue/20"
+                        className={`border border-primaryBlue/40 px-3 py-1.5 text-xs ${Colors.text.special} hover:bg-primaryBlue/20 cursor-pointer`}
                       >
                         See details
                       </button>
@@ -214,15 +217,15 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
       {/* ===================== MODAL ===================== */}
       {selectedEntity && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-          <div className="relative w-full max-w-xl bg-divBg p-6 rounded-xl">
+          <div className={`relative w-full max-w-xl ${Colors.background.primary} p-6 rounded-xl`}>
             <button
               onClick={() => setSelectedEntity(null)}
-              className="absolute right-4 top-4 text-white/50 hover:text-white"
+              className={`absolute right-4 top-4 ${Colors.text.secondary} cursor-pointer hover:text-red-700`}
             >
               <X />
             </button>
 
-            <h2 className="text-xl font-semibold mb-6 text-white">
+            <h2 className={`text-xl font-semibold mb-6 ${Colors.text.primary}`}>
               {type} Details
             </h2>
 
@@ -231,17 +234,17 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
                 .filter(([key]) => !["_id", "id", "createdAt"].includes(key))
                 .map(([key, value]) => (
                   <div key={key}>
-                    <p className="text-xs uppercase text-primaryBlue mb-1">
+                    <p className={`text-xs uppercase ${Colors.text.special} mb-1`}>
                       {key}
                     </p>
                     {isEditing ? (
                       <input
                         value={String(value ?? "")}
                         onChange={(e) => handleEditChange(key, e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 px-3 py-2 text-sm text-white rounded"
+                        className={`w-full ${Colors.background.secondary} border border-white/10 px-3 py-2 text-sm ${Colors.text.primary} rounded`}
                       />
                     ) : (
-                      <p className="text-sm text-white">{formatValue(value)}</p>
+                      <p className={`text-sm ${Colors.text.primary}`}>{formatValue(value)}</p>
                     )}
                   </div>
                 ))}
@@ -253,7 +256,7 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
                   <>
                     <button
                       onClick={handleUpdate}
-                      className="flex items-center gap-2 bg-green-600 px-4 py-2 rounded text-sm"
+                      className={`flex items-center gap-2 bg-green-600 px-4 py-2 rounded text-sm ${Colors.text.primary} cursor-pointer`}
                     >
                       <Save size={16} /> Save
                     </button>
@@ -262,7 +265,7 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
                         setEditData(selectedEntity);
                         setIsEditing(false);
                       }}
-                      className="flex items-center gap-2 text-white border border-white px-4 py-2 rounded text-sm"
+                      className={`flex items-center gap-2 ${Colors.text.primary} border border-white px-4 py-2 rounded text-sm cursor-pointer`}
                     >
                       <X size={16} /> Cancel
                     </button>
@@ -271,13 +274,13 @@ export const EntityList = ({ type, institutionId }: EntityListProps) => {
                   <>
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="flex items-center gap-2 bg-primaryBlue text-white px-4 py-2 rounded text-sm"
+                      className={`flex items-center gap-2 ${Colors.background.special} px-4 py-2 rounded text-sm ${Colors.text.primary} cursor-pointer`}
                     >
                       <Pencil size={16} /> Edit
                     </button>
                     <button
                       onClick={handleDelete}
-                      className="flex items-center gap-2 text-white border border-white px-4 py-2 rounded text-sm"
+                      className={`flex items-center gap-2 ${Colors.text.primary} ${Colors.border.defaultThin} px-4 py-2 rounded text-sm cursor-pointer`}
                     >
                       <Trash size={16} /> Delete
                     </button>

@@ -3,14 +3,7 @@
 import Image from "next/image";
 import { Clock, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-const colors = {
-  primary_Bg: "bg-[#121313]",
-  secondary_Bg: "bg-[#1E1E1E]",
-  special_Bg: "bg-[#64ACFF]",
-  primary_Font: "text-[#FFFFFF]",
-  secondary_Font: "text-[#B1AAA6]",
-};
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 export type Course = {
   id: string;
@@ -33,10 +26,11 @@ const CourseCard = ({ course }: CourseCardProps) => {
   const level = course.level?.toUpperCase();
 
   const isDraft = course.isPublished !== "PUBLISHED";
+  const Colors = useColors();
 
   const levelStyles =
     level === "BASIC"
-      ? "text-grey-300"
+      ? Colors.text.primary
       : level === "INTERMEDIATE"
         ? "text-yellow-400"
         : level === "ADVANCE"
@@ -51,7 +45,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
     <div
       className={`
         group overflow-hidden rounded-2xl
-        ${colors.secondary_Bg} ${colors.primary_Font}
+        ${Colors.background.secondary} ${Colors.text.primary}
         p-3 transition-all duration-300
         hover:-translate-y-1 hover:scale-[1.02]
         hover:shadow-[0_0_0_1px_#64ACFF,0_20px_40px_rgba(0,0,0,0.4)]
@@ -77,14 +71,14 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
           {isDraft && (
             <span
-              className="
-        text-xs font-medium
+              className={`
+                        text-xs font-medium
         px-2.5 py-1
         rounded-full
-        bg-slate-700/40
-        text-slate-300
+        ${Colors.background.primary}
+        ${Colors.text.secondary}
         border border-slate-600/40
-      "
+                `}
             >
               Draft
             </span>
@@ -93,10 +87,10 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
         {/* Level + Duration */}
         <div
-          className={`flex items-center justify-between text-sm ${colors.secondary_Font}`}
+          className={`flex items-center justify-between text-sm ${Colors.text.secondary}`}
         >
           <span
-            className={`rounded-md bg-neutral-800 px-3 py-1 text-xs font-semibold ${levelStyles}`}
+            className={`rounded-md ${Colors.background.primary} px-3 py-1 text-xs font-semibold ${levelStyles}`}
           >
             {level}
           </span>
@@ -107,23 +101,23 @@ const CourseCard = ({ course }: CourseCardProps) => {
           </div>
         </div>
 
-        <p className="text-sm text-neutral-300 line-clamp-2">
+        <p className={`text-sm ${Colors.text.secondary} line-clamp-2`}>
           {course.description}
         </p>
 
         <div className="flex items-center justify-between pt-2">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-sm font-bold text-black">
+            <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-sm font-bold ${Colors.text.black}`}>
               {course.instructorName?.charAt(0).toUpperCase()}
             </div>
-            <span className="text-sm text-neutral-300">
+            <span className={`text-sm font-medium ${Colors.text.primary}`}>
               {course.instructorName}
             </span>
           </div>
 
           <button
             onClick={handleNavigate}
-            className="text-sm text-[#64ACFF] opacity-0 transition-opacity group-hover:opacity-100 cursor-pointer"
+            className={`text-sm opacity-0 transition-opacity group-hover:opacity-100 cursor-pointer ${Colors.text.special} hover:underline`}
           >
             Manage →
           </button>

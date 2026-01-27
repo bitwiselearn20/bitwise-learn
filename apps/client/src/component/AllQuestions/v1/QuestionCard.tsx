@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Difficulty = "EASY" | "MEDIUM" | "HARD";
 
@@ -21,15 +22,15 @@ function QuestionCard({
 }) {
   // Flatten all tagNames into a single array
   const topicNames: string[] = topics.flatMap((topic) => topic.tagName || []);
+  const Colors = useColors();
 
   return (
     <div
-      className="
+      className={`
         group flex items-center
         px-4 py-3
-        bg-primary-bg hover:bg-secondary-bg
-        transition w-[90%] mx-auto
-      "
+        ${Colors.background.primary} ${Colors.hover.special} rounded-lg
+        transition w-[90%] mx-auto`}
     >
       {/* Status */}
       <div className="w-8 flex justify-center shrink-0">
@@ -42,7 +43,7 @@ function QuestionCard({
           href={
             !isAdmin ? `/problems/${id}` : `/admin-dashboard/problems/${id}`
           }
-          className="text-md text-white group-hover:text-blue-400 truncate"
+          className={`text-md ${Colors.text.primary} group-hover:text-blue-400 truncate`}
         >
           {name}
         </Link>
@@ -58,19 +59,18 @@ function QuestionCard({
         {topicNames.slice(0, 3).map((topic) => (
           <span
             key={topic}
-            className="
-              text-xs px-2 py-1
+            className={`
+                            text-xs px-2 py-1
               rounded-md
-              bg-white/5
-              text-white/60
+              ${Colors.background.secondary} ${Colors.text.secondary}
               whitespace-nowrap
-            "
+              `}
           >
             {topic}
           </span>
         ))}
         {topicNames.length > 3 && (
-          <span className="text-xs text-white/40">
+          <span className={`text-xs ${Colors.text.secondary}`}>
             +{topicNames.length - 3}
           </span>
         )}

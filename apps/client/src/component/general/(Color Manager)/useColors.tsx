@@ -27,6 +27,11 @@ export function useColors() {
       green: "border-t border-[var(--border-green)]",
       special: "border-t border-[var(--border-special)]",
 
+      defaultRight: "border-r border-[var(--border-default)]",
+      fadedRight: "border-r border-[var(--border-faded)]",
+      greenRight: "border-r border-[var(--border-green)]",
+      specialRight: "border-r border-[var(--border-special)]",
+
       defaultThin: "border border-[var(--border-default)]",
       fadedThin: "border border-[var(--border-faded)]",
       greenThin: "border border-[var(--border-green)]",

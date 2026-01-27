@@ -4,6 +4,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { createTeacher } from "@/api/teachers/create-teacher";
 import { getAllBatches } from "@/api/batches/get-all-batches";
+import { useColors } from "./(Color Manager)/useColors";
 type TeacherFormData = {
   name: string;
   email: string;
@@ -34,6 +35,7 @@ export default function TeacherForm({ openForm, institutionId, onSubmit }: Props
 
   const [batches, setBatches] = useState<Batch[]>([]);
   const [loadingBatches, setLoadingBatches] = useState(false);
+  const Colors = useColors();
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof TeacherFormData, string>>
@@ -134,10 +136,10 @@ export default function TeacherForm({ openForm, institutionId, onSubmit }: Props
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-white mt-1">
+        <h2 className={`text-lg font-semibold ${Colors.text.primary} mt-1`}>
           Create Teacher
         </h2>
-        <p className="text-xs text-white/50 mt-1">
+        <p className={`text-xs ${Colors.text.secondary} mt-1`}>
           Fill the details to create a teacher profile.
         </p>
       </div>
@@ -180,16 +182,16 @@ export default function TeacherForm({ openForm, institutionId, onSubmit }: Props
             value={formData.batchId}
             onChange={handleChange}
             disabled={loadingBatches || batches.length === 0}
-            className={`mt-1 w-full rounded-lg border bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue ${errors.batchId ? "border-red-500 focus:ring-red-500" : "border-white/10"} disabled:opacity-50 disabled:cursor-not-allowed`}
+            className={`mt-1 w-full rounded-lg border ${Colors.background.primary} px-3 py-2 text-sm ${Colors.text.primary} focus:ring-2 focus:ring-primaryBlue ${errors.batchId ? "border-red-500 focus:ring-red-500" : "border-white/10"} disabled:opacity-50 disabled:cursor-not-allowed`}
             style={{
               colorScheme: 'dark',
             }}
           >
-            <option value="" className="bg-black text-white">
+            <option value="" className={`${Colors.background.primary} ${Colors.text.primary}`}>
               {loadingBatches ? "Loading batches..." : "Select a batch"}
             </option>
             {batches.map((batch) => (
-              <option key={batch.id} value={batch.id} className="bg-black text-white">
+              <option key={batch.id} value={batch.id} className={`${Colors.background.primary} ${Colors.text.primary}`}>
                 {batch.batchname} - {batch.branch} ({batch.batchEndYear})
               </option>
             ))}
@@ -203,13 +205,13 @@ export default function TeacherForm({ openForm, institutionId, onSubmit }: Props
           <button
             type="button"
             onClick={() => openForm(false)}
-            className="text-sm text-white/60 hover:text-white"
+            className={`text-sm ${Colors.text.secondary} ${Colors.hover.textSpecial}`}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="rounded-md bg-primaryBlue px-4 py-2 text-sm font-semibold text-white"
+            className={`rounded-md ${Colors.background.special} px-4 py-2 text-sm font-semibold ${Colors.text.primary}`}
           >
             Create Teacher
           </button>
@@ -235,12 +237,13 @@ function Input({
   label: string;
   error?: string;
 }) {
+  const Colors = useColors();
   return (
     <div>
       <Label>{label}</Label>
       <input
         {...props}
-        className={`mt-1 w-full rounded-lg border bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue ${error ? "border-red-500 focus:ring-red-500" : "border-white/10"}`}
+        className={`mt-1 w-full rounded-lg border ${Colors.background.primary} px-3 py-2 text-sm ${Colors.text.primary} focus:ring-2 focus:ring-primaryBlue ${error ? "border-red-500 focus:ring-red-500" : "border-white/10"}`}
       />
       {error ? <p className="mt-1 text-xs text-red-400">{error}</p> : null}
     </div>

@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { createBatch } from "@/api/batches/create-batch";
+import { useColors } from "./(Color Manager)/useColors";
 
 type BatchFormData = {
   batchname: string;
@@ -15,6 +16,8 @@ type Props = {
   institutionId: string;
   onSubmit?: (data: BatchFormData) => void;
 };
+
+const Colors = useColors();
 
 function BatchesForm({ openForm, institutionId, onSubmit }: Props) {
   const [formData, setFormData] = useState<BatchFormData>({
@@ -115,10 +118,10 @@ function BatchesForm({ openForm, institutionId, onSubmit }: Props) {
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-white mt-1">
+        <h2 className={`text-lg font-semibold ${Colors.text.primary} mt-1`}>
           Create Batch
         </h2>
-        <p className="text-xs text-white/50 mt-1">
+        <p className={`text-xs ${Colors.text.secondary} mt-1`}>
           Fill the details to create a batch for this institution.
         </p>
       </div>
@@ -157,14 +160,14 @@ function BatchesForm({ openForm, institutionId, onSubmit }: Props) {
           <button
             type="button"
             onClick={() => openForm(false)}
-            className="text-sm text-white/60 hover:text-white"
+            className={`text-sm ${Colors.text.secondary} ${Colors.hover.textSpecial}`}
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-md bg-primaryBlue px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`rounded-md ${Colors.background.special} px-4 py-2 text-sm font-semibold ${Colors.text.primary} disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {submitting ? "Creating..." : "Create Batch"}
           </button>
@@ -175,8 +178,9 @@ function BatchesForm({ openForm, institutionId, onSubmit }: Props) {
 }
 
 function Label({ children }: { children: React.ReactNode }) {
+  const Colors = useColors();
   return (
-    <label className="text-[11px] uppercase tracking-wide text-primaryBlue">
+    <label className={`text-[11px] uppercase tracking-wide ${Colors.text.special}`}>
       {children}
     </label>
   );
@@ -195,7 +199,7 @@ function Input({
       <Label>{label}</Label>
       <input
         {...props}
-        className={`mt-1 w-full rounded-lg border bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue ${error ? "border-red-500 focus:ring-red-500" : "border-white/10"}`}
+        className={`mt-1 w-full rounded-lg border ${Colors.background.primary} px-3 py-2 text-sm ${Colors.text.primary} focus:ring-2 focus:ring-primaryBlue ${error ? "border-red-500 focus:ring-red-500" : "border-white/10"}`}
       />
       {error ? <p className="mt-1 text-xs text-red-400">{error}</p> : null}
     </div>

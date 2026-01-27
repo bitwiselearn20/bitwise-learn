@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X, Pencil, Trash2 } from "lucide-react";
 import { deleteEntity, updateEntity } from "@/api/institutions/entity";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type CompanyData = {
   id: string;
@@ -48,6 +49,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
   const [selected, setSelected] = useState<CompanyData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<CompanyData | null>(null);
+  const Colors = useColors();
 
   const handleSeeDetails = (vendorId: string) => {
     router.push(`/admin-dashboard/vendors/${vendorId}`);
@@ -104,7 +106,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="py-12 my-12 text-center text-sm text-white/50">
+      <div className={`py-12 my-12 text-center text-sm ${Colors.text.secondary}`}>
         No companies found
       </div>
     );
@@ -113,10 +115,10 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
   return (
     <>
       {/* Table */}
-      <div className="w-full overflow-y-auto border border-white/10 bg-divBg shadow-lg">
-        <table className="w-full">
-          <thead className="bg-black/30">
-            <tr className="text-left text-[11px] font-semibold uppercase tracking-wide text-white/40">
+      <div className={`w-full max-w-3/4 mx-auto overflow-y-auto ${Colors.border.defaultThick} ${Colors.background.secondary} shadow-lg rounded-lg`}>
+        <table className="w-full border-collapse">
+          <thead className={`${Colors.background.primary}`}>
+            <tr className={`text-left text-[11px] font-semibold uppercase tracking-wide ${Colors.text.secondary}`}>
               <th className="px-6 py-4">Company Name</th>
               <th className="px-6 py-4">Email</th>
               <th className="px-6 py-4">Phone</th>
@@ -129,20 +131,20 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
             {data.map((company) => (
               <tr
                 key={company.id}
-                className="text-sm text-white transition hover:bg-primaryBlue/10"
+                className={`text-sm transition hover:bg-primaryBlue/10 ${Colors.text.primary}`}
               >
                 <td className="px-6 py-4 font-medium">{company.name}</td>
-                <td className="px-6 py-4 text-white/70">{company.email}</td>
-                <td className="px-6 py-4 text-white/70">
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>{company.email}</td>
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>
                   {company.phoneNumber || "—"}
                 </td>
-                <td className="px-6 py-4 text-white/60">
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>
                   {formatDate(company.createdAt)}
                 </td>
                 <td className="px-6 py-4 text-right">
                   <button
                     onClick={() => handleSeeDetails(company.id)}
-                    className="rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20"
+                    className={`rounded-md border ${Colors.border.defaultThin} px-3 py-1.5 text-xs font-medium ${Colors.text.special} transition ${Colors.hover.special} cursor-pointer`}
                   >
                     See details
                   </button>
@@ -156,11 +158,11 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
       {/* Modal */}
       {selected && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-divBg p-6 shadow-2xl">
+          <div className={`relative w-full max-w-xl rounded-2xl ${Colors.background.primary} ${Colors.border.defaultThin} p-6 shadow-2xl`}>
             {/* Close */}
             <button
               onClick={() => setSelected(null)}
-              className="absolute right-4 top-4 text-white/50 hover:text-white transition"
+              className={`absolute right-4 top-4 ${Colors.text.primary} hover:text-red-500 transition cursor-pointer`}
             >
               <X size={20} />
             </button>
@@ -168,10 +170,10 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
             {/* Header */}
             <div className="mb-6 mt-6 flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className={`text-xl font-semibold ${Colors.text.primary}`}>
                   Company Details
                 </h2>
-                <p className="mt-1 text-sm text-white/40">ID: {selected.id}</p>
+                <p className={`mt-1 text-sm ${Colors.text.secondary}`}>ID: {selected.id}</p>
               </div>
 
               {/* Actions */}
@@ -180,14 +182,14 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
                   <>
                     <button
                       onClick={handleSubmit}
-                      className="rounded-md bg-primaryBlue px-4 py-1.5 text-xs font-semibold text-white hover:opacity-90"
+                      className={`rounded-md ${Colors.background.special} px-4 py-1.5 text-xs font-semibold ${Colors.text.primary} hover:opacity-90 cursor-pointer`}
                     >
                       Save
                     </button>
 
                     <button
                       onClick={handleCancel}
-                      className="rounded-md border border-white/20 px-4 py-1.5 text-xs text-white/70 hover:bg-white/10"
+                      className={`rounded-md border ${Colors.border.defaultThin} px-4 py-1.5 text-xs ${Colors.text.secondary} hover:${Colors.background.secondary} cursor-pointer`}
                     >
                       Cancel
                     </button>
@@ -222,7 +224,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
 
                   return (
                     <div key={key}>
-                      <p className="mb-1 mt-2 text-[11px] uppercase tracking-wide text-primaryBlue">
+                      <p className={`mb-1 mt-2 text-[11px] uppercase tracking-wide ${Colors.text.special}`}>
                         {key.replace(/_/g, " ")}
                       </p>
 
@@ -235,10 +237,10 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
                               e.target.value,
                             )
                           }
-                          className="w-full rounded-md border border-white/10 bg-black/30 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-primaryBlue"
+                          className={`w-full rounded-md border ${Colors.border.defaultThin} ${Colors.background.secondary} px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:ring-1 focus:ring-primaryBlue`}
                         />
                       ) : (
-                        <p className="break-words text-sm text-white">
+                        <p className={`break-words text-sm ${Colors.text.primary}`}>
                           {formatValue(value)}
                         </p>
                       )}

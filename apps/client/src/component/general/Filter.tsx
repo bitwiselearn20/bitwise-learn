@@ -1,6 +1,7 @@
 "use client";
 import { Search } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
+import { useColors } from "./(Color Manager)/useColors";
 
 export type Item = {
   id: number;
@@ -16,6 +17,7 @@ function Filter({
   setFilteredData: any;
 }) {
   const [search, setSearch] = useState("");
+  const Colors = useColors();
 
   const filteredData = useMemo(() => {
     return data.filter((item: Item) => {
@@ -32,13 +34,13 @@ function Filter({
       <div className="relative mb-3 w-1/3">
         <Search
           size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"
+          className={`absolute left-3 top-1/2 -translate-y-1/2 ${Colors.text.special}`}
         />
         <input
           placeholder="Search..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-9 pr-3 py-2 bg-black/30 text-white rounded-lg outline-none focus:ring-1 focus:ring-primaryBlue"
+          className={`w-full pl-9 pr-3 py-2 ${Colors.background.secondary} ${Colors.text.primary} rounded-lg outline-none focus:ring-1 focus:ring-primaryBlue`}
         />
       </div>
     </div>

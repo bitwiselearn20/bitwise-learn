@@ -4,6 +4,9 @@ import toast from "react-hot-toast";
 import { Trash2 } from "lucide-react";
 import { deleteAssignmentQuestion } from "@/api/courses/assignment-questions/delete-question";
 import { useState } from "react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+
+const Colors = useColors();
 
 export default function QuestionEditor({
   assignmentId,
@@ -59,13 +62,13 @@ export default function QuestionEditor({
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
         <div
           onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6"
+          className={`w-full max-w-sm rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThin} p-6`}
         >
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
             Delete this question?
           </h2>
 
-          <p className="mt-2 text-sm text-slate-400">
+          <p className={`mt-2 text-sm ${Colors.text.secondary}`}>
             This action cannot be undone.
           </p>
 
@@ -73,12 +76,7 @@ export default function QuestionEditor({
             <button
               onClick={onClose}
               disabled={loading}
-              className="
-              px-4 py-2 rounded-lg
-              bg-slate-800 text-slate-300
-              hover:bg-slate-700 transition
-              disabled:opacity-50
-            "
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
             >
               Cancel
             </button>
@@ -87,7 +85,7 @@ export default function QuestionEditor({
               onClick={onConfirm}
               disabled={loading}
               className={`
-              px-4 py-2 rounded-lg text-white transition
+              px-4 py-2 rounded-lg text-white transition cursor-pointer
               ${
                 loading
                   ? "bg-red-600/60 cursor-not-allowed"
@@ -138,7 +136,7 @@ export default function QuestionEditor({
   };
 
   return (
-    <div className="flex w-1/2 flex-col justify-between rounded-2xl bg-slate-900 border border-white/10 p-6 shadow-lg">
+    <div className={`flex w-1/2 flex-col justify-between rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThin} p-6 shadow-lg`}>
       {/* TOP BAR */}
       <div className="flex flex-col gap-3">
         <div className="flex justify-end">
@@ -146,7 +144,7 @@ export default function QuestionEditor({
             <XCircle
               size={26}
               onClick={onClose}
-              className={`cursor-pointer text-slate-500 hover:text-red-500 transition
+              className={`cursor-pointer ${Colors.text.secondary} hover:text-red-500 transition
               relative ${locked?"left-5":"left-38.5"}`}
             />
             <div className="flex justify-end gap-4">
@@ -156,7 +154,7 @@ export default function QuestionEditor({
                   className="
         rounded-md border border-yellow-500/30
         bg-yellow-500/10 px-3 py-1.5 text-sm
-        text-yellow-400 hover:bg-yellow-500/20
+        text-yellow-600 hover:bg-yellow-500/20
         transition cursor-pointer
       "
                 >
@@ -168,7 +166,7 @@ export default function QuestionEditor({
                 <>
                   <button
                     onClick={onNew}
-                    className="flex items-center gap-2 rounded-md border border-white/10 bg-slate-800 px-3 py-1.5 text-sm text-sky-300 hover:bg-slate-700 transition cursor-pointer"
+                    className={`flex items-center gap-2 rounded-md  px-3 py-1.5 text-sm ${Colors.text.special} ${Colors.hover.special} ${Colors.border.specialThick} transition cursor-pointer`}
                   >
                     <Plus size={16} />
                     New Question
@@ -195,9 +193,9 @@ export default function QuestionEditor({
         </div>
 
         {/* HEADER */}
-        <h2 className="text-lg font-medium text-white">
+        <h2 className={`text-lg font-medium ${Colors.text.primary}`}>
           Question{" "}
-          <span className="text-sky-400">
+          <span className={`font-semibold ${Colors.text.special}`}>
             {index + 1} / {total}
           </span>
         </h2>
@@ -210,9 +208,8 @@ export default function QuestionEditor({
           onChange={(e) => saveQuestion({ ...question, text: e.target.value })}
           className={`${locked?"cursor-not-allowed opacity-70":"cursor-pointer"}
             w-full rounded-lg px-4 py-2 text-sm
-            bg-slate-800 text-slate-100
-            border border-white/10
-            placeholder:text-slate-400
+            ${Colors.background.primary} ${Colors.text.secondary}
+            placeholder:text-neutral-400
             focus:outline-none focus:ring-2 focus:ring-sky-500/40
             disabled:opacity-50
           `}
@@ -225,8 +222,8 @@ export default function QuestionEditor({
               key={opt.id}
               className={`
                 flex items-center gap-3 rounded-lg px-4 py-2
-                bg-slate-800 border border-white/10
-                ${opt.isCorrect ? "ring-2 ring-emerald-500/40" : ""}
+                ${Colors.background.primary} ${Colors.border.defaultThin}
+                ${opt.isCorrect ? "ring-3 ring-emerald-500/40 " : ""}
               `}
             >
               <input
@@ -255,10 +252,9 @@ export default function QuestionEditor({
                 placeholder="Option text"
                 className={`${locked ? "cursor-not-allowed opacity-80" : "cursor-pointer"}
                   flex-1 rounded-md px-2 py-1
-                  bg-slate-900 text-slate-100
-                  placeholder:text-slate-400
+                  ${Colors.background.primary} ${Colors.text.secondary}
+                  placeholder:text-neutral-500
                   outline-none
-                  focus:ring-1 focus:ring-sky-500/40
                 `}
               />
               {!locked && (
@@ -278,12 +274,12 @@ export default function QuestionEditor({
         {!locked && (
           <button
             onClick={addOption}
-            className="
-              mt-2 w-fit rounded-md border border-white/10
-              bg-slate-800 px-3 py-1.5 text-sm
-              text-sky-300 hover:bg-slate-700 transition
+            className={`
+              mt-2 w-fit rounded-md ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special}
+               px-3 py-1.5 text-sm
+               transition
               cursor-pointer
-            "
+            `}
           >
             Add option
           </button>
@@ -296,12 +292,11 @@ export default function QuestionEditor({
           <button
             onClick={onPrev}
             disabled={index === 0}
-            className="
-              rounded-md border border-white/10
-              bg-slate-800 px-4 py-2 text-sm text-white
-              hover:bg-slate-700 disabled:opacity-40
-              cursor-pointer
-            "
+            className={`
+              rounded-md ${Colors.background.special} ${Colors.hover.special}
+              disabled:bg-neutral-300 px-4 py-2 text-sm
+              cursor-pointer disabled:cursor-not-allowed
+            `}
           >
             Previous
           </button>
@@ -309,12 +304,11 @@ export default function QuestionEditor({
           <button
             onClick={onNext}
             disabled={index === total - 1}
-            className="
-              rounded-md border border-white/10
-              bg-slate-800 px-4 py-2 text-sm text-white
-              hover:bg-slate-700 disabled:opacity-40
-              cursor-pointer
-            "
+            className={`
+              rounded-md ${Colors.background.special} ${Colors.hover.special}
+              disabled:bg-neutral-300 px-4 py-2 text-sm
+              cursor-pointer disabled:cursor-not-allowed
+            `}
           >
             Next
           </button>
@@ -322,12 +316,11 @@ export default function QuestionEditor({
 
         <button
           onClick={handleComplete}
-          className="
-            rounded-md bg-blue-500 px-5 py-2
-            text-sm font-medium text-white
-            hover:bg-blue-400 transition
-            cursor-pointer
-          "
+          className={`
+            rounded-md px-5 py-2
+            text-sm font-medium transition
+            cursor-pointer ${Colors.hover.special} ${Colors.background.special} ${Colors.text.primary}
+          `}
         >
           Complete
         </button>

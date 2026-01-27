@@ -13,8 +13,8 @@ export const Palette = {
   custom_white: "#FFFFFF",
 
   custom_gray: "#B1AAA6",
-  custom_dark_gray: "#3C3C3C",
-  custom_gray_faded: "white/15",
+  custom_dark_gray: "#2A2B2B",
+  custom_gray_faded: "rgba(177,170,166,0.41)",
 
   custom_green: "#129274",
   custom_green_faded: "rgba(18,146,116,0.24)",

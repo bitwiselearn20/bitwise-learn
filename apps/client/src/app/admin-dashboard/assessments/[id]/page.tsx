@@ -1,4 +1,5 @@
 import AssessmentBuilderV1 from "@/component/AssessmentBuilder/v1/AssessmentBuilderV1";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 import SideBar from "@/component/general/SideBar";
 
 interface PageProps {
@@ -9,9 +10,10 @@ interface PageProps {
 
 const page = async ({ params }: PageProps) => {
   const { id } = await params;
+  const Colors = useColors();
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className={`flex h-screen ${Colors.background.primary} overflow-hidden`}>
       <SideBar />
       <main className="flex-1 overflow-y-auto px-10 py-10">
         <AssessmentBuilderV1 assessmentId={id} />

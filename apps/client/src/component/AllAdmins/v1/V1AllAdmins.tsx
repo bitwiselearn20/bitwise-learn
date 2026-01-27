@@ -8,11 +8,14 @@ import { Plus } from "lucide-react";
 import AdminForm from "./AdminForm";
 import { createAdmin } from "@/api/admins/create-admin";
 import toast from "react-hot-toast";
+import VendorForm from "./VendorForm";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 function V1AllAdmins() {
   const [data, setData] = useState([]);
   const [addNew, setAddNew] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const Colors = useColors();
   useEffect(() => {
     getAllAdmins(setData);
   }, []);
@@ -28,25 +31,26 @@ function V1AllAdmins() {
     }
   };
   return (
-    <div className="flex">
+    <div className={`flex ${Colors.background.primary}`}>
       {addNew && <AdminForm openForm={setAddNew} onSubmit={handleCreateAdmin} />}
+
       <div className="h-screen">
         <SideBar />
       </div>
 
       <div className="ml-10 mt-10 w-full">
         <div className="w-[80%] mx-auto mb-5 flex justify-between">
-          <h1 className="text-3xl ml-3 text-white/60">Manage Admins</h1>
+          <h1 className={`text-3xl ml-3 ${Colors.text.secondary}`}>Manage Admins</h1>
           <button
             onClick={() => setAddNew(true)}
-            className="text-primaryBlue flex gap-2 border-primaryBlue border p-2 rounded-xl"
+            className={`${Colors.text.special} flex gap-2 border-primaryBlue border p-2 rounded-xl cursor-pointer ${Colors.hover.special} transition`}
           >
-            <Plus className="text-primaryBlue" />
+            <Plus className={`${Colors.text.special}`} />
             Add Admins
           </button>
         </div>
         <Filter data={data} setFilteredData={setFilteredData} />
-        <DashboardInfo data={filteredData} />
+        <DashboardInfo data={filteredData as any} />
       </div>
     </div>
   );

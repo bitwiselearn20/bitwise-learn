@@ -64,7 +64,7 @@ export default function SideBar() {
       style={{ width }}
       className={`relative shrink-0
         h-full
-        border-r border-white/10 ${Colors.background.primary}
+        ${Colors.border.fadedRight} ${Colors.background.primary}
          ${Colors.text.primary}
         flex flex-col`}
     >

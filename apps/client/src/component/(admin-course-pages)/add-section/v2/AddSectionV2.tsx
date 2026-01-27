@@ -13,6 +13,7 @@ import { getAssignmentsBySection } from "@/api/courses/assignment/get-section-as
 import { updateAssignment } from "@/api/courses/assignment/update-assignment";
 import { deleteAssignmentById } from "@/api/courses/assignment/delete-assignment";
 import QuestionEditorWrapper from "../../add-assignment/v1/QuestionEditorWrapper";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Props = {
   sectionNumber: number;
@@ -39,6 +40,7 @@ type UpdateContentPayload = {
   transcript?: File | null;
   videoUrl?: string;
 };
+const Colors = useColors();
 
 // ------------------------ Add Topic Modal --------------------------
 interface AddTopicModalProps {
@@ -55,44 +57,44 @@ const AddTopicModal = ({ open, onClose, onSubmit }: AddTopicModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6">
+      <div className={`w-full max-w-sm rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThick} p-6`}>
         {/* Header */}
-        <h2 className="text-lg font-semibold text-white">Add new topic</h2>
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>Add new topic</h2>
 
         {/* Topic Name */}
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Topic name</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Topic name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Introduction to HTML"
-            className="
+            className={`
               mt-2 w-full rounded-lg
-              bg-slate-800 border border-slate-700
-              px-3 py-2 text-sm text-white
-              placeholder:text-slate-500
+              ${Colors.background.primary} ${Colors.border.defaultThin}
+              px-3 py-2 text-sm ${Colors.text.secondary}
+              placeholder:text-neutral-500
               focus:outline-none focus:border-sky-500
-            "
+            `}
             autoFocus
           />
         </div>
 
         {/* Description */}
         <div className="mt-4">
-          <label className="text-sm text-slate-400">Description</label>
+          <label className={`text-sm ${Colors.text.secondary}`}>Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Brief description of this topic"
             rows={3}
-            className="
-              mt-2 w-full resize-none rounded-lg
-              bg-slate-800 border border-slate-700
-              px-3 py-2 text-sm text-white
-              placeholder:text-slate-500
+            className={`
+              mt-2 w-full rounded-lg
+              ${Colors.background.primary} ${Colors.border.defaultThin}
+              px-3 py-2 text-sm ${Colors.text.secondary}
+              placeholder:text-neutral-500
               focus:outline-none focus:border-sky-500
-            "
+            `}
           />
         </div>
 
@@ -104,7 +106,7 @@ const AddTopicModal = ({ open, onClose, onSubmit }: AddTopicModalProps) => {
               setDescription("");
               onClose();
             }}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
             Cancel
           </button>
@@ -119,7 +121,7 @@ const AddTopicModal = ({ open, onClose, onSubmit }: AddTopicModalProps) => {
               setName("");
               setDescription("");
             }}
-            className="px-4 py-2 rounded-lg bg-sky-600 text-black font-medium hover:bg-sky-500 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.special} ${Colors.border.defaultThick} ${Colors.text.primary} ${Colors.hover.special} transition cursor-pointer`}
           >
             Add Topic
           </button>
@@ -144,27 +146,27 @@ const ConfirmDeleteSectionModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6"
+        className={`w-full max-w-sm rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThick} p-6`}
       >
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
           Delete this section?
         </h2>
 
-        <p className="mt-2 text-sm text-slate-400">
+        <p className={`mt-2 text-sm ${Colors.text.secondary}`}>
           All topics & assignments inside this section will be removed.
         </p>
 
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
             Cancel
           </button>
 
           <button
             onClick={onConfirm}
-            className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-500 transition"
+            className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-500 transition cursor-pointer"
           >
             Delete
           </button>
@@ -219,37 +221,49 @@ const UpdateTopicModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm overflow-y-auto">
-      <div className="mt-2 w-full max-w-2xl rounded-2xl bg-slate-900 border border-slate-800 p-8">
+      <div className={`mt-2 w-full max-w-2xl rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThick} p-8`}>
         {/* Header */}
-        <h2 className="text-xl font-semibold text-white">Update Topic</h2>
+        <h2 className={`text-xl font-semibold ${Colors.text.primary}`}>Update Topic</h2>
 
         {/* Grid Layout */}
         <div className="mt-6 grid grid-cols-2 gap-5">
           {/* Topic Name */}
           <div className="col-span-2">
-            <label className="text-sm text-slate-400">Topic name</label>
+            <label className={`text-sm ${Colors.text.secondary}`}>Topic name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className={`
+              mt-2 w-full rounded-lg
+              ${Colors.background.primary} ${Colors.border.defaultThin}
+              px-3 py-2 text-sm ${Colors.text.secondary}
+              placeholder:text-neutral-500
+              focus:outline-none focus:border-sky-500
+            `}
             />
           </div>
 
           {/* Description */}
           <div className="col-span-2">
-            <label className="text-sm text-slate-400">Description</label>
+            <label className={`text-sm ${Colors.text.secondary}`}>Description</label>
             <textarea
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-2 w-full resize-none rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+            className={`
+              mt-2 w-full rounded-lg
+              ${Colors.background.primary} ${Colors.border.defaultThin}
+              px-3 py-2 text-sm ${Colors.text.secondary}
+              placeholder:text-neutral-500
+              focus:outline-none focus:border-sky-500
+            `}
             />
           </div>
 
           {/* Transcript Text */}
           <div className="col-span-2">
-            <label className="text-sm text-slate-400">
+            <label className={`text-sm ${Colors.text.secondary}`}>
               Transcript (paste text)
             </label>
             <textarea
@@ -257,7 +271,13 @@ const UpdateTopicModal = ({
               value={transcriptText}
               onChange={(e) => setTranscriptText(e.target.value)}
               placeholder="Paste transcript text here (optional)"
-              className="mt-2 w-full resize-none rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-sky-500"
+            className={`
+              mt-2 w-full rounded-lg
+              ${Colors.background.primary} ${Colors.border.defaultThin}
+              px-3 py-2 text-sm ${Colors.text.secondary}
+              placeholder:text-neutral-500
+              focus:outline-none focus:border-sky-500
+            `}
             />
           </div>
 
@@ -265,14 +285,14 @@ const UpdateTopicModal = ({
 
           <div className="col-span-2 flex justify-between items-center">
             <div>
-              <label className="text-sm text-slate-400">Upload File</label>
+              <label className={`text-sm ${Colors.text.secondary}`}>Upload File</label>
               <input
                 type="file"
                 accept=".txt,.pdf,.doc,.docx"
                 onChange={(e) => setTranscriptFile(e.target.files?.[0] || null)}
-                className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-300
-              file:mr-3 file:rounded-md file:border-0 file:bg-slate-700
-              file:px-3 file:py-1 file:text-sm file:text-white hover:file:bg-slate-600"
+                className={`mt-2 w-full rounded-lg ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.secondary}
+              file:mr-3 file:rounded-md file:border-0 file:bg-[#3b82f6]
+              file:px-3 file:py-1 file:text-sm file:text-white hover:opacity-80 transition cursor-pointer file:cursor-pointer`}
               />
             </div>
             {initialData.file && (
@@ -280,7 +300,7 @@ const UpdateTopicModal = ({
                 <Link
                   href={initialData.file}
                   target="_blank"
-                  className="text-sm bg-blue-700 p-3 rounded-md text-wrap"
+                  className={`text-sm ${Colors.background.special} ${Colors.hover.special} p-3 rounded-md text-wrapped text-white font-semibold transition`}
                 >
                   Previous File
                 </Link>
@@ -296,7 +316,13 @@ const UpdateTopicModal = ({
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
               placeholder="https://youtube.com/..."
-              className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-sky-500"
+            className={`
+              mt-2 w-full rounded-lg
+              ${Colors.background.primary} ${Colors.border.defaultThin}
+              px-3 py-2 text-sm ${Colors.text.secondary}
+              placeholder:text-neutral-500
+              focus:outline-none focus:border-sky-500
+            `}
             />
           </div>
         </div>
@@ -305,7 +331,7 @@ const UpdateTopicModal = ({
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
             Cancel
           </button>
@@ -322,7 +348,7 @@ const UpdateTopicModal = ({
                 videoUrl: videoUrl.trim(),
               });
             }}
-            className="px-5 py-2 rounded-lg bg-emerald-500 text-black font-medium hover:bg-emerald-400 transition"
+            className={`text-sm ${Colors.background.special} ${Colors.hover.special} p-3 rounded-md text-wrapped text-white font-semibold transition`}  
           >
             Update Topic
           </button>
@@ -371,26 +397,27 @@ const EditAssignmentModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 p-6">
-        <h2 className="text-xl font-semibold text-white">Edit Assignment</h2>
+      <div className={`w-full max-w-lg rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThick} p-6`}>
+        <h2 className={`text-xl font-semibold ${Colors.text.primary}`}>Edit Assignment</h2>
 
         <div className="mt-5 space-y-4">
           <div>
-            <label className="text-sm text-slate-400">Description</label>
+            <label className={`text-sm ${Colors.text.secondary}`}>Description</label>
             <textarea
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="
-                mt-2 w-full resize-none rounded-lg
-                bg-slate-800 border border-slate-700
-                px-3 py-2 text-sm text-white
-                focus:outline-none focus:border-sky-500
-              "
+            className={`
+              mt-2 w-full rounded-lg
+              ${Colors.background.primary} ${Colors.border.defaultThin}
+              px-3 py-2 text-sm ${Colors.text.secondary}
+              placeholder:text-neutral-500
+              focus:outline-none focus:border-sky-500
+            `}
             />
           </div>
           <div>
-            <label className="text-sm text-slate-400">Marks Per Question</label>
+            <label className={`text-sm ${Colors.text.secondary}`}>Marks Per Question</label>
             <input
               type="number"
               value={marks}
@@ -398,16 +425,28 @@ const EditAssignmentModal = ({
                 const value = e.target.value;
                 setMarks(value === "" ? "" : Number(value));
               }}
-              className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white"
+            className={`
+              mt-2 w-full rounded-lg
+              ${Colors.background.primary} ${Colors.border.defaultThin}
+              px-3 py-2 text-sm ${Colors.text.secondary}
+              placeholder:text-neutral-500
+              focus:outline-none focus:border-sky-500
+            `}
             />
           </div>
           <div>
-            <label className="text-sm text-slate-400">Instructions</label>
+            <label className={`text-sm ${Colors.text.secondary}`}>Instructions</label>
             <textarea
               rows={3}
               value={instruction}
               onChange={(e) => setInstruction(e.target.value)}
-              className="mt-2 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white"
+              className={`
+                mt-2 w-full rounded-lg
+                ${Colors.background.primary} ${Colors.border.defaultThin}
+                px-3 py-2 text-sm ${Colors.text.secondary}
+                placeholder:text-neutral-500
+                focus:outline-none focus:border-sky-500
+              `}
             />
           </div>
         </div>
@@ -415,7 +454,7 @@ const EditAssignmentModal = ({
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
             Cancel
           </button>
@@ -434,14 +473,7 @@ const EditAssignmentModal = ({
                 setSaving(false);
               }
             }}
-            className={`
-    px-5 py-2 rounded-lg font-medium transition
-    ${
-      saving
-        ? "bg-slate-600 text-white/60 cursor-not-allowed"
-        : "bg-sky-600 text-black hover:bg-sky-500"
-    }
-  `}
+            className={`text-sm ${Colors.background.special} ${Colors.hover.special} p-3 rounded-md text-wrapped text-white font-semibold transition cursor-pointer`}  
           >
             {saving ? "Saving Changes..." : "Save Changes"}
           </button>
@@ -470,13 +502,13 @@ const ConfirmDeleteAssignmentModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6"
+        className={`w-full max-w-sm rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThin} p-6`}
       >
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
           Delete this assignment?
         </h2>
 
-        <p className="mt-2 text-sm text-slate-400">
+        <p className={`mt-2 text-sm ${Colors.text.secondary}`}>
           This will permanently remove the assignment and all its questions.
         </p>
 
@@ -485,10 +517,8 @@ const ConfirmDeleteAssignmentModal = ({
             onClick={onClose}
             disabled={loading}
             className={`
-    px-4 py-2 rounded-lg
-    bg-slate-800 text-slate-300
-    transition
-    ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-slate-700"}
+px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer
+    ${loading ? "opacity-50 cursor-not-allowed" : ""}
   `}
           >
             Cancel
@@ -499,7 +529,7 @@ const ConfirmDeleteAssignmentModal = ({
             disabled={loading}
             className={`
     px-4 py-2 rounded-lg
-    text-white transition
+    text-white transition cursor-pointer
     ${
       loading
         ? "bg-red-600/60 cursor-not-allowed"
@@ -627,7 +657,7 @@ const AddSectionV2 = ({
   };
 
   return (
-    <div className="relative text-white bg-divBg rounded-2xl px-6 py-4 border border-white/10">
+    <div className={`relative ${Colors.text.primary} ${Colors.background.secondary} rounded-2xl px-6 py-4 ${Colors.border.defaultThin}`}>
       {/* Delete Section Button */}
       <button
         onClick={() => setShowDeleteConfirm(true)}
@@ -639,7 +669,7 @@ const AddSectionV2 = ({
           text-red-400
           hover:bg-red-500/20
           hover:border-red-400/60
-          transition
+          transition cursor-pointer
         "
         title="Delete section"
       >
@@ -656,11 +686,11 @@ const AddSectionV2 = ({
           <button
             onClick={() => setActiveTab("TOPIC")}
             className={`
-        px-3 py-1.5 text-sm rounded-md transition
+        px-3 py-1.5 text-sm rounded-md transition ${Colors.text.primary} cursor-pointer
         ${
           activeTab === "TOPIC"
-            ? "bg-sky-600 text-black"
-            : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+            ? `${Colors.background.special}`
+            : `${Colors.background.primary} ${Colors.hover.special}`
         }
       `}
           >
@@ -670,11 +700,11 @@ const AddSectionV2 = ({
           <button
             onClick={() => setActiveTab("ASSIGNMENT")}
             className={`
-        px-3 py-1.5 text-sm rounded-md transition
+        px-3 py-1.5 text-sm rounded-md transition ${Colors.text.primary} cursor-pointer
         ${
           activeTab === "ASSIGNMENT"
-            ? "bg-sky-600 text-black"
-            : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+            ? `${Colors.background.special}`
+            : `${Colors.background.primary} ${Colors.hover.special}`
         }
       `}
           >
@@ -687,32 +717,31 @@ const AddSectionV2 = ({
       {activeTab === "TOPIC" && (
         <div className="mt-4 space-y-3">
           {topics.length === 0 ? (
-            <p className="text-sm text-slate-400">No topics added yet</p>
+            <p className={`text-sm ${Colors.text.secondary}`}>No topics added yet</p>
           ) : (
             topics.map((topic) => (
               <div
                 key={topic.id}
-                className="
+                className={`
           group
           relative
           flex items-start justify-between
           gap-4
           rounded-lg
-          border border-slate-800
-          bg-slate-900/60
+          ${Colors.border.defaultThin}
+          ${Colors.background.primary}
           px-5 py-3
           transition
-          hover:bg-slate-900
-        "
+        `}
               >
                 {/* Content */}
                 <div className="flex-1">
-                  <p className="text-[15px] font-medium text-slate-100">
+                  <p className={`text-[15px] font-semibold ${Colors.text.primary}`}>
                     {topic.name}
                   </p>
 
                   {topic.description && (
-                    <p className="mt-1 text-sm text-slate-400 leading-relaxed">
+                    <p className={`mt-1 text-sm ${Colors.text.secondary} leading-relaxed`}>
                       {topic.description}
                     </p>
                   )}
@@ -724,19 +753,18 @@ const AddSectionV2 = ({
                     setSelectedTopic(topic);
                     setIsUpdateTopicOpen(true);
                   }}
-                  className="
+                  className={`
             group:opacity-100
             transition
+          ${Colors.border.specialThick}
+          ${Colors.background.primary}
+          ${Colors.hover.special}
+          ${Colors.text.special}
             rounded-md
-            border border-slate-700
-            bg-slate-800/80
             px-3 py-1.5
             text-xs
-            text-slate-300
-            hover:bg-slate-800
-            hover:text-white
             cursor-pointer
-          "
+          `}
                 >
                   Edit
                 </button>
@@ -767,9 +795,9 @@ const AddSectionV2 = ({
       {activeTab === "ASSIGNMENT" && (
         <div className="mt-4 space-y-3">
           {asssignmentLoading ? (
-            <p className="text-sm text-slate-400">Loading Assignments...</p>
+            <p className={`text-sm ${Colors.text.secondary}`}>Loading Assignments...</p>
           ) : assignments.length === 0 ? (
-            <p className="text-sm text-slate-400">No Assignments Added yet</p>
+            <p className={`text-sm ${Colors.text.secondary}`}>No Assignments Added yet</p>
           ) : (
             assignments.map((assignment) => (
               <div
@@ -778,33 +806,33 @@ const AddSectionV2 = ({
                   setSelectedAssignment(assignment);
                   setIsAssignmentModalOpen(true);
                 }}
-                className="
+                className={`
             group
             relative
             flex items-start justify-between
             gap-4
             rounded-lg
-            border border-slate-800
-            bg-slate-900/60
+            ${Colors.border.defaultThick}
+            ${Colors.background.primary}
             px-5 py-3
             transition
             cursor-pointer
-            hover:bg-slate-900
-          "
+            hover:opacity-80
+          `}
               >
                 {/* Content */}
                 <div className="flex-1">
-                  <p className="text-[15px] font-medium text-slate-100">
+                  <p className={`text-[15px] font-semibold ${Colors.text.primary}`}>
                     {assignment.name}
                   </p>
 
                   {assignment.description && (
-                    <p className="mt-1 text-sm text-slate-400 leading-relaxed">
+                    <p className={`mt-1 text-sm ${Colors.text.secondary} leading-relaxed`}>
                       {assignment.description}
                     </p>
                   )}
 
-                  <p className="mt-2 text-xs text-slate-500 opacity-0 group-hover:opacity-100 transition">
+                  <p className={`mt-2 text-xs ${Colors.text.secondary} opacity-0 group-hover:opacity-100 transition`}>
                     Click to view questions →
                   </p>
                 </div>
@@ -817,17 +845,18 @@ const AddSectionV2 = ({
                       setSelectedAssignment(assignment);
                       setIsEditAssignmentOpen(true);
                     }}
-                    className="
-      rounded-md
-      border border-slate-700
-      bg-slate-800/80
-      px-3 py-1.5
-      text-xs
-      text-slate-300
-      hover:bg-slate-800
-      hover:text-white
-      transition
-    "
+                    className={`
+            group:opacity-100
+            transition
+          ${Colors.border.specialThick}
+          ${Colors.background.primary}
+          ${Colors.hover.special}
+          ${Colors.text.special}
+            rounded-md
+            px-3 py-1.5
+            text-xs
+            cursor-pointer
+          `}
                   >
                     Edit
                   </button>
@@ -846,7 +875,7 @@ const AddSectionV2 = ({
       text-red-400
       hover:bg-red-500/20
       hover:border-red-400/60
-      transition
+      transition cursor-pointer
     "
                   >
                     <Trash2 size={14} />
@@ -861,15 +890,18 @@ const AddSectionV2 = ({
       {/* Action Button */}
       <div className="mt-4 ml-1 flex gap-3">
         <button
-          className="
-            px-4 py-1.5
-            text-sm
-            rounded-md
-            bg-slate-800
-            text-sky-300
-            hover:bg-slate-700
+          className={`
+            group:opacity-100
             transition
-          "
+          ${Colors.border.specialThick}
+          ${Colors.background.secondary}
+          ${Colors.hover.special}
+          ${Colors.text.special}
+            rounded-md
+            px-3 py-1.5
+            text-xs
+            cursor-pointer
+          `}
           onClick={() => {
             setIsAddTopicOpen(true);
           }}
@@ -883,7 +915,18 @@ const AddSectionV2 = ({
               setAssignmentRefetchKey((prev) => prev + 1);
             })
           }
-          className="px-3 py-1.5 text-sm rounded-md bg-slate-800 text-sky-300 hover:bg-slate-700 transition"
+          className={`
+            group:opacity-100
+            transition
+          ${Colors.border.specialThick}
+          ${Colors.background.secondary}
+          ${Colors.hover.special}
+          ${Colors.text.special}
+            rounded-md
+            px-3 py-1.5
+            text-xs
+            cursor-pointer
+          `}
         >
           + Add Assignment
         </button>

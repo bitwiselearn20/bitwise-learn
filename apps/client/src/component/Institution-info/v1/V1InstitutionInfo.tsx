@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import InstitutionSidebar from "./InstitutionSidebar";
 import { Tabs } from "./Tabs";
 import { EntityList } from "./EntityList";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type InstitutionInfoProps = {
   institution: any;
@@ -12,13 +13,14 @@ type InstitutionInfoProps = {
 const InstitutionInfo = ({ institution }: InstitutionInfoProps) => {
   const [activeTab, setActiveTab] = useState("Teachers");
   const [refreshKey, setRefreshKey] = useState(0);
+  const Colors = useColors();
 
   const handleRefresh = () => {
     setRefreshKey((prev) => prev + 1);
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] p-6">
+    <div className={`min-h-screen ${Colors.background.primary} p-6`}>
       <div className="flex gap-6 max-w-screen mx-auto">
         <InstitutionSidebar
           institution={institution}

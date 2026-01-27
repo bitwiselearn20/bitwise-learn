@@ -4,6 +4,7 @@ import { getAllCourses } from "@/api/courses/course/get-all-courses";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Filter, CheckCircle, XCircle } from "lucide-react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Course = {
   id: string;
@@ -25,6 +26,7 @@ function AllCourses() {
   const [status, setStatus] = useState("all");
 
   const router = useRouter();
+  const Colors = useColors();
 
   useEffect(() => {
     async function handleLoad() {
@@ -56,17 +58,17 @@ function AllCourses() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-3 items-center justify-between bg-neutral-900 border border-neutral-800 rounded-lg p-4">
+      <div className={`flex flex-wrap gap-3 items-center justify-between rounded-lg p-4 ${Colors.background.primary} ${Colors.text.primary} ${Colors.border.defaultThin}`}>
         <div className="flex items-center gap-3 flex-wrap">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-neutral-500" />
+            <Search className={`absolute left-3 top-2.5 h-4 w-4 ${Colors.text.secondary}`} />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search batch, institution or name..."
-              className="pl-9 pr-4 py-2 text-sm rounded-md bg-neutral-800 border border-neutral-700
-                         text-white placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600"
+              className={`pl-9 pr-4 py-2 text-sm rounded-md ${Colors.background.secondary} border ${Colors.border.defaultThin}
+                         ${Colors.text.primary} placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600`}
             />
           </div>
 
@@ -74,8 +76,8 @@ function AllCourses() {
           <select
             value={level}
             onChange={(e) => setLevel(e.target.value)}
-            className="px-3 py-2 text-sm rounded-md bg-neutral-800 border border-neutral-700
-                       text-neutral-200 focus:outline-none"
+            className={`px-3 py-2 text-sm rounded-md ${Colors.background.secondary} ${Colors.border.defaultThin}
+                       ${Colors.text.secondary} focus:outline-none`}
           >
             <option value="all">All Levels</option>
             {uniqueLevels.map((lvl) => (
@@ -89,8 +91,8 @@ function AllCourses() {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="px-3 py-2 text-sm rounded-md bg-neutral-800 border border-neutral-700
-                       text-neutral-200 focus:outline-none"
+            className={`px-3 py-2 text-sm rounded-md ${Colors.background.secondary} ${Colors.border.defaultThin}
+                       ${Colors.text.secondary} focus:outline-none`}
           >
             <option value="all">All Status</option>
             <option value="Published">Published</option>
@@ -99,16 +101,16 @@ function AllCourses() {
         </div>
 
         {/* Right Info */}
-        <div className="flex items-center gap-2 text-sm text-neutral-400">
+        <div className={`flex items-center gap-2 text-sm ${Colors.text.secondary}`}>
           <Filter className="h-4 w-4" />
           {filteredCourses.length} results
         </div>
       </div>
 
       <div className="w-full overflow-x-auto">
-        <table className="w-full border border-neutral-800 rounded-lg overflow-hidden">
-          <thead className="bg-neutral-900 border-b border-neutral-800">
-            <tr className="text-left text-sm text-neutral-400">
+        <table className={`w-full rounded-lg `}>
+          <thead className={`${Colors.background.primary} ${Colors.border.defaultThick}`}>
+            <tr className={`text-left text-sm ${Colors.text.secondary}`}>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Instructor</th>
               <th className="px-4 py-3">Level</th>
@@ -138,19 +140,19 @@ function AllCourses() {
               filteredCourses.map((course) => (
                 <tr
                   key={course.id}
-                  className="border-b border-neutral-800 text-sm hover:bg-neutral-800/40 transition"
+                  className={`border-b border-neutral-800 text-sm ${Colors.hover.special} transition ${Colors.background.secondary} `}
                 >
-                  <td className="px-4 py-3 font-medium text-white">
+                  <td className={`px-4 py-3 font-medium ${Colors.text.primary}`}>
                     {course.name}
                   </td>
 
-                  <td className="px-4 py-3 text-neutral-300">
+                  <td className={`px-4 py-3 ${Colors.text.secondary}`}>
                     {course.instructorName}
                   </td>
 
-                  <td className="px-4 py-3 text-neutral-300">{course.level}</td>
+                  <td className={`px-4 py-3 ${Colors.text.secondary}`}>{course.level}</td>
 
-                  <td className="px-4 py-3 text-neutral-300">
+                  <td className={`px-4 py-3 ${Colors.text.secondary}`}>
                     {course.duration}
                   </td>
 
@@ -174,7 +176,7 @@ function AllCourses() {
                     )}
                   </td>
 
-                  <td className="px-4 py-3 text-neutral-400">
+                  <td className={`px-4 py-3 ${Colors.text.secondary}`}>
                     {new Date(course.createdAt).toLocaleDateString()}
                   </td>
 
@@ -185,8 +187,8 @@ function AllCourses() {
                           `/admin-dashboard/reports/courses/${course.id}`,
                         )
                       }
-                      className="px-3 py-1.5 text-xs font-medium rounded-md
-                                 bg-neutral-700 hover:bg-neutral-600 text-white transition"
+                      className={`px-3 py-1.5 text-xs font-medium rounded-md cursor-pointer
+                                 ${Colors.border.specialThin} ${Colors.hover.special}  ${Colors.text.special} transition`}
                     >
                       View Report
                     </button>
@@ -198,7 +200,7 @@ function AllCourses() {
               <tr>
                 <td
                   colSpan={7}
-                  className="px-4 py-10 text-center text-neutral-500"
+                  className={`px-4 py-10 text-center ${Colors.text.secondary}`}
                 >
                   No matching courses found
                 </td>

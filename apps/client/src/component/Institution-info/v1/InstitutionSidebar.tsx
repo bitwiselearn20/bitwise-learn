@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Pencil, Save, X, Trash } from "lucide-react";
 import InfoBlock from "./InfoBlock";
 import { deleteEntity, updateEntity } from "@/api/institutions/entity";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type InstitutionSidebarProps = {
   institution: any;
   onUpdate?: (data: any) => void;
   onDelete?: (id: string) => void;
 };
+
+const Colors = useColors();
 
 const formatDate = (dateString: string | Date): string => {
   const date = new Date(dateString);
@@ -44,12 +47,12 @@ const InputField = ({
   onChange: (v: string) => void;
 }) => (
   <div className="space-y-1">
-    <label className="text-xs text-gray-400">{label}</label>
+    <label className={`text-xs ${Colors.text.secondary}`}>{label}</label>
     <input
       value={value}
       placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full bg-[#2a2a2a] border border-[#3a3a3a] rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+      className={`w-full ${Colors.background.primary} border border-[#3a3a3a] rounded px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:ring-1 focus:ring-blue-500`}
     />
   </div>
 );
@@ -103,7 +106,7 @@ const InstitutionSidebar = ({
   };
 
   return (
-    <aside className="w-[320px] bg-[#1b1b1b] text-white p-6 rounded-xl min-h-[93vh]">
+    <aside className={`w-[320px] ${Colors.background.secondary} ${Colors.text.primary} p-6 rounded-xl min-h-[93vh]`}>
       {/* Header */}
       <div className="mb-4">
         {isEditing ? (
@@ -123,12 +126,12 @@ const InstitutionSidebar = ({
             value={formData.tagline}
             onChange={(v) => handleChange("tagline", v.target.value)}
             placeholder="Enter tagline"
-            className="w-full bg-[#2a2a2a] border border-[#3a3a3a] rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+            className={`w-full ${Colors.background.primary} border border-[#3a3a3a] rounded px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
             rows={2}
           />
         </>
       ) : (
-        <p className="text-sm text-gray-400 mb-6">{institution.tagline}</p>
+        <p className={`text-sm ${Colors.text.secondary} mb-6`}>{institution.tagline}</p>
       )}
 
       {/* Content */}
@@ -136,12 +139,12 @@ const InstitutionSidebar = ({
         {isEditing ? (
           <>
             <div className="space-y-1">
-              <label className="text-xs text-gray-400">Address</label>
+              <label className={`text-xs ${Colors.text.secondary}`}>Address</label>
               <textarea
                 value={formData.address}
                 onChange={(e) => handleChange("address", e.target.value)}
                 placeholder="Enter address"
-                className="w-full bg-[#2a2a2a] border border-[#3a3a3a] rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                className={`w-full ${Colors.background.primary} border border-[#3a3a3a] rounded px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
                 rows={3}
               />
             </div>
@@ -180,14 +183,14 @@ const InstitutionSidebar = ({
           <>
             <button
               onClick={handleSave}
-              className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
+              className={`flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded ${Colors.text.primary} cursor-pointer active:scale-95 transition-all duration-300`}
             >
               <Save size={16} />
               Save
             </button>
             <button
               onClick={() => setIsEditing(false)}
-              className="flex-1 flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded"
+              className={`flex-1 flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded ${Colors.text.primary} cursor-pointer active:scale-95 transition-all duration-300`}
             >
               <X size={16} />
               Cancel
@@ -197,14 +200,14 @@ const InstitutionSidebar = ({
           <>
             <button
               onClick={() => setIsEditing(true)}
-              className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+              className={`flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded ${Colors.text.primary} cursor-pointer active:scale-95 transition-all duration-300`}
             >
               <Pencil size={16} />
               Edit
             </button>
             <button
               onClick={handleDelete}
-              className="flex-1 flex items-center justify-center gap-2 text-white border border-white px-4 py-2 rounded"
+              className={`flex-1 flex items-center justify-center ${Colors.background.primary} gap-2 border border-white px-4 py-2 rounded ${Colors.text.primary} cursor-pointer active:scale-95 transition-all duration-300`}
             >
               <Trash size={16} />
               Delete

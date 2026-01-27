@@ -8,11 +8,13 @@ import { Plus } from "lucide-react";
 import InstitutionForm from "./InstitutionForm";
 import { createInstitution } from "@/api/institutions/create-institution";
 import toast from "react-hot-toast";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 function V1AllInstitutions() {
   const [data, setData] = useState<any>([]);
   const [addNew, setAddNew] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const Colors = useColors();
   useEffect(() => {
     getAllInstitutions(setData);
   }, []);
@@ -30,7 +32,7 @@ function V1AllInstitutions() {
   };
 
   return (
-    <div className="flex">
+    <div className={`flex ${Colors.background.primary}`}>
       {addNew && (
         <InstitutionForm
           openForm={setAddNew}
@@ -43,10 +45,10 @@ function V1AllInstitutions() {
 
       <div className="ml-10 mt-10 w-full">
         <div className="w-[80%] mx-auto mb-5 flex justify-between">
-          <h1 className="text-3xl ml-3 text-white/60">Manage Institutions</h1>
+          <h1 className={`text-3xl ml-3 ${Colors.text.primary}`}>Manage Institutions</h1>
           <button
             onClick={() => setAddNew(true)}
-            className="text-primaryBlue flex gap-2 border-primaryBlue border p-2 rounded-xl"
+            className={`text-primaryBlue flex gap-2 border-primaryBlue border p-2 rounded-xl ${Colors.text.primary} ${Colors.border.fadedThin} ${Colors.hover.special} cursor-pointer`}
           >
             <Plus className="text-primaryBlue" />
             Add Institution

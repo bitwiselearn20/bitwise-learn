@@ -1,6 +1,8 @@
 "use client";
 
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { Search } from "lucide-react";
+
 
 type Difficulty = "easy" | "medium" | "hard" | null;
 type Status = "solved" | "unsolved" | null;
@@ -14,6 +16,8 @@ type FilterProps = {
   setStatus: (v: Status) => void;
 };
 
+const Colors = useColors();
+
 function Filter({
   query,
   setQuery,
@@ -23,25 +27,23 @@ function Filter({
   setStatus,
 }: FilterProps) {
   return (
-    <div className="w-full bg-primary-bg rounded-b-xl p-4 flex flex-wrap items-center gap-4">
+    <div className={`w-full ${Colors.background.primary} rounded-b-xl p-4 flex flex-wrap items-center gap-4`}>
       {/* Search */}
       <div className="relative flex-1 min-w-60">
         <Search
           size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"
+          className={`absolute left-3 top-1/2 -translate-y-1/2 ${Colors.text.special}`}
         />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search questions"
-          className="
-            w-full pl-9 pr-3 py-2
-            rounded-md bg-secondary-bg/80
-            text-sm text-white
-            placeholder:text-white/40
-            focus:outline-none focus:ring-1 focus:ring-white/20
-          "
+          className={`            w-full pl-9 pr-3 py-2
+            rounded-md ${Colors.background.secondary}
+            text-sm ${Colors.text.primary}
+            placeholder:white/40
+            focus:outline-none focus:ring-1 focus:ring-white/20`}
         />
       </div>
 
@@ -107,15 +109,15 @@ function FilterPill({
     <button
       onClick={onClick}
       className={`
-        px-3 py-1.5 rounded-md text-sm
-        border transition-all
-        ${
-          active
-            ? color
-              ? colorMap[color]
-              : "text-white border-white/40 bg-white/10"
-            : "text-white/60 border-white/10 hover:border-white/30"
-        }
+      px-3 py-1.5 rounded-md text-sm
+      border transition-all cursor-pointer
+      ${
+        active
+        ? color
+          ? colorMap[color]
+          : `${Colors.text.primary} ${Colors.border.defaultThin} ${Colors.background.primary}`
+        : `${Colors.text.secondary} ${Colors.border.defaultThin} ${Colors.background.secondary}`
+      }
       `}
     >
       {label}

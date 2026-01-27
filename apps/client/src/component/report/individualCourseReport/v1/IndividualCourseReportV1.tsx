@@ -24,6 +24,7 @@ import {
   BarChart3,
   ClipboardList,
 } from "lucide-react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Student = {
   id: string;
@@ -35,6 +36,7 @@ type Student = {
 
 const COLORS = ["#10b981", "#ef4444"];
 const PAGE_SIZE = 100; // Number of students per page
+const Colors = useColors();
 
 function IndividualCourseReportV1({
   courseId,
@@ -102,8 +104,8 @@ function IndividualCourseReportV1({
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload?.length) {
       return (
-        <div className="rounded-md bg-zinc-900 border border-zinc-700 px-3 py-2 text-sm">
-          <p className="font-medium text-zinc-100">{payload[0].payload.name}</p>
+        <div className={`rounded-md ${Colors.background.secondary} ${Colors.border.defaultThin} px-3 py-2 text-sm`}>
+          <p className={`font-medium ${Colors.text.primary}`}>{payload[0].payload.name}</p>
           <p className="text-emerald-400">Progress: {payload[0].value}</p>
         </div>
       );
@@ -112,7 +114,7 @@ function IndividualCourseReportV1({
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white p-6">
+    <div className={`min-h-screen ${Colors.background.primary} ${Colors.text.primary} p-6`}>
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Back + Header */}
         <div className="flex items-center gap-4">
@@ -120,8 +122,8 @@ function IndividualCourseReportV1({
             onClick={() =>
               router.push(`/admin-dashboard/reports/courses/${courseId}`)
             }
-            className="flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition"
-          >
+              className={`flex items-center gap-2 text-sm ${Colors.text.secondary} ${Colors.hover.textSpecial} cursor-pointer transition`}
+            >
             <ArrowLeft size={18} />
             Back to Courses
           </button>
@@ -203,18 +205,18 @@ function IndividualCourseReportV1({
         </div>
 
         {/* Search + Table */}
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900">
-          <div className="flex items-center justify-between gap-2 p-5 border-b border-zinc-800">
+        <div className={`rounded-lg ${Colors.border.defaultThin} ${Colors.background.secondary} overflow-hidden`}>
+          <div className={`flex items-center justify-between gap-2 p-5 border-b ${Colors.border.defaultThin}`}>
             <div className="flex items-center gap-2">
               <ClipboardList size={18} />
-              <h2 className="font-medium">Student Summary</h2>
+              <h2 className={`font-medium ${Colors.text.primary}`}>Student Summary</h2>
             </div>
 
             {/* Search input */}
             <input
               type="text"
               placeholder="Search by name or roll number"
-              className="rounded bg-zinc-800/60 text-sm p-2 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className={`rounded ${Colors.background.primary} text-sm p-2 ${Colors.text.primary} placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-300`}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -224,7 +226,7 @@ function IndividualCourseReportV1({
           </div>
 
           <table className="w-full text-sm">
-            <thead className="bg-zinc-800/60 text-zinc-300">
+            <thead className={`${Colors.background.primary} ${Colors.text.primary}`}>
               <tr>
                 <th className="text-left p-4">Name</th>
                 <th className="text-left p-4">Roll No</th>
@@ -237,7 +239,7 @@ function IndividualCourseReportV1({
               {paginatedStudents.map((s) => (
                 <tr
                   key={s.id}
-                  className="border-t border-zinc-800 hover:bg-zinc-800/40"
+                  className={`border-t border-zinc-800 ${Colors.hover.special}`}
                 >
                   <td className="p-4">{s.name}</td>
                   <td className="p-4 text-zinc-400">{s.rollNumber}</td>
@@ -271,11 +273,11 @@ function IndividualCourseReportV1({
             <button
               disabled={pageNumber === 0}
               onClick={() => setPageNumber((p) => Math.max(0, p - 1))}
-              className="px-4 py-2 rounded bg-zinc-800 disabled:opacity-40"
+              className={`px-4 py-2 rounded ${Colors.background.special} ${Colors.text.primary} cursor-pointer disabled:opacity-40`}
             >
               Prev
             </button>
-            <span className="text-sm text-zinc-400">
+            <span className={`text-sm ${Colors.text.secondary}`}>
               Page {pageNumber + 1} of {totalPages || 1}
             </span>
             <button
@@ -283,7 +285,7 @@ function IndividualCourseReportV1({
               onClick={() =>
                 setPageNumber((p) => Math.min(p + 1, totalPages - 1))
               }
-              className="px-4 py-2 rounded bg-zinc-800 disabled:opacity-40"
+              className={`px-4 py-2 rounded ${Colors.background.special} ${Colors.text.primary} cursor-pointer disabled:opacity-40`}
             >
               Next
             </button>
@@ -305,10 +307,10 @@ function StatCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 p-5">
+    <div className={`flex items-center justify-between rounded-lg border ${Colors.border.defaultThin} ${Colors.background.secondary} p-5`}>
       <div>
-        <p className="text-sm text-zinc-400">{title}</p>
-        <p className="text-3xl font-semibold mt-1">{value}</p>
+        <p className={`text-sm ${Colors.text.secondary}`}>{title}</p>
+        <p className={`text-3xl font-semibold mt-1 ${Colors.text.primary}`}>{value}</p>
       </div>
       <div className="text-emerald-500">{icon}</div>
     </div>
@@ -327,12 +329,12 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-5">
+    <div className={`rounded-lg border ${Colors.border.defaultThin} ${Colors.background.secondary} p-5`}>
       <div className="flex items-center gap-2 mb-1">
         <span className="text-emerald-500">{icon}</span>
         <h3 className="font-medium">{title}</h3>
       </div>
-      <p className="text-sm text-zinc-400 mb-4">{subtitle}</p>
+      <p className={`text-sm ${Colors.text.secondary} mb-4`}>{subtitle}</p>
       {children}
     </div>
   );

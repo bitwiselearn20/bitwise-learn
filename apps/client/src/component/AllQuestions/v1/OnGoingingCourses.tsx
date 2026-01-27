@@ -4,6 +4,7 @@ import axiosInstance from "@/lib/axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 const DEFAULT_COURSES = [
   {
@@ -23,13 +24,14 @@ const DEFAULT_COURSES = [
 function OngoingCourses() {
   const [courses] = useState(DEFAULT_COURSES);
   const user = "User";
+  const Colors = useColors();
 
   return (
-    <div className="bg-secondary-bg border border-white/10 p-6 my-3 ml-3 rounded-2xl">
+    <div className={`${Colors.background.secondary} ${Colors.border.fadedThick} p-6 my-3 ml-3 rounded-2xl`}>
       {/* Header */}
-      <span className="text-6xl text-white font-semibold">Welcome,</span>{" "}
-      <span className="text-6xl text-primaryBlue font-semibold"> {user}</span>
-      <p className="mt-1 text-xl text-white/60">
+      <span className={`text-6xl ${Colors.text.primary} font-semibold`}>Welcome,</span>{" "}
+      <span className={`text-6xl ${Colors.text.special} font-semibold`}> {user}</span>
+      <p className={`mt-1 text-xl ${Colors.text.secondary}`}>
         Continue where you left off or pick an ongoing course
       </p>
       {/* Courses */}
@@ -41,7 +43,6 @@ function OngoingCourses() {
             className="
               relative min-w-90 h-40
               rounded-xl overflow-hidden
-              border border-white/10
               transition-all duration-200
               hover:scale-[1.02] hover:shadow-lg
             "

@@ -2,8 +2,9 @@ import BatchesForm from "@/component/general/BatchesForm";
 import TeacherForm from "@/component/general/TeacherForm";
 import StudentForm from "@/component/general/StudentForm";
 import { Plus, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { getAllBatches } from "@/api/batches/get-all-batches";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type Batch = {
   id: string;
@@ -26,6 +27,8 @@ type RenderComponentProps = {
   onBatchCreated?: () => void;
   batches?: Batch[];
 };
+
+const Colors = useColors();
 
 const RenderComponent = ({
   value,
@@ -70,11 +73,11 @@ export const Tabs = ({ value, onValueChange, institutionId, onBatchCreated }: Ta
   return (
     <>
       {addNew && (
-        <div className="fixed inset-0 z-50 bg-black/80 text-white flex justify-center items-center">
-          <div className="relative bg-neutral-900 p-8 rounded-lg w-full max-w-xl">
+        <div className={`fixed inset-0 z-50 bg-black/80 ${Colors.text.primary} flex justify-center items-center`}>
+          <div className={`relative ${Colors.background.secondary} p-8 rounded-lg w-full max-w-xl`}>
             <button
               onClick={() => setAddNew(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+              className={`absolute top-4 right-4 ${Colors.text.primary} cursor-pointer`}
             >
               <X />
             </button>
@@ -96,9 +99,9 @@ export const Tabs = ({ value, onValueChange, institutionId, onBatchCreated }: Ta
             <button
               key={tab}
               onClick={() => onValueChange(tab)}
-              className={`px-4 py-1.5 rounded-md text-md transition ${value === tab
-                ? "bg-blue-500 text-white"
-                : "text-gray-400 hover:text-white"
+              className={`px-4 py-1.5 rounded-md text-md transition cursor-pointer ${value === tab
+                ? `${Colors.text.primary} ${Colors.background.special}`
+                : `${Colors.text.secondary} ${Colors.hover.textSpecial}`
                 }`}
             >
               {tab}
@@ -108,7 +111,7 @@ export const Tabs = ({ value, onValueChange, institutionId, onBatchCreated }: Ta
 
         <button
           onClick={() => setAddNew(true)}
-          className="flex items-center gap-2 border border-primaryBlue px-3 py-2 rounded text-white hover:bg-primaryBlue/10"
+          className={`flex items-center gap-2 border border-primaryBlue px-3 py-2 rounded ${Colors.text.special} hover:bg-primaryBlue/10 cursor-pointer`}
         >
           <Plus size={18} />
           Add New {value}
