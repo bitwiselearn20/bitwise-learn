@@ -5,4 +5,5 @@ export const getAllBatches = async (stateFn: any, paramId: string) => {
     const data = await axiosInstance.get("/api/batch/get-batches-for-institution/" + paramId);
     // console.log(data);
     stateFn(data.data);
+    return data.data;
 }

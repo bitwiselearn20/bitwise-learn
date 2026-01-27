@@ -1,7 +1,10 @@
 "use client";
+import CodeEditor from "@/component/Problem/v1/Editor";
+import { useEffect, useState } from "react";
 
 type Props = {
   problem: any;
+  problemId: string;
   code: string;
   onChange: (code: string) => void;
   onRun: () => void;
@@ -10,39 +13,37 @@ type Props = {
 
 export default function CodeRightSection({
   problem,
+  problemId,
   code,
   onChange,
   onRun,
   onSubmit,
 }: Props) {
+  const [output, setOutput] = useState("");
+
+  useEffect(() => {
+    console.log(problem);
+  }, []);
+
   return (
-    <div className="h-full w-full flex flex-col rounded-xl p-4 bg-[#0f172a] text-white font-mono">
+    <div className="h-full w-full flex flex-col min-h-0 rounded-xl p-4 bg-[#0f172a] text-white font-mono">
+      
+      {/* Header */}
       <div className="text-sm opacity-70 mb-2">
         {problem?.title || "Coding Question"}
       </div>
 
-      <textarea
-        value={code}
-        onChange={e => onChange(e.target.value)}
-        className="flex-1 bg-black text-green-400 p-4 rounded-lg resize-none"
-        placeholder="// write your code here"
-      />
-
-      <div className="flex justify-end gap-3 mt-4">
-        <button
-          onClick={onRun}
-          className="px-4 py-2 rounded bg-blue-600 hover:opacity-90"
-        >
-          Run
-        </button>
-
-        <button
-          onClick={onSubmit}
-          className="px-4 py-2 rounded bg-green-600 hover:opacity-90"
-        >
-          Submit
-        </button>
+      {/* Editor container (THIS FIXES OVERFLOW) */}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        {problem && (
+          <CodeEditor
+            questionId={problemId}
+            template={problem.problemTemplates}
+            output={output}
+          />
+        )}
       </div>
+
     </div>
   );
 }

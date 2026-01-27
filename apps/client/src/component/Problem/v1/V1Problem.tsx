@@ -120,7 +120,7 @@ function V1Problem({ data }: any) {
           <CodeEditor
             questionId={data.id}
             output={setOutput}
-            template={data.problemTemplates}
+            template={data.problemTemplates}  
           />
         </div>
 

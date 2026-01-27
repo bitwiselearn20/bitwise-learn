@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import type { CreateAssessment, UpdateAssessment } from "../utils/type";
 import prismaClient from "../utils/prisma";
 import apiResponse from "../utils/apiResponse";
-
+import MQClient from "../utils/producer";
 class AssessmentController {
   async createAssessment(req: Request, res: Response) {
     try {
@@ -200,8 +200,8 @@ class AssessmentController {
           sections: {
             include: {
               questions: true,
-            }
-          }
+            },
+          },
         },
       });
       if (!assessment) throw new Error("assessment not found");
@@ -252,6 +252,36 @@ class AssessmentController {
     } catch (error: any) {
       console.log(error);
       return res.status(200).json(apiResponse(200, error.message, null));
+    }
+  }
+  async assessmentReportRequest(req: Request, res: Response) {
+    try {
+      const assessmentId = req.params.id;
+      const dbAssessment = await prismaClient.assessment.findUnique({
+        where: { id: assessmentId as string },
+      });
+
+      if (!dbAssessment) throw new Error("no such valid assessment found");
+
+      if (dbAssessment.status !== "ENDED") {
+        throw new Error("wait for test to end");
+      }
+      //TODO: Send the response to the queue
+      await MQClient.registerNewChannel("assessment-report");
+
+      const messageSent = await MQClient.sendToQueue(
+        "assessment-report",
+        JSON.stringify({ id: dbAssessment.id }),
+      );
+
+      if (!messageSent) throw new Error("request failed");
+
+      return res
+        .status(200)
+        .json(apiResponse(200, "message pushed into queue", null));
+    } catch (error: any) {
+      console.log(error);
+      return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
 }

@@ -45,7 +45,7 @@ class RabbitMQ implements Queue {
     const createQueue = await this.channel.assertQueue(queueName);
     return createQueue;
   }
-  async sendToQueue(queueName: string, message: any) {
+  async sendToQueue(queueName: string, message: any): Promise<Boolean> {
     if (!this.connected) {
       await this.connect();
     }
@@ -55,13 +55,17 @@ class RabbitMQ implements Queue {
     });
 
     try {
-      await this.channel.sendToQueue(
+      const res = await this.channel.sendToQueue(
         queueName,
         Buffer.from(JSON.stringify(message)),
       );
+
+      return res;
     } catch (error: any) {
       console.log("QUEUE_PUSH_ERROR:" + error);
     }
+
+    return true;
   }
   async consumeFromQueue(queueName: string, cb: HandlerCB) {
     if (!this.connected || !this.channel) {

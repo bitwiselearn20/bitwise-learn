@@ -2,6 +2,13 @@ import React from "react";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import "./assignment.css";
 
+type TestCase = {
+  id: string;
+  testType: string;
+  input: string;
+  output: string;
+};
+
 type Props = {
   question: string;
   currentIndex: number;
@@ -13,6 +20,7 @@ type Props = {
   totalSections: number;
   sections: any[];
   onSectionSelect: (index: number) => void;
+  testCases: TestCase[];
 };
 
 const Colors = useColors();
@@ -28,31 +36,78 @@ export default function LeftSection({
   totalSections,
   sections,
   onSectionSelect,
+  testCases,
 }: Props) {
   return (
     <div
-      className={`flex flex-col font-mono ${Colors.text.primary} ${Colors.background.secondary} h-full p-4 rounded-lg`}
+      className={`flex flex-col font-mono ${Colors.text.primary} ${Colors.background.secondary} h-full min-h-0 p-4 rounded-lg`}
     >
 
-      <div className="flex gap-2 mb-3">
-        {sections.map((s, i) => (
-          <button
-            key={s.id}
-            onClick={() => onSectionSelect(i)}
-            className={`px-3 py-1 rounded-md text-sm ${i === sectionIndex
-                ? Colors.border.specialThick
-                : Colors.border.fadedThick
-              }`}
-          >
-            {s.type === "NO_CODE" ? "MCQ" : "CODING"}
-          </button>
-        ))}
+      {/* TOP CONTENT: SECTIONS (LEFT) + QUESTION (RIGHT) */}
+      <div className="flex gap-3 flex-1 min-h-0 mb-4">
+
+        {/* SECTION LIST (LEFT SIDE) */}
+        <div className={`${Colors.background.primary} flex flex-col gap-2 w-22 shrink-0 p-3 rounded-xl`}>
+          {sections.map((s, i) => (
+            <button
+              key={s.id}
+              onClick={() => onSectionSelect(i)}
+              className={`px-3 py-2 rounded-md text-sm ${
+                i === sectionIndex
+                  ? Colors.border.specialThick
+                  : Colors.border.fadedThick
+              } flex items-center justify-center`}
+            >
+              {s.type === "NO_CODE" ? "MCQ" : "CODING"}
+            </button>
+          ))}
+        </div>
+
+        {/* QUESTION + TEST CASES (RIGHT SIDE) */}
+        <div
+          className={`${Colors.background.primary} flex-1 p-4 rounded-lg overflow-y-auto`}
+        >
+          <p className="text-lg">{question}</p>
+
+          {testCases?.length > 0 && (
+            <div className="mt-4">
+              <p className="text-sm opacity-70 mb-2">Example Test Cases</p>
+
+              <div className="flex flex-col gap-3">
+                {testCases.map((tc, index) => {
+                  const parsedInput = JSON.parse(tc.input);
+
+                  return (
+                    <div
+                      key={tc.id}
+                      className={`${Colors.background.secondary} p-3 rounded-md text-sm`}
+                    >
+                      <p className="opacity-70 mb-1">Example {index + 1}</p>
+
+                      <p>
+                        <span className="opacity-60">Input:</span>{" "}
+                        <code className="opacity-90">
+                          array = [{parsedInput.array.join(", ")}], target ={" "}
+                          {parsedInput.target}
+                        </code>
+                      </p>
+
+                      <p>
+                        <span className="opacity-60">Output:</span>{" "}
+                        <code className={`${Colors.text.special}`}>
+                          {tc.output}
+                        </code>
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className={`${Colors.background.primary} p-4 rounded-lg mb-4 overflow-y-auto`}>
-        <p className="text-lg">{question}</p>
-      </div>
-
+      {/* BOTTOM NAVIGATION */}
       <div className="flex justify-between items-center mt-auto">
         <button
           onClick={onPrevious}

@@ -88,4 +88,10 @@ router.get(
   authMiddleware,
   assessmentQuestionController.getAllSectionQuestion,
 );
+
+router.post(
+  "/assignment-report/:id",
+  authMiddleware,
+  assessmentController.assessmentReportRequest,
+);
 export default router;
