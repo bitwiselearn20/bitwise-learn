@@ -1,6 +1,9 @@
-import React from "react";
-import AssignmentV1 from "./v1/AssignmentV1";
+import AssignmentV2 from "./v2/AssignmentV2";
 
-export default function Assignment({ assignmentId }: { assignmentId: string }) {
-  return <AssignmentV1 assignmentId={assignmentId} />;
+export default function Assignment({
+  assignments = [],
+}: {
+  assignments?: any[];
+}) {
+  return <AssignmentV2 assignments={assignments} />;
 }

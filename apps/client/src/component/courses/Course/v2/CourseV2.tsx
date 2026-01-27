@@ -7,11 +7,13 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import ReactViewAdobe from "react-adobe-embed";
 import View from "react-adobe-embed";
-import PdfViewer from "./PDFViewer";
+// import PdfViewer from "./PDFViewer";
 import { markAsDone, markAsUnDone } from "@/api/courses/course/course-progress";
 import MarkdownEditor from "@/component/ui/MarkDownEditor";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
+import AssignmentV2 from "@/component/assignment/v2/AssignmentV2";
+import Assignment from "@/component/assignment/Assignment";
 
 /* ================= TYPES ================= */
 
@@ -43,7 +45,6 @@ type Section = {
 };
 
 const Colors = useColors();
-
 
 /* ================= COMPONENT ================= */
 
@@ -145,6 +146,7 @@ export default function CourseV2() {
       await markAsUnDone(activeTopic.id);
 
       setCompletedSection((prev) =>
+        //@ts-ignore
         prev.filter((section) => section.id !== activeTopic.id),
       );
     } else {
@@ -157,6 +159,10 @@ export default function CourseV2() {
   };
 
   /* ================= RENDER ================= */
+
+  const allAssignments = sections.flatMap(
+    (section) => section.courseAssignemnts || [],
+  );
 
   return (
     <div className={`min-h-screen ${Colors.background.primary} p-4`}>
@@ -196,9 +202,13 @@ export default function CourseV2() {
         )}
 
         {/* ================= RIGHT CONTENT ================= */}
-        <div className={`flex-1 ${Colors.background.secondary} rounded-xl h-[95svh] overflow-hidden flex flex-col`}>
+        <div
+          className={`flex-1 ${Colors.background.secondary} rounded-xl h-[95svh] overflow-hidden flex flex-col`}
+        >
           {/* HEADER */}
-          <div className={`p-6 ${Colors.background.secondary} flex justify-between`}>
+          <div
+            className={`p-6 ${Colors.background.secondary} flex justify-between`}
+          >
             <h2 className={`${Colors.text.primary} text-lg font-semibold`}>
               {mode === "LEARNING" ? activeTopic?.name : activeAssignment?.name}
             </h2>
@@ -254,23 +264,34 @@ export default function CourseV2() {
               />
             )}
 
-            {mode === "ASSIGNEMENT" && activeAssignment && (
-              <AssignmentView assignment={activeAssignment} />
-            )}
-            {mode === "ASSIGNEMENT" && !activeAssignment && (
-              <div className={`w-full h-fit mt-36 flex flex-col items-center justify-center text-center gap-3 ${Colors.text.secondary}`}>
-                <div className={`p-4 rounded-full ${Colors.background.primary}`}>
-                  <Book size={32} className={Colors.text.primary} />
+            {mode === "ASSIGNEMENT" &&
+              !activeAssignment &&
+              allAssignments.length === 0 && (
+                <div
+                  className={`w-full h-fit mt-36 flex flex-col items-center justify-center text-center gap-3 ${Colors.text.secondary}`}
+                >
+                  <div
+                    className={`p-4 rounded-full ${Colors.background.primary}`}
+                  >
+                    <Book size={32} className={Colors.text.primary} />
+                  </div>
+
+                  <p className={`text-lg font-medium ${Colors.text.primary}`}>
+                    No assignments yet
+                  </p>
+
+                  <p className={`text-sm ${Colors.text.secondary} max-w-xs`}>
+                    You’ll see your assignments here once they’re added.
+                  </p>
                 </div>
+              )}
 
-                <p className={`text-lg font-medium ${Colors.text.primary}`}>
-                  No assignments yet
-                </p>
-
-                <p className={`text-sm ${Colors.text.secondary} max-w-xs`}>
-                  You’ll see your assignments here once they’re added.
-                </p>
-              </div>
+            {mode === "ASSIGNEMENT" && (
+              <Assignment
+                assignments={
+                  activeAssignment ? [activeAssignment] : allAssignments
+                }
+              />
             )}
           </div>
         </div>
@@ -282,14 +303,15 @@ export default function CourseV2() {
 /* ================= LEARNING VIEW ================= */
 
 function LearningView({ topic, showPDF, studyMode }: any) {
-const { theme } = useTheme();
-  const markdownTheme: "light" | "dark" =
-  theme === "Dark" ? "dark" : "light";
+  const { theme } = useTheme();
+  const markdownTheme: "light" | "dark" = theme === "Dark" ? "dark" : "light";
 
   return (
     <div className="flex gap-6">
       <div className="flex-1 space-y-6">
-        <div className={`aspect-video  rounded-xl overflow-hidden ${Colors.background.primary}`}>
+        <div
+          className={`aspect-video  rounded-xl overflow-hidden ${Colors.background.primary}`}
+        >
           {topic.videoUrl && (
             <iframe
               src={topic.videoUrl || ""}
@@ -300,17 +322,22 @@ const { theme } = useTheme();
         </div>
 
         {topic.transcript ? (
-          <aside className={`w-full ${Colors.background.primary} p-4 rounded-xl ${Colors.text.secondary}`}>
+          <aside
+            className={`w-full ${Colors.background.primary} p-4 rounded-xl ${Colors.text.secondary}`}
+          >
             <MarkdownEditor
               height={550}
               value={topic.transcript}
+              setValue={() => {}}
               mode={"preview"}
               hideToolbar={true}
               theme={markdownTheme}
             />
           </aside>
         ) : (
-          <aside className={`w-full h-[25%] flex justify-center items-center pt-8 ${Colors.background.secondary} p-4 rounded-xl ${Colors.text.secondary}`}>
+          <aside
+            className={`w-full h-[25%] flex justify-center items-center pt-8 ${Colors.background.secondary} p-4 rounded-xl ${Colors.text.secondary}`}
+          >
             No Transcripts yet
           </aside>
         )}
@@ -341,36 +368,6 @@ const { theme } = useTheme();
         <iframe src={topic.file} className="w-[40%] h-screen" />
       )}
     </div>
-  );
-}
-
-/* ================= ASSIGNMENT VIEW ================= */
-
-function AssignmentView({ assignment }: { assignment: Assignment }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="max-w-4xl mx-auto space-y-6"
-    >
-      <div className={` p-6 rounded-xl ${Colors.background.secondary}`}>
-        <h3 className={`text-xl font-semibold mb-2 ${Colors.text.primary}`}>
-          {assignment.name}
-        </h3>
-        <p className={`${Colors.text.secondary}`}>{assignment.description}</p>
-      </div>
-
-      <div className={` p-6 rounded-xl ${Colors.background.primary}`}>
-        <h4 className={` font-medium mb-2 ${Colors.text.primary}`}>Instructions</h4>
-        <p className={`${Colors.text.secondary} whitespace-pre-line`}>
-          {assignment.instruction}
-        </p>
-      </div>
-
-      <div className={` ${Colors.text.secondary}`}>
-        Marks per question: {assignment.marksPerQuestion}
-      </div>
-    </motion.div>
   );
 }
 
@@ -413,7 +410,9 @@ function SectionNav({
         <button
           onClick={() => setMode("LEARNING")}
           className={`px-3 py-1.5 rounded-md cursor-pointer ${
-            mode === "LEARNING" ? `${Colors.background.special} ${Colors.text.primary}` : `${Colors.background.primary} ${Colors.text.primary}`
+            mode === "LEARNING"
+              ? `${Colors.background.special} ${Colors.text.primary}`
+              : `${Colors.background.primary} ${Colors.text.primary}`
           }`}
         >
           Learning
@@ -421,7 +420,9 @@ function SectionNav({
         <button
           onClick={() => setMode("ASSIGNEMENT")}
           className={`px-3 py-1.5 rounded-md cursor-pointer ${
-            mode === "ASSIGNEMENT" ? `${Colors.background.special} ${Colors.text.primary}` : `${Colors.background.primary} ${Colors.text.primary}`
+            mode === "ASSIGNEMENT"
+              ? `${Colors.background.special} ${Colors.text.primary}`
+              : `${Colors.background.primary} ${Colors.text.primary}`
           }`}
         >
           Assignments
@@ -448,7 +449,9 @@ function SectionNav({
 
           {/* Section Content */}
           {section.isOpen && (
-            <div className={`${Colors.background.primary} ${Colors.text.primary}`}>
+            <div
+              className={`${Colors.background.primary} ${Colors.text.primary}`}
+            >
               {mode === "LEARNING" ? (
                 section.courseLearningContents.length > 0 ? (
                   section.courseLearningContents.map((t) => (
@@ -462,7 +465,9 @@ function SectionNav({
                     </button>
                   ))
                 ) : (
-                  <div className={`px-6 py-2 ${Colors.text.secondary}`}>No topics yet</div>
+                  <div className={`px-6 py-2 ${Colors.text.secondary}`}>
+                    No topics yet
+                  </div>
                 )
               ) : section.courseAssignemnts.length > 0 ? (
                 section.courseAssignemnts.map((a) => (
