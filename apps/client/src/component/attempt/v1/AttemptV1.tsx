@@ -195,10 +195,9 @@ export default function AttemptV1({ id, mode }: { id: string; mode: AttemptMode 
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="flex-1 grid grid-cols-2 gap-4 p-4 overflow-hidden">
-
+      <div className="flex-1 grid grid-cols-2 gap-4 p-4 min-h-0">
         {/* LEFT */}
-        <div className="h-full">
+        <div className="h-full min-h-0">
           <LeftSection
             sectionName={section.type === "NO_CODE" ? "MCQ" : "CODING"}
             sectionIndex={currentSectionIndex}
@@ -208,6 +207,11 @@ export default function AttemptV1({ id, mode }: { id: string; mode: AttemptMode 
                 ? question.question
                 : codingProblem?.description || "Loading problem..."
             }
+            testCases={
+              section.type === "CODE"
+                ? codingProblem?.testCases ?? []
+                : []
+            }            
             currentIndex={currentQuestionIndex}
             totalQuestions={questions.length}
             onNext={goNext}
@@ -218,7 +222,7 @@ export default function AttemptV1({ id, mode }: { id: string; mode: AttemptMode 
         </div>
 
         {/* RIGHT */}
-        <div className="h-full">
+        <div className="h-full min-h-0">
           {section.type === "NO_CODE" && (
             <RightSection
               assignmentName={assessment.name}
@@ -239,10 +243,10 @@ export default function AttemptV1({ id, mode }: { id: string; mode: AttemptMode 
               userAnswers={userAnswers}
             />
           )}
-
           {section.type === "CODE" && (
             <CodeRightSection
               problem={codingProblem}
+              problemId={question.id}
               code={codeAnswers[question.id] ?? ""}
               onChange={(code) =>
                 setCodeAnswers(p => ({ ...p, [question.id]: code }))

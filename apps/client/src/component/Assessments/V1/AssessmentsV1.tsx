@@ -9,6 +9,8 @@ import { getAllAssessments } from "@/api/assessments/get-all-assessments";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useColors } from "../../general/(Color Manager)/useColors";
+import { getAllInstitutions } from "@/api/institutions/get-all-institutions";
+import { getAllBatches } from "@/api/batches/get-all-batches";
 
 // colors ------------------------------------------------------------------
 const Colors = useColors();
@@ -129,9 +131,54 @@ const AddAssessmentModal = ({
   const [endDate, setEndDate] = useState("");
   const [endClock, setEndClock] = useState("");
 
+  const [institutes, setInstitutes] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [selectedInstitute, setSelectedInstitute] = useState("");
+
+  const [batches, setBatches] = useState<
+    { id: string; batchname: string; branch: string; batchEndYear: string }[]
+  >([]);
+
+
+  useEffect(() => {
+    const fetchInstitutes = async () => {
+      try {
+        await getAllInstitutions(setInstitutes);
+      } catch (err) {
+        console.error("Failed to load institutes", err);
+      }
+    };
+
+    fetchInstitutes();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedInstitute) {
+      setBatches([]);
+      setForm((prev) => ({ ...prev, batchId: "" }));
+      return;
+    }
+
+    const fetchBatches = async () => {
+      try {
+        await getAllBatches(setBatches, selectedInstitute);
+      } catch (err) {
+        console.error("Failed to load batches", err);
+      }
+    };
+
+    fetchBatches();
+  }, [selectedInstitute]);
+
+  useEffect(() => {
+    console.log("Updated batches:", batches);
+  }, [batches]);
+
   if (!open) return null;
 
-  const combineDateTime = (d: string, t: string) => (d && t ? `${d}T${t}` : "");
+  const combineDateTime = (d: string, t: string) =>
+    d && t ? `${d}T${t}` : "";
 
   const clearError = (field: string) => {
     if (errors[field]) {
@@ -146,7 +193,7 @@ const AddAssessmentModal = ({
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    >
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -195,11 +242,12 @@ const AddAssessmentModal = ({
                     w-full max-w-lg
           max-h-[85vh]
           rounded-2xl ${Colors.background.secondary} no-scollbar
+          overflow-y-auto
           border border-slate-800
           p-5
           `}
       >
-        <h2 className="text-lg font-semibold ${Colors.text.primary} mb-3">
+        <h2 className={`text-lg font-semibold ${Colors.text.primary} mb-3`}>
           Create new assessment
         </h2>
 
@@ -236,9 +284,9 @@ const AddAssessmentModal = ({
           <textarea
             name="instructions"
             value={form.instructions}
+            placeholder="Demo Instructions..."
             onChange={handleChange}
             rows={2}
-            placeholder="Instructions for students"
             className={`${inputBase} resize-none `}
           />
           {errorText("instructions")}
@@ -246,13 +294,12 @@ const AddAssessmentModal = ({
 
         {/* Start / End Time */}
         <div className="mt-4 space-y-3">
-          {/* Start */}
           <div>
             <label className={`text-sm ${Colors.text.primary}`}>Start time</label>
             <div className="grid grid-cols-3 gap-2 mt-1">
               <input
                 type="date"
-                className={`${inputBase} mt-0 col-span-2 artTime",
+                className={`${inputBase} mt-0 col-span-2 startTime",
                 )}`}
                 value={startDate}
                 onChange={(e) => {
@@ -273,13 +320,13 @@ const AddAssessmentModal = ({
             {errorText("startTime")}
           </div>
 
-          {/* End */}
           <div>
             <label className={`text-sm ${Colors.text.primary}`}>End time</label>
             <div className="grid grid-cols-3 gap-2 mt-1">
               <input
                 type="date"
-                className={`${inputBase} mt-0 col-span-2 dTime",
+                className={`${inputBase} mt-0 col-span-2 endTime",
+
                 )}`}
                 value={endDate}
                 onChange={(e) => {
@@ -301,21 +348,48 @@ const AddAssessmentModal = ({
           </div>
         </div>
 
-        {/* Batch ID */}
+        {/* Institute dropdown */}
         <div className="mt-3">
-          <label className={`text-sm ${Colors.text.primary}`}>Batch ID</label>
-          <input
-            name="batchId"
-            value={form.batchId}
-            onChange={handleChange}
-            placeholder="e.g. batch-1"
-            className={`${inputBase} `}
-          />
-          {errorText("batchId")}
+          <label className="text-sm text-slate-400">Institute</label>
+          <select
+            value={selectedInstitute}
+            onChange={(e) => setSelectedInstitute(e.target.value)}
+            className={`${inputBase}`}
+          >
+            <option value="">Select institute</option>
+            {institutes.map((institute) => (
+              <option key={institute.id} value={institute.id}>
+                {institute.name}
+              </option>
+            ))}
+          </select>
         </div>
 
+        {/* Batch dropdown */}
+        {selectedInstitute && (
+          <div className="mt-3">
+            <label className="text-sm text-slate-400">Batch</label>
+            <select
+              name="batchId"
+              value={form.batchId}
+              onChange={handleChange}
+              className={`${inputBase} `}
+            >
+              <option value="">Select batch</option>
+              {batches.map((batch) => (
+                <option key={batch.id} value={batch.id}>
+                  {batch.batchname}
+                </option>
+              ))}
+            </select>
+            {errorText("batchId")}
+          </div>
+        )}
+
+
+
         {/* Actions */}
-        <div className={`mt-5 flex justify-end gap-3 sticky bottom-0 pt-3`}>
+        <div className={`mt-5 flex justify-end gap-3 bottom-0 pt-3`}>
           <button
             onClick={onClose}
             className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special}`}
@@ -334,6 +408,7 @@ const AddAssessmentModal = ({
     </div>
   );
 };
+
 
 // -------------------------------------------------------------------------
 // Skeleton Card

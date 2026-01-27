@@ -99,29 +99,35 @@ export default function RightSection({
       </div>
 
       {/* Question Navigation */}
-      <div className="flex gap-2 overflow-x-auto mt-auto no-scrollbar">
-        {Array.from({ length: totalQuestions }).map((_, i) => {
-          const answered = userAnswers[questionIds[i]] != null;
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2 overflow-x-auto mt-auto no-scrollbar">
+          {Array.from({ length: totalQuestions }).map((_, i) => {
+            const answered = userAnswers[questionIds[i]] != null;
 
-          return (
-            <button
-              key={i}
-              onClick={() => onJumpToQuestion(i)}
-              className={`
-                px-3 py-1 rounded-md ${Colors.background.primary}
-                ${
-                  i === currentIndex
-                    ? Colors.border.specialThick
-                    : answered
-                      ? Colors.border.greenThick
-                      : Colors.border.fadedThick
-                }
-              `}
-            >
-              Q{i + 1}
-            </button>
-          );
-        })}
+            return (
+                <button
+                  key={i}
+                  onClick={() => onJumpToQuestion(i)}
+                  className={`
+                    px-3 py-1 rounded-md ${Colors.background.primary}
+                    ${
+                      i === currentIndex
+                        ? Colors.border.specialThick
+                        : answered
+                          ? Colors.border.greenThick
+                          : Colors.border.fadedThick
+                    }
+                  `}
+                >
+                  Q{i + 1}
+                </button>
+            );
+          })}
+        </div>
+
+        <button className={`${Colors.background.primary} px-4 py-2 rounded-md hover:opacity-80 group`}>
+          Mark As Correct
+        </button>
       </div>
     </div>
   );
