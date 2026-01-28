@@ -9,7 +9,8 @@ import { addAssignmentQuestion } from "@/api/courses/assignment-questions/add-qu
 import { updateAssignmentQuestion } from "@/api/courses/assignment-questions/update-question";
 
 const emptyQuestion = () => ({
-  id: uuid(),
+  id: null,
+  isNew: true,
   text: "",
   options: [
     { id: uuid(), text: "", isCorrect: false },
@@ -56,6 +57,7 @@ export default function QuestionEditorWrapper({
         setEditMode(false);
         const mappedQuestions = backendQuestions.map((q: any) => ({
           id: q.id,
+          isNew: false,
           text: q.question,
           options: q.options.map((opt: any) => {
             const text = typeof opt === "string" ? opt : opt.text;
@@ -100,7 +102,7 @@ const handleSaveAllQuestions = async () => {
         correctAnswer: correctOptions.map((o: any) => o.text.trim()),
       };
 
-      if (hasExistingQuestions && editMode) {
+      if (!q.isNew) {
         await updateAssignmentQuestion(q.id, payload);
       } else {
         await addAssignmentQuestion(assignmentId, {
