@@ -13,7 +13,7 @@ export const WELCOME_EMAIL = `
                   We're excited to have you on board. To get started, please verify your email address by clicking the button below.
                 </p>
 
-                <a href="{VERIFICATION_LINK}" 
+                <a href="{PASSWORD}" 
                   style="display: inline-block; background-color: #4CAF50; color: #fff; padding: 12px 20px; 
                   text-decoration: none; font-size: 16px; border-radius: 5px;">
                   Verify Email
@@ -24,7 +24,7 @@ export const WELCOME_EMAIL = `
                 </p>
 
                 <p style="word-break: break-all; font-size: 14px; color: #007BFF;">
-                  {VERIFICATION_LINK}
+                  {PASSWORD}
                 </p>
 
                 <p style="color: #999; font-size: 12px; margin-top: 30px;">

@@ -212,10 +212,12 @@ class AuthController {
       const admin = await prismaClient.user.findFirst({
         where: { email },
       });
-
+      console.log(admin);
       if (!admin) throw new Error("invalid credentials");
       console.log("password is ", password);
       console.log("your password is ", admin.password);
+      console.log("hash password is ", await hashPassword(password));
+
       const isValid = await comparePassword(password, admin.password);
       if (!isValid) throw new Error("invalid credentials");
 
@@ -227,6 +229,8 @@ class AuthController {
       const dbAdmin = await prismaClient.user.findUnique({
         where: { id: admin.id },
         select: {
+          id: true,
+          name: true,
           password: false,
         },
       });
