@@ -23,4 +23,9 @@ router.delete(
   adminController.deleteAdmin,
 );
 router.get("/db-info", authMiddleware, superAdminController.getAllInformation);
+router.get(
+  "/dashboard",
+  authMiddleware,
+  adminController.getAdminDashboardInfo
+);
 export default router;

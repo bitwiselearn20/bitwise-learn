@@ -255,7 +255,9 @@ class InstitutionController {
       if (!institutions) throw new Error("institute not found");
       return res
         .status(200)
-        .json(apiResponse(200, "institution fetched successfully", institutions));
+        .json(
+          apiResponse(200, "institution fetched successfully", institutions),
+        );
     } catch (error: any) {
       console.log(error);
       return res.status(200).json(apiResponse(200, error.message, null));
@@ -304,5 +306,101 @@ class InstitutionController {
       return res.status(200).json(apiResponse(200, error.message, null));
     }
   }
+
+async getInstitutionDashboard(req: Request, res: Response) {
+  try {
+    if (!req.user) throw new Error("Unauthenticated user");
+
+    const user = await prismaClient.user.findUnique({
+      where: { id: req.user.id },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    const institutionId = req.params.institutionId;
+    console.log(institutionId)
+    if (!institutionId) {
+      throw new Error("institutionId is required");
+    }
+
+    const institution = await prismaClient.institution.findUnique({
+      where: { id: institutionId },
+    });
+
+    if (!institution) throw new Error("Institution not found");
+
+    // FIX 2: correct access control (already right)
+    if (
+      user.ROLE !== "SUPERADMIN" &&
+      institution.createdBy !== user.id
+    ) {
+      throw new Error("You do not have access to this institution");
+    }
+
+    const [batches, students, teachers, assessments, courses] =
+      await Promise.all([
+        prismaClient.batch.count({
+          where: { institutionId: institution.id },
+        }),
+        prismaClient.student.count({
+          where: { institutionId: institution.id },
+        }),
+        prismaClient.teacher.count({
+          where: { instituteId: institution.id },
+        }),
+        prismaClient.assessment.count({
+          where: {
+            batch: { institutionId: institution.id },
+          },
+        }),
+        prismaClient.courseEnrollment.count({
+          where: { institutionId: institution.id },
+        }),
+      ]);
+
+    const batchBreakdown = await prismaClient.batch.findMany({
+      where: { institutionId: institution.id },
+      select: {
+        id: true,
+        batchname: true,
+        branch: true,
+        batchEndYear: true,
+        _count: {
+          select: {
+            students: true,
+            teachers: true,
+            assessments: true,
+          },
+        },
+      },
+    });
+
+    return res.status(200).json(
+      apiResponse(200, "Institution dashboard data", {
+        institution: {
+          id: institution.id,
+          name: institution.name,
+          tagline: institution.tagline,
+          createdAt: institution.createdAt,
+        },
+        overview: {
+          batches,
+          students,
+          teachers,
+          courses,
+          assessments,
+        },
+        batches: batchBreakdown,
+      }),
+    );
+  } catch (error: any) {
+    console.error(error);
+
+    // ✅ FIX 3: correct error status
+    return res.status(400).json(
+      apiResponse(400, error.message, null)
+    );
+  }
+}
 }
 export default new InstitutionController();

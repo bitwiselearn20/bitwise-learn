@@ -16,19 +16,68 @@ class SuperAdminController {
 
       if (!dbAdmin) throw new Error("db Admin not found");
 
-      const dataObject = {
-        institutions: 0,
-        vendors: 0,
-        admins: 0,
-        batches: 0,
-      };
+      const [
+        institutions,
+        vendors,
+        admins,
+        students,
+        teachers,
+        batches,
+        courses,
+        assessments,
+      ] = await Promise.all([
+        prismaClient.institution.count(),
+        prismaClient.vendor.count(),
+        prismaClient.user.count({where:{ROLE:"ADMIN"}}),
+        prismaClient.student.count(),
+        prismaClient.teacher.count(),
+        prismaClient.batch.count(),
+        prismaClient.course.count(),
+        prismaClient.assessment.count(),
+      ]);
 
-      dataObject["institutions"] = await prismaClient.institution.count();
-      dataObject["batches"] = await prismaClient.batch.count();
-      dataObject["admins"] = await prismaClient.user.count();
-      dataObject["vendors"] = await prismaClient.vendor.count();
+      const institutionHierarchy = await prismaClient.institution.findMany({
+        select:{
+          id:true,
+          name:true,
+          batches:{
+            select:{
+              id:true,
+              batchname:true,
+              _count:{
+                select:{
+                  students:true,
+                  teachers:true,
+                  assessments:true,
+                },
+              },
+            },
+          },
+          _count:{
+            select:{
+              students:true,
+              teachers:true,
+              batches:true,
+            },
+          },
+        },
+      });
 
-      return res.status(200).json(apiResponse(200, "data fetched", dataObject));
+      return res.status(200).json(
+        apiResponse(200, "SuperAdmin DashBoard Data",{
+          overview:{
+            institutions,
+            vendors,
+            admins,
+            students,
+            teachers,
+            batches,
+            courses,
+            assessments,
+          },
+          institutions:institutionHierarchy,
+        })
+      );
     } catch (error: any) {
       console.log(error);
       return res.status(200).json(apiResponse(500, error.message, null));

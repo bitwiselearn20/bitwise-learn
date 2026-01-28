@@ -33,7 +33,7 @@ class VendorController {
           secondaryPhoneNumber: data.secondaryPhoneNumber ?? null,
           websiteLink: data.websiteLink,
           loginPassword: hashedPassword,
-
+          userId: req.user.id,
         },
       });
       await handleSendMail(data.email, loginPassword);
@@ -67,7 +67,6 @@ class VendorController {
         where: { id: vendorId },
       });
       if (!vendor) throw new Error("Vendor not found");
-
 
       const updatedVendor = await prismaClient.vendor.update({
         where: { id: vendorId },
@@ -110,8 +109,6 @@ class VendorController {
         where: { id: vendorId },
       });
       if (!vendor) throw new Error("vendor not found");
-
-
 
       const deletedVendor = await prismaClient.vendor.delete({
         where: { id: vendorId },
@@ -185,7 +182,6 @@ class VendorController {
       });
       if (!vendor) throw new Error("vendor not found");
 
-
       if (!vendor) {
         throw new Error("vendor not found");
       }
@@ -196,6 +192,34 @@ class VendorController {
     } catch (error: any) {
       console.log(error);
       return res.status(200).json(apiResponse(200, error.message, null));
+    }
+  }
+  async getVendorDashboard(req: Request, res: Response) {
+    try {
+      if (!req.user) throw new Error("Unauthenticated user");
+
+      const vendor = await prismaClient.vendor.findUnique({
+        where: { id: req.user.id },
+        select: {
+           id: true,
+            name: true,
+            email: true,
+            phoneNumber: true,
+            createdAt: true,
+            loginPassword: false,
+        },
+      });
+
+      if (!vendor) throw new Error("Vendor not found");
+
+      return res.status(200).json(
+        apiResponse(200, "Vendor dashboard data", {
+          vendor: vendor,
+        }),
+      );
+    } catch (error: any) {
+      console.error(error);
+      return res.status(400).json(apiResponse(400, error.message, null));
     }
   }
 }

@@ -49,7 +49,7 @@ class StudentController {
           email: data.email,
           loginPassword: hashedPassword,
           batchId: data.batchId,
-          instituteId: institutionId,
+          institutionId: institutionId,
         },
       });
       await handleSendMail(data.email, loginPassword);
@@ -59,7 +59,7 @@ class StudentController {
         .json(apiResponse(200, "student created successfully", createdStudent));
     } catch (error: any) {
       console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+      return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
 
@@ -83,7 +83,7 @@ class StudentController {
       if (!student) throw new Error("student not found");
 
       // Check if student belongs to the institute
-      if (req.user.type === "INSTITUTION" && student.instituteId !== userId) {
+      if (req.user.type === "INSTITUTION" && student.institutionId !== userId) {
         throw new Error("student does not belongs to your institution");
       }
 
@@ -104,7 +104,7 @@ class StudentController {
           rollNumber: true,
           email: true,
           batchId: true,
-          instituteId: true,
+          institutionId: true,
           createdAt: true,
           updatedAt: true,
         },
@@ -115,7 +115,7 @@ class StudentController {
         .json(apiResponse(200, "student updated successfully", updatedStudent));
     } catch (error: any) {
       console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+      return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
 
@@ -139,7 +139,7 @@ class StudentController {
 
       // Code to be debugged
 
-      if (req.user.type === "INSTITUTION" && student.instituteId !== userId) {
+      if (req.user.type === "INSTITUTION" && student.institutionId !== userId) {
         throw new Error("student does not belongs to this institution");
       }
 
@@ -153,7 +153,7 @@ class StudentController {
         .json(apiResponse(200, "student deleted successfully", deletedStudent));
     } catch (error: any) {
       console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+      return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
 
@@ -165,7 +165,7 @@ class StudentController {
       let whereClause: any = {};
 
       if (req.user.type === "INSTITUTION") {
-        whereClause = { instituteId: userId };
+        whereClause = { institutionId: userId };
       }
 
       if (
@@ -185,7 +185,7 @@ class StudentController {
           rollNumber: true,
           email: true,
           batchId: true,
-          instituteId: true,
+          institutionId: true,
           createdAt: true,
           updatedAt: true,
         },
@@ -196,7 +196,7 @@ class StudentController {
         .json(apiResponse(200, "students fetched successfully", students));
     } catch (error: any) {
       console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+      return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
 
@@ -218,7 +218,7 @@ class StudentController {
       });
       if (!student) throw new Error("student not found");
 
-      if (req.user.type === "INSTITUTION" && student.instituteId !== userId) {
+      if (req.user.type === "INSTITUTION" && student.institutionId !== userId) {
         throw new Error("not authorized to view this student");
       }
 
@@ -236,7 +236,7 @@ class StudentController {
         .json(apiResponse(200, "student fetched successfully", student));
     } catch (error: any) {
       console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+      return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
   async getStudentByBatch(req: Request, res: Response) {
@@ -260,14 +260,14 @@ class StudentController {
           rollNumber: true,
           email: true,
           batchId: true,
-          instituteId: true,
+          institutionId: true,
           createdAt: true,
           updatedAt: true,
         },
       });
       if (!students) throw new Error("students not found");
 
-      // if (req.user.type === "INSTITUTION" && student.instituteId !== userId) {
+      // if (req.user.type === "INSTITUTION" && student.institutionId !== userId) {
       //     throw new Error("not authorized to view this student");
       // }
 
@@ -287,8 +287,147 @@ class StudentController {
         );
     } catch (error: any) {
       console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+      return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
+  async getStudentDashboard(req: Request, res: Response) {
+  try {
+    if (!req.user) throw new Error("Unauthenticated user");
+
+    const studentId = req.user.id;
+
+    const student = await prismaClient.student.findUnique({
+      where: { id: studentId },
+      include: {
+        batch: {
+          select: {
+            id: true,
+            batchname: true,
+            branch: true,
+          },
+        },
+        insitution: {
+          select: {
+            id: true,
+            name: true,
+            tagline: true,
+          },
+        },
+      },
+    });
+
+    if (!student) throw new Error("Student not found");
+
+    // ───────────────────────────────
+    // COURSES (via batch enrollments)
+    // ───────────────────────────────
+    const enrolledCourses = await prismaClient.courseEnrollment.findMany({
+      where: { batchId: student.batchId },
+      include: {
+        course: {
+          select: {
+            id: true,
+            name: true,
+            level: true,
+            duration: true,
+            instructorName: true,
+          },
+        },
+      },
+    });
+
+    // ───────────────────────────────
+    // ASSIGNMENTS
+    // ───────────────────────────────
+    const assignments = await prismaClient.courseAssignemnt.findMany({
+      where: {
+        section: {
+          course: {
+            courseEnrollments: {
+              some: {
+                batchId: student.batchId,
+              },
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        courseAssignemntQuestions: {
+          select: { id: true },
+        },
+      },
+    });
+
+    // ───────────────────────────────
+    // ASSESSMENTS
+    // ───────────────────────────────
+    const assessments = await prismaClient.assessment.findMany({
+      where: { batchId: student.batchId },
+      select: {
+        id: true,
+        name: true,
+        status: true,
+        startTime: true,
+        endTime: true,
+      },
+    });
+
+    const assessmentStats = {
+      upcoming: assessments.filter(a => a.status === "UPCOMING").length,
+      live: assessments.filter(a => a.status === "LIVE").length,
+      ended: assessments.filter(a => a.status === "ENDED").length,
+    };
+
+    // ───────────────────────────────
+    // COURSE PROGRESS
+    // ───────────────────────────────
+    const completedContents = await prismaClient.courseProgress.count({
+      where: { studentId },
+    });
+
+    const totalContents = await prismaClient.courseLearningContent.count({
+      where: {
+        section: {
+          course: {
+            courseEnrollments: {
+              some: { batchId: student.batchId },
+            },
+          },
+        },
+      },
+    });
+
+    return res.status(200).json(
+      apiResponse(200, "Student dashboard data", {
+        student: {
+          id: student.id,
+          name: student.name,
+          rollNumber: student.rollNumber,
+          batch: student.batch,
+          institution: student.insitution,
+        },
+        overview: {
+          courses: enrolledCourses.length,
+          assignments: assignments.length,
+          assessments: assessmentStats,
+          progress: {
+            completedContents,
+            totalContents,
+          },
+        },
+        courses: enrolledCourses.map(e => e.course),
+      }),
+    );
+  } catch (error: any) {
+    console.error(error);
+    return res.status(400).json(
+      apiResponse(400, error.message, null)
+    );
+  }
+}
+
 }
 export default new StudentController();

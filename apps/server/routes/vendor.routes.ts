@@ -21,4 +21,9 @@ router.delete(
   authMiddleware,
   vendorController.deleteVendor,
 );
+router.get(
+  "/dashboard",
+  authMiddleware,
+  vendorController.getVendorDashboard
+);
 export default router;

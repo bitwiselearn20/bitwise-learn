@@ -30,4 +30,9 @@ router.delete(
   authMiddleware,
   studentController.deleteStudent,
 );
+router.get(
+  "/dashboard",
+  authMiddleware,
+  studentController.getStudentDashboard
+);
 export default router;

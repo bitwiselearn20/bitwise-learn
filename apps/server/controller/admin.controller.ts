@@ -239,5 +239,66 @@ class AdminController {
       return res.status(200).json(apiResponse(200, error.message, null));
     }
   }
+  async getAdminDashboardInfo(req: Request, res: Response) {
+    try {
+      if (!req.user) throw new Error("Unauthenticated user");
+
+      const userId = req.user.id;
+
+      const admin = await prismaClient.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!admin) throw new Error("User not found");
+
+      // Institutions created by this admin
+      const institutions = await prismaClient.institution.findMany({
+        where: { createdBy: admin.id },
+        select: { id: true, name: true },
+      });
+
+      const institutionIds = institutions.map((i) => i.id);
+
+      const [batches, students, teachers, courses, assessments] =
+        await Promise.all([
+          prismaClient.batch.count({
+            where: { institutionId: { in: institutionIds } },
+          }),
+          prismaClient.student.count({
+            where: { institutionId: { in: institutionIds } },
+          }),
+          prismaClient.teacher.count({
+            where: { instituteId: { in: institutionIds } },
+          }),
+          prismaClient.course.count({
+            where: { createdBy: admin.id },
+          }),
+          prismaClient.assessment.count({
+            where: { creatorId: admin.id },
+          }),
+        ]);
+
+      return res.status(200).json(
+        apiResponse(200, "Admin dashboard data", {
+          admin: {
+            id: admin.id,
+            name: admin.name,
+            email: admin.email,
+          },
+          institutionsCount: institutions.length,
+          overview: {
+            batches,
+            students,
+            teachers,
+            courses,
+            assessments,
+          },
+        }),
+      );
+    } catch (error: any) {
+      console.error(error);
+      return res.status(200).json(apiResponse(400, error.message, null));
+    }
+  }
 }
 export default new AdminController();

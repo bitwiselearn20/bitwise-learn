@@ -34,4 +34,9 @@ router.delete(
   authMiddleware,
   institutionController.deleteInstitution,
 );
+router.get(
+  "/dashboard/:institutionId",
+  authMiddleware,
+  institutionController.getInstitutionDashboard
+);
 export default router;
