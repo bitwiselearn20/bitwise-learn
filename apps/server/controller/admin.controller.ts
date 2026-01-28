@@ -52,7 +52,7 @@ class AdminController {
         .json(apiResponse(200, "admin created successfully", createdAdmin));
     } catch (error: any) {
       console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+      return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
   async updateAdmin(req: Request, res: Response) {

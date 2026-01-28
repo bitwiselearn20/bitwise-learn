@@ -28,7 +28,7 @@ function Header({ name, email }: HeaderProps) {
     <div className="flex justify-between p-4">
       <div>
         <span className={`text-5xl ${Colors.text.special}`}>Greetings,</span>{" "}
-        <span className={`text-5xl ${Colors.text.primary}`}>Vendor</span>
+        <span className={`text-5xl ${Colors.text.primary}`}>Teacher</span>
         <div className="mt-2 text-lg">
           <span className={`${Colors.text.primary}`}>Enjoy managing</span>{" "}
           <span className={`${Colors.text.special}`}>B</span>

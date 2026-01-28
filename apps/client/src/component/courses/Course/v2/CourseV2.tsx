@@ -2,7 +2,7 @@
 
 import { getCourseById } from "@/api/courses/course/get-course-by-id";
 import { motion, AnimatePresence } from "framer-motion";
-import { Book, CheckLine, ChevronDown, Play } from "lucide-react";
+import { Book, CheckLine, ChevronDown, Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import ReactViewAdobe from "react-adobe-embed";
@@ -63,6 +63,10 @@ export default function CourseV2() {
   const [showTranscript, setShowTranscript] = useState(true);
   const [showPDF, setShowPDF] = useState(true);
   const [completedSection, setCompletedSection] = useState([]);
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [pdfMode, setPdfMode] = useState(false);
+
+
 
   const isResizing = useRef(false);
 
@@ -168,7 +172,7 @@ export default function CourseV2() {
     <div className={`min-h-screen ${Colors.background.primary} p-4`}>
       <motion.div className="flex gap-4 h-[calc(100vh-2rem)]">
         {/* ================= LEFT SIDEBAR ================= */}
-        {!studyMode && (
+        {!studyMode && showSidebar && (
           <aside
             style={{ width: sidebarWidth }}
             className={`relative ${Colors.background.secondary} rounded-lg shrink-0 overflow-hidden`}
@@ -194,6 +198,16 @@ export default function CourseV2() {
                 );
               }}
             />
+            <button
+            onClick={() => setShowSidebar(false)}
+            className={`absolute -right-4 top-1/2 -translate-y-1/2 
+              p-2 rounded-md shadow-md 
+              ${Colors.background.primary} ${Colors.text.primary}
+              hover:scale-105 transition cursor-pointer`}
+          >
+            <ChevronLeft />
+            </button>
+
             <div
               onMouseDown={startResize}
               className="absolute right-0 top-0 h-full w-1.5 cursor-col-resize hover:bg-blue-500/40"
@@ -201,10 +215,21 @@ export default function CourseV2() {
           </aside>
         )}
 
+        {!studyMode && !showSidebar && (
+          <button
+            onClick={() => setShowSidebar(true)}
+            className={`absolute left-2 top-1/2 -translate-y-1/2 
+              p-1 rounded-md shadow-lg z-50
+              ${Colors.background.primary} ${Colors.text.primary}
+              hover:scale-105 transition cursor-pointer`}
+          >
+            <ChevronRight />
+          </button>
+        )}
+
+
         {/* ================= RIGHT CONTENT ================= */}
-        <div
-          className={`flex-1 ${Colors.background.secondary} rounded-xl h-[95svh] overflow-hidden flex flex-col`}
-        >
+        <div className={`flex-1 ${Colors.background.secondary} rounded-xl h-full overflow-hidden flex flex-col`}>
           {/* HEADER */}
           <div
             className={`p-6 ${Colors.background.secondary} flex justify-between`}
@@ -212,7 +237,18 @@ export default function CourseV2() {
             <h2 className={`${Colors.text.primary} text-lg font-semibold`}>
               {mode === "LEARNING" ? activeTopic?.name : activeAssignment?.name}
             </h2>
-            <div className="w-1/3 flex gap-4 flex-end">
+            <div className=" flex gap-3 justify-end">
+            {activeTopic?.file && (
+              <button
+                onClick={() => setPdfMode((p) => !p)}
+                className={`px-3 py-2 
+                  ${Colors.background.primary} ${Colors.text.primary} 
+                  ${Colors.hover.special} rounded-lg cursor-pointer`}
+              >
+                {pdfMode ? "Exit PDF Mode" : "PDF Mode"}
+              </button>
+            )}
+
               {
                 <button
                   onClick={() => {
@@ -231,7 +267,7 @@ export default function CourseV2() {
                   }}
                   className={`px-3 py-2 ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special} cursor-pointer rounded-lg`}
                 >
-                  {showPDF ? "Hide PDF" : "Show PDF"}
+                  {showPDF ? "Video Mode" : "Exit Video Mode"}
                 </button>
               )}
               <button
@@ -261,6 +297,7 @@ export default function CourseV2() {
                 setShowPDF={setShowPDF}
                 setShowTranscript={setShowTranscript}
                 studyMode={studyMode}
+                pdfMode={pdfMode}
               />
             )}
 
@@ -302,19 +339,20 @@ export default function CourseV2() {
 
 /* ================= LEARNING VIEW ================= */
 
-function LearningView({ topic, showPDF, studyMode }: any) {
-  const { theme } = useTheme();
-  const markdownTheme: "light" | "dark" = theme === "Dark" ? "dark" : "light";
+
+function LearningView({ topic, showPDF, studyMode, pdfMode }: any) {
+const { theme } = useTheme();
+  const markdownTheme: "light" | "dark" =
+  theme === "Dark" ? "dark" : "light";
 
   return (
-    <div className="flex gap-6">
-      <div className="flex-1 space-y-6">
-        <div
-          className={`aspect-video  rounded-xl overflow-hidden ${Colors.background.primary}`}
-        >
+  <div className={`flex gap-6 ${pdfMode ? "h-full" : ""}`}>
+    {!pdfMode && (
+      <div className="flex-1 flex flex-col gap-6 min-h-0">
+        <div className={`aspect-video rounded-xl overflow-hidden ${Colors.background.primary}`}>
           {topic.videoUrl && (
             <iframe
-              src={topic.videoUrl || ""}
+              src={topic.videoUrl}
               className="w-full h-full"
               allowFullScreen
             />
@@ -322,11 +360,9 @@ function LearningView({ topic, showPDF, studyMode }: any) {
         </div>
 
         {topic.transcript ? (
-          <aside
-            className={`w-full ${Colors.background.primary} p-4 rounded-xl ${Colors.text.secondary}`}
-          >
+          <aside className={`w-full ${Colors.background.primary} p-4 rounded-xl flex-1 overflow-y-auto`}>
             <MarkdownEditor
-              height={550}
+              // height={550}
               value={topic.transcript}
               setValue={() => {}}
               mode={"preview"}
@@ -342,34 +378,20 @@ function LearningView({ topic, showPDF, studyMode }: any) {
           </aside>
         )}
       </div>
-      {showPDF && topic.file && (
-        // <ReactViewAdobe
-        //   clientId={process.env.NEXT_PUBLIC_ADOBE_KEY as string}
-        //   title="Daksh Document"
-        //   url={topic.file}
-        //   id="pdf-brochure"
-        //   fileMeta={{
-        //     fileName: "Daksh Document",
-        //   }}
-        //   previewConfig={{
-        //     defaultViewMode: "SINGLE_PAGE",
-        //     showAnnotationTools: false,
-        //     showPageControls: true,
-        //     showDownloadPDF: true,
-        //     showZoomControl: true,
-        //   }}
-        //   style={{
-        //     height: "100vh",
-        //     width: "100vw",
-        //   }}
-        //   debug
-        // />
-        // <PdfViewer url={topic.file} />
-        <iframe src={topic.file} className="w-[40%] h-screen" />
-      )}
-      
-    </div>
-  );
+    )}
+
+    {topic.file && (showPDF || pdfMode) && (
+      <iframe
+        src={topic.file}
+        className={
+          pdfMode
+            ? "w-full h-[90vh] rounded-xl"
+            : "w-[40%] h-screen rounded-xl"
+        }
+      />
+    )}
+  </div>
+);
 }
 
 /* ================= SIDEBAR ================= */
