@@ -20,7 +20,7 @@ class CodeExecution {
 
       const executionObject: CodeExecutionRequest = {
         language,
-        version: VERSION_MAP[language] as string,
+        version: "*",
         files: [
           {
             name:
@@ -63,7 +63,7 @@ class CodeExecution {
 
       const executionObject: CodeExecutionRequest = {
         language,
-        version: VERSION_MAP[language] as string,
+        version: "*",
         files: [
           {
             name:
@@ -76,14 +76,13 @@ class CodeExecution {
         stdin: "",
         args: [],
         compile_timeout: 10000,
-        run_timeout: 20000,
+        run_timeout: 3000,
         compile_cpu_time: 10000,
         run_cpu_time: 3000,
         compile_memory_limit: -1,
         run_memory_limit: -1,
       };
-      console.log("====================");
-      console.log(executionObject);
+      console.log(JSON.stringify(executionObject.files[0].content, null, 2));
       const result = await axios.post(
         this.client + "api/v2/execute",
         executionObject,
@@ -93,9 +92,11 @@ class CodeExecution {
           },
         },
       );
+      console.log(JSON.stringify(result.data, null, 2));
       return result.data;
     } catch (error: any) {
       console.log(error.message);
+      throw error;
       return null;
     }
   }
@@ -112,7 +113,7 @@ class CodeExecution {
 
       const executionObject: CodeExecutionRequest = {
         language,
-        version: VERSION_MAP[language] as string,
+        version: "*",
         files: [
           {
             name:
