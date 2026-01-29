@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 
 export function useAntiCheatControls(started: boolean) {
@@ -11,22 +11,22 @@ export function useAntiCheatControls(started: boolean) {
   useEffect(() => {
     if (!startedRef.current) return;
 
-    const disableContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-      toast.error("Right click is disabled during the test.", {
-        duration: 1000,
+    const showToast = (message: string) => {
+      toast.error(message, {
+        duration: 800,
         position: "top-right",
         style: { background: "#000", color: "#fff" },
       });
     };
 
+    const disableContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      showToast("Right click is disabled during the test.");
+    };
+
     const disableCopyPaste = (e: ClipboardEvent) => {
       e.preventDefault();
-      toast.error("Copy / Paste is disabled during the test.", {
-        duration: 1000,
-        position: "top-right",
-        style: { background: "#000", color: "#fff" },
-      });
+      showToast("Copy / Paste is disabled during the test.");
     };
 
     const disableShortcuts = (e: KeyboardEvent) => {
@@ -35,34 +35,30 @@ export function useAntiCheatControls(started: boolean) {
       const key = e.key.toLowerCase();
       const ctrlOrCmd = e.ctrlKey || e.metaKey;
 
+      /* ---------------- COPY / PASTE ---------------- */
       if (ctrlOrCmd && ["c", "v", "x", "a"].includes(key)) {
         e.preventDefault();
-
-        toast.error("Copy / paste is disabled during the test.", {
-          duration: 750,
-          position: "top-right",
-          style: { background: "#000", color: "#fff" },
-        });
+        showToast("Copy / Paste is disabled during the test.");
         return;
       }
 
+      /* ---------------- TAB NAV ---------------- */
       if (key === "tab") {
         e.preventDefault();
-
-        toast.error("Tab navigation is disabled during the test.", {
-          duration: 750,
-          position: "top-right",
-          style: { background: "#000", color: "#fff" },
-        });
+        showToast("Tab navigation is disabled during the test.");
         return;
       }
 
-      if (e.metaKey) {
-        toast.error("System keys are restricted during the test.", {
-          duration: 750,
-          position: "top-right",
-          style: { background: "#000", color: "#fff" },
-        });
+      /* ---------------- DEVTOOLS BLOCK ---------------- */
+      const isDevToolsShortcut =
+        key === "f12" ||
+        (ctrlOrCmd && e.shiftKey && ["i", "j", "c"].includes(key));
+
+      if (isDevToolsShortcut) {
+        e.preventDefault();
+        e.stopPropagation();
+        showToast("Inspect tools are disabled during the test.");
+        return;
       }
     };
 

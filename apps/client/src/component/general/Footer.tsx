@@ -67,24 +67,21 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Legal Links */}
         <div className="text-center sm:text-left">
           <h4 className={`font-bold text-lg mb-4 ${Colors.text.primary}`}>
-            Legal
+            Logins
           </h4>
           <ul className={`space-y-2 ${Colors.text.secondary}`}>
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
-              (item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="hover:font-semibold transition-all duration-200"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ),
-            )}
+            {["Vendor", "Institution", "Teacher", "Student"].map((item) => (
+              <li key={item}>
+                <Link
+                  href={`/multi-login`}
+                  className="hover:font-semibold transition-all duration-200"
+                >
+                  {item}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 

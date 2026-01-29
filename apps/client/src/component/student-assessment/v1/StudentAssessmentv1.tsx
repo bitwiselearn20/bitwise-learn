@@ -10,15 +10,8 @@ import { useRouter } from "next/navigation";
 
 
 // colors ------------------------------------------------------------------
-const colors = {
-    primary_Bg: "bg-[#121313]",
-    secondary_Bg: "bg-[#1E1E1E]",
-    special_Bg: "bg-[#64ACFF]",
-    primary_Hero: "bg-[#129274]",
-    primary_Font: "text-white",
-    secondary_Font: "text-white/60",
-    border: "border border-white/10",
-};
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+const Colors = useColors();
 
 // types -------------------------------------------------------------------
 type StudentAssessment = {
@@ -50,17 +43,17 @@ const AssessmentCard = ({
         <motion.div
             whileHover={{ y: -6, scale: 1.01 }}
             transition={{ duration: 0.25 }}
-            className="
+            className={`
         rounded-2xl p-5 flex flex-col gap-4
-        bg-linear-to-br from-[#1E1E1E] to-[#151515]
-        border border-white/10
+        ${Colors.background.secondary}
+        ${Colors.border.defaultThick}
         shadow-lg shadow-black/30
         hover:border-[#64ACFF]/40
         transition
-      "
+      `}
         >
             <div className="flex items-start justify-between gap-3">
-                <h3 className="text-lg font-semibold text-white leading-tight">
+                <h3 className={`text-lg font-semibold ${Colors.text.primary} leading-tight`}>
                     {assessment.name}
                 </h3>
 
@@ -71,12 +64,12 @@ const AssessmentCard = ({
                 )}
             </div>
 
-            <p className="text-sm leading-relaxed text-white/60">
+            <p className={`text-sm leading-relaxed ${Colors.text.secondary}`}>
                 {assessment.description}
             </p>
 
-            <div className="flex items-center gap-2 text-xs text-white/50">
-                <Clock size={14} />
+            <div className={`flex items-center gap-2 text-xs ${Colors.text.secondary}`}>
+                <Clock className={`${Colors.text.special}`} size={14} />
                 <span>
                     {new Date(assessment.startTime).toLocaleString()} —{" "}
                     {new Date(assessment.endTime).toLocaleString()}
@@ -85,14 +78,14 @@ const AssessmentCard = ({
 
             <button
                 onClick={() => onAttempt(assessment)}
-                className="
+                className={`
           mt-auto w-full rounded-lg py-2.5 text-sm font-semibold
-          bg-linear-to-r from-primary-hero to-[#0f7e65]
-          text-white
-          hover:opacity-90
+          ${Colors.background.special}
+          ${Colors.text.primary}
+          ${Colors.hover.special}
           hover:shadow-md hover:shadow-primary-hero/30
-          transition
-        "
+          transition cursor-pointer
+        `}
             >
                 Attempt Assessment
             </button>
@@ -118,27 +111,27 @@ const InstructionsModal = ({
             <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="
+                className={`
           w-full max-w-lg rounded-2xl p-6
-          bg-linear-to-br from-[#1E1E1E] to-[#141414]
-          border border-white/10
+            ${Colors.background.secondary}
+            ${Colors.border.defaultThick}
           shadow-xl shadow-black/40
-        "
+        `}
             >
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className={`text-xl font-semibold ${Colors.text.primary}`}>
                     {assessment.name}
                 </h2>
 
-                <p className="mt-2 text-sm text-white/60">
+                <p className={`mt-2 text-sm ${Colors.text.secondary}`}>
                     {assessment.description}
                 </p>
 
                 <div className="mt-4 max-h-60 overflow-y-auto pr-2">
-                    <h4 className="text-sm font-semibold text-white mb-2">
+                    <h4 className={`text-sm font-semibold ${Colors.text.primary} mb-2`}>
                         Instructions
                     </h4>
 
-                    <p className="text-sm text-white/60 whitespace-pre-line">
+                    <p className={`text-sm ${Colors.text.secondary} whitespace-pre-line`}>
                         {assessment.instructions?.trim()
                             ? assessment.instructions
                             : "No instructions provided for this assessment."}
@@ -148,18 +141,20 @@ const InstructionsModal = ({
                 <div className="mt-6 flex justify-end gap-3">
                     <button
                         onClick={onClose}
-                        className="rounded-md px-4 py-2 text-sm text-white/60 hover:text-white transition"
+                        className={`rounded-md px-4 py-2 text-sm ${Colors.text.special} ${Colors.hover.textSpecial} hover:underline transition cursor-pointer`}
                     >
                         Cancel
                     </button>
 
                     <button
                         onClick={onStart}
-                        className="
+                        className={`
               rounded-md px-4 py-2 text-sm font-semibold
-              bg-primary-hero text-white
+                ${Colors.background.special}
+                ${Colors.text.primary}
+                ${Colors.hover.special}
               hover:opacity-90 transition
-            "
+              cursor-pointer`}
                     >
                         Start Assessment
                     </button>
@@ -174,24 +169,24 @@ const InstructionsModal = ({
 // -------------------------------------------------------------------------
 const AssessmentSkeleton = () => (
     <div
-        className="
+        className={`
       rounded-2xl p-5 flex flex-col gap-4
-      bg-[#1E1E1E]
+      ${Colors.background.secondary}
       border border-white/10
       animate-pulse
-    "
+    `}
     >
         <div className="flex justify-between gap-4">
-            <div className="h-5 w-2/3 rounded bg-white/10" />
-            <div className="h-5 w-16 rounded bg-white/10" />
+            <div className={`h-5 w-2/3 rounded ${Colors.background.primary}`} />
+            <div className={`h-5 w-16 rounded ${Colors.background.primary}`} />
         </div>
 
-        <div className="h-4 w-full rounded bg-white/10" />
-        <div className="h-4 w-5/6 rounded bg-white/10" />
+        <div className={`h-4 w-full rounded ${Colors.background.primary}`} />
+        <div className={`h-4 w-5/6 rounded ${Colors.background.primary}`} />
 
-        <div className="h-3 w-3/4 rounded bg-white/10" />
+        <div className={`h-3 w-3/4 rounded ${Colors.background.primary}`} />
 
-        <div className="h-9 w-full rounded bg-white/10 mt-auto" />
+        <div className={`h-9 w-full rounded ${Colors.background.primary} mt-auto`} />
     </div>
 );
 
@@ -253,30 +248,31 @@ const StudentAssesmentv1 = () => {
                 <div className="relative w-full">
                     <Search
                         size={18}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"
+                        className={`absolute left-3 top-1/2 -translate-y-1/2 ${Colors.text.special}`}
                     />
                     <input
                         type="text"
                         placeholder="Search live assessments..."
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
-                        className="
+                        className={`
               w-full rounded-lg pl-10 pr-4 py-2.5 text-sm
-              bg-[#1A1A1A] text-white
-              border border-white/10
-              placeholder:text-white/30
+              placeholder:text-neutral-500
               focus:border-[#64ACFF]/60
               focus:ring-1 focus:ring-[#64ACFF]/30
               transition
-            "
+              ${Colors.background.secondary}
+              ${Colors.text.primary}
+                ${Colors.border.defaultThick}
+              `}
                     />
                 </div>
 
-                <h1 className="text-2xl font-bold text-white tracking-tight">
+                <h1 className={`text-2xl font-bold ${Colors.text.primary} tracking-tight`}>
                     Your Assessments
                 </h1>
                 {/* Helper text BELOW search */}
-                <p className="text-xs text-white/40 tracking-wide">
+                <p className={`text-xs ${Colors.text.secondary} tracking-wide`}>
                     View and attempt live assessments assigned to you
                 </p>
             </div>
@@ -296,8 +292,8 @@ const StudentAssesmentv1 = () => {
                             />
                         ))
                         : (
-                            <p className="col-span-full text-center text-sm text-white/50 py-12">
-                                🚫 No live assessments available right now.
+                            <p className={`col-span-full text-center text-sm ${Colors.text.secondary} py-12`}>
+                                No live assessments available right now.
                             </p>
                         )}
             </div>
