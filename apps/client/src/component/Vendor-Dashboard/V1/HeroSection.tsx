@@ -5,14 +5,31 @@ import { getAllStats } from "@/api/admins/get-admin-stats";
 import { User } from "lucide-react";
 import Link from "next/link";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { getVendorData } from "@/api/vendors/get-vendor-by-id";
+import useVendor from "@/store/vendorStore";
 
 /* ---------------- TYPES ---------------- */
 
 type StatsMap = Record<string, number>;
 
+/*---------------- DUMMY DATA ------------ */
+
+const DUMMY_VENDOR = {
+  id: "demo-vendor-id",
+  name: "Demo Vendor",
+  email: "vendor@demo.com",
+  tagline: "Building the future of education",
+  phoneNumber: "9999999999",
+  websiteLink: "https://example.com",
+  address: "Demo Address",
+  pincode: "000000",
+};
+
+
 type HeaderProps = {
   name: string;
   email: string;
+  tagline?: string;
 };
 
 type EntityTabsProps = {
@@ -23,26 +40,32 @@ type EntityTabsProps = {
 const Colors = useColors();
 
 /* ---------------- HEADER ---------------- */
-function Header({ name, email }: HeaderProps) {
+function Header({ name, email, tagline }: HeaderProps) {
   return (
     <div className="flex justify-between p-4">
       <div>
         <span className={`text-5xl ${Colors.text.special}`}>Greetings,</span>{" "}
-        <span className={`text-5xl ${Colors.text.primary}`}>Vendor</span>
+        <span className={`text-5xl ${Colors.text.primary}`}>{name}</span>
         <div className="mt-2 text-lg">
-          <span className={`${Colors.text.primary}`}>Enjoy managing</span>{" "}
-          <span className={`${Colors.text.special}`}>B</span>
-          <span className={`${Colors.text.primary}`}>itwise Learn</span>
+          <span className={`${Colors.text.primary}`}>
+            {tagline || "Welcome back to your dashboard"}
+          </span>
         </div>
       </div>
 
-      <div className="flex mr-11">
-        <div className="p-8 bg-white rounded-full flex justify-center items-center">
-          <User size={35} color="black" />
+      <div className="flex mr-11 items-center gap-6">
+        <div className="p-6 bg-white rounded-full flex justify-center items-center">
+          <User size={32} color="black" />
         </div>
-        <div className={` ${Colors.text.primary} flex flex-col mt-3 ml-4`}>
-          <h1 className={`${Colors.text.primary} text-3xl`}>{name}</h1>
-          <p>{email}</p>
+
+        <div className="flex flex-col">
+          <h1 className={`${Colors.text.primary} text-2xl font-semibold`}>
+            {name}
+          </h1>
+          <p className={`${Colors.text.secondary}`}>{email}</p>
+          {tagline && (
+            <span className="text-sm text-white/50 mt-1">{tagline}</span>
+          )}
         </div>
       </div>
     </div>
@@ -58,9 +81,13 @@ const URL_MAP: Record<string, string> = {
 };
 
 /* ---------------- HERO SECTION ---------------- */
+
 export default function HeroSection() {
   const [tabs, setTabs] = useState<StatsMap>({});
   const [fields, setFields] = useState<string[]>([]);
+
+  const vendor = useVendor((state) => state.info);
+  const setVendor = useVendor((state) => state.setData);
 
   useEffect(() => {
     getAllStats(setTabs);
@@ -70,9 +97,28 @@ export default function HeroSection() {
     setFields(Object.keys(tabs));
   }, [tabs]);
 
+  // FORCE UI TO WORK
+  useEffect(() => {
+    if (!vendor) {
+      setVendor(DUMMY_VENDOR);
+    }
+  }, [vendor, setVendor]);
+
+  // TRY REAL API (fails silently for now)
+  useEffect(() => {
+    if (!vendor?.id || vendor.id === "demo-vendor-id") return;
+    getVendorData(null,vendor.id);
+  }, [vendor?.id]);
+
+  if (!vendor) return null;
+
   return (
     <>
-      <Header name="Britto Anand" email="brittoanand@example.com" />
+      <Header
+        name={vendor.name}
+        email={vendor.email}
+        tagline={vendor.tagline}
+      />
 
       <EntityTabs fields={fields} data={tabs} />
     </>
@@ -158,7 +204,9 @@ function EntityTabs({ fields, data }: EntityTabsProps) {
                 <h3 className={`text-lg font-semibold ${Colors.text.primary}`}>
                   {meta.label}
                 </h3>
-                <p className={`text-sm mt-1 leading-snug ${Colors.text.secondary}`}>
+                <p
+                  className={`text-sm mt-1 leading-snug ${Colors.text.secondary}`}
+                >
                   {meta.tagline}
                 </p>
               </div>

@@ -32,3 +32,5 @@ const useVendor = create<VendorStore>()(
     },
   ),
 );
+
+export default useVendor;
