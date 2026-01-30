@@ -47,6 +47,19 @@ export async function POST(req: NextRequest) {
       path: "/",
       maxAge: 60 * 60 * 2,
     });
+
+    if (data.role.includes("ADMIN")) {
+      return NextResponse.redirect(new URL("/admin-dashboard", req.url));
+    } else if (data.role === "INSTITUTION") {
+      return NextResponse.redirect(new URL("/institute-dashboard", req.url));
+    } else if (data.role === "VENDOR") {
+      return NextResponse.redirect(new URL("/vendor-dashboard", req.url));
+    } else if (data.role === "STUDENT") {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    } else if (data.role === "TEACHER") {
+      return NextResponse.redirect(new URL("/teacher-dashboard", req.url));
+    }
+
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {
     console.error("Error loggin in :", error.message);

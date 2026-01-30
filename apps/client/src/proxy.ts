@@ -14,6 +14,7 @@ export function proxy(request: NextRequest) {
     "/student-login",
     "/multi-login",
     "/admin-login",
+    "/api/run"
   ];
   if (PUBLIC_ROUTES.includes(pathname)) {
     return NextResponse.next();
@@ -27,11 +28,23 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/student-login", request.url));
   }
 
-  const allowedRoutes = URL_ACCESS_MAP[role];
-  const allowedRbunoutes = URL_ACCESS_MAP[role];
+  let allowedRoutes = URL_ACCESS_MAP[role];
+  if (role === "SUPERADMIN") {
+    URL_ACCESS_MAP["ADMIN"]
+  }
 
   if (!allowedRoutes) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    if (role === "ADMIN" || role === "SUPERADMIN") {
+      return NextResponse.redirect(new URL("/admin-dashboard", request.url));
+    } else if (role === "TEACHER") {
+      return NextResponse.redirect(new URL("/teacher-dashboard", request.url));
+    } else if (role === "STUDENT") {
+      return NextResponse.redirect(new URL("/student-dashboard", request.url));
+    } else if (role === "INSTITUTE") {
+      return NextResponse.redirect(new URL("/institute-dashboard", request.url));
+    } else if (role === "VENDOR") {
+      return NextResponse.redirect(new URL("/vendor-dashboard", request.url));
+    }
   }
 
   if (allowedRoutes.includes(pathname)) {
