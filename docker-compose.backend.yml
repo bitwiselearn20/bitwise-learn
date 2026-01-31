@@ -1,0 +1,25 @@
+services:
+  backend-1:
+    image: bitwise-learn-backend
+    restart: always
+    privileged: true
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+  backend-2:
+    image: bitwise-learn-backend
+    restart: always
+    privileged: true
+    ports:
+      - 8001:8000
+    env_file:
+      - ./.env
+  backend-8:
+    image: bitwise-learn-backend
+    restart: always
+    privileged: true
+    ports:
+      - 8002:8000
+    env_file:
+      - ./.env

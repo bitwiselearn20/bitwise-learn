@@ -1,0 +1,25 @@
+services:
+  frontend-1:
+    image: bitwise-learn-frontend
+    restart: always
+    privileged: true
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
+  frontend-2:
+    image: bitwise-learn-frontend
+    restart: always
+    privileged: true
+    ports:
+      - 3001:3000
+    env_file:
+      - ./.env
+  frontend-3:
+    image: bitwise-learn-frontend
+    restart: always
+    privileged: true
+    ports:
+      - 3002:3000
+    env_file:
+      - ./.env

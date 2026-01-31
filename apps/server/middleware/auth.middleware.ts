@@ -1,25 +1,3 @@
-// import type { Request, Response, NextFunction } from "express";
-// import { verifyAccessToken } from "../utils/jwt";
-// import apiResponse from "../utils/apiResponse";
-
-// export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const authHeader = req.headers.authorization;
-//         if (!authHeader || !authHeader.startsWith("Bearer ")) {
-//             throw new Error("authorization token missing");
-//         }
-//         const token = authHeader.split(" ")[1] as string;
-//         const decoded = verifyAccessToken(token);
-//         req.user = {
-//             id: decoded.id,
-//             type: decoded.type,
-//         }
-//         next();
-//     } catch (error: any) {
-//         return res.status(401).json(apiResponse(401, error.message, null));
-//     }
-// }
-
 import type { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "../utils/jwt";
 import apiResponse from "../utils/apiResponse";
@@ -44,32 +22,30 @@ export const authMiddleware = async (
     let user;
     if (decoded.type === "ADMIN" || decoded.type === "SUPERADMIN") {
       user = await prismaClient.user.findUnique({
-        where: { id: decoded.id }
-      })
-    }
-    else if (decoded.type === "TEACHER") {
+        where: { id: decoded.id },
+      });
+    } else if (decoded.type === "TEACHER") {
       user = await prismaClient.teacher.findUnique({
-        where: { id: decoded.id }
-      })
-    }
-    else if (decoded.type === "INSTITUTION") {
+        where: { id: decoded.id },
+      });
+    } else if (decoded.type === "INSTITUTION") {
       user = await prismaClient.institution.findUnique({
-        where: { id: decoded.id }
-      })
-    }
-    else if (decoded.type === "VENDOR") {
+        where: { id: decoded.id },
+      });
+    } else if (decoded.type === "VENDOR") {
       user = await prismaClient.vendor.findUnique({
-        where: { id: decoded.id }
-      })
-    }
-    else if (decoded.type === "STUDENT") {
+        where: { id: decoded.id },
+      });
+    } else if (decoded.type === "STUDENT") {
       user = await prismaClient.student.findUnique({
-        where: { id: decoded.id }
-      })
+        where: { id: decoded.id },
+      });
     }
 
     if (!user) {
-      return res.status(401).json(apiResponse(401, "UNAUTHORIZED ENTITY", null));
+      return res
+        .status(401)
+        .json(apiResponse(401, "UNAUTHORIZED ENTITY", null));
     }
     req.user = {
       id: decoded.id,

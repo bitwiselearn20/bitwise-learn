@@ -269,6 +269,102 @@ class CodeRunnerController {
       return res.status(500).json(apiResponse(500, error.message, null));
     }
   }
+  async runTestCode(id: string, code: string, language: string) {
+    try {
+      const questionId = id;
+
+      if (!language || !code || !questionId) {
+        throw new Error("missing required field");
+      }
+
+      const dbProblem = await prismaClient.problem.findUnique({
+        where: { id: questionId },
+      });
+      if (!dbProblem) throw new Error("no such problem found");
+
+      const dbTemplate = await prismaClient.problemTemplate.findFirst({
+        where: {
+          language: language.toUpperCase() as any,
+          problemId: dbProblem.id,
+        },
+      });
+      if (!dbTemplate) throw new Error("template not supported yet");
+
+      const executionCode = dbTemplate.functionBody.replace("_solution_", code);
+
+      const exampleTestCases = await prismaClient.problemTestCase.findMany({
+        where: { problemId: dbProblem.id, testType: "EXAMPLE" },
+      });
+
+      const hiddenTestCases = await prismaClient.problemTestCase.findMany({
+        where: { problemId: dbProblem.id, testType: "HIDDEN" },
+      });
+
+      let correct = 0;
+      let wrong = 0;
+
+      // ---- Run Example Testcases (for feedback)
+      for (const testcase of exampleTestCases) {
+        let testrun = executionCode;
+        const input = JSON.parse(testcase.input as string);
+
+        Object.keys(input).forEach((key) => {
+          testrun = testrun.replace(`input_${key}`, `${input[key]}`);
+        });
+
+        const result = await CodeExecution.compileDsaProblem(testrun, language);
+
+        const execStatus = classifyExecutionResult(result);
+
+        const actualOutput = normalizeOutput(result?.run?.stdout);
+        const expectedOutput = normalizeOutput(testcase.output);
+
+        const isCorrect =
+          execStatus.verdict === "SUCCESS" && actualOutput === expectedOutput;
+
+        if (isCorrect) {
+          correct++;
+        } else {
+          wrong++;
+        }
+      }
+      let wrongTestCase: any;
+      // ---- Run Hidden Testcases (for verdict)
+      for (const testcase of hiddenTestCases) {
+        let testrun = executionCode;
+        const input = JSON.parse(testcase.input as string);
+
+        Object.keys(input).forEach((key) => {
+          testrun = testrun.replace(`input_${key}`, `${input[key]}`);
+        });
+
+        const result = await CodeExecution.compileCode(testrun, language);
+        const execStatus = classifyExecutionResult(result);
+
+        if (execStatus.verdict !== "SUCCESS") {
+          break;
+        }
+
+        const actualOutput = normalizeOutput(result?.run?.stdout);
+        const expectedOutput = normalizeOutput(testcase.output);
+
+        if (actualOutput !== expectedOutput) {
+          wrongTestCase = { ...testcase, yourOutput: actualOutput };
+          break;
+        } else {
+          correct++;
+        }
+      }
+
+      return {
+        passed: correct,
+        wrong: exampleTestCases.length + hiddenTestCases.length - correct,
+      };
+    } catch (error: any) {
+      console.error(error);
+      return null;
+    }
+  }
 }
 
 export default new CodeRunnerController();

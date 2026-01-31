@@ -192,17 +192,6 @@ class CourseAssignmentController {
 
       const mappedAssignment = {
         ...assignment,
-        courseAssignmentQuestions: assignment.courseAssignemntQuestions.map(
-          (q) => ({
-            id: q.id,
-            question: q.question,
-            options: q.options.map((opt: string) => ({
-              text: opt,
-            })),
-            correctAnswer: q.correctAnswer,
-            type: q.type,
-          }),
-        ),
       };
 
       return res

@@ -11,8 +11,8 @@ RUN bun install
 WORKDIR /repo/packages/db
 RUN bunx prisma generate
 
-WORKDIR /repo/apps/server
+WORKDIR /repo/apps/work-server
 
-EXPOSE 8000
+EXPOSE 8001
 
 CMD ["bun", "run", "dev"]

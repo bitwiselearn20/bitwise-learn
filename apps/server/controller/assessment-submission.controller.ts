@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import apiResponse from "../utils/apiResponse";
 import prismaClient from "../utils/prisma";
+import CodeExecution from "../service/piston.service";
 
 class AssessmentSubmission {
   async submitAssessment(req: Request, res: Response) {
@@ -21,7 +22,7 @@ class AssessmentSubmission {
         where: { id: assessmentId as string },
       });
       if (!dbAssessment) throw new Error("assessment not found");
-
+      if (dbAssessment.status !== "LIVE") throw new Error("test has ended");
       const dbAssessmentSubmission =
         await prismaClient.assessmentSubmission.findFirst({
           where: { assessmentId: dbAssessment?.id, studentId: dbUser.id },
@@ -83,6 +84,7 @@ class AssessmentSubmission {
           question: true,
           options: true,
           correctOption: true,
+          problemId: true,
           section: {
             select: {
               assessmentId: true,
@@ -102,8 +104,7 @@ class AssessmentSubmission {
       let result: any;
       const isMCQ = dbQuestion.section.assessmentType;
       const marksPerQuestion = dbQuestion.section.marksPerQuestion;
-      console.log("==============");
-      console.log(req.body);
+
       if (dbSubmission) {
         if (isMCQ) {
           console.log("starting update result in mcq");
@@ -121,6 +122,36 @@ class AssessmentSubmission {
           console.log("updated result in mcq");
         } else {
           //TODO: way to handle code questions
+          const dbProblem = await prismaClient.problem.findUnique({
+            where: { id: dbQuestion.problemId as string },
+          });
+
+          if (!dbProblem) throw new Error("problem not found");
+
+          const { passed, wrong } = await CodeExecution.compileTestQuestion(
+            req.body.code,
+            req.body.language,
+          );
+          // ALL PASSED, FULL MARKS
+          if (wrong == 0) {
+            result = await prismaClient.assessmentQuestionSubmission.update({
+              where: { id: dbSubmission.id },
+              data: {
+                answer: req.body.code,
+                marksObtained: marksPerQuestion,
+              },
+            });
+          } else {
+            result = await prismaClient.assessmentQuestionSubmission.update({
+              where: { id: dbSubmission.id },
+              data: {
+                answer: req.body.code,
+                marksObtained: Math.round(
+                  (marksPerQuestion * passed) / (wrong + passed),
+                ),
+              },
+            });
+          }
         }
       } else {
         if (isMCQ) {
@@ -138,6 +169,34 @@ class AssessmentSubmission {
           });
         } else {
           //TODO: way to handle code questions
+          const { passed, wrong } = await CodeExecution.compileTestQuestion(
+            req.body.code,
+            req.body.language,
+          );
+          // ALL PASSED, FULL MARKS
+          if (wrong == 0) {
+            result = await prismaClient.assessmentQuestionSubmission.create({
+              data: {
+                questionId: dbQuestion.id,
+                studentId: dbStudent.id,
+                assessmentId: dbQuestion.section.assessmentId,
+                answer: req.body.code,
+                marksObtained: marksPerQuestion,
+              },
+            });
+          } else {
+            result = await prismaClient.assessmentQuestionSubmission.create({
+              data: {
+                questionId: dbQuestion.id,
+                studentId: dbStudent.id,
+                assessmentId: dbQuestion.section.assessmentId,
+                answer: req.body.code,
+                marksObtained: Math.round(
+                  (marksPerQuestion * passed) / (wrong + passed),
+                ),
+              },
+            });
+          }
         }
       }
       return res.status(200).json(apiResponse(200, "saved", null));

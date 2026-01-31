@@ -82,7 +82,52 @@ class CodeExecution {
         compile_memory_limit: -1,
         run_memory_limit: -1,
       };
-      console.log(JSON.stringify(executionObject.files[0].content, null, 2));
+
+      const result = await axios.post(
+        this.client + "api/v2/execute",
+        executionObject,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      console.log(JSON.stringify(result.data, null, 2));
+      return result.data;
+    } catch (error: any) {
+      console.log(error.message);
+      throw error;
+      return null;
+    }
+  }
+  async compileTestQuestion(code: string, language: string) {
+    try {
+      if (this.client === null) {
+        throw new Error("the client wasn't initialized properly");
+      }
+
+      const executionObject: CodeExecutionRequest = {
+        language,
+        version: "*",
+        files: [
+          {
+            name:
+              language === "java"
+                ? "CodeRunner.java"
+                : Date.now().toString() + EXTENSION_MAP,
+            content: code,
+          },
+        ],
+        stdin: "",
+        args: [],
+        compile_timeout: 10000,
+        run_timeout: 3000,
+        compile_cpu_time: 10000,
+        run_cpu_time: 3000,
+        compile_memory_limit: -1,
+        run_memory_limit: -1,
+      };
+
       const result = await axios.post(
         this.client + "api/v2/execute",
         executionObject,

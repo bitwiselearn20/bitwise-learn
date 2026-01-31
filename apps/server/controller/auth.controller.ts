@@ -4,11 +4,14 @@ import apiResponse from "../utils/apiResponse";
 import { comparePassword, hashPassword } from "../utils/password";
 import { generateFreshTokens, verifyRefreshToken } from "../utils/jwt";
 import type { JwtPayload } from "../utils/type";
-import { handleSendMail, handleSendOTPMail, handleVerifyOTP } from "../utils/nodemailer/mailHandler";
+import {
+  handleSendMail,
+  handleSendOTPMail,
+  handleVerifyOTP,
+} from "../utils/nodemailer/mailHandler";
 import { generateResetToken, verifyResetToken } from "../utils/resetToken";
 
 class AuthController {
-
   async sendVerificationOTP(req: Request, res: Response) {
     try {
       /**
@@ -20,26 +23,29 @@ class AuthController {
       let dbUser;
       if (req.user.type === "ADMIN" || req.user.type === "SUPERADMIN") {
         dbUser = await prismaClient.user.findFirst({ where: { email: email } });
-      }
-      else if (req.user.type === "STUDENT") {
-        dbUser = await prismaClient.student.findFirst({ where: { email: email } });
-      }
-      else if (req.user.type === "VENDOR") {
-        dbUser = await prismaClient.vendor.findFirst({ where: { email: email } });
-      }
-      else if (req.user.type === "TEACHER") {
-        dbUser = await prismaClient.teacher.findFirst({ where: { email: email } });
+      } else if (req.user.type === "STUDENT") {
+        dbUser = await prismaClient.student.findFirst({
+          where: { email: email },
+        });
+      } else if (req.user.type === "VENDOR") {
+        dbUser = await prismaClient.vendor.findFirst({
+          where: { email: email },
+        });
+      } else if (req.user.type === "TEACHER") {
+        dbUser = await prismaClient.teacher.findFirst({
+          where: { email: email },
+        });
       } else {
-        dbUser = await prismaClient.institution.findFirst({ where: { email: email } });
+        dbUser = await prismaClient.institution.findFirst({
+          where: { email: email },
+        });
       }
-      if (!dbUser) throw new Error("no such user found!")
+      if (!dbUser) throw new Error("no such user found!");
 
-
-      console.log(email)
+      console.log(email);
       const sentOtp = await handleSendOTPMail(email, "email-otp-verification");
       if (sentOtp === false) throw new Error("OTP could not be sent");
       res.status(200).json(apiResponse(200, "OTP sent successfully", null));
-
     } catch (error: any) {
       console.log(error);
       res.status(500).json(apiResponse(500, error.message, error));
@@ -49,8 +55,8 @@ class AuthController {
   async matchVerificationOTP(req: Request, res: Response) {
     try {
       /**
-      * req.params = email
-      */
+       * req.params = email
+       */
 
       const { email, otp } = req.body;
       if (!req.user) throw new Error("User not authenticated");
@@ -58,19 +64,22 @@ class AuthController {
       let dbUser;
       if (req.user.type === "ADMIN" || req.user.type === "SUPERADMIN") {
         dbUser = await prismaClient.user.findFirst({ where: { email: email } });
-        if (!dbUser) throw new Error("no such user found!")
-      }
-      else if (req.user.type === "STUDENT") {
-        dbUser = await prismaClient.student.findFirst({ where: { email: email } });
-        if (!dbUser) throw new Error("no such user found!")
-      }
-      else if (req.user.type === "VENDOR") {
-        dbUser = await prismaClient.vendor.findFirst({ where: { email: email } });
-        if (!dbUser) throw new Error("no such user found!")
-      }
-      else if (req.user.type === "TEACHER") {
-        dbUser = await prismaClient.teacher.findFirst({ where: { email: email } });
-        if (!dbUser) throw new Error("no such user found!")
+        if (!dbUser) throw new Error("no such user found!");
+      } else if (req.user.type === "STUDENT") {
+        dbUser = await prismaClient.student.findFirst({
+          where: { email: email },
+        });
+        if (!dbUser) throw new Error("no such user found!");
+      } else if (req.user.type === "VENDOR") {
+        dbUser = await prismaClient.vendor.findFirst({
+          where: { email: email },
+        });
+        if (!dbUser) throw new Error("no such user found!");
+      } else if (req.user.type === "TEACHER") {
+        dbUser = await prismaClient.teacher.findFirst({
+          where: { email: email },
+        });
+        if (!dbUser) throw new Error("no such user found!");
       }
 
       const isCorrect = handleVerifyOTP(email, otp);
@@ -81,8 +90,6 @@ class AuthController {
       console.log(error);
       res.status(500).json(apiResponse(500, error.message, error));
     }
-
-
   }
 
   async resetPassword(req: Request, res: Response) {
@@ -91,9 +98,9 @@ class AuthController {
       const resetToken = req.cookies.reset_token;
 
       if (!resetToken) {
-        return res.status(401).json(
-          apiResponse(401, "Reset token missing or expired", null)
-        );
+        return res
+          .status(401)
+          .json(apiResponse(401, "Reset token missing or expired", null));
       }
       if (!newPassword) {
         return res
@@ -146,9 +153,7 @@ class AuthController {
       }
 
       if (!dbUser || !userType) {
-        return res
-          .status(404)
-          .json(apiResponse(404, "User not found", null));
+        return res.status(404).json(apiResponse(404, "User not found", null));
       }
 
       // 🔐 Hash new password
@@ -188,13 +193,9 @@ class AuthController {
       });
       res.clearCookie("reset_token");
 
-      return res.status(200).json(
-        apiResponse(
-          200,
-          "Password reset successfully",
-          { tokens }
-        )
-      );
+      return res
+        .status(200)
+        .json(apiResponse(200, "Password reset successfully", { tokens }));
     } catch (error: any) {
       console.error(error);
       return res.status(500).json(apiResponse(500, error.message, null));
@@ -416,6 +417,7 @@ class AuthController {
           rollNumber: true,
           batch: {
             select: {
+              id: true,
               batchname: true,
               branch: true,
               batchEndYear: true,
@@ -423,6 +425,7 @@ class AuthController {
           },
           insitution: {
             select: {
+              id: true,
               name: true,
               tagline: true,
               websiteLink: true,
@@ -467,12 +470,14 @@ class AuthController {
   async forgotPassword(req: Request, res: Response) {
     try {
       /**
-          * req.body = {email}
-      */
+       * req.body = {email}
+       */
       const { email } = req.body;
 
       if (!email) {
-        return res.status(400).json(apiResponse(400, "Email is required", null));
+        return res
+          .status(400)
+          .json(apiResponse(400, "Email is required", null));
       }
 
       // Check user in all tables
@@ -500,8 +505,9 @@ class AuthController {
       const sentOtp = await handleSendOTPMail(email, "reset-password");
       if (sentOtp === false) throw new Error("OTP could not be sent");
 
-      return res.status(200).json(apiResponse(200, "Password reset OTP sent to your email", null));
-
+      return res
+        .status(200)
+        .json(apiResponse(200, "Password reset OTP sent to your email", null));
     } catch (error: any) {
       res.status(500).json(apiResponse(500, error.message, error));
     }
@@ -510,12 +516,14 @@ class AuthController {
   async verifyForgotPassword(req: Request, res: Response) {
     try {
       /**
-          * req.body = {email, otp}
-      */
+       * req.body = {email, otp}
+       */
       const { email, otp } = req.body;
 
       if (!email || !otp) {
-        return res.status(400).json(apiResponse(400, "Email and OTP are required", null));
+        return res
+          .status(400)
+          .json(apiResponse(400, "Email and OTP are required", null));
       }
 
       // Check user in all tables
@@ -549,8 +557,13 @@ class AuthController {
 
       const resetToken = generateResetToken(email);
 
-      return res.status(200).json(apiResponse(200, "Forgot password OTP verified successfully", { resetToken }));
-
+      return res
+        .status(200)
+        .json(
+          apiResponse(200, "Forgot password OTP verified successfully", {
+            resetToken,
+          }),
+        );
     } catch (error: any) {
       res.status(500).json(apiResponse(500, error.message, error));
     }

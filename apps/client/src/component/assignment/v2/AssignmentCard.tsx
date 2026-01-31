@@ -2,7 +2,7 @@
 
 import { Clock, ClipboardList } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import type { AssignmentCardData } from "./AssignmentV2";
@@ -15,6 +15,8 @@ export default function AssignmentCard({
   assignment: AssignmentCardData;
 }) {
   const router = useRouter();
+  const params = useParams();
+  const courseId = params.id as string;
   const [open, setOpen] = useState(false);
 
   const statusStyles =
@@ -120,7 +122,9 @@ export default function AssignmentCard({
 
                 <button
                   onClick={() =>
-                    router.push(`/attempt?type=assignment&id=${assignment.id}`)
+                    router.push(
+                      `/courses/${courseId}/assignment/${assignment.id}`,
+                    )
                   }
                   className={`
     px-4 py-2 rounded-md text-sm font-medium
