@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { getAssignmentById } from "@/api/courses/assignment/get-assignment-by-id";
 import { submitAssignment } from "@/api/courses/assignment/submit-assignment";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type AnswerMap = {
   [questionId: string]: string[];
@@ -102,6 +103,8 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
     setShowReviewScreen(false);
   }
 
+  const Colors = useColors();
+
   /* -------------------- REVIEW SCREEN -------------------- */
   if (showReviewScreen) {
     const totalQuestions = questions.length;
@@ -110,8 +113,8 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
     const unansweredCount = totalQuestions - answeredCount;
 
     return (
-      <div className="p-8 max-w-xl mx-auto">
-        <h2 className="text-xl font-semibold mb-6">
+      <div className={`p-8 max-w-xl mx-auto `}>
+        <h2 className={`text-xl ${Colors.text.special} font-semibold mb-6`}>
           Review Before Final Submit
         </h2>
 
@@ -138,7 +141,7 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
         </div>
 
         {/* ACTIONS */}
-        <div className="flex justify-end gap-4 mt-6">
+        <div className={`flex justify-end gap-4 mt-6 ${Colors.text.special}`}>
           <button
             onClick={() => setShowReviewScreen(false)}
             className="px-4 py-2 border rounded"
@@ -160,16 +163,16 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
 
   /* -------------------- MAIN UI -------------------- */
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className={`flex h-screen ${Colors.background.secondary}`}>
       {/* SIDEBAR */}
-      <div className="w-64 bg-white border-r p-4 overflow-y-auto">
-        <h3 className="font-semibold mb-4">Questions</h3>
+      <div className={`w-64 ${Colors.background.primary} border-r p-4 overflow-y-auto`}>
+        <h3 className={`font-semibold mb-4 ${Colors.text.primary}`}>Questions</h3>
 
         <div className="space-y-2">
           {questions.map((q: any, idx: number) => {
             const answered = !!answers[q.id];
             const review = markedForReview.has(q.id);
-
+ 
             return (
               <div
                 key={q.id}
@@ -177,8 +180,8 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
                 className={`flex justify-between px-3 py-2 rounded cursor-pointer
                   ${
                     idx === currentIndex
-                      ? "bg-blue-100 text-blue-700"
-                      : "hover:bg-gray-100"
+                      ? `${Colors.background.secondary} ${Colors.text.primary}`
+                      : `${Colors.hover.textSpecial}`
                   }`}
               >
                 <span>Q{idx + 1}</span>
@@ -195,14 +198,14 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
       {/* CONTENT */}
       <div className="flex-1 p-8">
         <div className="flex justify-between mb-4">
-          <h2 className="text-xl font-semibold">{assignment.name}</h2>
+          <h2 className={`text-xl ${Colors.text.secondary} font-semibold`}>{assignment.name}</h2>
           <span className="font-mono text-red-600">
             ⏱ {formatTime(timeLeft)}
           </span>
         </div>
 
-        <div className="bg-white rounded shadow p-6">
-          <div className="flex justify-between mb-3">
+        <div className={`${Colors.background.primary} rounded shadow p-6`}>
+          <div className={`flex justify-between ${Colors.text.primary} mb-3`}>
             <h4>
               Question {currentIndex + 1} of {questions.length}
             </h4>
@@ -216,7 +219,7 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
             </button>
           </div>
 
-          <p className="mb-4">{currentQuestion.question}</p>
+          <p className={`mb-4 ${Colors.text.secondary}`}>{currentQuestion.question}</p>
 
           <div className="space-y-3">
             {currentQuestion.options.map((opt: string) => {
@@ -226,11 +229,12 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
                 <div
                   key={opt}
                   onClick={() => handleOptionSelect(opt)}
-                  className={`p-3 border rounded cursor-pointer
+                  className={`p-3 border rounded cursor-pointer ${Colors.background.secondary}
+                              ${Colors.text.primary}
                     ${
                       selected
-                        ? "bg-blue-100 border-blue-400"
-                        : "hover:bg-gray-50"
+                        ? `${Colors.background.heroSecondaryFaded} ${Colors.border.defaultThick}`
+                        : `${Colors.hover.textSpecial}`
                     }`}
                 >
                   {opt}
@@ -243,7 +247,7 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
             <button
               disabled={currentIndex === 0}
               onClick={() => setCurrentIndex((i) => i - 1)}
-              className="px-4 py-2 border rounded disabled:opacity-50"
+              className={`px-4 py-2 border rounded disabled:opacity-50 ${Colors.text.special}`}
             >
               Previous
             </button>
@@ -252,7 +256,7 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
               <button
                 onClick={() => setCurrentIndex((i) => i + 1)}
                 disabled={!answers[currentQuestion.id]}
-                className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+                className={`px-4 py-2 ${Colors.text.special} rounded disabled:opacity-50`}
               >
                 Next
               </button>

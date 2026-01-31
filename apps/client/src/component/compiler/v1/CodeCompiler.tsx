@@ -1,6 +1,8 @@
 "use client";
 import axiosInstance from "@/lib/axios";
 import { Editor } from "@monaco-editor/react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 import {
   Play,
   Timer,
@@ -227,12 +229,15 @@ function CodeCompiler() {
     return <Skeleton />;
   }
 
+  const Colors = useColors();
+  const theme = useTheme();
+
   return (
-    <div className="flex flex-col w-full h-screen bg-[#0f172a] text-white">
+    <div className={`flex flex-col w-full h-screen ${Colors.background.primary} ${Colors.text.primary}`}>
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-slate-700 bg-[#020617]">
+      <div className={`flex items-center justify-between px-6 py-3 border-b border-slate-700 ${Colors.background.primary}`}>
         <div className="flex gap-3">
-          <div className="h-7 w-7 flex items-center justify-center rounded bg-blue-600 font-bold">
+          <div className={`h-7 w-7 flex items-center justify-center rounded ${Colors.background.heroSecondary} font-bold`}>
             B
           </div>
           <h1 className="font-semibold text-xl tracking-wide">
@@ -242,7 +247,7 @@ function CodeCompiler() {
 
         <div className="flex gap-3 items-center">
           <div
-            className={`flex items-center bg-slate-900 border border-slate-700 rounded-lg
+            className={`flex items-center ${Colors.background.secondary} border ${Colors.border.defaultThin} rounded-lg
   transition-all duration-300 ease-out
   ${showStopwatch ? "px-1 gap-2 w-40 py-1" : "w-9 h-9 justify-center"}`}
           >
@@ -296,8 +301,7 @@ function CodeCompiler() {
           <div className="relative group">
             <button
               onClick={toggleFullscreen}
-              className="p-2 bg-slate-800 rounded hover:bg-slate-700 cursor-pointer"
-            >
+              className={`p-2 ${Colors.background.secondary} rounded ${Colors.border.defaultThin} cursor-pointer`}            >
               <Maximize className="text-blue-400" size={18} />
             </button>
             <Tooltip label="Fullscreen" />
@@ -306,14 +310,14 @@ function CodeCompiler() {
           <div className="relative" ref={langRef}>
             <button
               onClick={() => setLangOpen((p) => !p)}
-              className="bg-slate-800 px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium border border-slate-600"
+              className={`${Colors.background.secondary} px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium border ${Colors.border.defaultThin}`}
             >
               {language.toUpperCase()}
               {langOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>
 
             {langOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-slate-900 rounded-xl border border-white/10 shadow-lg overflow-hidden z-50">
+              <div className={`absolute right-0 mt-2 w-40 ${Colors.background.secondary} rounded-xl border ${Colors.border.defaultThin} shadow-lg overflow-hidden z-50`}>
                 {Object.keys(LANGUAGE_CONFIG).map((lang) => (
                   <button
                     key={lang}
@@ -352,7 +356,7 @@ function CodeCompiler() {
             language={LANGUAGE_CONFIG[language].monaco}
             value={code}
             onChange={(value) => setCode(value || "")}
-            theme="vs-dark"
+            theme={theme.theme==="Dark" ? "vs-dark" : "vs-light"}
             options={{
               fontSize: 15,
               lineHeight: 22,
@@ -370,7 +374,7 @@ function CodeCompiler() {
           />
         </div>
         <div
-          className="w-1 cursor-col-resize bg-slate-700 hover:bg-slate-500"
+          className={`w-1 cursor-col-resize ${Colors.background.primary} hover:bg-slate-500`}
           onMouseDown={(e) => {
             const startX = e.clientX;
             const startWidth = editorWidth;
@@ -394,22 +398,22 @@ function CodeCompiler() {
 
         <div
           style={{ width: `${100 - editorWidth}%` }}
-          className="h-[90svh] min-w-75 flex flex-col border-l border-slate-700"
+          className={`h-[90svh] min-w-75 flex flex-col border-l ${Colors.background.primary}`}
         >
           {/* Input */}
           <div style={{ height: `${inputHeight}%` }} className="min-h-30 p-3">
-            <p className="text-sm font-medium text-slate-300 mb-2 uppercase tracking-wide">
+            <p className={`text-sm font-medium ${Colors.text.secondary} mb-2 uppercase tracking-wide`}>
               Input
             </p>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="w-full h-full bg-slate-900 border border-slate-700 rounded p-2 text-sm resize-y overflow-auto"
+              className={`w-full h-full ${Colors.background.secondary} ${Colors.border.defaultThin} rounded p-2 text-sm resize-y overflow-auto`}
               placeholder="Enter input here..."
             />
           </div>
           <div
-            className="h-1 top-6 cursor-row-resize bg-slate-700 transition relative z-10"
+            className={`h-1 top-6 cursor-row-resize bg-slate-700 transition relative z-10`}
             onMouseDown={(e) => {
               const startY = e.clientY;
               const startHeight = inputHeight;
@@ -438,15 +442,15 @@ function CodeCompiler() {
           {/* Output */}
           <div
             style={{ height: `${100 - inputHeight - 2}%` }}
-            className="min-h-30 p-3 border-t border-slate-700 my-5"
+            className={`min-h-30 p-3 border-t ${Colors.border.defaultThin} my-5`}
           >
-            <p className="text-xs font-medium text-slate-300 mb-2 uppercase tracking-wide">
+            <p className={`text-xs font-medium ${Colors.text.secondary} mb-2 uppercase tracking-wide`}>
               Output
             </p>
             <textarea
               value={output}
               readOnly
-              className="w-full h-full bg-black border border-slate-700 rounded p-2 text-sm resize-y overflow-auto text-emerald-400"
+              className={`w-full h-full ${Colors.background.secondary} border ${Colors.border.defaultThin} rounded p-2 text-sm resize-y overflow-auto text-emerald-400`}
             />
           </div>
         </div>
