@@ -13,6 +13,8 @@ import {
 import ThemeSwitcher from "./(Color Manager)/ThemeSwitcher";
 import { useColors } from "./(Color Manager)/useColors";
 import { useRole } from "./useRole";
+import { useRouter } from "next/navigation";
+import { logoutUser } from "@/lib/logout";
 
 const MIN_WIDTH = 60;
 const MAX_WIDTH = 420;
@@ -25,9 +27,16 @@ export default function SideBar() {
   const isResizing = useRef(false);
   const sidebarRef = useRef<HTMLElement | null>(null);
 
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logoutUser();
+    router.replace("/");
+  };
+
   const isCollapsed = width <= 80;
 
-  // ✅ Hooks must ALWAYS run
+  // Hooks must ALWAYS run
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isResizing.current || !sidebarRef.current) return;
@@ -132,12 +141,19 @@ export default function SideBar() {
       <div className="mt-auto px-2 py-4">
         <ThemeSwitcher />
         <button
-          className={`w-full flex items-center
-            ${isCollapsed ? "justify-center px-2" : "gap-3 px-4"}
-            py-2.5 rounded-lg text-sm font-medium
-            ${Colors.text.secondary}
-            hover:text-red-400 hover:bg-red-500/10
-            transition-all active:scale-95`}
+          onClick={handleLogout}
+          className={`
+    w-full flex items-center
+    ${isCollapsed ? "justify-center px-2" : "gap-3 px-4"}
+    py-2.5 rounded-lg
+    text-sm font-medium
+    ${Colors.text.secondary}
+    hover:text-red-400
+    hover:bg-red-500/10
+    transition-all
+    cursor-pointer
+    active:scale-95
+  `}
         >
           <LogOut size={18} />
           {!isCollapsed && <span>Log out</span>}

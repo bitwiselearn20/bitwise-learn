@@ -2,7 +2,14 @@
 
 import { getCourseById } from "@/api/courses/course/get-course-by-id";
 import { motion, AnimatePresence } from "framer-motion";
-import { Book, CheckLine, ChevronDown, Play, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Book,
+  CheckLine,
+  ChevronDown,
+  Play,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import ReactViewAdobe from "react-adobe-embed";
@@ -14,6 +21,7 @@ import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 import AssignmentV2 from "@/component/assignment/v2/AssignmentV2";
 import Assignment from "@/component/assignment/Assignment";
+import { getCourseProgressById } from "@/api/courses/course/course-progress-by-id";
 
 /* ================= TYPES ================= */
 
@@ -62,11 +70,21 @@ export default function CourseV2() {
   const [studyMode, setStudyMode] = useState(false);
   const [showTranscript, setShowTranscript] = useState(true);
   const [showPDF, setShowPDF] = useState(true);
-  const [completedSection, setCompletedSection] = useState([]);
+  const [completedSection, setCompletedSection] = useState<{ id: string }[]>(
+    [],
+  );
   const [showSidebar, setShowSidebar] = useState(true);
   const [pdfMode, setPdfMode] = useState(false);
 
+  const totalTopics = sections.reduce(
+    (acc, sec) => acc + sec.courseLearningContents.length,
+    0,
+  );
 
+  const completedCount = completedSection.length;
+
+  const progressPercent =
+    totalTopics === 0 ? 0 : Math.round((completedCount / totalTopics) * 100);
 
   const isResizing = useRef(false);
 
@@ -90,6 +108,28 @@ export default function CourseV2() {
     }
 
     fetchData();
+  }, [params.id]);
+
+  /* ================= FETCH COURSE PROGRESS ================= */
+
+  useEffect(() => {
+    async function fetchProgress() {
+      if (!params.id) return;
+
+      const res = await getCourseProgressById(params.id as string);
+      const progress = res.data;
+
+      if (!progress || !progress.completedContentIds) {
+        setCompletedSection([]);
+        return;
+      }
+
+      setCompletedSection(
+        progress.completedContentIds.map((id: string) => ({ id })),
+      );
+    }
+
+    fetchProgress();
   }, [params.id]);
 
   /* ================= SIDEBAR RESIZE ================= */
@@ -142,25 +182,34 @@ export default function CourseV2() {
     return () =>
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
-  const handleMarkAsDone = async () => {
-    if (!activeTopic) return;
 
-    if (activeTopic.isCompleted) {
-      //@ts-ignore
-      await markAsUnDone(activeTopic.id);
+  const isActiveTopicCompleted = activeTopic
+  ? completedSection.some((s) => s.id === activeTopic.id)
+  : false;
 
-      setCompletedSection((prev) =>
-        //@ts-ignore
-        prev.filter((section) => section.id !== activeTopic.id),
-      );
-    } else {
-      //@ts-ignore
-      await markAsDone(activeTopic.id);
 
-      //@ts-ignore
-      setCompletedSection((prev) => [...prev, { id: activeTopic.id }]);
-    }
-  };
+const handleMarkAsDone = async () => {
+  if (!activeTopic) return;
+
+  const isCompleted = completedSection.some(
+    (s) => s.id === activeTopic.id
+  );
+
+  if (isCompleted) {
+    await markAsUnDone(activeTopic.id);
+
+    setCompletedSection((prev) =>
+      prev.filter((s) => s.id !== activeTopic.id)
+    );
+  } else {
+    await markAsDone(activeTopic.id);
+
+    setCompletedSection((prev) => [
+      ...prev,
+      { id: activeTopic.id },
+    ]);
+  }
+};
 
   /* ================= RENDER ================= */
 
@@ -182,6 +231,7 @@ export default function CourseV2() {
               mode={mode}
               setMode={setMode}
               completedSection={completedSection}
+              totalTopics={totalTopics}
               onSelectTopic={(t: any) => {
                 setActiveTopic(t);
                 setActiveAssignment(null);
@@ -198,14 +248,15 @@ export default function CourseV2() {
                 );
               }}
             />
+
             <button
-            onClick={() => setShowSidebar(false)}
-            className={`absolute -right-4 top-1/2 -translate-y-1/2 
+              onClick={() => setShowSidebar(false)}
+              className={`absolute -right-4 top-1/2 -translate-y-1/2 
               p-2 rounded-md shadow-md 
               ${Colors.background.primary} ${Colors.text.primary}
               hover:scale-105 transition cursor-pointer`}
-          >
-            <ChevronLeft />
+            >
+              <ChevronLeft />
             </button>
 
             <div
@@ -227,27 +278,32 @@ export default function CourseV2() {
           </button>
         )}
 
-
         {/* ================= RIGHT CONTENT ================= */}
-        <div className={`flex-1 ${Colors.background.secondary} rounded-xl h-full overflow-hidden flex flex-col`}>
+        <div
+          className={`flex-1 ${Colors.background.secondary} rounded-xl h-full overflow-hidden flex flex-col`}
+        >
           {/* HEADER */}
           <div
-            className={`p-6 ${Colors.background.secondary} flex justify-between`}
+            className={`p-6 ${Colors.background.secondary} flex items-center justify-between`}
           >
-            <h2 className={`${Colors.text.primary} text-lg font-semibold`}>
-              {mode === "LEARNING" ? activeTopic?.name : activeAssignment?.name}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className={`${Colors.text.primary} text-lg font-semibold`}>
+                {mode === "LEARNING"
+                  ? activeTopic?.name
+                  : activeAssignment?.name}
+              </h2>
+            </div>
             <div className=" flex gap-3 justify-end">
-            {activeTopic?.file && (
-              <button
-                onClick={() => setPdfMode((p) => !p)}
-                className={`px-3 py-2 
+              {activeTopic?.file && (
+                <button
+                  onClick={() => setPdfMode((p) => !p)}
+                  className={`px-3 py-2 
                   ${Colors.background.primary} ${Colors.text.primary} 
                   ${Colors.hover.special} rounded-lg cursor-pointer`}
-              >
-                {pdfMode ? "Exit PDF Mode" : "PDF Mode"}
-              </button>
-            )}
+                >
+                  {pdfMode ? "Exit PDF Mode" : "PDF Mode"}
+                </button>
+              )}
 
               {
                 <button
@@ -274,7 +330,7 @@ export default function CourseV2() {
                 onClick={handleMarkAsDone}
                 className={`px-3 py-2 ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special} cursor-pointer rounded-lg`}
               >
-                Mark as Done
+                {isActiveTopicCompleted ? "Mark as Undone" : "Mark as Done"}
               </button>
             </div>
           </div>
@@ -339,59 +395,102 @@ export default function CourseV2() {
 
 /* ================= LEARNING VIEW ================= */
 
-
 function LearningView({ topic, showPDF, studyMode, pdfMode }: any) {
-const { theme } = useTheme();
-  const markdownTheme: "light" | "dark" =
-  theme === "Dark" ? "dark" : "light";
+  const { theme } = useTheme();
+  const markdownTheme: "light" | "dark" = theme === "Dark" ? "dark" : "light";
 
   return (
-  <div className={`flex gap-6 ${pdfMode ? "h-full" : ""}`}>
-    {!pdfMode && (
-      <div className="flex-1 flex flex-col gap-6 min-h-0">
-        <div className={`aspect-video rounded-xl overflow-hidden ${Colors.background.primary}`}>
-          {topic.videoUrl && (
-            <iframe
-              src={topic.videoUrl}
-              className="w-full h-full"
-              allowFullScreen
-            />
+    <div className={`flex gap-6 ${pdfMode ? "h-full" : ""}`}>
+      {!pdfMode && (
+        <div className="flex-1 flex flex-col gap-6 min-h-0">
+          <div
+            className={`aspect-video rounded-xl overflow-hidden ${Colors.background.primary}`}
+          >
+            {topic.videoUrl && (
+              <iframe
+                src={topic.videoUrl}
+                className="w-full h-full"
+                allowFullScreen
+              />
+            )}
+          </div>
+
+          {topic.transcript ? (
+            <aside
+              className={`w-full ${Colors.background.primary} p-4 rounded-xl flex-1 overflow-y-auto`}
+            >
+              <MarkdownEditor
+                // height={550}
+                value={topic.transcript}
+                setValue={() => {}}
+                mode={"preview"}
+                hideToolbar={true}
+                theme={markdownTheme}
+              />
+            </aside>
+          ) : (
+            <aside
+              className={`w-full h-[25%] flex justify-center items-center pt-8 ${Colors.background.secondary} p-4 rounded-xl ${Colors.text.secondary}`}
+            >
+              No Transcripts yet
+            </aside>
           )}
         </div>
+      )}
 
-        {topic.transcript ? (
-          <aside className={`w-full ${Colors.background.primary} p-4 rounded-xl flex-1 overflow-y-auto`}>
-            <MarkdownEditor
-              // height={550}
-              value={topic.transcript}
-              setValue={() => {}}
-              mode={"preview"}
-              hideToolbar={true}
-              theme={markdownTheme}
-            />
-          </aside>
-        ) : (
-          <aside
-            className={`w-full h-[25%] flex justify-center items-center pt-8 ${Colors.background.secondary} p-4 rounded-xl ${Colors.text.secondary}`}
-          >
-            No Transcripts yet
-          </aside>
-        )}
-      </div>
-    )}
+      {topic.file && (showPDF || pdfMode) && (
+        <iframe
+          src={topic.file}
+          className={
+            pdfMode
+              ? "w-full h-[90vh] rounded-xl"
+              : "w-[40%] h-screen rounded-xl"
+          }
+        />
+      )}
+    </div>
+  );
+}
 
-    {topic.file && (showPDF || pdfMode) && (
-      <iframe
-        src={topic.file}
-        className={
-          pdfMode
-            ? "w-full h-[90vh] rounded-xl"
-            : "w-[40%] h-screen rounded-xl"
-        }
-      />
-    )}
-  </div>
-);
+/*========= Course Progress Circle ============*/
+
+function ProgressRing({ value }: { value: number }) {
+  const radius = 26;
+  const stroke = 5;
+  const size = radius * 2;
+  const normalizedRadius = radius - stroke;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const offset = circumference - (value / 100) * circumference;
+
+  return (
+    <div className="relative w-14 h-14 flex items-center justify-center">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle
+          stroke="currentColor"
+          className="opacity-20"
+          fill="transparent"
+          strokeWidth={stroke}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+        />
+        <circle
+          stroke="currentColor"
+          fill="transparent"
+          strokeWidth={stroke}
+          strokeDasharray={`${circumference} ${circumference}`}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+          className="transition-all duration-300"
+        />
+      </svg>
+
+      <span className="absolute text-xs font-semibold">{value}%</span>
+    </div>
+  );
 }
 
 /* ================= SIDEBAR ================= */
@@ -404,6 +503,7 @@ function SectionNav({
   onSelectAssignment,
   onToggleSection,
   completedSection,
+  totalTopics,
 }: {
   sections: Section[];
   mode: "LEARNING" | "ASSIGNEMENT";
@@ -411,106 +511,130 @@ function SectionNav({
   onSelectTopic: (t: Topic) => void;
   onSelectAssignment: (a: Assignment) => void;
   onToggleSection: (id: string) => void;
-  completedSection: Section[];
+  completedSection: { id: string }[];
+  totalTopics: number;
 }) {
+  const completedCount = completedSection.length;
+
+  const progressPercent =
+    totalTopics === 0 ? 0 : Math.round((completedCount / totalTopics) * 100);
+
+  const isCourseCompleted = progressPercent === 100;
+
   const fetchIcon = (id: string) => {
-    const match = completedSection.filter((section: any) => {
-      return section.id === id;
-    });
-
-    console.log(match);
-
-    return match.length === 0 ? (
-      <Play size={14} className="mr-2" />
-    ) : (
+    return completedSection.some((s) => s.id === id) ? (
       <CheckLine size={14} className="mr-2" />
+    ) : (
+      <Play size={14} className="mr-2" />
     );
   };
   return (
-    <nav className="h-full overflow-y-auto p-4 space-y-4">
-      {/* Mode Switch */}
-      <div className={`flex mb-6 justify-center gap-4 ${Colors.text.primary}`}>
-        <button
-          onClick={() => setMode("LEARNING")}
-          className={`px-3 py-1.5 rounded-md cursor-pointer ${
-            mode === "LEARNING"
-              ? `${Colors.background.special} ${Colors.text.primary}`
-              : `${Colors.background.primary} ${Colors.text.primary}`
-          }`}
-        >
-          Learning
-        </button>
-        <button
-          onClick={() => setMode("ASSIGNEMENT")}
-          className={`px-3 py-1.5 rounded-md cursor-pointer ${
-            mode === "ASSIGNEMENT"
-              ? `${Colors.background.special} ${Colors.text.primary}`
-              : `${Colors.background.primary} ${Colors.text.primary}`
-          }`}
-        >
-          Assignments
-        </button>
-      </div>
-
-      {sections.map((section) => (
+    <div className="relative h-full">
+      {/* Scrollable content */}
+      <nav className="h-full overflow-y-auto p-4 space-y-4 pb-24">
+        {/* Mode Switch */}
         <div
-          key={section.id}
-          className={`rounded-lg overflow-hidden ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special}`}
+          className={`flex mb-6 justify-center items-center gap-4 ${Colors.text.primary}`}
         >
-          {/* Section Header */}
+          <ProgressRing value={progressPercent} />
           <button
-            onClick={() => onToggleSection(section.id)}
-            className={`w-full px-4 py-3 flex justify-between items-center cursor-pointer ${Colors.hover.special}`}
+            onClick={() => setMode("LEARNING")}
+            className={`px-2 h-10 rounded-md cursor-pointer ${
+              mode === "LEARNING"
+                ? `${Colors.background.special} ${Colors.text.primary}`
+                : `${Colors.background.primary} ${Colors.text.primary}`
+            }`}
           >
-            <span>{section.name}</span>
-            <ChevronDown
-              className={`transition-transform ${
-                section.isOpen ? "rotate-180" : ""
-              }`}
-            />
+            Learning
           </button>
+          <button
+            onClick={() => setMode("ASSIGNEMENT")}
+            className={`px-2 h-10 rounded-md cursor-pointer ${
+              mode === "ASSIGNEMENT"
+                ? `${Colors.background.special} ${Colors.text.primary}`
+                : `${Colors.background.primary} ${Colors.text.primary}`
+            }`}
+          >
+            Assignments
+          </button>
+        </div>
 
-          {/* Section Content */}
-          {section.isOpen && (
-            <div
-              className={`${Colors.background.primary} ${Colors.text.primary}`}
+        {sections.map((section) => (
+          <div
+            key={section.id}
+            className={`rounded-lg overflow-hidden ${Colors.background.primary} ${Colors.text.primary} ${Colors.hover.special}`}
+          >
+            {/* Section Header */}
+            <button
+              onClick={() => onToggleSection(section.id)}
+              className={`w-full px-4 py-3 flex justify-between items-center cursor-pointer ${Colors.hover.special}`}
             >
-              {mode === "LEARNING" ? (
-                section.courseLearningContents.length > 0 ? (
-                  section.courseLearningContents.map((t) => (
+              <span>{section.name}</span>
+              <ChevronDown
+                className={`transition-transform ${
+                  section.isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {/* Section Content */}
+            {section.isOpen && (
+              <div
+                className={`${Colors.background.primary} ${Colors.text.primary}`}
+              >
+                {mode === "LEARNING" ? (
+                  section.courseLearningContents.length > 0 ? (
+                    section.courseLearningContents.map((t) => (
+                      <button
+                        key={t.id}
+                        onClick={() => onSelectTopic(t)}
+                        className={`flex items-center w-full px-6 py-2 cursor-pointer ${Colors.hover.special}`}
+                      >
+                        {fetchIcon(t.id)}
+                        {t.name}
+                      </button>
+                    ))
+                  ) : (
+                    <div className={`px-6 py-2 ${Colors.text.secondary}`}>
+                      No topics yet
+                    </div>
+                  )
+                ) : section.courseAssignemnts.length > 0 ? (
+                  section.courseAssignemnts.map((a) => (
                     <button
-                      key={t.id}
-                      onClick={() => onSelectTopic(t)}
+                      key={a.id}
+                      onClick={() => onSelectAssignment(a)}
                       className={`flex items-center w-full px-6 py-2 cursor-pointer ${Colors.hover.special}`}
                     >
-                      {fetchIcon(t.id)}
-                      {t.name}
+                      {a.name}
                     </button>
                   ))
                 ) : (
                   <div className={`px-6 py-2 ${Colors.text.secondary}`}>
-                    No topics yet
+                    No assignments yet
                   </div>
-                )
-              ) : section.courseAssignemnts.length > 0 ? (
-                section.courseAssignemnts.map((a) => (
-                  <button
-                    key={a.id}
-                    onClick={() => onSelectAssignment(a)}
-                    className={`flex items-center w-full px-6 py-2 cursor-pointer ${Colors.hover.special}`}
-                  >
-                    {a.name}
-                  </button>
-                ))
-              ) : (
-                <div className={`px-6 py-2 ${Colors.text.secondary}`}>
-                  No assignments yet
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </nav>
+      {/*  CERTIFICATE BUTTON */}
+      {isCourseCompleted && (
+        <div className="absolute bottom-4 right-4">
+          <button
+            className={`px-4 py-2 rounded-lg shadow-md font-medium
+          ${Colors.background.special} ${Colors.text.primary}
+          hover:scale-105 transition cursor-pointer`}
+            onClick={() => {
+              // later: navigate to certificate download
+              console.log("Download certificate");
+            }}
+          >
+            Get Certificate
+          </button>
         </div>
-      ))}
-    </nav>
+      )}
+    </div>
   );
 }

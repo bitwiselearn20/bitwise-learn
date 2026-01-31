@@ -2,10 +2,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface Admin {
-  email: string;
-  id: string;
-  name: string;
-  ROLE: string;
+  data: {
+    email: string;
+    id: string;
+    name: string;
+    ROLE: string;
+  };
 }
 interface AdminStore {
   info: Admin | null;

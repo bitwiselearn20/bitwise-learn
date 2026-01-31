@@ -5,34 +5,35 @@ import { getAllStats } from "@/api/admins/get-admin-stats";
 import { User } from "lucide-react";
 import Link from "next/link";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { useAdmin } from "@/store/adminStore";
 
 /* ---------------- TYPES ---------------- */
 
 type StatsMap = Record<string, number>;
-
-type HeaderProps = {
-  name: string;
-  email: string;
-};
 
 type EntityTabsProps = {
   fields: string[];
   data: StatsMap;
 };
 
-const Colors = useColors();
-
 /* ---------------- HEADER ---------------- */
-function Header({ name, email }: HeaderProps) {
+function Header() {
+  const Colors = useColors();
+  const admin = useAdmin();
+
+  if (!admin.info) return null;
+
+  const { name, email } = admin.info.data;
+
   return (
     <div className="flex justify-between p-4">
       <div>
         <span className={`text-5xl ${Colors.text.special}`}>Greetings,</span>{" "}
-        <span className={`text-5xl ${Colors.text.primary}`}>Admin</span>
+        <span className={`text-5xl ${Colors.text.primary}`}>{name}</span>
         <div className="mt-2 text-lg">
-          <span className={`${Colors.text.primary}`}>Enjoy managing</span>{" "}
-          <span className={`${Colors.text.special}`}>B</span>
-          <span className={`${Colors.text.primary}`}>itwise Learn</span>
+          <span className={Colors.text.primary}>Enjoy managing</span>{" "}
+          <span className={Colors.text.special}>B</span>
+          <span className={Colors.text.primary}>itwise Learn</span>
         </div>
       </div>
 
@@ -40,8 +41,8 @@ function Header({ name, email }: HeaderProps) {
         <div className="p-8 bg-white rounded-full flex justify-center items-center">
           <User size={35} color="black" />
         </div>
-        <div className={` ${Colors.text.primary} flex flex-col mt-3 ml-4`}>
-          <h1 className={`${Colors.text.primary} text-3xl`}>{name}</h1>
+        <div className={`${Colors.text.primary} flex flex-col mt-3 ml-4`}>
+          <h1 className="text-3xl">{name}</h1>
           <p>{email}</p>
         </div>
       </div>
@@ -67,14 +68,12 @@ export default function HeroSection() {
   }, []);
 
   useEffect(() => {
-    console.log(tabs);
     setFields(Object.keys(tabs));
   }, [tabs]);
 
   return (
     <>
-      <Header name="Britto Anand" email="brittoanand@example.com" />
-
+      <Header />
       <EntityTabs fields={fields} data={tabs} />
     </>
   );
@@ -113,6 +112,8 @@ const ENTITY_META: Record<
 };
 
 function EntityTabs({ fields, data }: EntityTabsProps) {
+  const Colors = useColors();
+
   if (!fields.length) {
     return <p className="text-white/60 text-center mt-6">Loading dashboard…</p>;
   }
@@ -131,37 +132,31 @@ function EntityTabs({ fields, data }: EntityTabsProps) {
             key={field}
             href={href}
             className={`
-                            group relative rounded-2xl p-6
+              group relative rounded-2xl p-6
               ${Colors.background.secondary} overflow-hidden
               hover:shadow-2xl hover:-translate-y-1
               transition-all duration-300
-              `}
+            `}
           >
-            {/* Gradient depth layer */}
             <div
-              className={`absolute inset-0 bg-gradient-to-br ${meta.accent} opacity-0 group-hover:opacity-100 transition`}
+              className={`absolute inset-0 bg-linear-to-br ${meta.accent} opacity-0 group-hover:opacity-100 transition`}
             />
 
-            {/* Content */}
             <div className="relative z-10 flex flex-col gap-4">
-              {/* Icon + Count */}
               <div className="flex items-center justify-between">
                 <div className={`p-3 rounded-xl ${Colors.background.primary}`}>
-                  <Icon className={`text-primaryBlue`} size={28} />
+                  <Icon className="text-primaryBlue" size={28} />
                 </div>
                 <span className={`text-3xl font-bold ${Colors.text.primary}`}>
                   {data[field] ?? 0}
                 </span>
               </div>
 
-              {/* Text */}
               <div>
                 <h3 className={`text-lg font-semibold ${Colors.text.primary}`}>
                   {meta.label}
                 </h3>
-                <p
-                  className={`text-sm mt-1 leading-snug ${Colors.text.secondary}`}
-                >
+                <p className={`text-sm mt-1 ${Colors.text.secondary}`}>
                   {meta.tagline}
                 </p>
               </div>

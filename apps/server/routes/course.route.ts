@@ -170,7 +170,7 @@ router.post(
   authMiddleware,
   courseProgressController.markAsDone,
 );
-router.put(
+router.post(
   "/unmark-content-as-done/:id",
   authMiddleware,
   courseProgressController.unMarksAsDone,

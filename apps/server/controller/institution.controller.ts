@@ -183,41 +183,50 @@ class InstitutionController {
       return res.status(200).json(apiResponse(200, error.message, null));
     }
   }
-  async getAllInstitutions(req: Request, res: Response) {
-    try {
-      if (!req.user) throw new Error("user is not authenticated");
-      const userId = req.user.id;
-
-      const dbAdmin = await prismaClient.user.findFirst({
-        where: { id: userId },
-      });
-
-      if (!dbAdmin) throw new Error("no such user found!");
-
-      if (dbAdmin.ROLE !== "ADMIN" && dbAdmin.ROLE !== "SUPERADMIN") {
-        throw new Error("only admin/superadmin can view institutions");
-      }
-
-      const institutions = await prismaClient.institution.findMany({
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      });
-
+async getAllInstitutions(req: Request, res: Response) {
+  try {
+    if (!req.user) {
       return res
         .status(200)
-        .json(
-          apiResponse(200, "institutions fetched successfully", institutions),
-        );
-    } catch (error: any) {
-      console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+        .json(apiResponse(401, "user is not authenticated", null));
     }
+
+    // Allow ADMIN, SUPERADMIN, VENDOR
+    if (
+      req.user.type !== "ADMIN" &&
+      req.user.type !== "SUPERADMIN" &&
+      req.user.type !== "VENDOR"
+    ) {
+      return res
+        .status(200)
+        .json(apiResponse(403, "not authorized to view institutions", null));
+    }
+
+    const institutions = await prismaClient.institution.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        tagline: true,
+        phoneNumber: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return res
+      .status(200)
+      .json(
+        apiResponse(200, "institutions fetched successfully", institutions),
+      );
+  } catch (error: any) {
+    console.log(error);
+    return res
+      .status(200)
+      .json(apiResponse(500, error.message, null));
   }
+}
+
   async getInstitutionById(req: Request, res: Response) {
     try {
       if (!req.user) throw new Error("user is not authenticated");
@@ -343,7 +352,7 @@ async getInstitutionDashboard(req: Request, res: Response) {
           where: { institutionId: institution.id },
         }),
         prismaClient.student.count({
-          where: { institutionId: institution.id },
+          where: { instituteId: institution.id },
         }),
         prismaClient.teacher.count({
           where: { instituteId: institution.id },

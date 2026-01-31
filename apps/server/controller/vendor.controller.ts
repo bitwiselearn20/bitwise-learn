@@ -122,39 +122,45 @@ class VendorController {
       return res.status(200).json(apiResponse(200, error.message, null));
     }
   }
-  async getAllVendors(req: Request, res: Response) {
-    try {
-      if (!req.user) throw new Error("user is not authenticated");
-
-      const institutionId = req.user.id;
-      let whereClause: any = {};
-
-      if (req.user.type !== "INSTITUTION" && req.user.type != "SUPERADMIN") {
-        throw new Error("only institution can view vendors");
-      }
-      if (req.user.type == "INSTITUTION") {
-        whereClause = { institutionId: req.user.id };
-      }
-      const institutions = await prismaClient.vendor.findMany({
-        where: whereClause,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phoneNumber: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      });
-
+async getAllVendors(req: Request, res: Response) {
+  try {
+    if (!req.user) {
       return res
-        .status(200)
-        .json(apiResponse(200, "vendors fetched successfully", institutions));
-    } catch (error: any) {
-      console.log(error);
-      return res.status(200).json(apiResponse(200, error.message, null));
+        .status(401)
+        .json(apiResponse(401, "user is not authenticated", null));
     }
+
+    if (
+      req.user.type !== "SUPERADMIN" &&
+      req.user.type !== "ADMIN" &&
+      req.user.type !== "INSTITUTION"
+    ) {
+      return res
+        .status(403)
+        .json(apiResponse(403, "not authorized to view vendors", null));
+    }
+
+    const vendors = await prismaClient.vendor.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phoneNumber: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return res
+      .status(200)
+      .json(apiResponse(200, "vendors fetched successfully", vendors));
+  } catch (error: any) {
+    console.log(error);
+    return res
+      .status(200)
+      .json(apiResponse(500, error.message, null));
   }
+}
   async getVendorById(req: Request, res: Response) {
     try {
       if (!req.user) throw new Error("user is not authenticated");

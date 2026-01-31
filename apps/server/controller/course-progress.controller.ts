@@ -189,11 +189,13 @@ class CourseProgressController {
 
       const course = await prismaClient.course.findUnique({
         where: { id: dbCourse.id },
-        include: {
+        select: {
           courseSections: {
-            include: {
+            select: {
+              id: true,
               courseLearningContents: {
-                include: {
+                select: {
+                  id: true,
                   courseProgresses: {
                     where: { studentId: dbStudent.id },
                     select: { id: true },
@@ -201,38 +203,32 @@ class CourseProgressController {
                 },
               },
             },
-            select: {
-              id: true,
-            },
           },
         },
       });
+
       if (!course) throw new Error("no course found");
 
       // get % per course
       let totalSections = 0;
       let completedSections = 0;
-      const individualSectionMap: any = {};
-      course?.courseSections.map((course) => {
-        totalSections += course.courseLearningContents.length;
-        individualSectionMap[course.id] = 0;
-        let completedInSection = 0;
-        course.courseLearningContents.map((section) => {
-          if (section.courseProgresses.length > 0) {
+      const completedContentIds: string[] = [];
+      course.courseSections.forEach((section) => {
+        section.courseLearningContents.forEach((content) => {
+          if (content.courseProgresses.length > 0) {
+            completedContentIds.push(content.id);
             completedSections++;
-            completedInSection++;
           }
+          totalSections++;
         });
-        individualSectionMap[course.id] =
-          completedInSection / course.courseLearningContents.length;
       });
 
       const overAllCompletionStatus = completedSections / totalSections;
 
       return res.status(200).json(
         apiResponse(200, "course info fetched", {
-          overallProgress: overAllCompletionStatus,
-          sectionInfo: individualSectionMap,
+          overallProgress: completedSections / totalSections,
+          completedContentIds,
         }),
       );
     } catch (error: any) {

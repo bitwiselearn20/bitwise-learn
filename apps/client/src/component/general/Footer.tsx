@@ -92,24 +92,18 @@ export default function Footer() {
           </h4>
           <ul className={`space-y-2 ${Colors.text.secondary}`}>
             <li>
-              Email:{" "}
-              <a
-                href="mailto:info@bitwise.com"
-                className="hover:font-semibold transition-all duration-200"
+              <p
               >
-                info@Bitwise.com
-              </a>
+                Email : sales_support@bitwiselearn.com
+              </p>
             </li>
             <li>
-              Phone:{" "}
-              <a
-                href="tel:+919779935714"
-                className="hover:font-semibold transition-all duration-200"
+              <p
               >
-                +91 9779935714
-              </a>
+                 Phone : +91 9787777547
+              </p>
             </li>
-            <li>Address: #2147 Green St., Dhakoli</li>
+            <li>Address : Banglore India</li>
           </ul>
         </div>
       </div>
