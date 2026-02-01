@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type BatchData = {
   id: string;
@@ -22,6 +23,7 @@ function formatDate(date: string) {
 
 function DashboardInfo({ data }: Props) {
   const router = useRouter();
+  const Colors = useColors();
 
   const handleSeeDetails = (batchId: string) => {
     router.push(`/admin-dashboard/batches/${batchId}`);
@@ -39,7 +41,7 @@ function DashboardInfo({ data }: Props) {
     <>
       {/* Table */}
       <div
-        className="w-full overflow-y-auto border border-white/10 bg-divBg shadow-lg"
+        className={`w-full overflow-y-auto border ${Colors.border.defaultThick} ${Colors.background.primary} shadow-lg rounded-lg`}
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",
@@ -48,8 +50,8 @@ function DashboardInfo({ data }: Props) {
         }}
       >
         <table className="w-full border-collapse">
-          <thead className="bg-black/30">
-            <tr className="text-left text-[11px] font-semibold uppercase tracking-wide text-white/40">
+          <thead className={`${Colors.background.secondary}`}>
+            <tr className={`text-left text-[11px] font-semibold uppercase tracking-wide ${Colors.text.primary}`}>
               <th className="px-6 py-4">Batch Name</th>
               <th className="px-6 py-4">Branch</th>
               <th className="px-6 py-4">End Year</th>
@@ -62,24 +64,24 @@ function DashboardInfo({ data }: Props) {
             {data.map((batch) => (
               <tr
                 key={batch.id}
-                className="text-sm text-white transition hover:bg-primaryBlue/10"
+                className={`text-sm ${Colors.text.primary} transition hover:bg-primaryBlue/10 ${Colors.border.default}`}
               >
-                <td className="px-6 py-4 font-medium">{batch.batchname}</td>
+                <td className={`px-6 py-4 font-medium ${Colors.text.secondary}`}>{batch.batchname}</td>
 
-                <td className="px-6 py-4 text-white/70">{batch.branch}</td>
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>{batch.branch}</td>
 
-                <td className="px-6 py-4 text-white/70">
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>
                   {batch.batchEndYear}
                 </td>
 
-                <td className="px-6 py-4 text-white/60">
+                <td className={`px-6 py-4 ${Colors.text.secondary}`}>
                   {formatDate(batch.createdAt)}
                 </td>
 
                 <td className="px-6 py-4 text-right">
                   <button
                     onClick={() => handleSeeDetails(batch.id)}
-                    className="rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20"
+                    className={`rounded-md border ${Colors.border.specialThick} px-3 py-1.5 text-xs font-medium ${Colors.text.special} transition ${Colors.hover.special} cursor-pointer active:scale-95`}
                   >
                     See details
                   </button>

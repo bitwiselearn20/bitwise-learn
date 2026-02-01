@@ -3,18 +3,26 @@ import AllTestCases from "./AllTestCases";
 import Solution from "./Solution";
 import Submissions from "./Submissions";
 import Templates from "./Templates";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 function ProblemInfo({ content }: any) {
+  const Colors = useColors();
   return (
-    <div className="text-white w-full">
+    <div className={`w-full ${Colors.background.primary}`}>
       <Tabs defaultValue="solution" className="flex flex-col h-full">
-        <TabsList className="border-b w-full border-neutral-700 bg-neutral-900 px-4">
-          <TabsTrigger value="solution">Solution</TabsTrigger>
-          <TabsTrigger value="general">Problem</TabsTrigger>
-          <TabsTrigger value="testcases" className="">
+        <TabsList
+          className={` w-full ${Colors.border.defaultThin} ${Colors.background.secondary} px-4`}
+        >
+          <TabsTrigger className="cursor-pointer" value="solution">
+            Solution
+          </TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="general">
+            Problem
+          </TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="testcases">
             Testcases
           </TabsTrigger>
-          <TabsTrigger value="templates" className="">
+          <TabsTrigger className="cursor-pointer" value="templates">
             Templates
           </TabsTrigger>
         </TabsList>

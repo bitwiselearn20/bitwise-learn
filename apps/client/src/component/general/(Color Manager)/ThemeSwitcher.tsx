@@ -2,10 +2,12 @@
 
 import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 import { Sun, Moon } from 'lucide-react'
+import { useColors } from "./useColors";
 
 export default function ThemeSwitcher() {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "Dark";
+  const Colors = useColors();
 
   return (
     <button
@@ -18,7 +20,7 @@ export default function ThemeSwitcher() {
         w-14 h-8
         rounded-full
         transition-colors duration-500 ease-in-out cursor-pointer
-        ${isDark ? "bg-neutral-900" : "bg-neutral-300"}
+        ${Colors.background.secondary}
       `}
     >
       {/* Knob */}

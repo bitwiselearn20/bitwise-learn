@@ -1,12 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { User } from "lucide-react";
+import { User, Plus, X } from "lucide-react";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { useInstitution } from "@/store/institutionStore";
 import { getAllBatches } from "@/api/batches/get-all-batches";
 import DashboardInfo from "@/component/AllBatches/v1/DashboardInfo";
 import Filter from "@/component/general/Filter";
+import BatchesForm from "@/component/general/BatchesForm";
+
+type Batch = {
+  id: string;
+  batchname: string;
+  branch: string;
+  batchEndYear: string;
+};
 
 /* ---------------- HEADER ---------------- */
 
@@ -58,20 +66,70 @@ export default function HeroSection() {
   const [batches, setBatches] = useState<any[]>([]);
   const [filteredBatches, setFilteredBatches] = useState<any[]>([]);
 
-  useEffect(() => {
+  const [addNew, setAddNew] = useState(false);
+
+  const fetchBatches = () => {
     if (!institutionId) return;
 
-    getAllBatches(setBatches, institutionId);
+    getAllBatches((data: Batch[]) => {
+      setBatches(Array.isArray(data) ? data : []);
+      setFilteredBatches(Array.isArray(data) ? data : []);
+    }, institutionId);
+  };
+
+  useEffect(() => {
+    fetchBatches();
   }, [institutionId]);
+
+  const onBatchCreated = () => {
+    fetchBatches();
+    setAddNew(false);
+  };
 
   return (
     <div className="space-y-8">
+      {addNew && (
+        <div
+          className={`fixed inset-0 z-50 bg-black/80 ${Colors.text.primary} flex justify-center items-center`}
+        >
+          <div
+            className={`relative ${Colors.background.secondary} p-8 rounded-lg w-full max-w-xl`}
+          >
+            <button
+              onClick={() => setAddNew(false)}
+              className={`absolute top-4 right-4 ${Colors.text.primary} cursor-pointer`}
+            >
+              <X />
+            </button>
+
+            <BatchesForm
+              openForm={() => setAddNew(false)}
+              institutionId={institutionId as string}
+              onSubmit={() => {
+                onBatchCreated();
+              }}
+            />
+          </div>
+        </div>
+      )}
+
       <Header />
 
       <div className="flex flex-col gap-10 px-4">
         <div className="flex flex-col gap-3">
-        <h1 className={`${Colors.text.special} text-3xl font-semibold`}>Batches</h1>
-        <Filter data={batches} setFilteredData={setFilteredBatches} />
+          <h1 className={`${Colors.text.special} text-3xl font-semibold`}>
+            Batches
+          </h1>
+          <div className="flex justify-between items-center">
+            <Filter data={batches} setFilteredData={setFilteredBatches} />
+            <button
+              onClick={() => setAddNew(true)}
+              className={`flex items-center gap-2 ${Colors.border.specialThick} px-3 py-2 rounded-md ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95 transition whitespace-nowrap shrink-0`}
+            >
+              <Plus size={18} />
+              Add New Batch
+            </button>
+          </div>
         </div>
         <DashboardInfo data={filteredBatches} />
       </div>

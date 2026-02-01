@@ -1,6 +1,9 @@
 import { createTopic } from "@/api/problems/create-topic";
 import { updateDescription } from "@/api/problems/update-problem";
+import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 import MarkdownEditor from "@/component/ui/MarkDownEditor";
+import { X } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -11,6 +14,8 @@ type SubmissionsProps = {
 function Submissions({ content }: SubmissionsProps) {
   if (!content) return null;
   const param = useParams();
+  const Colors = useColors();
+  /* ---------------- STATE ---------------- */
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -75,12 +80,12 @@ function Submissions({ content }: SubmissionsProps) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 text-white space-y-6">
+    <div className={`max-w-4xl mx-auto p-6 ${Colors.text.primary} space-y-6`}>
       {/* Header */}
       <div className="flex justify-between items-center">
         {isEditing ? (
           <input
-            className="text-3xl font-bold bg-transparent border-b border-gray-600 focus:outline-none"
+            className={`text-3xl font-bold ${Colors.background.secondary} rounded-md px-3 py-2 focus:outline-none`}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -93,14 +98,14 @@ function Submissions({ content }: SubmissionsProps) {
             <select
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
-              className="bg-gray-800 px-3 py-1 rounded-md"
+              className={` px-3 py-1 rounded-md ${Colors.background.secondary} ${Colors.text.primary} cursor-pointer`}
             >
-              <option value="EASY">EASY</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="HARD">HARD</option>
+              <option className="cursor-pointer" value="EASY">EASY</option>
+              <option className="cursor-pointer" value="MEDIUM">MEDIUM</option>
+              <option className="cursor-pointer" value="HARD">HARD</option>
             </select>
           ) : (
-            <span className="bg-gray-700 px-3 py-1 rounded-full text-sm">
+            <span className={`${Colors.background.secondary} ${Colors.text.primary} px-3 py-1 rounded-full text-sm`}>
               {difficulty}
             </span>
           )}
@@ -108,7 +113,7 @@ function Submissions({ content }: SubmissionsProps) {
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}
-              className="bg-blue-600 px-4 py-1 rounded-md"
+              className={` px-4 py-1 rounded-lg ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95 transition-all`}
             >
               Edit
             </button>
@@ -125,10 +130,11 @@ function Submissions({ content }: SubmissionsProps) {
             setValue={setDescription}
             mode={"edit"}
             hideToolbar={false}
+            theme={useTheme().theme === "Dark" ? "dark" : "light"}
           />
         ) : (
           //@ts-ignore
-          <MarkdownEditor value={description} mode={"preview"} />
+          <MarkdownEditor value={description} mode={"preview"} theme={useTheme().theme === "Dark" ? "dark" : "light"} />
         )}
       </section>
 
@@ -143,13 +149,13 @@ function Submissions({ content }: SubmissionsProps) {
                 value={newTopic}
                 onChange={(e) => setNewTopic(e.target.value)}
                 placeholder="Add topic"
-                className="bg-gray-800 px-3 py-1 rounded-md flex-1"
+                className={`${Colors.background.secondary} ${Colors.text.primary} px-3 py-1 rounded-md flex-1`}
               />
               <button
                 onClick={() =>
                   createTopic(param.id as string, { tagName: [newTopic] })
                 }
-                className="bg-blue-600 px-4 py-1 rounded-md"
+                className={`${Colors.background.special} ${Colors.text.primary} px-4 py-1 rounded-md`}
               >
                 Add
               </button>
@@ -161,15 +167,15 @@ function Submissions({ content }: SubmissionsProps) {
             topics.map((tag) => (
               <span
                 key={tag}
-                className="bg-gray-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                className={`${Colors.background.secondary} ${Colors.text.primary} px-3 py-1 rounded-full text-sm flex items-center gap-2`}
               >
                 {tag}
                 {isEditing && (
                   <button
                     onClick={() => removeTopic(tag)}
-                    className="text-red-400"
+                    className={`text-red-500 hover:text-red-700 cursor-pointer`}
                   >
-                    ✕
+                    <X size={14} />
                   </button>
                 )}
               </span>
@@ -182,11 +188,11 @@ function Submissions({ content }: SubmissionsProps) {
               value={newTopic}
               onChange={(e) => setNewTopic(e.target.value)}
               placeholder="Add topic"
-              className="bg-gray-800 px-3 py-1 rounded-md flex-1"
+              className={`${Colors.background.secondary} ${Colors.text.primary} placeholder:text-neutral-500 px-3 py-1 rounded-md flex-1`}
             />
             <button
               onClick={addTopic}
-              className="bg-blue-600 px-4 py-1 rounded-md"
+              className={`${Colors.hover.special} ${Colors.text.special} ${Colors.border.specialThick} px-4 py-1 rounded-md cursor-pointer active:scale-95 transition-all`}
             >
               Add
             </button>
@@ -205,23 +211,23 @@ function Submissions({ content }: SubmissionsProps) {
                 <input
                   value={hint}
                   onChange={(e) => updateHint(index, e.target.value)}
-                  className="flex-1 bg-gray-900 p-2 rounded-md"
+                  className={`${Colors.background.secondary} ${Colors.text.primary} placeholder:text-neutral-500 px-3 py-1 rounded-md flex-1`}
                 />
                 <button
                   onClick={() => removeHint(index)}
-                  className="text-red-400"
+                    className={`text-red-500 hover:text-red-700 cursor-pointer`}
                 >
-                  ✕
+                  <X size={20} />
                 </button>
               </div>
             ))}
 
-            <button onClick={addHint} className="text-blue-400 hover:underline">
+            <button onClick={addHint} className={`${Colors.text.special} hover:underline cursor-pointer active:scale-95 transition-all`}>
               + Add Hint
             </button>
           </>
         ) : (
-          <ul className="list-disc list-inside text-gray-300 space-y-1">
+          <ul className={`list-disc list-inside ${Colors.text.secondary} space-y-1`}>
             {hints.map((hint, i) => (
               <li key={i}>{hint}</li>
             ))}
@@ -230,8 +236,8 @@ function Submissions({ content }: SubmissionsProps) {
       </section>
 
       {/* Footer */}
-      <footer className="pt-4 border-t border-gray-700 flex justify-between items-center">
-        <div className="text-sm text-gray-400">
+      <footer className={`pt-4 ${Colors.border.default} flex justify-between items-center`}>
+        <div className={`text-sm ${Colors.text.secondary} space-y-1`}>
           <p>Created: {new Date(content.createdAt).toLocaleString()}</p>
           <p>Last Updated: {new Date(content.updatedAt).toLocaleString()}</p>
         </div>
@@ -243,7 +249,7 @@ function Submissions({ content }: SubmissionsProps) {
                 resetChanges();
                 setIsEditing(false);
               }}
-              className="bg-gray-600 px-4 py-2 rounded-md"
+              className={`${Colors.text.special} hover:underline px-4 py-2 cursor-pointer active:scale-95 transition-all`}
             >
               Cancel
             </button>
@@ -251,7 +257,7 @@ function Submissions({ content }: SubmissionsProps) {
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-green-600 px-6 py-2 rounded-md font-semibold"
+              className={`${Colors.hover.special} ${Colors.text.special} ${Colors.border.specialThick} px-6 py-2 rounded-md cursor-pointer active:scale-95 transition-all`}
             >
               {isSaving ? "Saving..." : "Save"}
             </button>

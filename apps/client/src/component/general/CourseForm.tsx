@@ -2,7 +2,8 @@
 
 import { getAllCourses } from "@/api/courses/course/get-all-courses";
 import { enrollInstitutionCourses } from "@/api/courses/course/enrollments/enroll-institution";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 interface Course {
   id: string;
@@ -17,6 +18,7 @@ function CourseForm({ batchId }: { batchId: string }) {
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(false);
+  const Colors = useColors();
 
   const handleToggleCourse = (courseId: string) => {
     setSelectedCourses((prev) =>
@@ -59,18 +61,18 @@ function CourseForm({ batchId }: { batchId: string }) {
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className={`space-y-4 ${Colors.text.primary}`}>
       <h2 className="text-lg font-semibold">Select Courses</h2>
 
       {/* Scrollable flex container */}
       <div
-        className="flex flex-col gap-3 max-h-[420px] overflow-y-auto pr-2"
+        className={`flex flex-col gap-3 max-h-[420px] overflow-y-auto pr-2 ${Colors.background.primary} hover:opacity-90 rounded-md`}
         style={{}}
       >
         {allCourses.map((course) => (
           <label
             key={course.id}
-            className="flex gap-4 items-start border p-3 rounded cursor-pointer"
+            className={`flex gap-4 items-start p-3 rounded cursor-pointer`}
           >
             <input
               type="checkbox"
@@ -91,10 +93,10 @@ function CourseForm({ batchId }: { batchId: string }) {
             {/* Course info */}
             <div className="flex flex-col">
               <p className="font-medium">{course.name}</p>
-              <p className="text-sm text-gray-500">
+              <p className={`text-sm ${Colors.text.secondary}`}>
                 {course.level} • {course.duration}
               </p>
-              <p className="text-sm text-gray-700 line-clamp-2">
+              <p className={`text-sm ${Colors.text.secondary} line-clamp-2`}>
                 {course.description}
               </p>
             </div>
@@ -104,7 +106,7 @@ function CourseForm({ batchId }: { batchId: string }) {
 
       <button
         disabled={loading}
-        className="px-4 py-2 bg-black text-white rounded disabled:opacity-50"
+        className={`px-4 py-2 cursor-pointer rounded disabled:opacity-50 disabled:cursor-not-allowed ${Colors.background.special} ${Colors.hover.special} ${Colors.text.primary}`}
         onClick={handleSubmit}
       >
         {loading ? "Enrolling..." : "Enroll Institution"}

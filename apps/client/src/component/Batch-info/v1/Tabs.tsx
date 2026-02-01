@@ -4,13 +4,14 @@ import CourseForm from "@/component/general/CourseForm";
 import TeacherForm from "@/component/general/TeacherForm";
 import BatchStudentForm from "./BatchStudentForm";
 import { Plus, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { use, useRef, useState } from "react";
 import AssessmentsForm from "./AssessmentsForm";
 import { useParams } from "next/navigation";
 import CreateStudent from "@/component/CreateStudent/CreateStudent";
 import toast from "react-hot-toast";
 import { uploadBatches } from "@/api/batches/create-batches";
 import useLogs from "@/lib/useLogs";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type TabsProps = {
   value: string;
@@ -20,6 +21,8 @@ type TabsProps = {
   institutionId: string;
   onStudentCreated?: () => void;
 };
+
+const Colors = useColors();
 
 const RenderComponent = ({
   value,
@@ -117,10 +120,10 @@ export const Tabs = ({
       {/* Modal */}
       {addNew && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center">
-          <div className="relative bg-neutral-900 p-6 rounded-lg w-full max-w-3xl">
+          <div className={`relative  p-6 rounded-lg w-full max-w-3xl ${Colors.background.secondary}`}>
             <button
               onClick={() => setAddNew(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+              className={`absolute top-4 right-4 ${Colors.text.secondary} hover:text-red-500 cursor-pointer active:scale-95`}
             >
               <X />
             </button>
@@ -143,10 +146,10 @@ export const Tabs = ({
           <button
             key={tab}
             onClick={() => onValueChange(tab)}
-            className={`px-4 py-1.5 rounded-md text-md ${
+            className={`px-4 py-1.5 rounded-md text-md cursor-pointer ${
               value === tab
-                ? "bg-blue-500 text-white"
-                : "text-gray-400 hover:text-white"
+                ? `${Colors.text.special} ${Colors.border.specialThick}`
+                : `${Colors.text.primary} ${Colors.hover.textSpecial}`
             }`}
           >
             {tab}
@@ -157,7 +160,7 @@ export const Tabs = ({
         {!logsLoading && logRole != null && logRole != 5 && logRole != 4 && (
           <button
             onClick={() => setAddNew(true)}
-            className="flex items-center gap-2 border border-primaryBlue px-3 py-2 rounded text-white hover:bg-primaryBlue/10"
+            className={`flex items-center gap-2 border ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95 px-3 py-2 rounded`}
           >
             <Plus size={18} />
             Add New {value}
@@ -172,7 +175,7 @@ export const Tabs = ({
           logRole != 4 && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2 border border-primaryBlue px-3 py-2 rounded text-white hover:bg-primaryBlue/10"
+            className={`flex items-center gap-2 border ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95 px-3 py-2 rounded`}
             >
               Upload Bulk
             </button>

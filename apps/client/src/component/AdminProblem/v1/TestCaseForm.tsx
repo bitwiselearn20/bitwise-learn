@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type InputField = {
   key: string;
@@ -25,6 +26,7 @@ export default function TestCaseForm({
 
   const [output, setOutput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const Colors = useColors();
 
   /* ---------------- INPUT OPS ---------------- */
   const updateField = (
@@ -77,11 +79,11 @@ export default function TestCaseForm({
   /* ---------------- UI ---------------- */
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-start">
-      <div className="bg-neutral-900 w-full max-w-xl mt-16 rounded-lg shadow-xl border border-neutral-800">
+      <div className={`${Colors.background.secondary} w-full max-w-xl mt-16 rounded-lg shadow-xl`}>
         {/* Header */}
-        <div className="flex justify-between items-center px-4 py-3 border-b border-neutral-800">
-          <h2 className="text-white font-semibold">Add Test Case</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
+        <div className="flex justify-between items-center px-4 py-3">
+          <h2 className={` font-semibold ${Colors.text.primary}`}>Add Test Case</h2>
+          <button onClick={onClose} className={`${Colors.text.primary} hover:text-red-500 cursor-pointer active:scale-95 transition-all`}>
             <X size={18} />
           </button>
         </div>
@@ -90,75 +92,75 @@ export default function TestCaseForm({
         <div className="p-4 space-y-5 text-sm">
           {/* Type */}
           <div>
-            <label className="block text-gray-400 mb-1">Test Case Type</label>
+            <label className={`block ${Colors.text.secondary} mb-1`}>Test Case Type</label>
             <select
               value={testCaseType}
               onChange={(e) =>
                 setTestCaseType(e.target.value as "EXAMPLE" | "HIDDEN")
               }
-              className="w-full bg-neutral-800 px-3 py-2 rounded-md"
+              className={`w-full  px-3 py-2 rounded-md ${Colors.background.primary} ${Colors.text.secondary} cursor-pointer`}
             >
-              <option value="EXAMPLE">EXAMPLE</option>
-              <option value="HIDDEN">HIDDEN</option>
+              <option className="cursor-pointer" value="EXAMPLE">EXAMPLE</option>
+              <option className="cursor-pointer" value="HIDDEN">HIDDEN</option>
             </select>
           </div>
 
           {/* Input */}
           <div>
-            <p className="text-gray-400 mb-2">Input</p>
+            <p className={`mb-2 ${Colors.text.secondary}`}>Input</p>
 
             {inputFields.map((field, i) => (
               <div key={i} className="flex gap-2 mb-2">
                 <input
                   value={field.key}
                   onChange={(e) => updateField(i, "key", e.target.value)}
-                  placeholder="key"
-                  className="w-1/3 bg-neutral-800 p-2 rounded-md"
+                  placeholder="Key"
+                  className={`w-1/3 p-2 rounded-md ${Colors.background.primary} ${Colors.text.secondary} placeholder:text-neutral-500`}
                 />
                 <input
                   value={field.value}
                   onChange={(e) => updateField(i, "value", e.target.value)}
-                  placeholder="value"
-                  className="flex-1 bg-neutral-800 p-2 rounded-md font-mono"
+                  placeholder="Value"
+                  className={`flex-1 p-2 rounded-md ${Colors.background.primary} ${Colors.text.secondary} placeholder:text-neutral-500`}
                 />
                 <button
                   onClick={() => removeField(i)}
-                  className="text-red-400 hover:text-red-300"
+                  className="text-red-500 hover:text-red-300 cursor-pointer active:scale-95 transition-all"
                 >
-                  ✕
+                  <X size={16} />
                 </button>
               </div>
             ))}
 
-            <button onClick={addField} className="text-blue-400 text-xs mt-1">
+            <button onClick={addField} className={`${Colors.text.special} text-xs mt-1 hover:underline cursor-pointer active:scale-95 transition-all`}>
               + Add Field
             </button>
           </div>
 
           {/* Output */}
           <div>
-            <label className="block text-gray-400 mb-1">Output</label>
+            <label className={`block mb-1 ${Colors.text.secondary}`}>Output</label>
             <textarea
               value={output}
               onChange={(e) => setOutput(e.target.value)}
               rows={3}
-              className="w-full bg-neutral-800 p-2 rounded-md font-mono text-xs"
+              className={`w-full p-2 rounded-md font-mono text-xs ${Colors.background.primary} ${Colors.text.secondary} placeholder:text-neutral-500`}
             />
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex gap-2 p-4 border-t border-neutral-800">
+        <div className="flex gap-2 p-4">
           <button
             onClick={onClose}
-            className="flex-1 bg-neutral-700 py-2 rounded-md"
+            className={`flex-1 py-2 rounded-md ${Colors.text.special} hover:underline cursor-pointer active:scale-95 transition-all`}
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex-1 bg-green-600 py-2 rounded-md font-semibold disabled:opacity-50"
+            className={`flex-1 py-2 rounded-md font-semibold disabled:opacity-50 ${Colors.text.primary} ${Colors.background.special} ${Colors.hover.special} cursor-pointer active:scale-95 transition-all`}
           >
             {isSaving ? "Saving..." : "Save Test Case"}
           </button>

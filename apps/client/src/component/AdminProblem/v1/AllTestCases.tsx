@@ -10,6 +10,7 @@ import { createTestCase } from "@/api/problems/create-testcase";
 import { updateProblemTestcase } from "@/api/problems/update-testcase";
 import { uploadBatches } from "@/api/batches/create-batches";
 import toast from "react-hot-toast";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type TestCase = {
   id: string;
@@ -24,6 +25,7 @@ type TestCase = {
 export default function AllTestCases() {
   const param = useParams();
   const problemId = param.id as string;
+  const Colors = useColors();
 
   const [data, setData] = useState<TestCase[]>([]);
   const [selectedTestCase, setSelectedTestCase] = useState<TestCase | null>(
@@ -82,7 +84,7 @@ export default function AllTestCases() {
   };
 
   return (
-    <div className="relative flex h-full text-gray-300">
+    <div className={`relative flex h-full ${Colors.text.secondary}`}>
       {showTestCaseForm && (
         <TestCaseForm
           onClose={() => setShowTestCaseForm(false)}
@@ -99,26 +101,26 @@ export default function AllTestCases() {
       {/* TABLE */}
       <div className="flex-1 p-4">
         <div className="flex justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">Test Cases</h2>
+          <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>Test Cases</h2>
           <div className="flex gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+              className={`px-4 py-2 rounded-md ${Colors.hover.special} ${Colors.text.special} ${Colors.border.specialThick} cursor-pointer active:scale-95 transition-all`}
             >
               Bulk Upload
             </button>
             <button
               onClick={() => setShowTestCaseForm(true)}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+              className={`px-4 py-2 rounded-md ${Colors.hover.special} ${Colors.text.special} ${Colors.border.specialThick} cursor-pointer active:scale-95 transition-all`}
             >
               Add New Testcase
             </button>
           </div>
         </div>
 
-        <div className="overflow-x-auto border border-neutral-700 rounded-lg">
+        <div className={`overflow-x-auto border ${Colors.border.defaultThick} rounded-lg`}>
           <table className="w-full text-sm">
-            <thead className="bg-neutral-800 text-gray-400">
+            <thead className={` ${Colors.text.primary} ${Colors.background.secondary}`}>
               <tr>
                 <th className="px-4 py-3">#</th>
                 <th className="px-4 py-3">Type</th>
@@ -131,21 +133,21 @@ export default function AllTestCases() {
                 <tr
                   key={tc.id}
                   onClick={() => setSelectedTestCase(tc)}
-                  className="cursor-pointer border-t border-neutral-700 hover:bg-neutral-800"
+                  className={`cursor-pointer ${Colors.border.default} ${Colors.background.primary} hover:bg-blue-400/20`}
                 >
                   <td className="px-4 py-3">{i + 1}</td>
                   <td className="px-4 py-3">{tc.testType}</td>
-                  <td className="px-4 py-3 font-mono text-xs">
+                  <td className="px-4 py-3 text-sm">
                     {truncate(tc.input, 40)}
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs">
+                  <td className="px-4 py-3 text-sm">
                     {truncate(tc.output, 40)}
                   </td>
                 </tr>
               ))}
               {data.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="text-center py-6 text-gray-500">
+                  <td colSpan={4} className={`text-center py-6 ${Colors.text.secondary}`}>
                     No test cases found
                   </td>
                 </tr>
@@ -181,6 +183,7 @@ function EditableTestCaseSidebar({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const Colors = useColors();
 
   const parsedInput = (() => {
     try {
@@ -222,9 +225,9 @@ function EditableTestCaseSidebar({
   };
 
   return (
-    <div className="fixed right-0 top-0 h-screen w-[420px] bg-neutral-900 border-l border-neutral-800 flex flex-col">
-      <div className="flex justify-between p-4 border-b border-neutral-800">
-        <h3 className="text-white font-semibold">Test Case</h3>
+    <div className={`fixed right-0 top-0 h-screen w-[420px] ${Colors.background.primary} ${Colors.border.default} flex flex-col`}>
+      <div className={`flex justify-between p-4 border-b ${Colors.border.default}`}>
+        <h3 className={`font-semibold ${Colors.text.primary}`}>Test Case</h3>
         <button onClick={onClose}>
           <X size={18} />
         </button>
@@ -243,7 +246,7 @@ function EditableTestCaseSidebar({
                   ),
                 )
               }
-              className="w-1/3 bg-neutral-800 p-2 rounded"
+              className={`w-1/3 ${Colors.background.secondary} p-2 rounded ${Colors.text.primary}`}
             />
             <input
               disabled={!isEditing}
@@ -255,7 +258,7 @@ function EditableTestCaseSidebar({
                   ),
                 )
               }
-              className="flex-1 bg-neutral-800 p-2 rounded font-mono"
+              className={`flex-1 ${Colors.background.secondary} p-2 rounded ${Colors.text.primary}`}
             />
           </div>
         ))}
@@ -264,15 +267,15 @@ function EditableTestCaseSidebar({
           disabled={!isEditing}
           value={output}
           onChange={(e) => setOutput(e.target.value)}
-          className="w-full bg-neutral-800 p-2 rounded font-mono"
+          className={`w-full ${Colors.background.secondary} p-2 rounded ${Colors.text.primary}`}
         />
       </div>
 
-      <div className="p-4 border-t border-neutral-800 space-y-2">
+      <div className={`p-4 border-t ${Colors.border.default} space-y-2`}>
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="w-full bg-blue-600 py-2 rounded"
+            className={`w-full ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} py-2 rounded`}
           >
             Edit
           </button>
@@ -280,7 +283,7 @@ function EditableTestCaseSidebar({
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="w-full bg-green-600 py-2 rounded"
+            className={`w-full ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} py-2 rounded`}
           >
             Save
           </button>
@@ -302,25 +305,27 @@ function truncate(text: string, length: number) {
 }
 
 function Detail({ label, value }: { label: string; value: string }) {
+  const Colors = useColors();
   return (
     <div>
-      <p className="text-xs text-gray-500 mb-1">{label}</p>
-      <p className="text-gray-300 break-all">{value}</p>
+      <p className={`text-xs ${Colors.text.secondary} mb-1`}>{label}</p>
+      <p className={`${Colors.text.primary} break-all`}>{value}</p>
     </div>
   );
 }
 
 function DetailJSON({ label, value }: { label: string; value: string }) {
+  const Colors = useColors();
   return (
     <div>
-      <p className="text-xs text-gray-500 mb-1">{label}</p>
+      <p className={`text-xs ${Colors.text.secondary} mb-1`}>{label}</p>
       {/* <pre className="bg-neutral-800 border border-neutral-700 rounded-md p-3 text-xs font-mono text-gray-300 overflow-x-auto">
         {JSON.stringify(JSON.parse(value), null, 2)}
       </pre> */}
 
       {Object.entries(JSON.parse(value)).map(([key, value], idx) => (
         <div key={idx} className="text-[#facc15]">
-          <span className="font-medium text-gray-300">{key}</span>
+          <span className={`font-medium ${Colors.text.primary}`}>{key}</span>
           {" : "}
           <span>
             {Array.isArray(value) ? JSON.stringify(value) : String(value)}

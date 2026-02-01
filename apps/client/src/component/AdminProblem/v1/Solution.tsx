@@ -3,10 +3,13 @@
 import { getProblemSolutionById } from "@/api/problems/get-problem-solution";
 import MDEditor from "@uiw/react-md-editor";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import AddSolution from "./AddSolution";
 import { updateSolution } from "@/api/problems/update-solution";
 import { THEME_MAP } from "@/component/ui/MarkDownEditor";
+import { useColors } from "@/component/general/(Color Manager)/useColors"; 
+import toast from "react-hot-toast";
+import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 type SolutionType = {
   id: string;
   solution: string;
@@ -15,6 +18,7 @@ type SolutionType = {
 };
 
 function Solution() {
+  const Colors = useColors();
   const params = useParams();
   const problemId = params.id as string;
 
@@ -44,10 +48,10 @@ function Solution() {
         solution: solution.solution,
         videoSolution: solution.videoSolution,
       });
-      alert("Solution saved successfully ✅");
+      toast.success("Solution saved successfully!");
     } catch (error) {
       console.error(error);
-      alert("Failed to save solution ❌");
+      toast.error("Failed to save solution!");
     } finally {
       setLoading(false);
     }
@@ -58,7 +62,7 @@ function Solution() {
       <div className="h-screen flex justify-end">
         <button
           onClick={() => setShowSolutionForm(true)}
-          className="inline-flex h-fit items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-500"
+          className={`inline-flex h-fit items-center gap-2 px-4 py-2 text-sm font-medium rounded-md ${Colors.hover.special} ${Colors.text.special} ${Colors.border.specialThick} cursor-pointer active:scale-95 transition-all`}
         >
           + Add New Solution
         </button>
@@ -71,12 +75,12 @@ function Solution() {
   }
 
   return (
-    <div className="h-screen">
+    <div className={`h-screen ${Colors.background.primary}`}>
       <div className="flex flex-col gap-4">
         <button
           onClick={handleSave}
           disabled={loading}
-          className="w-fit rounded-md bg-green-600 px-5 py-2 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-50"
+          className={`w-fit rounded-md px-5 py-2 text-sm font-semibold ${Colors.text.primary} ${Colors.background.special} ${Colors.hover.special} disabled:opacity-50 cursor-pointer active:scale-95 transition-all`}
         >
           {loading ? "Saving..." : "Save"}
         </button>
@@ -91,11 +95,11 @@ function Solution() {
               videoSolution: e.target.value,
             })
           }
-          className="rounded-md border bg-neutral-900 px-3 py-2 text-white"
+          className={`rounded-md border px-3 py-2 ${Colors.background.secondary} ${Colors.text.primary} ${Colors.border.defaultThin}`}
         />
       </div>
 
-      <div className="mt-4" data-color-mode="dark">
+      <div className="mt-4" data-color-mode={useTheme().theme === "Dark" ? "dark" : "light"}>
         <MDEditor
           height={600}
           value={solution.solution}
