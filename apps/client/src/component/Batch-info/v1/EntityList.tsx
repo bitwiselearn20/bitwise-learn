@@ -9,6 +9,7 @@ import { getCourseEnrollments } from "@/api/courses/course/enrollments/get-all-e
 import { allBatchCourses } from "@/api/courses/course/enrollments/get-all-batch-courses";
 import { getAssessmentsByBatch } from "@/api/assessments/get-assessments-by-batch";
 // import { getAllAssessments } from "@/api/vendors/get-all-vendors";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type EntityListProps = {
   type: string;
@@ -23,6 +24,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedEntity, setEditedEntity] = useState<any>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const Colors = useColors();
 
   const handleEdit = () => {
     setEditedEntity({ ...selectedEntity }); // clone data
@@ -260,26 +262,26 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
       <div className="rounded-xl p-4 mr-4">
         <input
           placeholder={`Search for ${type.toLowerCase()}`}
-          className="w-full mb-4 bg-[#141414] border border-gray-700 rounded-md px-3 py-2 text-sm text-white outline-none"
+          className={`w-full mb-4 ${Colors.background.secondary} rounded-md px-3 py-2 text-sm ${Colors.text.primary} outline-none`}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
         {loading ? (
-          <div className="py-12 text-center text-sm text-white/50">
+          <div className={`py-12 text-center text-sm ${Colors.text.secondary}`}>
             Loading...
           </div>
         ) : !filteredEntities || filteredEntities.length === 0 ? (
-          <div className="py-12 text-center text-sm text-white/50">
+          <div className={`py-12 text-center text-sm ${Colors.text.secondary}`}>
             {searchQuery
               ? `No ${type.toLowerCase()} found`
               : `No ${type.toLowerCase()} available`}
           </div>
         ) : (
-          <div className="w-full overflow-x-auto border border-white/10 bg-divBg shadow-lg">
+          <div className={`w-full overflow-x-auto border ${Colors.border.defaultThick} ${Colors.background.primary} shadow-lg rounded-lg`}>
             <table className="w-full border-collapse">
-              <thead className="bg-black/30">
-                <tr className="text-left text-[11px] font-semibold uppercase tracking-wide text-white/40">
+              <thead className={`${Colors.background.secondary}`}>
+                <tr className={`text-left text-[11px] font-semibold uppercase tracking-wide ${Colors.text.secondary}`}>
                   {getTableHeaders().map((header) => (
                     <th key={header} className="px-6 py-4">
                       {header}
@@ -294,7 +296,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                   return (
                     <tr
                       key={getEntityKey(entity)}
-                      className="text-sm text-white transition-colors hover:bg-primaryBlue/10"
+                      className={`text-sm ${Colors.text.primary} transition-colors hover:bg-primaryBlue/10 ${Colors.border.default}`}
                     >
                       {cells.map((cell, index) => (
                         <td
@@ -303,10 +305,10 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                             index === 0 ? "font-medium" : ""
                           } ${
                             index === cells.length - 1
-                              ? "text-white/60"
+                              ? `${Colors.text.secondary}`
                               : index === 0
                                 ? ""
-                                : "text-white/70 truncate"
+                                : `${Colors.text.secondary} truncate`
                           }`}
                         >
                           {cell}
@@ -315,7 +317,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                       <td className="px-6 py-4 text-right">
                         <button
                           onClick={() => setSelectedEntity(entity)}
-                          className="rounded-md border border-primaryBlue/40 px-3 py-1.5 text-xs font-medium text-primaryBlue transition hover:bg-primaryBlue/20"
+                          className={`rounded-md border px-3 py-1.5 text-xs font-medium transition ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95`}
                         >
                           See details
                         </button>
@@ -334,7 +336,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
         <>
           {/* Details Modal */}
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="relative w-full max-w-xl rounded-2xl border border-white/10 bg-divBg p-6 shadow-2xl">
+            <div className={`relative w-full max-w-xl rounded-2xl ${Colors.background.secondary} ${Colors.border.specialThin} p-6 shadow-2xl`}>
               {/* Top Right Action Buttons */}
               <div className="absolute right-4 top-4 flex items-center gap-3">
                 {!isEditing && (
@@ -343,7 +345,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                       setEditedEntity({ ...selectedEntity });
                       setIsEditing(true);
                     }}
-                    className="text-white/50 transition hover:text-primaryBlue"
+                    className={`${Colors.text.secondary} transition hover:text-primaryBlue cursor-pointer active:scale-95`}
                   >
                     <Pencil size={18} />
                   </button>
@@ -352,7 +354,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                 {!isEditing && (
                   <button
                     onClick={() => setShowDeleteConfirm(true)}
-                    className="text-white/50 transition hover:text-red-500"
+                    className={`${Colors.text.secondary} transition hover:text-red-500 cursor-pointer active:scale-95`}
                   >
                     <Trash2 size={18} />
                   </button>
@@ -376,7 +378,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                           console.error("Update failed", err);
                         }
                       }}
-                      className="rounded-md bg-primaryBlue px-3 py-1 text-sm text-white"
+                      className={`rounded-md px-3 py-1 text-sm ${Colors.text.primary} ${Colors.background.special} ${Colors.hover.special} cursor-pointer active:scale-95`}
                     >
                       Save
                     </button>
@@ -386,7 +388,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                         setIsEditing(false);
                         setEditedEntity(null);
                       }}
-                      className="rounded-md bg-white/10 px-3 py-1 text-sm text-white"
+                      className={`rounded-md px-3 py-1 text-sm ${Colors.text.special} hover:underline cursor-pointer active:scale-95`}
                     >
                       Cancel
                     </button>
@@ -399,7 +401,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                     setIsEditing(false);
                     setEditedEntity(null);
                   }}
-                  className="text-white/50 transition hover:text-white"
+                  className={`${Colors.text.secondary} transition hover:text-red-500 cursor-pointer active:scale-95`}
                 >
                   <X size={20} />
                 </button>
@@ -407,10 +409,10 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
 
               {/* Header */}
               <div className="mb-6">
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className={`text-xl font-semibold ${Colors.text.primary}`}>
                   {type} Details
                 </h2>
-                <p className="mt-1 text-sm text-white/40">
+                <p className={`mt-1 text-sm ${Colors.text.secondary}`}>
                   ID: {selectedEntity.id || selectedEntity._id || "N/A"}
                 </p>
               </div>
@@ -428,7 +430,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                   )
                   .map(([key, value]) => (
                     <div key={key}>
-                      <p className="my-3 text-[11px] uppercase tracking-wide text-primaryBlue">
+                      <p className={`my-3 text-[11px] uppercase tracking-wide ${Colors.text.special}`}>
                         {key.replace(/_/g, " ")}
                       </p>
 
@@ -441,10 +443,10 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                               [key]: e.target.value,
                             }))
                           }
-                          className="w-full rounded-md bg-black/40 px-2 py-1 text-sm text-white outline-none focus:ring-1 focus:ring-primaryBlue"
+                          className={`w-full rounded-md ${Colors.background.primary} px-2 py-1 text-sm ${Colors.text.primary} outline-none focus:ring-1 focus:ring-primaryBlue`}
                         />
                       ) : (
-                        <p className="break-words text-sm text-white">
+                        <p className={`break-words text-sm ${Colors.text.primary}`}>
                           {formatValue(value)}
                         </p>
                       )}
@@ -457,18 +459,18 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
           {/* Delete Confirmation Modal */}
           {showDeleteConfirm && (
             <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70">
-              <div className="w-full max-w-sm rounded-xl bg-divBg p-6 text-center">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className={`w-full max-w-sm rounded-xl ${Colors.background.secondary} p-6 text-center`}>
+                <h3 className={`mb-2 text-lg font-semibold ${Colors.text.primary}`}>
                   Confirm Delete
                 </h3>
-                <p className="mb-6 text-sm text-white/60">
+                <p className={`mb-6 text-sm ${Colors.text.secondary}`}>
                   This action cannot be undone.
                 </p>
 
                 <div className="flex justify-center gap-4">
                   <button
                     onClick={() => setShowDeleteConfirm(false)}
-                    className="rounded-md bg-white/10 px-4 py-2 text-white"
+                    className={`rounded-md px-4 py-2 ${Colors.text.special} hover:underline cursor-pointer active:scale-95`}
                   >
                     Cancel
                   </button>
@@ -487,7 +489,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                         console.error("Delete failed", err);
                       }
                     }}
-                    className="rounded-md bg-red-500 px-4 py-2 text-white"
+                    className="rounded-md bg-red-500 px-4 py-2 text-white cursor-pointer hover:bg-red-600 active:scale-95"
                   >
                     Delete
                   </button>

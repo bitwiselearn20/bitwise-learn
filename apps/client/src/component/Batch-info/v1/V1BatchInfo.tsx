@@ -3,6 +3,7 @@ import BatchSidebar from "./BatchSidebar";
 import { Tabs } from "./Tabs";
 import { EntityList } from "./EntityList";
 import { json } from "stream/consumers";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type BatchInfoProps = {
   batch: any;
@@ -12,13 +13,14 @@ type BatchInfoProps = {
 const BatchInfo = ({ batch, institutionId }: BatchInfoProps) => {
   const [activeTab, setActiveTab] = useState("Teachers");
   const [refreshKey, setRefreshKey] = useState(0);
+  const Colors = useColors();
 
   const handleRefresh = () => {
     setRefreshKey((prev) => prev + 1);
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] p-6">
+    <div className={`min-h-screen ${Colors.background.primary} p-6`}>
       <div className="flex gap-6 max-w-screen mx-auto">
         <BatchSidebar batch={batch} />
 

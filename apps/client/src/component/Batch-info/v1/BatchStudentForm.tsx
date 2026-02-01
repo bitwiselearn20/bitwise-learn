@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { createStudent } from "@/api/students/create-student";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type StudentFormData = {
     name: string;
@@ -21,6 +22,7 @@ type Props = {
 };
 
 function BatchStudentForm({ openForm, batchId, batchName, institutionId, onSubmit }: Props) {
+    const Colors = useColors();
     const [formData, setFormData] = useState<StudentFormData>({
         name: "",
         rollNumber: "",
@@ -127,10 +129,10 @@ function BatchStudentForm({ openForm, batchId, batchName, institutionId, onSubmi
     return (
         <>
             <div className="mb-6">
-                <h2 className="text-lg font-semibold text-white mt-1">
+                <h2 className={`text-lg font-semibold ${Colors.text.primary} mt-1`}>
                     Create Student
                 </h2>
-                <p className="text-xs text-white/50 mt-1">
+                <p className={`text-xs ${Colors.text.secondary} mt-1`}>
                     Add a new student to this batch.
                 </p>
             </div>
@@ -167,9 +169,9 @@ function BatchStudentForm({ openForm, batchId, batchName, institutionId, onSubmi
                     error={errors.email}
                 />
 
-                <div className="p-3 rounded-lg border border-white/10 bg-black/30">
+                <div className={`p-3 rounded-lg border ${Colors.border.special} ${Colors.background.primary}`}>
                     <Label>Batch</Label>
-                    <p className="mt-2 text-sm text-white font-semibold">
+                    <p className={`mt-2 text-sm font-semibold ${Colors.text.primary}`}>
                         {batchName || "Current Batch"}
                     </p>
                 </div>
@@ -178,14 +180,14 @@ function BatchStudentForm({ openForm, batchId, batchName, institutionId, onSubmi
                     <button
                         type="button"
                         onClick={() => openForm(false)}
-                        className="text-sm text-white/60 hover:text-white"
+                        className={`text-sm ${Colors.text.special} hover:underline cursor-pointer active:scale-95`}
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={submitting}
-                        className="rounded-md bg-primaryBlue px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`rounded-md px-4 py-2 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed ${Colors.background.special} ${Colors.hover.special} ${Colors.text.primary} cursor-pointer active:scale-95`}
                     >
                         {submitting ? "Creating..." : "Create Student"}
                     </button>
@@ -196,8 +198,9 @@ function BatchStudentForm({ openForm, batchId, batchName, institutionId, onSubmi
 }
 
 function Label({ children }: { children: React.ReactNode }) {
+    const Colors = useColors();
     return (
-        <label className="text-[11px] uppercase tracking-wide text-primaryBlue">
+        <label className={`text-[11px] uppercase tracking-wide ${Colors.text.special}`}>
             {children}
         </label>
     );
@@ -211,12 +214,13 @@ function Input({
     label: string;
     error?: string;
 }) {
+    const Colors = useColors();
     return (
         <div>
             <Label>{label}</Label>
             <input
                 {...props}
-                className={`mt-1 w-full rounded-lg border bg-black/30 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-primaryBlue ${error ? "border-red-500 focus:ring-red-500" : "border-white/10"}`}
+                className={`mt-1 w-full rounded-lg border ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.text.primary} px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 ${error ? "border-red-500 focus:ring-red-500" : "border-white/10"}`}
             />
             {error ? <p className="mt-1 text-xs text-red-400">{error}</p> : null}
         </div>

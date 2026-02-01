@@ -7,6 +7,8 @@ import { Editor } from "@monaco-editor/react";
 import ShowAddTemplateForm from "./ShowAddTemplateForm";
 import { createProblemTemplate } from "@/api/problems/create-template";
 import { updateProblemTemplate } from "@/api/problems/update-tempate";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 
 type Template = {
   id: string;
@@ -26,6 +28,7 @@ const LANGUAGE_MAP: Record<string, string> = {
 
 function Templates() {
   const param = useParams();
+  const Colors = useColors();
 
   const [templates, setTemplates] = useState<Template[]>([]);
   const [selectedLang, setSelectedLang] = useState<string | null>(null);
@@ -76,7 +79,7 @@ function Templates() {
 
   if (!selectedLang) {
     return (
-      <div className="h-screen w-full flex flex-col items-center justify-center text-gray-400">
+      <div className={`h-screen w-full flex flex-col items-center justify-center ${Colors.text.primary}`}>
         {showTemplateForm && (
           <ShowAddTemplateForm
             onClose={() => setShowTemplateForm(false)}
@@ -107,7 +110,7 @@ function Templates() {
         No templates available
         <button
           onClick={() => setShowTemplateForm(true)}
-          className="mt-3 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className={`mt-3 rounded-md px-4 py-2 text-sm font-medium ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95 transition-all`}
         >
           + Add New Template
         </button>
@@ -142,7 +145,7 @@ function Templates() {
 
   /* ---------------- UI ---------------- */
   return (
-    <div className="h-screen flex flex-col bg-neutral-900 text-gray-300">
+    <div className={`h-screen flex flex-col ${Colors.text.primary}`}>
       {showTemplateForm && (
         <ShowAddTemplateForm
           onClose={() => setShowTemplateForm(false)}
@@ -154,7 +157,7 @@ function Templates() {
       <div className="w-full p-3 flex justify-end gap-3">
         <button
           onClick={() => setShowTemplateForm(true)}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+          className={`rounded-md px-4 py-2 text-sm ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95 transition-all`}
         >
           + Add New Template
         </button>
@@ -162,14 +165,14 @@ function Templates() {
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="rounded-md bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700"
+            className={`rounded-md px-4 py-2 text-sm ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95 transition-all`}
           >
             Edit
           </button>
         ) : (
           <button
             onClick={handleSave}
-            className="rounded-md bg-green-600 px-4 py-2 text-sm text-white hover:bg-green-700"
+            className={`rounded-md px-4 py-2 text-sm ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95 transition-all`}
           >
             Save
           </button>
@@ -177,17 +180,17 @@ function Templates() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-neutral-700">
+      <div className="flex">
         {["defaultCode", "functionBody"].map((tab) => (
           <button
             key={tab}
             onClick={() =>
               setCurrentDisplay(tab as "defaultCode" | "functionBody")
             }
-            className={`px-4 py-2 text-sm font-medium ${
+            className={`px-4 py-2 text-sm font-medium cursor-pointer active:scale-95 transition-all rounded-md ${
               currentDisplay === tab
-                ? "border-b-2 border-indigo-500 text-white"
-                : "text-gray-400 hover:text-white"
+                  ? `${Colors.background.special} ${Colors.text.primary}`
+                  : `${Colors.background.primary} ${Colors.text.secondary}`
             }`}
           >
             {tab === "defaultCode" ? "Default Code" : "Function Body"}
@@ -196,18 +199,18 @@ function Templates() {
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-neutral-800">
-        <h2 className="text-sm font-semibold text-white">
+      <div className={`flex items-center justify-between px-4 py-2 ${Colors.border.default}`}>
+        <h2 className={`text-sm font-semibold ${Colors.text.primary}`}>
           {selectedLang} Editor
         </h2>
 
         <select
           value={selectedLang}
           onChange={(e) => setSelectedLang(e.target.value)}
-          className="bg-neutral-800 border border-neutral-700 px-3 py-1.5 rounded-md"
+          className={`px-3 py-1.5 rounded-md ${Colors.background.primary} ${Colors.border.defaultThin} ${Colors.text.primary} cursor-pointer`}
         >
           {Object.keys(templateMap).map((lang) => (
-            <option key={lang} value={lang}>
+            <option className={`cursor-pointer ${Colors.text.primary}`} key={lang} value={lang}>
               {lang}
             </option>
           ))}
@@ -220,7 +223,7 @@ function Templates() {
           key={`${selectedLang}-${currentDisplay}-${isEditing}`}
           language={monacoLanguage}
           value={editorValue}
-          theme="vs-dark"
+          theme={useTheme().theme === "Dark" ? "vs-dark" : "vs-light"}
           onChange={(value) => {
             if (!isEditing) return;
 

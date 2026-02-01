@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Editor } from "@monaco-editor/react";
 import { X } from "lucide-react";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 
 const LANGUAGE_MAP: Record<string, string> = {
   PYTHON: "python",
@@ -25,6 +27,7 @@ function ShowAddTemplateForm({ onClose, onSave }: Props) {
   const [language, setLanguage] = useState("PYTHON");
   const [defaultCode, setDefaultCode] = useState("");
   const [functionBody, setFunctionBody] = useState("");
+  const Colors = useColors();
   const [activeTab, setActiveTab] = useState<"defaultCode" | "functionBody">(
     "defaultCode",
   );
@@ -46,24 +49,24 @@ function ShowAddTemplateForm({ onClose, onSave }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-start">
-      <div className="bg-neutral-900 w-full max-w-5xl mt-10 rounded-lg shadow-xl border border-neutral-800 flex flex-col">
+      <div className={` w-full max-w-5xl mt-10 rounded-lg shadow-xl ${Colors.border.defaultThin} flex flex-col ${Colors.background.secondary}`}>
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800">
-          <h2 className="text-white font-semibold">Add New Template</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
-            <X size={18} />
+        <div className="flex items-center justify-between px-4 py-3">
+          <h2 className={`font-semibold ${Colors.text.primary}`}>Add New Template</h2>
+          <button onClick={onClose} className={`hover:text-red-500 ${Colors.text.primary} cursor-pointer active:scale-95 transition-all`}>
+            <X size={20} />
           </button>
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-between px-4 py-2 border-b border-neutral-800">
+        <div className="flex items-center justify-between px-4 py-2">
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="bg-neutral-800 border border-neutral-700 px-3 py-1.5 rounded-md text-sm"
+            className={`px-3 py-1.5 rounded-md text-sm ${Colors.background.primary} ${Colors.border.defaultThin} ${Colors.text.primary} cursor-pointer`}
           >
             {Object.keys(LANGUAGE_MAP).map((lang) => (
-              <option key={lang} value={lang}>
+              <option className="cursor-pointer" key={lang} value={lang}>
                 {lang}
               </option>
             ))}
@@ -72,10 +75,10 @@ function ShowAddTemplateForm({ onClose, onSave }: Props) {
           <div className="flex gap-2">
             <button
               onClick={() => setActiveTab("defaultCode")}
-              className={`px-3 py-1.5 text-sm rounded-md ${
+              className={`px-3 py-1.5 text-sm rounded-md cursor-pointer active:scale-95 transition-all ${
                 activeTab === "defaultCode"
-                  ? "bg-indigo-600 text-white"
-                  : "bg-neutral-800 text-gray-400"
+                  ? `${Colors.background.special} ${Colors.text.primary}`
+                  : `${Colors.background.primary} ${Colors.text.secondary}`
               }`}
             >
               Default Code
@@ -83,10 +86,10 @@ function ShowAddTemplateForm({ onClose, onSave }: Props) {
 
             <button
               onClick={() => setActiveTab("functionBody")}
-              className={`px-3 py-1.5 text-sm rounded-md ${
+              className={`px-3 py-1.5 text-sm rounded-md cursor-pointer active:scale-95 transition-all ${
                 activeTab === "functionBody"
-                  ? "bg-indigo-600 text-white"
-                  : "bg-neutral-800 text-gray-400"
+                  ? `${Colors.background.special} ${Colors.text.primary}`
+                  : `${Colors.background.primary} ${Colors.text.secondary}`
               }`}
             >
               Function Body
@@ -101,7 +104,7 @@ function ShowAddTemplateForm({ onClose, onSave }: Props) {
             key={`${language}-${activeTab}`}
             language={monacoLanguage}
             value={editorValue}
-            theme="vs-dark"
+            theme={useTheme().theme === "Dark" ? "vs-dark" : "vs-light"}
             onChange={(value) => {
               if (activeTab === "defaultCode") {
                 setDefaultCode(value ?? "");
@@ -121,16 +124,16 @@ function ShowAddTemplateForm({ onClose, onSave }: Props) {
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 p-4 border-t border-neutral-800">
+        <div className="flex gap-3 p-4">
           <button
             onClick={onClose}
-            className="flex-1 bg-neutral-700 py-2 rounded-md"
+            className={`flex-1  py-2 rounded-md ${Colors.text.special} hover:underline cursor-pointer active:scale-95 transition-all`}
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 bg-green-600 py-2 rounded-md font-semibold"
+            className={`flex-1 py-2 rounded-md font-semibold ${Colors.background.special} ${Colors.text.primary} ${Colors.hover.special} cursor-pointer active:scale-95 transition-all`}
           >
             Save Template
           </button>

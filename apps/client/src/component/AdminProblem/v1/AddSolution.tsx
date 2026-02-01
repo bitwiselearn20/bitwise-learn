@@ -1,8 +1,12 @@
 "use client";
 
 import { createSolution } from "@/api/problems/create-solution";
+import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 import MarkdownEditor from "@/component/ui/MarkDownEditor";
+import { X } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 type AddSolutionProps = {
   id: string;
@@ -15,6 +19,7 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
 
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const Colors = useColors();
 
   const handleSubmit = async () => {
     if (!solutionDescription.trim()) {
@@ -32,8 +37,9 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
       });
 
       stateFn(false); // close form
+      toast.success("Solution added successfully!");
     } catch (err) {
-      setError("Failed to save solution. Please try again.");
+      toast.error("Failed to save solution. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -41,21 +47,21 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
-      <div className="w-full max-w-3xl bg-neutral-900 rounded-lg shadow-xl p-6 space-y-5">
+      <div className={`w-full max-w-3xl ${Colors.background.secondary} rounded-lg shadow-xl p-6 space-y-5`}>
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-white">Add New Solution</h2>
+          <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>Add New Solution</h2>
           <button
             onClick={() => stateFn(false)}
-            className="text-gray-400 hover:text-white"
+            className={`${Colors.text.primary} hover:text-red-500 cursor-pointer active:scale-95 transition-all`}
           >
-            ✕
+            <X size={20} />
           </button>
         </div>
 
         {/* Video URL */}
         <div>
-          <label className="block text-sm text-gray-400 mb-1">
+          <label className={`block text-sm ${Colors.text.secondary} mb-1`}>
             Video URL (optional)
           </label>
           <input
@@ -63,16 +69,17 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
             placeholder="https://youtube.com/..."
-            className="w-full bg-neutral-800 border border-neutral-700 px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className={`w-full ${Colors.background.primary} border ${Colors.border.defaultThin} px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-300`}
           />
         </div>
 
         {/* Markdown Editor */}
         <div>
-          <label className="block text-sm text-gray-400 mb-1">
+          <label className={`block text-sm ${Colors.text.secondary} mb-1`}>
             Solution Description *
           </label>
           <MarkdownEditor
+            theme={useTheme().theme === "Dark" ? "dark" : "light"}
             value={solutionDescription}
             setValue={setSolutionDescription}
             mode="live"
@@ -84,10 +91,10 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
         {error && <p className="text-sm text-red-400">{error}</p>}
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-3 border-t border-neutral-800">
+        <div className="flex justify-end gap-3 pt-3">
           <button
             onClick={() => stateFn(false)}
-            className="px-4 py-2 bg-neutral-700 rounded-md text-sm hover:bg-neutral-600"
+            className={`px-4 py-2 ${Colors.text.special} rounded-md text-sm hover:underline cursor-pointer active:scale-95 transition-all`}
           >
             Cancel
           </button>
@@ -95,7 +102,7 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
           <button
             onClick={handleSubmit}
             disabled={isSaving}
-            className="px-5 py-2 bg-indigo-600 rounded-md text-sm font-medium hover:bg-indigo-500 disabled:opacity-60"
+            className={`px-5 py-2 ${Colors.background.special} rounded-md text-sm font-medium ${Colors.text.primary} ${Colors.hover.special} disabled:opacity-60 cursor-pointer active:scale-95 transition-all`}
           >
             {isSaving ? "Saving..." : "Save Solution"}
           </button>

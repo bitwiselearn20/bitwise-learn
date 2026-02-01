@@ -8,10 +8,12 @@ import { useRouter } from "next/navigation";
 import { uploadBatches } from "@/api/batches/create-batches";
 import toast from "react-hot-toast";
 import useLogs from "@/lib/useLogs";
+import { useColors } from "@/component/general/(Color Manager)/useColors";
 
 type BatchSidebarProps = {
   batch: any;
 };
+const Colors = useColors();
 
 const formatDate = (dateString: string | Date): string => {
   const date = new Date(dateString);
@@ -48,12 +50,12 @@ const InputField = ({
   onChange: (v: string) => void;
 }) => (
   <div className="space-y-1">
-    <label className="text-xs text-gray-400">{label}</label>
+    <label className={`text-xs ${Colors.text.secondary}`}>{label}</label>
     <input
       value={value ?? ""}
       placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full bg-[#2a2a2a] border border-[#3a3a3a] rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+      className={`w-full ${Colors.background.secondary} ${Colors.border.defaultThick} rounded px-3 py-2 text-sm ${Colors.text.primary} focus:outline-none focus:ring-1 focus:ring-blue-500`}
     />
   </div>
 );
@@ -134,7 +136,7 @@ const BatchSidebar = ({ batch }: BatchSidebarProps) => {
   };
 
   return (
-    <aside className="w-[320px] bg-[#1b1b1b] text-white p-6 rounded-xl min-h-[93vh]">
+    <aside className={`w-[320px] ${Colors.background.secondary} ${Colors.text.primary} p-6 rounded-xl min-h-[93vh]`}>
       <input
         type="file"
         accept=".csv,.xlsx"
@@ -205,7 +207,7 @@ const BatchSidebar = ({ batch }: BatchSidebarProps) => {
               <>
                 <button
                   onClick={handleSave}
-                  className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded ${Colors.text.primary} ${Colors.background.special} ${Colors.hover.special} cursor-pointer active:scale-95`}
                 >
                   <Save size={16} />
                   Save
@@ -213,7 +215,7 @@ const BatchSidebar = ({ batch }: BatchSidebarProps) => {
 
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="flex-1 flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded"
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded ${Colors.text.special} ${Colors.border.specialThick} ${Colors.hover.special} cursor-pointer active:scale-95`}
                 >
                   <X size={16} />
                   Cancel
@@ -223,7 +225,7 @@ const BatchSidebar = ({ batch }: BatchSidebarProps) => {
               <>
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded ${Colors.text.primary} ${Colors.background.special} ${Colors.hover.special} cursor-pointer active:scale-95`}
                 >
                   <Pencil size={16} />
                   Edit
@@ -231,7 +233,7 @@ const BatchSidebar = ({ batch }: BatchSidebarProps) => {
 
                 <button
                   onClick={handleDelete}
-                  className="flex-1 flex items-center justify-center gap-2 text-white border border-white px-4 py-2 rounded"
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded text-red-500 border border-red-500 hover:bg-red-500/30 cursor-pointer active:scale-95`}
                 >
                   <Trash size={16} />
                   Delete
@@ -241,7 +243,7 @@ const BatchSidebar = ({ batch }: BatchSidebarProps) => {
           </div>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex-1 mt-4 w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
+            className={`flex-1 mt-4 w-full flex items-center justify-center gap-2  px-4 py-2 rounded ${Colors.text.special} ${Colors.border.specialThick} ${Colors.hover.special} cursor-pointer active:scale-95`}
           >
             <Upload size={16} />
             upload cloud credentials
