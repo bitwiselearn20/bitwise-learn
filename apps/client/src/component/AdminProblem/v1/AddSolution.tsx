@@ -35,7 +35,7 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
         videoUrl: videoUrl || null,
         solution: solutionDescription,
       });
-
+      window.location.reload();
       stateFn(false); // close form
       toast.success("Solution added successfully!");
     } catch (err) {
@@ -47,10 +47,14 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
-      <div className={`w-full max-w-3xl ${Colors.background.secondary} rounded-lg shadow-xl p-6 space-y-5`}>
+      <div
+        className={`w-full max-w-3xl ${Colors.background.secondary} rounded-lg shadow-xl p-6 space-y-5`}
+      >
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>Add New Solution</h2>
+          <h2 className={`text-lg font-semibold ${Colors.text.primary}`}>
+            Add New Solution
+          </h2>
           <button
             onClick={() => stateFn(false)}
             className={`${Colors.text.primary} hover:text-red-500 cursor-pointer active:scale-95 transition-all`}
@@ -61,7 +65,7 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
 
         {/* Video URL */}
         <div>
-          <label className={`block text-sm ${Colors.text.secondary} mb-1`}>
+          <label className={`block text-sm ${Colors.text.primary} mb-1`}>
             Video URL (optional)
           </label>
           <input
@@ -69,7 +73,7 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
             placeholder="https://youtube.com/..."
-            className={`w-full ${Colors.background.primary} border ${Colors.border.defaultThin} px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-300`}
+            className={`w-full ${Colors.background.primary} ${Colors.text.primary} border ${Colors.border.defaultThin} px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-300`}
           />
         </div>
 
@@ -79,7 +83,7 @@ function AddSolution({ stateFn, id }: AddSolutionProps) {
             Solution Description *
           </label>
           <MarkdownEditor
-            theme={useTheme().theme === "Dark" ? "dark" : "light"}
+            theme={"light"}
             value={solutionDescription}
             setValue={setSolutionDescription}
             mode="live"

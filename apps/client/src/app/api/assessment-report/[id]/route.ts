@@ -20,13 +20,13 @@ export async function GET(
     const cookieHeader = req.headers.get("cookie");
 
     const response = await axios.get(
-      `${backendUrl}/api/v1/reoports/assessment-report/${id}`,
+      `${backendUrl}/api/v1/reports/assessment-report/${id}`,
       {
         headers: {
           Cookie: cookieHeader || "",
         },
         withCredentials: true,
-      }
+      },
     );
 
     return NextResponse.json(response.data.data, { status: 200 });

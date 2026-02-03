@@ -203,14 +203,18 @@ export default function AttemptV1({
   const { enterFullscreen } = useFullscreenEnforcer(() => {
     if (intentionalExitRef.current) return;
     toast.error(attemptConfig.autoSubmitText);
-    setTimeout(() => router.push(attemptConfig.redirectPath), 1500);
+    submitTest(id, { tabSwitchCount: tabSwitchCount }).then(() => {
+      router.push("/assessments");
+    });
   });
 
   const tabSwitchCount = useTabSwitchCounter(started);
   useEffect(() => {
     if (tabSwitchCount >= 3) {
       toast.error("Too many tab switches");
-      router.push(attemptConfig.redirectPath);
+      if (assessment.autoSubmit) {
+        router.push(attemptConfig.redirectPath);
+      }
     }
   }, [tabSwitchCount]);
 
@@ -294,9 +298,16 @@ export default function AttemptV1({
   const handleSubmitQuestion = async (id: string, data: any) => {
     await submitIndividualQuestion(id, { option: data }, "NO_CODE");
   };
-  const handleCodeQuestion = async (id: string, data: any) => {
-    await submitIndividualQuestion(id, { code: data }, "CODE");
+  const handleCodeQuestion = async (
+    id: string,
+    data: any,
+    language: string,
+  ) => {
+    await submitIndividualQuestion(id, { code: data, language }, "CODE");
   };
+  async function submitAssessmentCode(language: string, code: string) {
+    await handleCodeQuestion(question.id, code, language);
+  }
   const handleSubmitTest = async () => {
     await submitTest(id, { tabSwitchCount: tabSwitchCount });
     router.push("/assessments");
@@ -402,14 +413,16 @@ export default function AttemptV1({
           {section.type === "CODE" && (
             <CodeRightSection
               problem={codingProblem}
-              problemId={question.id}
+              problemId={question.problemId}
               code={codeAnswers[question.id] ?? ""}
               onChange={(code) => {
-                handleCodeQuestion(question.id, code);
                 setCodeAnswers((p) => ({ ...p, [question.id]: code }));
               }}
               onRun={() => {}}
-              onSubmit={() => toast("Code submit placeholder", { icon: "🧪" })}
+              //@ts-ignore
+              onSubmit={(language: string, code: string) =>
+                submitAssessmentCode(language, code)
+              }
             />
           )}
         </div>

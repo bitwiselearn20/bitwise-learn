@@ -31,9 +31,8 @@ type ReportRow = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  CLEAN: "#22c55e",
-  SUSPICIOUS: "#facc15",
-  MALPRACTICE: "#ef4444",
+  NOT_CHEATED: "#22c55e",
+  CHEATED: "#ef4444",
 };
 
 function IndividualAssessmentReportV1({
@@ -488,13 +487,15 @@ function IndividualAssessmentReportV1({
         className="hidden bg-neutral-900 text-white p-6 rounded-lg w-[210mm]"
       ></div>
       <div>
-        <div>
-          <h1 className="text-xl font-semibold text-white">
-            Assessment Report
-          </h1>
-          <p className="text-sm text-neutral-400">
-            Performance & proctoring overview
-          </p>
+        <div className="flex justify-between w-full items-center">
+          <div>
+            <h1 className="text-xl font-semibold text-white">
+              Assessment Report
+            </h1>
+            <p className="text-sm text-neutral-400">
+              Performance & proctoring overview
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

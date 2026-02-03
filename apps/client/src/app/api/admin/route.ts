@@ -4,7 +4,7 @@ import axios from "axios";
 export async function GET(req: NextRequest) {
   try {
     const backendUrl = process.env.BACKEND_URL;
-    console.log(backendUrl);
+    // console.log(backendUrl);
     if (!backendUrl) {
       return NextResponse.json(
         { error: "Backend URL not configured" },
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
           Cookie: cookieHeader || "",
         },
         withCredentials: true,
-      }
+      },
     );
 
     return NextResponse.json(response.data.data, { status: 200 });

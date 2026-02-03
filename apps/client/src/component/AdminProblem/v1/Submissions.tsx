@@ -71,7 +71,7 @@ function Submissions({ content }: SubmissionsProps) {
         },
       ],
     };
-
+    console.log(content);
     await updateDescription(content.id as string, updatedData);
     setTimeout(() => {
       setIsSaving(false);
@@ -100,12 +100,20 @@ function Submissions({ content }: SubmissionsProps) {
               onChange={(e) => setDifficulty(e.target.value)}
               className={` px-3 py-1 rounded-md ${Colors.background.secondary} ${Colors.text.primary} cursor-pointer`}
             >
-              <option className="cursor-pointer" value="EASY">EASY</option>
-              <option className="cursor-pointer" value="MEDIUM">MEDIUM</option>
-              <option className="cursor-pointer" value="HARD">HARD</option>
+              <option className="cursor-pointer" value="EASY">
+                EASY
+              </option>
+              <option className="cursor-pointer" value="MEDIUM">
+                MEDIUM
+              </option>
+              <option className="cursor-pointer" value="HARD">
+                HARD
+              </option>
             </select>
           ) : (
-            <span className={`${Colors.background.secondary} ${Colors.text.primary} px-3 py-1 rounded-full text-sm`}>
+            <span
+              className={`${Colors.background.secondary} ${Colors.text.primary} px-3 py-1 rounded-full text-sm`}
+            >
               {difficulty}
             </span>
           )}
@@ -125,16 +133,21 @@ function Submissions({ content }: SubmissionsProps) {
       <section>
         <h2 className="text-xl font-semibold mb-2">Description</h2>
         {isEditing ? (
+          //@ts-ignore
           <MarkdownEditor
             value={description}
             setValue={setDescription}
             mode={"edit"}
             hideToolbar={false}
-            theme={useTheme().theme === "Dark" ? "dark" : "light"}
+            theme={"light"}
           />
         ) : (
           //@ts-ignore
-          <MarkdownEditor value={description} mode={"preview"} theme={useTheme().theme === "Dark" ? "dark" : "light"} />
+          <MarkdownEditor
+            value={description}
+            mode={"preview"}
+            theme={useTheme().theme === "Dark" ? "dark" : "light"}
+          />
         )}
       </section>
 
@@ -215,19 +228,24 @@ function Submissions({ content }: SubmissionsProps) {
                 />
                 <button
                   onClick={() => removeHint(index)}
-                    className={`text-red-500 hover:text-red-700 cursor-pointer`}
+                  className={`text-red-500 hover:text-red-700 cursor-pointer`}
                 >
                   <X size={20} />
                 </button>
               </div>
             ))}
 
-            <button onClick={addHint} className={`${Colors.text.special} hover:underline cursor-pointer active:scale-95 transition-all`}>
+            <button
+              onClick={addHint}
+              className={`${Colors.text.special} hover:underline cursor-pointer active:scale-95 transition-all`}
+            >
               + Add Hint
             </button>
           </>
         ) : (
-          <ul className={`list-disc list-inside ${Colors.text.secondary} space-y-1`}>
+          <ul
+            className={`list-disc list-inside ${Colors.text.secondary} space-y-1`}
+          >
             {hints.map((hint, i) => (
               <li key={i}>{hint}</li>
             ))}
@@ -236,7 +254,9 @@ function Submissions({ content }: SubmissionsProps) {
       </section>
 
       {/* Footer */}
-      <footer className={`pt-4 ${Colors.border.default} flex justify-between items-center`}>
+      <footer
+        className={`pt-4 ${Colors.border.default} flex justify-between items-center`}
+      >
         <div className={`text-sm ${Colors.text.secondary} space-y-1`}>
           <p>Created: {new Date(content.createdAt).toLocaleString()}</p>
           <p>Last Updated: {new Date(content.updatedAt).toLocaleString()}</p>

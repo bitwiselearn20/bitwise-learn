@@ -49,8 +49,10 @@ function ProblemDescrption({
     document.removeEventListener("mouseup", stopResizing);
   };
   const handlePublish = async (id: string) => {
+    console.log("problem is + ", id);
     await changeStatus(id);
     data.problem = "LISTED";
+    window.location.reload();
   };
   return (
     <div
@@ -115,7 +117,9 @@ function ProblemDescrption({
       {/* Topics */}
       {problemTopics?.length > 0 && (
         <div>
-          <h2 className={`text-lg font-semibold ${Colors.text.primary} mb-2`}>Topics</h2>
+          <h2 className={`text-lg font-semibold ${Colors.text.primary} mb-2`}>
+            Topics
+          </h2>
 
           <div className="flex flex-wrap gap-2">
             {problemTopics[0].tagName.map((tag: string) => (
@@ -132,7 +136,9 @@ function ProblemDescrption({
       {/* Hints */}
       {hints?.length > 0 && (
         <div>
-          <h2 className={`text-lg font-semibold ${Colors.text.primary} mb-2`}>Hints</h2>
+          <h2 className={`text-lg font-semibold ${Colors.text.primary} mb-2`}>
+            Hints
+          </h2>
 
           <div className="space-y-2">
             {hints.map((hint: string, idx: number) => (
@@ -152,7 +158,9 @@ function HintItem({ hint, index }: { hint: string; index: number }) {
   const Colors = useColors();
 
   return (
-    <div className={`${Colors.background.secondary} ${Colors.border.defaultThin} rounded-lg`}>
+    <div
+      className={`${Colors.background.secondary} ${Colors.border.defaultThin} rounded-lg`}
+    >
       <button
         onClick={() => setOpen(!open)}
         className={`flex items-center gap-2 w-full px-4 py-2 text-sm ${Colors.text.secondary} ${Colors.hover.special} cursor-pointer transition`}
@@ -165,7 +173,9 @@ function HintItem({ hint, index }: { hint: string; index: number }) {
       </button>
 
       {open && (
-        <div className={`px-4 pb-3 text-sm ${Colors.text.secondary} mt-3`}>{hint}</div>
+        <div className={`px-4 pb-3 text-sm ${Colors.text.secondary} mt-3`}>
+          {hint}
+        </div>
       )}
     </div>
   );

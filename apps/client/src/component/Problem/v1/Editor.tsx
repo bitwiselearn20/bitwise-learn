@@ -22,10 +22,12 @@ export default function CodeEditor({
   template,
   questionId,
   output: setOutput,
+  customSubmit,
 }: {
   template: any[];
   questionId: string;
   output: any;
+  customSubmit?: (language: string, code: string) => void;
 }) {
   const Colors = useColors();
   const theme = useTheme();
@@ -89,17 +91,21 @@ export default function CodeEditor({
       code,
       questionId,
     });
-    setOutput(res.testCases);
+    setOutput(res.testCases || []);
     toast.success("Execution Completed", { id: "run" });
   };
 
   const handleSubmit = async () => {
     toast.loading("Submitting Code", { id: "submit" });
-    await submitCode({
-      language,
-      code,
-      questionId,
-    });
+    if (customSubmit) {
+      await customSubmit(language, code);
+    } else {
+      await submitCode({
+        language,
+        code,
+        questionId,
+      });
+    }
     toast.success("Code Submitted", { id: "submit" });
   };
 

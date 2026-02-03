@@ -7,8 +7,8 @@ export const getAllCourses = async (publishedOnly: boolean = false) => {
   return res.data;
 };
 export const getInstitutionCourses = async (id: string) => {
-  console.log(id);
-  console.log("/api/course/institute/" + id);
+  // console.log(id);
+  // console.log("/api/course/institute/" + id);
   const res = await axiosInstance.get("/api/course/institute/" + id);
   return res.data;
 };

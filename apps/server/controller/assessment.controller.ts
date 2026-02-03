@@ -22,6 +22,7 @@ class AssessmentController {
           name: data.name,
           description: data.description,
           instruction: data.instruction,
+          autoSubmit: data.autoSubmit,
           startTime,
           endTime,
           individualSectionTimeLimit: data.individualSectionTimeLimit,
@@ -140,6 +141,8 @@ class AssessmentController {
           individualSectionTimeLimit: true,
           status: true,
           batchId: true,
+          report: true,
+          reportStatus: true,
         },
       });
 
@@ -432,6 +435,12 @@ class AssessmentController {
         JSON.stringify({ id: dbAssessment.id }),
       );
 
+      await prismaClient.assessment.update({
+        where: { id: dbAssessment.id },
+        data: {
+          reportStatus: "PROCESSING",
+        },
+      });
       if (!messageSent) throw new Error("request failed");
 
       return res

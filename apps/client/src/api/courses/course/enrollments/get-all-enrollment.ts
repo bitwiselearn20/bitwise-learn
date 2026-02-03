@@ -20,6 +20,6 @@ export async function getInstituteEnrollments(
     "/api/course/enrollments/institute/" + institutionId + "/" + id,
   );
   courseInfo(data.data.course);
-  console.log(data.data.data);
+  // console.log(data.data.data);
   stateFn(data.data.data);
 }

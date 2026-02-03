@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  getAllCourses,
-  getInstitutionCourses,
-} from "@/api/courses/course/get-all-courses";
+import { getAllCourses } from "@/api/courses/course/get-all-courses";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Filter, CheckCircle, XCircle } from "lucide-react";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
-import { useAdmin } from "@/store/adminStore";
-import { useInstitution } from "@/store/institutionStore";
 
 type Course = {
   id: string;
@@ -32,28 +27,16 @@ function AllCourses() {
 
   const router = useRouter();
   const Colors = useColors();
-  const { info: adminInfo } = useAdmin();
-  const { info: instutionInfo } = useInstitution();
+
   useEffect(() => {
     async function handleLoad() {
       setLoading(true);
-      let data;
-      if (adminInfo?.data.id) {
-        data = await getAllCourses(true);
-        setCourses(data);
-      } else {
-        console.log(instutionInfo);
-        if (!instutionInfo?.data.id) {
-          return;
-        }
-        data = await getInstitutionCourses(instutionInfo?.data.id as string);
-        console.log(data.data);
-        setCourses(data.data);
-      }
+      const data = await getAllCourses(true);
+      setCourses(data);
       setLoading(false);
     }
     handleLoad();
-  }, [instutionInfo, adminInfo]);
+  }, []);
 
   const uniqueLevels = useMemo(() => {
     return Array.from(new Set(courses.map((c) => c.level)));
@@ -211,11 +194,11 @@ function AllCourses() {
 
                   <td className="px-4 py-3 text-right">
                     <button
-                      onClick={() => {
+                      onClick={() =>
                         router.push(
                           `/admin-dashboard/reports/courses/${course.id}`,
-                        );
-                      }}
+                        )
+                      }
                       className={`px-3 py-1.5 text-xs font-medium rounded-md cursor-pointer
                                  ${Colors.border.specialThin} ${Colors.hover.special}  ${Colors.text.special} transition`}
                     >

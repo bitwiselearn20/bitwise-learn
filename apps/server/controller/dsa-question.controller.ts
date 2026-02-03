@@ -110,6 +110,7 @@ class DsaQuestionController {
       const udpatedProblem = await prismaClient.problem.update({
         where: { id: dbProblem.id },
         data: {
+          name: data.name ?? dbProblem.name,
           description: data.description ?? dbProblem.description,
           hints: data.hints ?? dbProblem.hints,
           difficulty: (data.difficulty as any) ?? dbProblem.difficulty,
@@ -178,6 +179,8 @@ class DsaQuestionController {
       const userId = req.user?.id;
       const problemId = req.params.id;
 
+      console.log(userId);
+      console.log(problemId);
       if (!userId) throw new Error("kindly Login");
       if (!problemId) throw new Error("problemId is required");
 
@@ -200,6 +203,7 @@ class DsaQuestionController {
           where: { id: userId },
         });
       }
+      console.log(dbAdmin);
       if (!dbAdmin) throw new Error("no such admin found!");
 
       const dbProblem = await prismaClient.problem.findFirst({
@@ -220,7 +224,8 @@ class DsaQuestionController {
         .status(200)
         .json(apiResponse(200, "problem updated successfully", updatedProblem));
     } catch (error: any) {
-      console.log(error);
+      console.log("--------");
+      console.log(error.message);
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
@@ -593,7 +598,7 @@ class DsaQuestionController {
         });
       }
       if (!dbAdmin) throw new Error("no such admin found!");
-
+      console.log(req.body);
       const dbProblem = await prismaClient.problem.findFirst({
         where: { id: problemId as string },
         include: {
@@ -622,7 +627,7 @@ class DsaQuestionController {
         .status(200)
         .json(apiResponse(200, "template added successfully", createdTemplate));
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }

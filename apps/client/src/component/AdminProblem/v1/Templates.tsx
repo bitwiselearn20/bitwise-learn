@@ -22,7 +22,7 @@ const LANGUAGE_MAP: Record<string, string> = {
   PYTHON: "python",
   JAVA: "java",
   CPP: "cpp",
-  JAVASCRIPT: "javascript",
+  JS: "javscript",
   TYPESCRIPT: "typescript",
 };
 
@@ -79,7 +79,9 @@ function Templates() {
 
   if (!selectedLang) {
     return (
-      <div className={`h-screen w-full flex flex-col items-center justify-center ${Colors.text.primary}`}>
+      <div
+        className={`h-screen w-full flex flex-col items-center justify-center ${Colors.text.primary}`}
+      >
         {showTemplateForm && (
           <ShowAddTemplateForm
             onClose={() => setShowTemplateForm(false)}
@@ -140,6 +142,26 @@ function Templates() {
       templateMap,
     );
 
+    getAllProblemTemplate((res: Template[]) => {
+      setTemplates(res);
+
+      if (!res.length) return;
+
+      const initialLang = res[0].language;
+      setSelectedLang(initialLang);
+
+      const defaultCodes: Record<string, string> = {};
+      const functionBodies: Record<string, string> = {};
+
+      res.forEach((t) => {
+        defaultCodes[t.language] = t.defaultCode;
+        functionBodies[t.language] = t.functionBody;
+      });
+
+      setCodeMap(defaultCodes);
+      setFunctionBodyMap(functionBodies);
+    }, param.id as string);
+
     setIsEditing(false);
   };
 
@@ -189,8 +211,8 @@ function Templates() {
             }
             className={`px-4 py-2 text-sm font-medium cursor-pointer active:scale-95 transition-all rounded-md ${
               currentDisplay === tab
-                  ? `${Colors.background.special} ${Colors.text.primary}`
-                  : `${Colors.background.primary} ${Colors.text.secondary}`
+                ? `${Colors.background.special} ${Colors.text.primary}`
+                : `${Colors.background.primary} ${Colors.text.secondary}`
             }`}
           >
             {tab === "defaultCode" ? "Default Code" : "Function Body"}
@@ -199,7 +221,9 @@ function Templates() {
       </div>
 
       {/* Header */}
-      <div className={`flex items-center justify-between px-4 py-2 ${Colors.border.default}`}>
+      <div
+        className={`flex items-center justify-between px-4 py-2 ${Colors.border.default}`}
+      >
         <h2 className={`text-sm font-semibold ${Colors.text.primary}`}>
           {selectedLang} Editor
         </h2>
@@ -210,7 +234,11 @@ function Templates() {
           className={`px-3 py-1.5 rounded-md ${Colors.background.primary} ${Colors.border.defaultThin} ${Colors.text.primary} cursor-pointer`}
         >
           {Object.keys(templateMap).map((lang) => (
-            <option className={`cursor-pointer ${Colors.text.primary}`} key={lang} value={lang}>
+            <option
+              className={`cursor-pointer ${Colors.text.primary}`}
+              key={lang}
+              value={lang}
+            >
               {lang}
             </option>
           ))}

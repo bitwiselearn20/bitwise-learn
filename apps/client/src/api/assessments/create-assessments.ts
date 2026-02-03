@@ -8,6 +8,7 @@ type CreateAssessment = {
   endTime: string;
   individualSectionTimeLimit?: number;
   status?: "UPCOMING" | "LIVE" | "ENDED";
+  autoSubmit: boolean;
   batchId: string;
 };
 
@@ -22,6 +23,7 @@ export const createAssessments = async (payload: CreateAssessment) => {
       individualSectionTimeLimit: payload.individualSectionTimeLimit,
       status: payload.status,
       batchId: payload.batchId,
+      autoSubmit: payload.autoSubmit,
     };
 
     const response = await axiosInstance.post(

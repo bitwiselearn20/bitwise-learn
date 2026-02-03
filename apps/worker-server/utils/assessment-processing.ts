@@ -148,6 +148,7 @@ export default async function assessmentProcessing(payload: { id: string }) {
     where: { id: payload.id },
     data: {
       report: uploadData.url,
+      reportStatus: "PROCESSED",
     },
   });
 

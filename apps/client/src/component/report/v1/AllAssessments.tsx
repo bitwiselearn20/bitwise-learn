@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  getAllAssessments,
-  getAllInstituteAssessment,
-} from "@/api/assessments/get-all-assessments";
+import { getAllAssessments } from "@/api/assessments/get-all-assessments";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -14,8 +11,9 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
-import { useInstitution } from "@/store/institutionStore";
-import { useAdmin } from "@/store/adminStore";
+import Link from "next/link";
+import { handleReport } from "@/api/reports/get-full-report";
+import toast from "react-hot-toast";
 
 type Assessment = {
   id: string;
@@ -27,6 +25,8 @@ type Assessment = {
   individualSectionTimeLimit: number | null;
   status: "UPCOMING" | "ONGOING" | "ENDED";
   batchId: string;
+  reportStatus: "NOT_REQUESTED" | "PROCESSING" | "PROCESSED";
+  report: string;
 };
 
 function AllAssessments() {
@@ -38,25 +38,28 @@ function AllAssessments() {
 
   const router = useRouter();
   const Colors = useColors();
-  const { info: adminInfo } = useAdmin();
-  const { info: instutionInfo } = useInstitution();
+
   useEffect(() => {
     async function handleLoad() {
       setLoading(true);
-      let data;
-      if (adminInfo?.data.id) {
-        data = await getAllAssessments();
-      } else {
-        data = await getAllInstituteAssessment(
-          instutionInfo?.data.id as string,
-        );
-      }
-      console.log(data);
+      const data = await getAllAssessments();
       setAssessments(data.data);
       setLoading(false);
     }
     handleLoad();
   }, []);
+  async function handleReportRequest(id: string) {
+    const toastId = toast.loading("Requesting...");
+
+    try {
+      await handleReport(id);
+      toast.success("Done!", { id: toastId });
+    } catch (err) {
+      toast.error("Something went wrong", { id: toastId });
+    } finally {
+      window.location.reload();
+    }
+  }
 
   const filteredAssessments = useMemo(() => {
     return assessments.filter((assessment) => {
@@ -128,6 +131,7 @@ function AllAssessments() {
               <th className="px-4 py-3">Section Time</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3 text-right">Action</th>
+              <th className="px-4 py-3">report</th>
             </tr>
           </thead>
 
@@ -228,6 +232,35 @@ function AllAssessments() {
                       >
                         View
                       </button>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-700">
+                    {assessment.status === "ENDED" ? (
+                      <>
+                        {assessment.reportStatus === "PROCESSED" ? (
+                          <Link
+                            href={assessment.report}
+                            target="_blank"
+                            className="inline-flex items-center gap-1 rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 transition"
+                          >
+                            View Report
+                          </Link>
+                        ) : assessment.reportStatus === "NOT_REQUESTED" ? (
+                          <button
+                            onClick={() => handleReportRequest(assessment.id)}
+                            className="rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition"
+                          >
+                            Request Report
+                          </button>
+                        ) : (
+                          <span className="inline-flex items-center gap-2 text-yellow-600">
+                            <span className="h-2 w-2 animate-pulse rounded-full bg-yellow-500" />
+                            Under processing
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-gray-400">—</span>
                     )}
                   </td>
                 </tr>

@@ -1,5 +1,6 @@
 "use client";
 import CodeEditor from "@/component/Problem/v1/Editor";
+import TestCases from "@/component/Problem/v1/TestCases";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -19,7 +20,7 @@ export default function CodeRightSection({
   onRun,
   onSubmit,
 }: Props) {
-  const [output, setOutput] = useState("");
+  const [output, setOutput] = useState([]);
 
   return (
     <div className="h-full w-full flex flex-col min-h-0 rounded-xl p-4 bg-[#0f172a] text-white font-mono">
@@ -31,11 +32,19 @@ export default function CodeRightSection({
       {/* Editor container (THIS FIXES OVERFLOW) */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         {problem && (
-          <CodeEditor
-            questionId={problemId}
-            template={problem.problemTemplates}
-            output={output}
-          />
+          <>
+            <div className="h-2/3">
+              <CodeEditor
+                questionId={problemId}
+                template={problem.problemTemplates}
+                output={setOutput}
+                customSubmit={onSubmit}
+              />
+            </div>
+            <div className="overflow-y-auto min-h-0">
+              <TestCases output={output} testCases={problem.testCases} />
+            </div>
+          </>
         )}
       </div>
     </div>

@@ -1,12 +1,12 @@
 export interface JwtPayload {
   id: string;
   type:
-  | "SUPERADMIN"
-  | "ADMIN"
-  | "INSTITUTION"
-  | "VENDOR"
-  | "TEACHER"
-  | "STUDENT";
+    | "SUPERADMIN"
+    | "ADMIN"
+    | "INSTITUTION"
+    | "VENDOR"
+    | "TEACHER"
+    | "STUDENT";
 }
 export interface CourseBody {
   name: string;
@@ -143,6 +143,7 @@ export interface ProblemBody {
 }
 
 export interface UpdateProblemBody {
+  name: string;
   description?: string;
   hints?: string[];
   difficulty?: string;
@@ -248,6 +249,7 @@ export interface CreateAssessment {
   individualSectionTimeLimit?: number;
   status?: "UPCOMING" | "LIVE" | "ENDED";
   batchId: string;
+  autoSubmit: boolean;
 }
 export interface UpdateAssessment {
   name?: string;

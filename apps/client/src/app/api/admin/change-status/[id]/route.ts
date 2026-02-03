@@ -20,16 +20,14 @@ export async function POST(
 
     const response = await axiosInstance.put(
       `${backendUrl}/api/v1/problems/change-status/${id}`,
+      {},
       {
         headers: {
           Cookie: cookieHeader || "",
         },
         withCredentials: true,
-      }
+      },
     );
-
-    console.log("==================");
-    console.log(response.data);
 
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {

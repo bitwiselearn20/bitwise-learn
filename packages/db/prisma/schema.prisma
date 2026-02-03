@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum REPORT_STATUS {
+  NOT_REQUESTED
+  PROCESSING
+  PROCESSED
+}
+
 enum COURSE_STATUS {
   PUBLISHED
   NOT_PUBLISHED
@@ -67,7 +73,7 @@ enum ASSESSMENT_STATUS {
 }
 
 enum LANGUAGES {
-  JS
+  JAVASCRIPT
   JAVA
   PYTHON
   C
@@ -404,11 +410,12 @@ model Assessment {
   individualSectionTimeLimit Int?
   status                     ASSESSMENT_STATUS @default(UPCOMING)
   report                     String?
+  reportStatus               REPORT_STATUS     @default(NOT_REQUESTED)
   creatorId                  String            @db.ObjectId
   creatorType                String            @default("ADMIN")
-
-  batchId String @db.ObjectId
-  batch   Batch  @relation(fields: [batchId], references: [id])
+  autoSubmit                 Boolean           @default(true)
+  batchId                    String            @db.ObjectId
+  batch                      Batch             @relation(fields: [batchId], references: [id])
 
   sections                      AssessmentSection[]
   submissions                   AssessmentSubmission[]

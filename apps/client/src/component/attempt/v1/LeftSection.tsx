@@ -42,12 +42,12 @@ export default function LeftSection({
     <div
       className={`flex flex-col font-mono ${Colors.text.primary} ${Colors.background.secondary} h-full min-h-0 p-4 rounded-lg`}
     >
-
       {/* TOP CONTENT: SECTIONS (LEFT) + QUESTION (RIGHT) */}
       <div className="flex gap-3 flex-1 min-h-0 mb-4">
-
         {/* SECTION LIST (LEFT SIDE) */}
-        <div className={`${Colors.background.primary} flex flex-col gap-2 w-22 shrink-0 p-3 rounded-xl`}>
+        <div
+          className={`${Colors.background.primary} flex flex-col gap-2 w-22 shrink-0 p-3 rounded-xl`}
+        >
           {sections.map((s, i) => (
             <button
               key={s.id}
@@ -87,8 +87,16 @@ export default function LeftSection({
                       <p>
                         <span className="opacity-60">Input:</span>{" "}
                         <code className="opacity-90">
-                          array = [{parsedInput.array.join(", ")}], target ={" "}
-                          {parsedInput.target}
+                          {Object.keys(parsedInput).map((key, index) => {
+                            return (
+                              <p key={index}>
+                                {" "}
+                                {key} : {parsedInput[key]}{" "}
+                              </p>
+                            );
+                          })}
+                          {/* array = [{parsedInput.array.join(", ")}], target ={" "}
+                          {parsedInput.target} */}
                         </code>
                       </p>
 

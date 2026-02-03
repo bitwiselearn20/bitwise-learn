@@ -15,6 +15,7 @@ import { useStudent } from "@/store/studentStore";
 import { getAssessmentsByInstitution } from "@/api/assessments/get-assessments-by-batch";
 import { useInstitution } from "@/store/institutionStore";
 import { useAdmin } from "@/store/adminStore";
+import useLogs from "@/lib/useLogs";
 
 // colors ------------------------------------------------------------------
 const Colors = useColors();
@@ -28,6 +29,7 @@ type CreateAssessment = {
   startTime: string;
   endTime: string;
   individualSectionTimeLimit?: number;
+  autoSubmit: boolean;
   status?: "UPCOMING" | "LIVE" | "ENDED";
   batchId: string;
 };
@@ -124,6 +126,7 @@ const AddAssessmentModal = ({
     startTime: "",
     endTime: "",
     individualSectionTimeLimit: undefined,
+    autoSubmit: true,
     batchId: "",
     status: "UPCOMING",
   });
@@ -293,6 +296,31 @@ const AddAssessmentModal = ({
             className={`${inputBase} resize-none `}
           />
           {errorText("instructions")}
+        </div>
+        <div className="mt-4 flex items-center justify-between gap-4">
+          <div>
+            <label className={`text-sm font-medium ${Colors.text.primary}`}>
+              Auto submit assessment
+            </label>
+          </div>
+
+          <button
+            type="button"
+            onClick={() =>
+              setForm((prev) => ({ ...prev, autoSubmit: !prev.autoSubmit }))
+            }
+            className={`
+      relative inline-flex h-6 w-11 items-center rounded-full transition
+      ${form.autoSubmit ? "bg-[#64ACFF]" : "bg-slate-600"}
+    `}
+          >
+            <span
+              className={`
+        inline-block h-4 w-4 transform rounded-full bg-white transition
+        ${form.autoSubmit ? "translate-x-6" : "translate-x-1"}
+      `}
+            />
+          </button>
         </div>
 
         {/* Start / End Time */}
@@ -488,33 +516,33 @@ const AssessmentsV1 = () => {
   const [searchText, setSearchText] = useState("");
   const { info: instituteInfo } = useInstitution();
   const { info: adminInfo } = useAdmin();
+  const { loading: logsLoading, role: logsRole } = useLogs();
   const fetchAssessments = async () => {
     try {
       setLoading(true);
       // console.log(instituteInfo?.data.id);
       if (!instituteInfo?.data.id && !adminInfo?.data.id) return;
+
       let res: any;
-      if (!instituteInfo?.data.id) {
+      if (logsRole === 0) {
         res = await getAllAssessments();
-        console.log(res);
         setAssessments(res.data || []);
       } else {
         res = await getAssessmentsByInstitution((data: any) => {
           //@ts-ignore
           setAssessments(data || []);
-        }, instituteInfo.data.id);
+          // @ts-ignore
+        }, instituteInfo.data.id as any);
       }
       setLoading(false);
     } catch (error) {
-      console.log(error);
-      toast.error("Failed to load Assessments");
       setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchAssessments();
-  }, [instituteInfo?.data.id, adminInfo?.data.id]);
+  }, [logsLoading, logsRole]);
 
   const filteredAssessments = assessments.filter((assessment) => {
     if (!searchText.trim()) return true;

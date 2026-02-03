@@ -9,9 +9,6 @@ export const authMiddleware = async (
   next: NextFunction,
 ) => {
   try {
-    console.log("HEADERSSS");
-    console.log(req.headers);
-    console.log(req.cookies);
     const token = req.cookies.token;
     if (!token) {
       throw new Error("Unauthorised, Re-login");
