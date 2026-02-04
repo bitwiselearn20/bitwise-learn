@@ -356,7 +356,7 @@ export default function AttemptV1({
 
         <button
           onClick={() => setShowSubmitConfirm(true)}
-          className={`${Colors.background.secondary} px-4 py-2 rounded-md hover:opacity-90 font-mono`}
+          className={`${Colors.background.secondary} ${Colors.text.primary} px-4 py-2 rounded-md hover:opacity-90 font-mono`}
         >
           Submit
         </button>
