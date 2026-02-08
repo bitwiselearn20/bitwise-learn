@@ -149,49 +149,69 @@ class CoursesController {
       return res.status(200).json(apiResponse(500, error.message, null));
     }
   }
-  async changePublishStatus(req: Request, res: Response) {
-    try {
-      if (!req.user) throw new Error("user not authenticated");
-      const userId = req.user.id;
-      const courseId = req.params.id;
+async changePublishStatus(req: Request, res: Response) {
+  try {
+    const courseId = req.params.id;
+    if (!courseId) throw new Error("courseId is required");
 
-      if (!userId) throw new Error("userId is required");
-      if (!courseId) throw new Error("courseId is required");
+    const course = await prismaClient.course.findUnique({
+      where: { id: courseId },
+    });
 
-      const dbAdmin = await prismaClient.user.findFirst({
-        where: { id: userId },
-      });
+    if (!course) throw new Error("Course not found");
 
-      if (!dbAdmin) throw new Error("no such user found!");
+    const isUnpublishing = course.isPublished === "PUBLISHED";
+    const newStatus = isUnpublishing ? "NOT_PUBLISHED" : "PUBLISHED";
 
-      const dbCourse = await prismaClient.course.findFirst({
-        where: { id: courseId as string },
-      });
+    await prismaClient.$transaction(async (tx) => {
+      if (isUnpublishing) {
+        const enrollments = await tx.courseEnrollment.findMany({
+          where: { courseId },
+          select: { batchId: true },
+        });
 
-      if (!dbCourse) throw new Error("no courseId found!");
+        const batchIds = enrollments.map((e) => e.batchId);
 
-      const updatedCourse = await prismaClient.course.update({
-        where: {
-          id: dbCourse.id,
-        },
+        if (batchIds.length > 0) {
+          const students = await tx.student.findMany({
+            where: { batchId: { in: batchIds } },
+            select: { id: true },
+          });
+
+          const studentIds = students.map((s) => s.id);
+
+          if (studentIds.length > 0) {
+            await tx.courseEnrollment.deleteMany({
+              where: {
+                courseId
+              },
+            });
+          }
+        }
+      }
+
+      await tx.course.update({
+        where: { id: courseId },
         data: {
-          isPublished:
-            dbCourse.isPublished === "PUBLISHED"
-              ? "NOT_PUBLISHED"
-              : "PUBLISHED",
+          isPublished: isUnpublishing ? "NOT_PUBLISHED" : "PUBLISHED",
         },
       });
+    });
 
-      if (!updatedCourse) throw new Error("couldnot update course");
-
-      return res
-        .status(200)
-        .json(apiResponse(200, "course updated successfully", updatedCourse));
-    } catch (error: any) {
-      console.log(error);
-      return res.status(200).json(apiResponse(500, error.message, null));
-    }
+    return res
+      .status(200)
+      .json(apiResponse(200, "Publish status updated", {
+        isPublished:newStatus==="PUBLISHED"
+      }));
+  } catch (error: any) {
+    console.error("changePublishStatus error:", error);
+    return res
+      .status(500)
+      .json(apiResponse(500, error.message, null));
   }
+}
+
+
   async updateCourse(req: Request, res: Response) {
     try {
       if (!req.user) throw new Error("user not authenticated");

@@ -597,31 +597,30 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
     }
   };
 
-  const handlePublishCourse = async () => {
-    try {
-      toast.loading(
-        isPublished ? "UnPublishing Course..." : "Publishing Course...",
-        { id: "publish" },
-      );
+const handlePublishCourse = async () => {
+  try {
+    toast.loading("Updating publish status...", { id: "publish" });
 
-      const res = await publishCourse(courseId);
+    const res = await publishCourse(courseId);
 
-      if (!res?.data) {
-        throw new Error("Publish Failed");
-      }
+    const { isPublished } = res.data;
 
-      toast.success(isPublished ? "Course UnPublished" : "Course Published", {
-        id: "publish",
-      });
+    toast.success(
+      isPublished
+        ? "Course published successfully"
+        : "Course unpublished successfully",
+      { id: "publish" },
+    );
 
-      const refreshed = await getCourseById(courseId);
-      setCourse(refreshed.data);
-    } catch (error) {
-      toast.error("Failed to publish Course", { id: "publish" });
-    } finally {
-      setShowPublishModal(false);
-    }
-  };
+    const refreshed = await getCourseById(courseId);
+    setCourse(refreshed.data);
+  } catch (error) {
+    toast.error("Failed to update publish status", { id: "publish" });
+  } finally {
+    setShowPublishModal(false);
+  }
+};
+
 
   const publishRequirements = [
     {

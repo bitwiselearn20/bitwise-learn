@@ -13,6 +13,7 @@ export async function DELETE(
     const res = await fetch(
       `${process.env.BACKEND_URL}/api/v1/courses/delete-content/${id}`,
       {
+        method: "DELETE",
         headers: {
           Cookie: cookieHeader || "",
         },

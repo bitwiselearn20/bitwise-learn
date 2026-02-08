@@ -118,6 +118,12 @@ class CouseContentController {
         await cloudinaryService.deleteFile(dbContent.file);
       }
 
+      await prismaClient.courseProgress.deleteMany({
+        where: {
+          contentId: dbContent.id,
+        },
+      });
+
       const deletedCourse = await prismaClient.courseLearningContent.delete({
         where: { id: dbContent.id },
       });

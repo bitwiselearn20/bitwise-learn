@@ -250,7 +250,7 @@ model CourseProgress {
   studentId String                @db.ObjectId
   student   Student               @relation(references: [id], fields: [studentId])
   contentId String                @db.ObjectId
-  content   CourseLearningContent @relation(references: [id], fields: [contentId])
+  content   CourseLearningContent @relation(references: [id], fields: [contentId], onDelete: Cascade)
   createdAt DateTime              @default(now())
   updatedAt DateTime              @updatedAt
 
