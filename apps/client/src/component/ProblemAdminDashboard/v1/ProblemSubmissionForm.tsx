@@ -41,6 +41,7 @@ Output:
       });
 
       toast.success("Create Success!", { id: toastId });
+      window.location.reload();
       setOpen(false);
     } catch (error) {
       toast.error("Unable to create problem", { id: toastId });
