@@ -47,7 +47,7 @@ export const deleteEntity = async (id: string, data: any, stateFn: any) => {
   // console.log("hello inside the function");
   const toastId = toast.loading("Deleting...");
   try {
-    const deleteData = await axiosInstance.delete(
+    const deleteData = await axiosInstance.post(
       getUrl(id, data.entity, "delete"),
       data,
     );
