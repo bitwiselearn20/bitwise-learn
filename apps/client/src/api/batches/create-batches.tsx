@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 export const uploadBatches = async (
   id: string,
   file: File,
-  type: "STUDENT" | "BATCH" | "TESTCASE" | "CLOUD",
+  type: "STUDENT" | "BATCH" | "TESTCASE" | "CLOUD" | "ASSESSMENT" | "ASSIGNMENT",
   stateFn?: any,
 ) => {
   try {

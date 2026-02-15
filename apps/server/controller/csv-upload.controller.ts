@@ -300,7 +300,7 @@ class CSVUploader {
       /* ---------------- TRANSFORM & VALIDATE ---------------- */
       const validQuestions: any[] = [];
       const skipped: any[] = [];
-
+      // console.log(JSON.stringify(rows, null, true));
       for (const row of rows) {
         const question = row.question?.trim();
         const optionsRaw = row.options;
@@ -342,7 +342,11 @@ class CSVUploader {
           });
           continue;
         }
-
+        console.log(question,
+          options,
+          correctAnswer,
+          assignmentId, );
+          
         validQuestions.push({
           question,
           options,
@@ -353,11 +357,12 @@ class CSVUploader {
       }
 
       /* ---------------- BULK INSERT ---------------- */
-      if (validQuestions.length) {
-        await prismaClient.courseAssignemntQuestion.createMany({
+      // if (validQuestions.length) {
+      const data1 = await prismaClient.courseAssignemntQuestion.createMany({
           data: validQuestions,
         });
-      }
+        console.log(data1);
+      // }
 
       return res.status(200).json(
         apiResponse(200, "assignment questions uploaded", {

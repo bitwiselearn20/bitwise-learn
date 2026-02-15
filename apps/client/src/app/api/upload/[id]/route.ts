@@ -3,6 +3,8 @@ const URL_MAP: Record<string, string> = {
   STUDENT: "students",
   BATCH: "batches",
   TESTCASE: "testcases",
+  ASSESSMENT: "assessment",
+  ASSIGNMENT: "assignment",
 };
 export async function POST(
   req: NextRequest,

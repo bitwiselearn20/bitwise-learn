@@ -32,6 +32,7 @@ export function proxy(request: NextRequest) {
     "/multi-login",
     "/admin-login",
     "/api/run",
+    "/our-services",
   ];
 
   if (PUBLIC_ROUTES.includes(pathname)) {

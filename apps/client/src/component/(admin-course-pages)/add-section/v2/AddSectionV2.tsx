@@ -1,7 +1,7 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { addContentToSection } from "@/api/courses/section/add-content-to-section";
 import toast from "react-hot-toast";
 import { deleteSectionById } from "@/api/courses/section/delete-section";
@@ -14,6 +14,7 @@ import { updateAssignment } from "@/api/courses/assignment/update-assignment";
 import { deleteAssignmentById } from "@/api/courses/assignment/delete-assignment";
 import QuestionEditorWrapper from "../../add-assignment/v1/QuestionEditorWrapper";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { uploadBatches } from "@/api/batches/create-batches";
 
 type Props = {
   sectionNumber: number;
@@ -688,6 +689,37 @@ const AddSectionV2 = ({
     }
   };
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      toast.loading("Uploading Assessments...", { id: "bulk-upload" });
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("id", sectionId);
+
+      await uploadBatches(sectionId as string, file, "ASSIGNMENT", null);
+
+      // window.location.reload();
+      toast.success("Assessments uploaded successfully", {
+        id: "bulk-upload",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Bulk upload failed", {
+        id: "bulk-upload",
+      });
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
   return (
     <div
       className={`relative ${Colors.text.primary} ${Colors.background.secondary} rounded-2xl px-6 py-4 ${Colors.border.defaultThin}`}
@@ -832,6 +864,15 @@ const AddSectionV2 = ({
         </div>
       )}
 
+      {/* Bulk upload hidden input */}
+      <input
+        type="file"
+        accept=".csv,.xlsx"
+        ref={fileInputRef}
+        onChange={handleBulkUpload}
+        hidden
+      />
+
       {activeTab === "ASSIGNMENT" && (
         <div className="mt-4 space-y-3">
           {asssignmentLoading ? (
@@ -888,6 +929,48 @@ const AddSectionV2 = ({
                 </div>
 
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                  <Link
+                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1770455127/student-info_rsa5q9.ods"
+                    download
+                    className={`
+            group:opacity-100
+            transition
+          ${Colors.border.specialThick}
+          ${Colors.background.primary}
+          ${Colors.hover.special}
+          ${Colors.text.special}
+            rounded-md
+            px-3 py-1.5
+            text-xs
+            cursor-pointer
+          `}
+          onClick={(e)=>{e.stopPropagation()}}
+                  >
+                    <button>Download Format</button>
+                  </Link>
+
+                  {/* Bulk Upload */}
+                  <button
+                    className={`
+            group:opacity-100
+            transition
+          ${Colors.border.specialThick}
+          ${Colors.background.primary}
+          ${Colors.hover.special}
+          ${Colors.text.special}
+            rounded-md
+            px-3 py-1.5
+            text-xs
+            cursor-pointer
+          `}
+          onClick={(e)=>{
+            e.stopPropagation();
+            fileInputRef.current?.click();
+          }}
+                  >
+                    Bulk Upload
+                  </button>
+
                   {/* Edit */}
                   <button
                     onClick={(e) => {
@@ -939,47 +1022,51 @@ const AddSectionV2 = ({
 
       {/* Action Button */}
       <div className="mt-4 ml-1 flex gap-3">
-        <button
-          className={`
-            group:opacity-100
-            transition
-          ${Colors.border.specialThick}
-          ${Colors.background.secondary}
-          ${Colors.hover.special}
-          ${Colors.text.special}
-            rounded-md
-            px-3 py-1.5
-            text-xs
-            cursor-pointer
-          `}
-          onClick={() => {
-            setIsAddTopicOpen(true);
-          }}
-        >
-          + Add Topic
-        </button>
-        <button
-          onClick={() =>
-            onAddAssignment(sectionId, () => {
-              setActiveTab("ASSIGNMENT");
-              setAssignmentRefetchKey((prev) => prev + 1);
-            })
-          }
-          className={`
-            group:opacity-100
-            transition
-          ${Colors.border.specialThick}
-          ${Colors.background.secondary}
-          ${Colors.hover.special}
-          ${Colors.text.special}
-            rounded-md
-            px-3 py-1.5
-            text-xs
-            cursor-pointer
-          `}
-        >
-          + Add Assignment
-        </button>
+        {activeTab == "TOPIC" && (
+          <button
+            className={`
+              group:opacity-100
+              transition
+            ${Colors.border.specialThick}
+            ${Colors.background.secondary}
+            ${Colors.hover.special}
+            ${Colors.text.special}
+              rounded-md
+              px-3 py-1.5
+              text-xs
+              cursor-pointer
+            `}
+            onClick={() => {
+              setIsAddTopicOpen(true);
+            }}
+          >
+            + Add Topic
+          </button>
+        )}
+        {activeTab == "ASSIGNMENT" && (
+          <button
+            onClick={() =>
+              onAddAssignment(sectionId, () => {
+                setActiveTab("ASSIGNMENT");
+                setAssignmentRefetchKey((prev) => prev + 1);
+              })
+            }
+            className={`
+              group:opacity-100
+              transition
+            ${Colors.border.specialThick}
+            ${Colors.background.secondary}
+            ${Colors.hover.special}
+            ${Colors.text.special}
+              rounded-md
+              px-3 py-1.5
+              text-xs
+              cursor-pointer
+            `}
+          >
+            + Add Assignment
+          </button>
+        )}
       </div>
 
       {/* --------------- Add Topic Modal ---------------- */}

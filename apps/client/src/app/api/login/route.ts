@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
         { status: 500 },
       );
     }
+    console.log(backendUrl);
     const response = await axios.post(
       `${backendUrl}/api/v1/auth` + URL_MAP[data.role],
       { email: data.email, password: data.password },
@@ -49,8 +50,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response.data.data, { status: 200 });
   } catch (error: any) {
     console.dir("Error loggin in :", error.message);
-    console.dir(error);
-
+    console.log(error);                 
     return NextResponse.json({ error: "Failed loggin in " }, { status: 500 });
   }
 }

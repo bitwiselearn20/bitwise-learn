@@ -39,6 +39,9 @@ const V1HomeNav = () => {
           <Link href="/contact" className="hover:text-blue-400 transition">
             Contact
           </Link>
+          <Link href="/our-services" className="hover:text-blue-400 transition">
+            Services
+          </Link>
         </div>
 
         {/* Sign in button (desktop) */}

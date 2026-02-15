@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,8 @@ import { deleteAssessmentQuestion } from "@/api/assessments/delete-assessment-qu
 import { updateAssessmentSection } from "@/api/assessments/update-assessment-section";
 import { updateAssessmentQuestion } from "@/api/assessments/update-assessment-question";
 import { updateAssessmentStatus } from "@/api/assessments/publish-assessment";
+import { uploadBatches } from "@/api/batches/create-batches";
+import Link from "next/link";
 
 interface BuilderProps {
   assessmentId: string;
@@ -917,8 +919,46 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
     fetchSections();
   }, [assessmentId]);
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [bulkUploadSectionId, setBulkUploadSectionId] = useState<string | null>(
+    null,
+  );
+
+  const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file || !bulkUploadSectionId) return;
+
+      toast.loading("Uploading Assessments...", { id: "bulk-upload" });
+
+      await uploadBatches(bulkUploadSectionId, file, "ASSIGNMENT", null);
+
+      toast.success("Assessments uploaded successfully", {
+        id: "bulk-upload",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Bulk upload failed", {
+        id: "bulk-upload",
+      });
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setBulkUploadSectionId(null);
+    }
+  };
+
   return (
     <div className={`w-full`}>
+      {/* Bulk upload hidden input */}
+      <input
+        type="file"
+        accept=".csv,.xlsx"
+        ref={fileInputRef}
+        onChange={handleBulkUpload}
+        hidden
+      />
       {/* Header */}
       <div className="flex items-center justify-between px-1 py-4">
         <h1 className={`text-xl font-semibold ${Colors.text.primary}`}>
@@ -989,6 +1029,49 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                 </div>
 
                 <div className="flex items-center gap-2">
+                  {/* Bulk format  */}
+                  <Link
+                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1770455127/student-info_rsa5q9.ods"
+                    download
+                    className={`
+            group:opacity-100
+            transition
+          ${Colors.border.specialThick}
+          ${Colors.background.primary}
+          ${Colors.hover.special}
+          ${Colors.text.special}
+            rounded-md
+            px-3 py-1.5
+            text-xs
+            cursor-pointer
+          `}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <button>Download Format</button>
+                  </Link>
+                  {/* Add Bulk Questions  */}
+                  <button
+                    className={`
+            group:opacity-100
+            transition
+          ${Colors.border.specialThick}
+          ${Colors.background.primary}
+          ${Colors.hover.special}
+          ${Colors.text.special}
+            rounded-md
+            px-3 py-1.5
+            text-xs
+            cursor-pointer
+          `}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      fileInputRef.current?.click();
+                    }}
+                  >
+                    Bulk Upload
+                  </button>
                   {/* Add Question */}
                   <button
                     onClick={(e) => {
