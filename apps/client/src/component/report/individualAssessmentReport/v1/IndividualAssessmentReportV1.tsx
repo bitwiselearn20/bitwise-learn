@@ -462,8 +462,8 @@ function IndividualAssessmentReportV1({
               <th className="px-4 py-3 text-left">Student</th>
               <th className="px-4 py-3">Roll No</th>
               <th className="px-4 py-3">Marks</th>
-              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Ip</th>
+              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3 text-right">Download Report</th>
             </tr>
           </thead>

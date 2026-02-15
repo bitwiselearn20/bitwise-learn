@@ -183,7 +183,7 @@ export const Tabs = ({
           logRole != 4 && (
             <>
               <Link
-                href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1770455127/student-info_rsa5q9.ods"
+                href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1771159081/student-info_rsa5q9_w8ihpg.xlsx"
                 download
                 className={`px-4 py-2 rounded-md ${Colors.hover.special} ${Colors.text.special} ${Colors.border.specialThick} cursor-pointer active:scale-95 transition-all`}
               >

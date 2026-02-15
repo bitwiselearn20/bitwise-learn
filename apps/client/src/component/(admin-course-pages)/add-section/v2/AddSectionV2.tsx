@@ -702,7 +702,12 @@ const AddSectionV2 = ({
       formData.append("file", file);
       formData.append("id", sectionId);
 
-      await uploadBatches(sectionId as string, file, "ASSIGNMENT", null);
+      await uploadBatches(
+        selectedAssignment?.id as string,
+        file,
+        "ASSIGNMENT",
+        null,
+      );
 
       // window.location.reload();
       toast.success("Assessments uploaded successfully", {
@@ -930,7 +935,7 @@ const AddSectionV2 = ({
 
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
                   <Link
-                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1770455127/student-info_rsa5q9.ods"
+                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1771158933/assignment_xlq50a.xlsx"
                     download
                     className={`
             group:opacity-100
@@ -944,7 +949,9 @@ const AddSectionV2 = ({
             text-xs
             cursor-pointer
           `}
-          onClick={(e)=>{e.stopPropagation()}}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
                   >
                     <button>Download Format</button>
                   </Link>
@@ -963,10 +970,12 @@ const AddSectionV2 = ({
             text-xs
             cursor-pointer
           `}
-          onClick={(e)=>{
-            e.stopPropagation();
-            fileInputRef.current?.click();
-          }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedAssignment(assignment);
+                      setIsAssignmentModalOpen(true);
+                      fileInputRef.current?.click();
+                    }}
                   >
                     Bulk Upload
                   </button>

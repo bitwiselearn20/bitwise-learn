@@ -7,6 +7,7 @@ import { useStudent } from "@/store/studentStore";
 import { allBatchCourses } from "@/api/courses/course/enrollments/get-all-batch-courses";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { getStudentCourses } from "@/api/courses/course/get-all-courses";
 
 /* ---------------- TYPES ---------------- */
 
@@ -86,8 +87,8 @@ export default function HeroSection() {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const data = await allBatchCourses(batchID);
-
+        // const data = await allBatchCourses(batchID);
+        const data = await getStudentCourses();
         const normalized: Course[] = data.map((course: any) => ({
           ...course,
           level: normalizeLevel(course.level),

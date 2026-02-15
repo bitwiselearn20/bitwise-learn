@@ -300,69 +300,44 @@ class CSVUploader {
       /* ---------------- TRANSFORM & VALIDATE ---------------- */
       const validQuestions: any[] = [];
       const skipped: any[] = [];
-      // console.log(JSON.stringify(rows, null, true));
+
       for (const row of rows) {
         const question = row.question?.trim();
-        const optionsRaw = row.options;
-        const correctRaw = row.correctAnswer;
+        let options = row.options.split("|");
+        const correct = row.correctAnswer;
+        options = options.map((opt: string) => {
+          return opt.trim();
+        });
 
-        if (!question || !optionsRaw || !correctRaw) {
+        if (!question || !options || !correct) {
           skipped.push({ row, reason: "missing required fields" });
           continue;
         }
 
-        if (existingSet.has(question.toLowerCase())) {
-          skipped.push({ row, reason: "duplicate question" });
-          continue;
-        }
-
-        const options = optionsRaw
-          .split("|")
-          .map((o: string) => o.trim())
-          .filter(Boolean);
-
-        const correctAnswer = correctRaw
-          .split("|")
-          .map((c: string) => c.trim())
-          .filter(Boolean);
-
-        if (options.length < 1) {
-          skipped.push({ row, reason: "options missing" });
-          continue;
-        }
-
-        const invalidCorrect = correctAnswer.some(
-          (ans: string) => !options.includes(ans),
-        );
-
-        if (invalidCorrect) {
-          skipped.push({
-            row,
-            reason: "correct answer not present in options",
-          });
-          continue;
-        }
-        console.log(question,
+        console.log({
+          question,
           options,
-          correctAnswer,
-          assignmentId, );
-          
+          correctAnswer: [correct],
+          assignmentId,
+          type: options.length === 1 ? "SCQ" : "MCQ",
+        });
         validQuestions.push({
           question,
           options,
-          correctAnswer,
+          correctAnswer: [correct],
           assignmentId,
           type: options.length === 1 ? "SCQ" : "MCQ",
         });
       }
 
       /* ---------------- BULK INSERT ---------------- */
-      // if (validQuestions.length) {
-      const data1 = await prismaClient.courseAssignemntQuestion.createMany({
+
+      if (validQuestions.length) {
+        const data = await prismaClient.courseAssignemntQuestion.createMany({
           data: validQuestions,
         });
-        console.log(data1);
-      // }
+        console.log(data);
+      }
 
       return res.status(200).json(
         apiResponse(200, "assignment questions uploaded", {
@@ -415,49 +390,14 @@ class CSVUploader {
         const rowNumber = index + 2; // Excel header = row 1
 
         const question = row.question?.trim();
-        const optionsRaw = row.options;
-        const correctOption = row.correctOption?.trim();
-        const maxMarks = Number(row.maxMarks);
-
-        /* ---- base validation ---- */
-        if (!maxMarks || maxMarks <= 0) {
-          skipped.push({ rowNumber, reason: "invalid maxMarks" });
-          return;
-        }
-
-        /* ---- MCQ validation ---- */
-        if (!optionsRaw || !correctOption) {
-          skipped.push({
-            rowNumber,
-            reason: "options or correctOption missing",
-          });
-          return;
-        }
-
-        const options = optionsRaw
-          .split("|")
-          .map((o: string) => o.trim())
-          .filter(Boolean);
-
-        if (options.length < 2) {
-          skipped.push({
-            rowNumber,
-            reason: "MCQ must have at least 2 options",
-          });
-          return;
-        }
-
-        if (!options.includes(correctOption)) {
-          skipped.push({
-            rowNumber,
-            reason: "correctOption not present in options",
-          });
-          return;
-        }
+        let optionsRaw = row.options.split("|");
+        const correctOption = row.correctAnswer?.trim();
+        const maxMarks = dbSection.marksPerQuestion;
+        optionsRaw = optionsRaw.map((opt: string) => opt.trim());
 
         validQuestions.push({
           question,
-          options,
+          options: optionsRaw,
           correctOption,
           maxMarks,
           sectionId,
@@ -466,15 +406,17 @@ class CSVUploader {
 
       /* ---------------- BULK INSERT ---------------- */
       if (validQuestions.length) {
-        await prismaClient.assessmentQuestion.createMany({
-          data: validQuestions.map((q) => ({
-            question: q.question,
-            options: q.options,
-            correctOption: q.correctOption,
-            maxMarks: q.maxMarks,
-            sectionId: q.sectionId,
-          })),
-        });
+        const createdQuestions =
+          await prismaClient.assessmentQuestion.createMany({
+            data: validQuestions.map((q) => ({
+              question: q.question,
+              options: q.options,
+              correctOption: q.correctOption,
+              maxMarks: q.maxMarks,
+              sectionId: q.sectionId,
+            })),
+          });
+        console.log(createdQuestions);
       }
 
       return res.status(200).json(

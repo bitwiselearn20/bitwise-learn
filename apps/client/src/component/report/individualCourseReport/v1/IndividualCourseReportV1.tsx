@@ -89,7 +89,7 @@ function IndividualCourseReportV1({
           students.reduce((sum, s) => sum + s.courseProgresses.length, 0) /
           totalStudents
         ).toFixed(1)
-      : "0";
+      : 0;
 
   const progressChartData = students.map((s) => ({
     name: s.name.split(" ")[0],
@@ -104,8 +104,12 @@ function IndividualCourseReportV1({
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload?.length) {
       return (
-        <div className={`rounded-md ${Colors.background.secondary} ${Colors.border.defaultThin} px-3 py-2 text-sm`}>
-          <p className={`font-medium ${Colors.text.primary}`}>{payload[0].payload.name}</p>
+        <div
+          className={`rounded-md ${Colors.background.secondary} ${Colors.border.defaultThin} px-3 py-2 text-sm`}
+        >
+          <p className={`font-medium ${Colors.text.primary}`}>
+            {payload[0].payload.name}
+          </p>
           <p className="text-emerald-400">Progress: {payload[0].value}</p>
         </div>
       );
@@ -114,7 +118,9 @@ function IndividualCourseReportV1({
   };
 
   return (
-    <div className={`min-h-screen ${Colors.background.primary} ${Colors.text.primary} p-6`}>
+    <div
+      className={`min-h-screen ${Colors.background.primary} ${Colors.text.primary} p-6`}
+    >
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Back + Header */}
         <div className="flex items-center gap-4">
@@ -122,8 +128,8 @@ function IndividualCourseReportV1({
             onClick={() =>
               router.push(`/admin-dashboard/reports/courses/${courseId}`)
             }
-              className={`flex items-center gap-2 text-sm ${Colors.text.secondary} ${Colors.hover.textSpecial} cursor-pointer transition`}
-            >
+            className={`flex items-center gap-2 text-sm ${Colors.text.secondary} ${Colors.hover.textSpecial} cursor-pointer transition`}
+          >
             <ArrowLeft size={18} />
             Back to Courses
           </button>
@@ -148,7 +154,7 @@ function IndividualCourseReportV1({
           />
           <StatCard
             title="Average Progress"
-            value={avgProgress}
+            value={`${Number(avgProgress) % 100} %`}
             icon={<TrendingUp />}
           />
         </div>
@@ -205,11 +211,17 @@ function IndividualCourseReportV1({
         </div>
 
         {/* Search + Table */}
-        <div className={`rounded-lg ${Colors.border.defaultThin} ${Colors.background.secondary} overflow-hidden`}>
-          <div className={`flex items-center justify-between gap-2 p-5 border-b ${Colors.border.defaultThin}`}>
+        <div
+          className={`rounded-lg ${Colors.border.defaultThin} ${Colors.background.secondary} overflow-hidden`}
+        >
+          <div
+            className={`flex items-center justify-between gap-2 p-5 border-b ${Colors.border.defaultThin}`}
+          >
             <div className="flex items-center gap-2">
               <ClipboardList size={18} />
-              <h2 className={`font-medium ${Colors.text.primary}`}>Student Summary</h2>
+              <h2 className={`font-medium ${Colors.text.primary}`}>
+                Student Summary
+              </h2>
             </div>
 
             {/* Search input */}
@@ -226,7 +238,9 @@ function IndividualCourseReportV1({
           </div>
 
           <table className="w-full text-sm">
-            <thead className={`${Colors.background.primary} ${Colors.text.primary}`}>
+            <thead
+              className={`${Colors.background.primary} ${Colors.text.primary}`}
+            >
               <tr>
                 <th className="text-left p-4">Name</th>
                 <th className="text-left p-4">Roll No</th>
@@ -307,10 +321,14 @@ function StatCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className={`flex items-center justify-between rounded-lg border ${Colors.border.defaultThin} ${Colors.background.secondary} p-5`}>
+    <div
+      className={`flex items-center justify-between rounded-lg border ${Colors.border.defaultThin} ${Colors.background.secondary} p-5`}
+    >
       <div>
         <p className={`text-sm ${Colors.text.secondary}`}>{title}</p>
-        <p className={`text-3xl font-semibold mt-1 ${Colors.text.primary}`}>{value}</p>
+        <p className={`text-3xl font-semibold mt-1 ${Colors.text.primary}`}>
+          {value}
+        </p>
       </div>
       <div className="text-emerald-500">{icon}</div>
     </div>
@@ -329,7 +347,9 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`rounded-lg border ${Colors.border.defaultThin} ${Colors.background.secondary} p-5`}>
+    <div
+      className={`rounded-lg border ${Colors.border.defaultThin} ${Colors.background.secondary} p-5`}
+    >
       <div className="flex items-center gap-2 mb-1">
         <span className="text-emerald-500">{icon}</span>
         <h3 className="font-medium">{title}</h3>

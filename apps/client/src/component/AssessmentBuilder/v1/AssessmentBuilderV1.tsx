@@ -927,11 +927,13 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
   const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const file = e.target.files?.[0];
+      console.log(file);
+      console.log(bulkUploadSectionId);
       if (!file || !bulkUploadSectionId) return;
 
       toast.loading("Uploading Assessments...", { id: "bulk-upload" });
 
-      await uploadBatches(bulkUploadSectionId, file, "ASSIGNMENT", null);
+      await uploadBatches(bulkUploadSectionId, file, "ASSESSMENT", null);
 
       toast.success("Assessments uploaded successfully", {
         id: "bulk-upload",
@@ -1031,7 +1033,7 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                 <div className="flex items-center gap-2">
                   {/* Bulk format  */}
                   <Link
-                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1770455127/student-info_rsa5q9.ods"
+                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1771158933/assignment_xlq50a.xlsx"
                     download
                     className={`
             group:opacity-100
@@ -1067,7 +1069,10 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
           `}
                     onClick={(e) => {
                       e.stopPropagation();
+                      console.log("Clicking");
                       fileInputRef.current?.click();
+                      setBulkUploadSectionId(section.id as string);
+                      console.log("Clicked");
                     }}
                   >
                     Bulk Upload

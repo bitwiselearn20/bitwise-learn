@@ -111,7 +111,7 @@ export default function AllTestCases() {
           </h2>
           <div className="flex gap-2">
             <Link
-              href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1770455092/testcase_fxz96x.ods"
+              href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1771158892/testcase_fxz96x_ziwivr.xlsx"
               target="_blank"
               download
               className={`px-4 py-2 rounded-md ${Colors.hover.special} ${Colors.text.special} ${Colors.border.specialThick} cursor-pointer active:scale-95 transition-all`}
@@ -211,9 +211,7 @@ function EditableTestCaseSidebar({
   const [testType, setTestType] = useState(testCase.testType);
   const [input, setInput] = useState(testCase.input);
   const [output, setOutput] = useState(testCase.output);
-  const [errors, setErrors] = useState<{ input?: string; output?: string }>(
-    {}
-  );
+  const [errors, setErrors] = useState<{ input?: string; output?: string }>({});
 
   const handleSave = async () => {
     const nextErrors: { input?: string; output?: string } = {};
@@ -285,8 +283,9 @@ function EditableTestCaseSidebar({
             rows={4}
             aria-invalid={Boolean(errors.input)}
             aria-describedby={errors.input ? "sidebar-input-error" : undefined}
-            className={`w-full font-mono text-xs ${Colors.background.secondary} p-2 rounded ${Colors.text.primary} border ${errors.input ? "border-red-500/70" : "border-transparent"
-              }`}
+            className={`w-full font-mono text-xs ${Colors.background.secondary} p-2 rounded ${Colors.text.primary} border ${
+              errors.input ? "border-red-500/70" : "border-transparent"
+            }`}
           />
           {errors.input && (
             <p id="sidebar-input-error" className="text-xs text-red-400 mt-1">
@@ -306,9 +305,12 @@ function EditableTestCaseSidebar({
             onChange={(e) => setOutput(e.target.value)}
             rows={3}
             aria-invalid={Boolean(errors.output)}
-            aria-describedby={errors.output ? "sidebar-output-error" : undefined}
-            className={`w-full font-mono text-xs ${Colors.background.secondary} p-2 rounded ${Colors.text.primary} border ${errors.output ? "border-red-500/70" : "border-transparent"
-              }`}
+            aria-describedby={
+              errors.output ? "sidebar-output-error" : undefined
+            }
+            className={`w-full font-mono text-xs ${Colors.background.secondary} p-2 rounded ${Colors.text.primary} border ${
+              errors.output ? "border-red-500/70" : "border-transparent"
+            }`}
           />
           {errors.output && (
             <p id="sidebar-output-error" className="text-xs text-red-400 mt-1">
