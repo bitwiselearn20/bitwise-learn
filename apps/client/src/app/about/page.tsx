@@ -1,5 +1,8 @@
-import AboutPage from "@/component/about/About";
-
-export default function About() {
-  return <AboutPage />;
+import About from "@/component/about/About";
+export default function AboutPage() {
+  return (
+    <>
+      <About />
+    </>
+  );
 }

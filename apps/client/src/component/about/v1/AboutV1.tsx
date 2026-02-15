@@ -1,20 +1,11 @@
-import React from "react";
-import TargetSegments from "./TargetSegment";
-import V1HomeNav from "@/component/Home/V1/V1HomeNav";
-import TestimonialsSection from "./TestimonialsSection";
-import Footer from "@/component/general/Footer";
-import OurTeam from "./OurTeam";
+import { AboutHeader } from "./AboutHeader";
+import { EdTechFocus } from "./EdTechFocus";
 
-const AboutV1 = () => {
+export default function AboutPage() {
   return (
-    <div>
-      <V1HomeNav />
-      <TargetSegments />
-      <TestimonialsSection />
-      <OurTeam />
-      <Footer />
-    </div>
+    <>
+      <AboutHeader />
+      <EdTechFocus />
+    </>
   );
-};
-
-export default AboutV1;
+}
