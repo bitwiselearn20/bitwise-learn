@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { testimonials } from "@/lib/data/testimonials";
+import { testimonials } from "@/lib/content/testimonials";
 
 export function Testimonials() {
   return (

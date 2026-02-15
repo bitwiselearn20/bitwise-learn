@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { faqItems } from "@/lib/data/faq";
+import { faqItems } from "@/lib/content/faq";
 
 export function FAQ() {
   const [openId, setOpenId] = useState<string | null>(null);
