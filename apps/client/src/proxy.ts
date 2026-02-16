@@ -33,6 +33,7 @@ export function proxy(request: NextRequest) {
     "/admin-login",
     "/api/run",
     "/our-services",
+    "/blog",
   ];
 
   if (PUBLIC_ROUTES.includes(pathname)) {

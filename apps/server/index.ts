@@ -27,6 +27,7 @@ import {
   assessmentRouter,
   reportRouter,
   bulkUploadRouter,
+  contactRouter,
 } from "./routes";
 dotenv.config({ path: "../.env" });
 
@@ -107,6 +108,7 @@ app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/code", codeRouter);
 app.use("/api/v1/reports", reportRouter);
 app.use("/api/v1/bulk-upload", bulkUploadRouter);
+app.use("/api/v1/contact",contactRouter);
 
 // For dev only
 app.use("/api/v1/assessments", assessmentRouter);

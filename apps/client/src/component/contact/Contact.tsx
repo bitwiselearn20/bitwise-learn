@@ -1,5 +1,5 @@
-import ContactV1 from "./V1/ContactV1";
+import ContactV2 from "./V2/ContactV2";
 
 export default function Contact() {
-  return <ContactV1 />;
+  return <ContactV2 />;
 }

@@ -1,5 +1,9 @@
 import nodemailer from "nodemailer";
-import { WELCOME_EMAIL, VERIFY_OTP, PASSWORD_RESET_OTP } from "./emailTemplate.ts";
+import {
+  WELCOME_EMAIL,
+  VERIFY_OTP,
+  PASSWORD_RESET_OTP,
+} from "./emailTemplate.ts";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -18,11 +22,18 @@ interface OTPMapType {
   [email: string]: OTPEntry;
 }
 
+interface ContactPayload {
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+}
+
 const OTP_MAP: OTPMapType = {}; // { email: { otp: '123456', expiresAt: 168383838383 } }
 
 // Generate OTP for an email
 export function generateOTP(email: string): OTPEntry {
-  Object.keys(OTP_MAP).forEach(key => {
+  Object.keys(OTP_MAP).forEach((key) => {
     if (OTP_MAP[key] && OTP_MAP[key].expiresAt < Date.now()) {
       delete OTP_MAP[key];
     }
@@ -31,16 +42,14 @@ export function generateOTP(email: string): OTPEntry {
   const otp = String(Math.floor(100000 + Math.random() * 900000));
   OTP_MAP[email] = {
     otp,
-    expiresAt: Date.now() + 10 * 60 * 1000 // expires in 10 minutes
+    expiresAt: Date.now() + 10 * 60 * 1000, // expires in 10 minutes
   };
   return OTP_MAP[email];
 }
 
 // Verify OTP for an email
 export function handleVerifyOTP(email: string, otp: string): boolean {
-
-  if (!OTP_MAP[email])
-    throw new Error("OTP isn't present");
+  if (!OTP_MAP[email]) throw new Error("OTP isn't present");
 
   if (OTP_MAP[email].expiresAt < Date.now())
     throw new Error("OTP expired, Request a new OTP!");
@@ -54,7 +63,10 @@ export function handleVerifyOTP(email: string, otp: string): boolean {
 }
 
 // Send password email
-export async function handleSendMail(email: string, password: string): Promise<boolean> {
+export async function handleSendMail(
+  email: string,
+  password: string,
+): Promise<boolean> {
   const template = WELCOME_EMAIL.replace("{PASSWORD}", password).replace(
     "{EMAIL}",
     email,
@@ -70,11 +82,14 @@ export async function handleSendMail(email: string, password: string): Promise<b
 }
 
 // Send OTP email with template
-export async function handleSendOTPMail(email: string, templateId: string): Promise<boolean> {
+export async function handleSendOTPMail(
+  email: string,
+  templateId: string,
+): Promise<boolean> {
   const { otp } = generateOTP(email);
 
-  let template: string = '';
-  let subject: string = 'Your Verification OTP';
+  let template: string = "";
+  let subject: string = "Your Verification OTP";
 
   if (templateId === "welcome") {
     template = WELCOME_EMAIL.replace("{VERIFICATION_LINK}", "");
@@ -93,7 +108,29 @@ export async function handleSendOTPMail(email: string, templateId: string): Prom
     from: `"Bitwise Learn" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: subject,
-    html: template
+    html: template,
+  });
+  return true;
+}
+
+export async function handleSendContactEmail(
+  payload: ContactPayload,
+): Promise<boolean> {
+  const { name, email, phone, message } = payload;
+  const htmlTemplate = `
+    <h2>New Contact Form Submission</h2>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
+    <p><strong>Message:</strong></p>
+    <p>${message}</p>
+  `;
+  await transporter.sendMail({
+    from: `"Bitwise Learn Contact" <${process.env.EMAIL_USER}>`,
+    to: process.env.EMAIL_USER,
+    replyTo: email,
+    subject: `New Contact Message from ${name}`,
+    html: htmlTemplate,
   });
   return true;
 }
