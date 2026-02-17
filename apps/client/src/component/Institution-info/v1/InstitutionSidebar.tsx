@@ -91,6 +91,7 @@ const InstitutionSidebar = ({
       null,
     );
     setIsEditing(false);
+    window.location.reload();
   };
 
   const handleDelete = async () => {

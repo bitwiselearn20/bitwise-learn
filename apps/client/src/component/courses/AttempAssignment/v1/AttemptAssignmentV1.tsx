@@ -5,6 +5,7 @@ import axios from "axios";
 import { getAssignmentById } from "@/api/courses/assignment/get-assignment-by-id";
 import { submitAssignment } from "@/api/courses/assignment/submit-assignment";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
+import { useParams, useRouter } from "next/navigation";
 
 type AnswerMap = {
   [questionId: string]: string[];
@@ -81,7 +82,8 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
     const s = seconds % 60;
     return `${m}:${s.toString().padStart(2, "0")}`;
   }
-
+  const router = useRouter();
+  const params = useParams();
   /* -------------------- SUBMIT -------------------- */
   async function handleFinalSubmit() {
     const payload = questions
@@ -100,6 +102,8 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
 
     await submitAssignment(assignmentId, payload);
     setLoading(false);
+
+    router.push(`/courses/${params.id}`);
     setShowReviewScreen(false);
   }
 
@@ -172,16 +176,15 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
           {questions.map((q: any, idx: number) => {
             const answered = !!answers[q.id];
             const review = markedForReview.has(q.id);
- 
+
             return (
               <div
                 key={q.id}
                 onClick={() => setCurrentIndex(idx)}
                 className={`flex justify-between px-3 py-2 rounded cursor-pointer
-                  ${
-                    idx === currentIndex
-                      ? `${Colors.background.secondary} ${Colors.text.primary}`
-                      : `${Colors.hover.textSpecial}`
+                  ${idx === currentIndex
+                    ? `${Colors.background.secondary} ${Colors.text.primary}`
+                    : `${Colors.hover.textSpecial}`
                   }`}
               >
                 <span>Q{idx + 1}</span>
@@ -231,10 +234,9 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
                   onClick={() => handleOptionSelect(opt)}
                   className={`p-3 border rounded cursor-pointer ${Colors.background.secondary}
                               ${Colors.text.primary}
-                    ${
-                      selected
-                        ? `${Colors.background.heroSecondaryFaded} ${Colors.border.defaultThick}`
-                        : `${Colors.hover.textSpecial}`
+                    ${selected
+                      ? `${Colors.background.heroSecondaryFaded} ${Colors.border.defaultThick}`
+                      : `${Colors.hover.textSpecial}`
                     }`}
                 >
                   {opt}

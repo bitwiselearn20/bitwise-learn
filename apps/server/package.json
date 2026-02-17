@@ -23,6 +23,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.991.0",
     "@bitwiselearn/prisma": "*",
     "@bitwiselearn/queue": "*",
     "aws-sdk": "^2.1693.0",

@@ -79,6 +79,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
       toast.success("Changes Saved!", { id: toasdId });
       setSelected(formData);
       setIsEditing(false);
+      window.location.reload();
     } catch (error) {
       toast.error("Unable to update", { id: toasdId });
     }

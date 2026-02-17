@@ -45,15 +45,15 @@ class BatchController {
 
       const institutionId = req.user.id;
 
-      if (req.user.type !== "INSTITUTION") {
-        throw new Error("only institution can update batches");
+      if (req.user.type === "STUDENT") {
+        throw new Error("not authorized to update batches");
       }
       const batch = await prismaClient.batch.findFirst({
         where: { id: batchId as string },
       });
       if (!batch) throw new Error("Batch not found");
 
-      if (batch.institutionId !== institutionId) {
+      if (req.user.type === "INSTITUTION" && batch.institutionId !== institutionId) {
         throw new Error("this batch does not belongs to this institution");
       }
 

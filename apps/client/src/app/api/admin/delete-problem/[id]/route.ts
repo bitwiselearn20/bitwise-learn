@@ -1,7 +1,7 @@
 import axiosInstance from "@/lib/axios";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
+export async function DELETE(
   req: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {

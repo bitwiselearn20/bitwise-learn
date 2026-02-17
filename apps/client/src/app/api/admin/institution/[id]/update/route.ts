@@ -20,7 +20,7 @@ export async function POST(
     const cookieHeader = req.headers.get("cookie");
 
     const response = await axiosInstance.put(
-      `${backendUrl}/api/v1/institutions/update-insitituion-by-id/${id}`,
+      `${backendUrl}/api/v1/institutions/update-insititution-by-id/${id}`,
       data.data,
       {
         headers: {

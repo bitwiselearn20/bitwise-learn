@@ -8,6 +8,9 @@ import { changeStatus, deleteStatus } from "@/api/problems/change-status";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
 import useLogs from "@/lib/useLogs";
+import { useInstitution } from "@/store/institutionStore";
+import { useRouter } from "next/navigation";
+import useVendor from "@/store/vendorStore";
 
 function ProblemDescrption({
   data,
@@ -20,21 +23,34 @@ function ProblemDescrption({
 }) {
   if (!data) return null;
 
-  const { name, description, hints, testCases, problemTopics } = data;
+  const { name, description, hints, testCases, problemTopics, createdBy, creatorType } = data;
   const { loading, role } = useLogs();
   const [width, setWidth] = useState(420); // initial width in px
   const [showButton, setShowButton] = useState(false);
   const isResizing = useRef(false);
   const Colors = useColors();
+  const { info } = useInstitution();
+  const { info: vendorinfo } = useVendor();
   useEffect(() => {
+    console.log("DDAATTAA", data);
+    console.log("Dataaaaaaaaaa", creatorType, createdBy);
+    console.log("iunsti", info?.data.id)
     if (role === null) return;
-    if (role < 4) {
+    if (creatorType === "INSTITUTION" && createdBy === info?.data.id && role == 3) {
+      setShowButton(true);
+      return;
+    };
+
+    if (creatorType === "VENDOR" && createdBy === vendorinfo?.data.id && role == 2) {
+      setShowButton(true);
+      return;
+    };
+    if (role < 2) {
       setShowButton(true);
     } else {
       setShowButton(false);
     }
-  }, [role]);
-
+  }, [role, info?.data.id, createdBy, creatorType]);
   const startResizing = () => {
     isResizing.current = true;
     document.addEventListener("mousemove", resize);
@@ -63,9 +79,11 @@ function ProblemDescrption({
     data.problem = "LISTED";
     window.location.reload();
   };
+  const router = useRouter();
   const handleDelete = async (id: string) => {
+    console.log("delte is id" + id);
     await deleteStatus(id);
-    window.location.reload();
+    router.push("/admin-dashboard/problems");
   };
   return (
     <div
@@ -96,11 +114,10 @@ function ProblemDescrption({
           <button
             onClick={() => handlePublish(data.id)}
             className={` px-2 py-2 text-white font-medium rounded-lg transition-colors cursor-pointer
-    ${
-      data.published === "NOT_LISTED"
-        ? "bg-blue-600 hover:bg-blue-700"
-        : "bg-red-600 hover:bg-red-700"
-    }`}
+    ${data.published === "NOT_LISTED"
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-red-600 hover:bg-red-700"
+              }`}
           >
             {data.published === "NOT_LISTED"
               ? "List Question"
