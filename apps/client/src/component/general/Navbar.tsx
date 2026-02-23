@@ -7,7 +7,7 @@ import { useState } from "react";
 const navLinks = [
   { href: "/", label: "HOME" },
   { href: "/about", label: "ABOUT" },
-  { href: "/courses", label: "COURSE" },
+  { href: "/listed-courses", label: "COURSE" },
   { href: "/services", label: "SERVICES" },
   { href: "/blog", label: "BLOG" },
   { href: "/contact", label: "CONTACT" },
@@ -26,38 +26,39 @@ export function Navbar() {
             className="flex shrink-0 items-center justify-center text-white hover:opacity-80 cursor-pointer font-bold"
             aria-label="Home"
           >
-            <span className={`${Colors.text.special}`}>B</span> <span>itwise Learn</span>
+            <span className={`${Colors.text.special}`}>B</span>{" "}
+            <span>itwise Learn</span>
           </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
+          <nav className="hidden items-center gap-8 md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium tracking-wide text-white hover:opacity-80"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-6">
             <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium tracking-wide text-white hover:opacity-80"
+              href="/student-login"
+              className="hidden text-sm font-medium text-white hover:opacity-80 sm:inline-block"
             >
-              {link.label}
+              LOGIN
             </Link>
-          ))}
-        </nav>
 
-        <div className="flex items-center gap-6">
-          <Link
-            href="/student-login"
-            className="hidden text-sm font-medium text-white hover:opacity-80 sm:inline-block"
-          >
-            LOGIN
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => setMenuOpen((o) => !o)}
-            className="rounded p-2 text-neutral-400 md:hidden"
-            aria-label="Menu"
-          >
-            {menuOpen ? "✕" : "☰"}
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((o) => !o)}
+              className="rounded p-2 text-neutral-400 md:hidden"
+              aria-label="Menu"
+            >
+              {menuOpen ? "✕" : "☰"}
+            </button>
+          </div>
         </div>
       </div>
 

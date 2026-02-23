@@ -421,7 +421,7 @@ function LearningView({ topic, showPDF, studyMode, pdfMode }: any) {
             {topic.videoUrl && (
               <iframe
                 src={topic.videoUrl}
-                className="w-full h-full"
+                className="w-[80svw] h-[80svh] mx-auto"
                 allowFullScreen
               />
             )}

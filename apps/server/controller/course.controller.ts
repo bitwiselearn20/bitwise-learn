@@ -268,8 +268,7 @@ class CoursesController {
 
       if (!dbAdmin) throw new Error("no such user found!");
 
-      const courses = await prismaClient.course.findMany({
-      });
+      const courses = await prismaClient.course.findMany({});
 
       return res
         .status(200)

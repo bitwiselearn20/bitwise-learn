@@ -34,6 +34,10 @@ export function proxy(request: NextRequest) {
     "/api/run",
     "/our-services",
     "/blog",
+    "/listed-courses",
+    "/services",
+    "/blog",
+    "/blog/:id",
   ];
 
   if (PUBLIC_ROUTES.includes(pathname)) {
