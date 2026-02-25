@@ -23,7 +23,15 @@ function ProblemDescrption({
 }) {
   if (!data) return null;
 
-  const { name, description, hints, testCases, problemTopics, createdBy, creatorType } = data;
+  const {
+    name,
+    description,
+    hints,
+    testCases,
+    problemTopics,
+    createdBy,
+    creatorType,
+  } = data;
   const { loading, role } = useLogs();
   const [width, setWidth] = useState(420); // initial width in px
   const [showButton, setShowButton] = useState(false);
@@ -32,19 +40,24 @@ function ProblemDescrption({
   const { info } = useInstitution();
   const { info: vendorinfo } = useVendor();
   useEffect(() => {
-    console.log("DDAATTAA", data);
-    console.log("Dataaaaaaaaaa", creatorType, createdBy);
-    console.log("iunsti", info?.data.id)
     if (role === null) return;
-    if (creatorType === "INSTITUTION" && createdBy === info?.data.id && role == 3) {
+    if (
+      creatorType === "INSTITUTION" &&
+      createdBy === info?.data.id &&
+      role == 3
+    ) {
       setShowButton(true);
       return;
-    };
+    }
 
-    if (creatorType === "VENDOR" && createdBy === vendorinfo?.data.id && role == 2) {
+    if (
+      creatorType === "VENDOR" &&
+      createdBy === vendorinfo?.data.id &&
+      role == 2
+    ) {
       setShowButton(true);
       return;
-    };
+    }
     if (role < 2) {
       setShowButton(true);
     } else {
@@ -110,14 +123,15 @@ function ProblemDescrption({
             Delete Question
           </button>
         )}
-        {showButton && (
+        {showButton && (role === 0 || role === 1) && (
           <button
             onClick={() => handlePublish(data.id)}
             className={` px-2 py-2 text-white font-medium rounded-lg transition-colors cursor-pointer
-    ${data.published === "NOT_LISTED"
-                ? "bg-blue-600 hover:bg-blue-700"
-                : "bg-red-600 hover:bg-red-700"
-              }`}
+    ${
+      data.published === "NOT_LISTED"
+        ? "bg-blue-600 hover:bg-blue-700"
+        : "bg-red-600 hover:bg-red-700"
+    }`}
           >
             {data.published === "NOT_LISTED"
               ? "List Question"

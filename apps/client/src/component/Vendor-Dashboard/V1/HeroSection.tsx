@@ -52,7 +52,7 @@ export default function HeroSection() {
   const [institutionData, setInstitutionData] = useState<any>([]);
   const [filteredData, setFilteredData] = useState<any>([]);
   const [addNew, setAddNew] = useState(false);
-  const vendorId = vendor?.info?.data?.id|| "";
+  const vendorId = vendor?.info?.data?.id || "";
 
   useEffect(() => {
     if (!vendor) {
@@ -74,7 +74,7 @@ export default function HeroSection() {
       console.log(res);
       setAddNew(false);
       toast.success("Institute Created Successfully", { id: toastId });
-      await getAllInstitutions(setInstitutionData);
+      await getVendorInstitutions(setInstitutionData, vendorId as string);
     } catch (err: any) {
       toast.error(
         err?.response?.data?.message ||

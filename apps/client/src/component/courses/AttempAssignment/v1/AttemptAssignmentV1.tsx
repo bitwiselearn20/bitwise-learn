@@ -105,7 +105,7 @@ function AttemptAssignmentV1({ assignmentId }: { assignmentId: string }) {
     await submitAssignment(assignmentId, payload);
     setLoading(false);
 
-    // router.push(`/courses/${params.id}`);
+    router.push(`/courses/${params.id}`);
     setShowReviewScreen(false);
   }
 

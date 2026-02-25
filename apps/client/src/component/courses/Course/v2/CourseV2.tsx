@@ -306,7 +306,7 @@ export default function CourseV2() {
 
         {/* ================= RIGHT CONTENT ================= */}
         <div
-          className={`flex-1 ${Colors.background.secondary} rounded-xl h-full overflow-hidden flex flex-col`}
+          className={`flex-1 ${Colors.background.secondary} rounded-xl h-full flex flex-col`}
         >
           {/* HEADER */}
           <div
@@ -431,12 +431,12 @@ function LearningView({ topic, showPDF, studyMode, pdfMode }: any) {
       {!pdfMode && (
         <div className="flex-1 flex flex-col gap-6 min-h-0">
           <div
-            className={`aspect-video rounded-xl overflow-hidden ${Colors.background.primary}`}
+            className={`aspect-video rounded-xl ${Colors.background.primary}`}
           >
             {topic.videoUrl && (
               <iframe
                 src={topic.videoUrl}
-                className="w-[80svw] h-[80svh] mx-auto"
+                className={"mx-auto w-full h-full"}
                 allowFullScreen
               />
             )}

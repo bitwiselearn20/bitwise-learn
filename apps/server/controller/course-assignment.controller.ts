@@ -358,17 +358,16 @@ class CourseAssignmentController {
       if (!couresId) throw new Error("sectionId is required");
       const dbSection = await prismaClient.courseSections.findMany({
         where: {
-          courseId:couresId
+          courseId: couresId as string,
         },
       });
       if (!dbSection) throw new Error("section id not found");
       console.log(dbSection);
       let assignemnts = [];
-      for(let i=0;i<dbSection.length;i++){
-
+      for (let i = 0; i < dbSection.length; i++) {
         const data = await prismaClient.courseAssignemnt.findMany({
           where: {
-            sectionId:dbSection[i]?.id,
+            sectionId: dbSection[i]?.id,
           },
         });
 
@@ -381,17 +380,17 @@ class CourseAssignmentController {
         const data = await prismaClient.courseAssignemntSubmission.findFirst({
           where: {
             studentId,
-            assignmentId: assignemnts[0]?.id,
+            assignmentId: assignemnts[i]?.id,
           },
         });
         if (data) {
           assignmentSubmission.push({
-            assignmentId: assignemnts[0]?.id,
+            assignmentId: assignemnts[i]?.id,
             isSubmitted: true,
           });
         } else {
           assignmentSubmission.push({
-            assignmentId: assignemnts[0]?.id,
+            assignmentId: assignemnts[i]?.id,
             isSubmitted: false,
           });
         }
