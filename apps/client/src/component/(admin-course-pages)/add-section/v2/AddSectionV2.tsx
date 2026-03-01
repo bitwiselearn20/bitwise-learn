@@ -1128,11 +1128,13 @@ const AddSectionV2 = ({
                 await uploadTranscript(selectedTopic.id, data.transcriptFile);
               }
               toast.success("Topic updated!", { id: toastId });
+              //TODO: add re-fetch for topic
+              window.location.reload();
               setIsUpdateTopicOpen(false);
               setSelectedTopic(null);
             } catch (err) {
               // console.error(err);
-              toast.error("Failed to update topic");
+              toast.error("Failed to update topic", { id: toastId });
             }
           }}
         />

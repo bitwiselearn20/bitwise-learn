@@ -6,6 +6,7 @@ import MarkdownEditor from "@/component/ui/MarkDownEditor";
 import { X } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 type SubmissionsProps = {
   content: any;
@@ -20,7 +21,7 @@ function Submissions({ content }: SubmissionsProps) {
   const [isSaving, setIsSaving] = useState(false);
 
   const [name, setName] = useState(content.name);
-  const [description, setDescription] = useState(content.description);
+  const [description, setDescription] = useState<string>(content.description);
   const [difficulty, setDifficulty] = useState(content.difficulty);
   const [hints, setHints] = useState<string[]>(content.hints || []);
   const [topics, setTopics] = useState<string[]>(
@@ -59,6 +60,13 @@ function Submissions({ content }: SubmissionsProps) {
   const handleSave = async () => {
     setIsSaving(true);
 
+    for (let i = 0; i < hints.length; i++) {
+      if (hints[i].trim().length === 0) {
+        toast.error("dont add an empty hint");
+        return;
+      }
+    }
+
     const updatedData = {
       name,
       description,
@@ -78,7 +86,6 @@ function Submissions({ content }: SubmissionsProps) {
       setIsSaving(false);
       setIsEditing(false);
     }, 500);
-    window.location.reload();
   };
 
   return (
@@ -148,6 +155,7 @@ function Submissions({ content }: SubmissionsProps) {
           <MarkdownEditor
             value={description}
             mode={"preview"}
+            setValue={setDescription}
             theme={useTheme().theme === "Dark" ? "dark" : "light"}
           />
         )}

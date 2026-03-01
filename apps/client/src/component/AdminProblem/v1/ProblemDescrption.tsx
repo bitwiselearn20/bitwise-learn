@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import TestCaseSection from "@/component/Problem/v1/TestcaseSection";
 import MarkdownEditor, { THEME_MAP } from "@/component/ui/MarkDownEditor";
 import { changeStatus, deleteStatus } from "@/api/problems/change-status";
@@ -39,6 +39,7 @@ function ProblemDescrption({
   const Colors = useColors();
   const { info } = useInstitution();
   const { info: vendorinfo } = useVendor();
+
   useEffect(() => {
     if (role === null) return;
     if (
@@ -93,6 +94,9 @@ function ProblemDescrption({
     window.location.reload();
   };
   const router = useRouter();
+  const handleGoBack = () => {
+    router.back();
+  };
   const handleDelete = async (id: string) => {
     console.log("delte is id" + id);
     await deleteStatus(id);
@@ -114,6 +118,10 @@ function ProblemDescrption({
         onMouseDown={startResizing}
         className="absolute top-0 right-0 h-full w-1 cursor-col-resize bg-transparent hover:bg-blue-500/30"
       />
+      <div onClick={handleGoBack} className="flex gap-3 cursor-pointer">
+        <ArrowLeft className="text-gray-400 text-md" />
+        <span>Go Back</span>
+      </div>
       <div className="flex space-x-3 mx-auto items-center justify-between mb-4">
         {showButton && (
           <button
@@ -163,6 +171,7 @@ function ProblemDescrption({
       <MarkdownEditor
         height={550}
         value={description}
+        setValue={(data) => {}}
         mode={"preview"}
         hideToolbar={true}
         theme={useTheme().theme === "Dark" ? "dark" : "light"}

@@ -61,8 +61,8 @@ function HeroSection({ showForm, setShowForm }: any) {
 
       case 2:
         if (!vendorInfo) return;
-        name = vendorInfo.name;
-        email = vendorInfo.email;
+        name = vendorInfo.data.name;
+        email = vendorInfo.data.email;
         break;
 
       case 3:

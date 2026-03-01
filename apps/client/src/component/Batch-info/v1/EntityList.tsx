@@ -47,7 +47,40 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
       [key]: value,
     }));
   };
-
+  const fetchData = async () => {
+    try {
+      switch (type) {
+        case "Students":
+          await getStudentsByBatch((data: any) => {
+            setEntities(Array.isArray(data) ? data : []);
+          }, batchId as string);
+          break;
+        case "Teachers":
+          await getTeachersByBatch((data: any) => {
+            setEntities(Array.isArray(data) ? data : []);
+          }, batchId as string);
+          break;
+        case "Assessments":
+          await getAssessmentsByBatch((data: any) => {
+            // console.log(data);
+            setEntities(Array.isArray(data) ? data : []);
+          }, batchId as string);
+          break;
+        case "Courses":
+          // TODO: Add courses API when available
+          const data = await allBatchCourses(batchId as string);
+          setEntities(data);
+          break;
+        default:
+          setEntities([]);
+      }
+    } catch (error) {
+      // console.error(`Error fetching ${type}:`, error);
+      setEntities([]);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleSave = async () => {
     try {
       // TODO: UPDATE STUDENT API CALL GOES HERE
@@ -57,7 +90,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
         { data: editedEntity, entity: ENTITY_URL_MAP[type] },
         null,
       );
-      window.location.reload();
+      await fetchData();
       setIsEditing(false);
       setSelectedEntity(editedEntity); // update UI after success
     } catch (error) {
@@ -76,50 +109,18 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
 
       setShowDeleteConfirm(false);
       setSelectedEntity(null);
-      window.location.reload();
+      await fetchData();
+      // window.location.reload();
     } catch (error) {
       console.error("Delete failed", error);
     }
     setShowDeleteConfirm(false);
     setSelectedEntity(null);
   };
-  // console.log("out of delete func");
+
   useEffect(() => {
     setLoading(true);
-    const fetchData = async () => {
-      try {
-        switch (type) {
-          case "Students":
-            await getStudentsByBatch((data: any) => {
-              setEntities(Array.isArray(data) ? data : []);
-            }, batchId as string);
-            break;
-          case "Teachers":
-            await getTeachersByBatch((data: any) => {
-              setEntities(Array.isArray(data) ? data : []);
-            }, batchId as string);
-            break;
-          case "Assessments":
-            await getAssessmentsByBatch((data: any) => {
-              // console.log(data);
-              setEntities(Array.isArray(data) ? data : []);
-            }, batchId as string);
-            break;
-          case "Courses":
-            // TODO: Add courses API when available
-            const data = await allBatchCourses(batchId as string);
-            setEntities(data);
-            break;
-          default:
-            setEntities([]);
-        }
-      } catch (error) {
-        // console.error(`Error fetching ${type}:`, error);
-        setEntities([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+
     fetchData();
   }, [type]);
 
@@ -320,13 +321,15 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                       {cells.map((cell, index) => (
                         <td
                           key={index}
-                          className={`px-6 py-4 ${index === 0 ? "font-medium" : ""
-                            } ${index === cells.length - 1
+                          className={`px-6 py-4 ${
+                            index === 0 ? "font-medium" : ""
+                          } ${
+                            index === cells.length - 1
                               ? `${Colors.text.secondary}`
                               : index === 0
                                 ? ""
                                 : `${Colors.text.secondary} truncate`
-                            }`}
+                          }`}
                         >
                           {cell}
                         </td>
@@ -385,8 +388,8 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                       onClick={async () => {
                         try {
                           handleSave()
-                            .then(() => { })
-                            .catch(() => { });
+                            .then(() => {})
+                            .catch(() => {});
                           setSelectedEntity(editedEntity);
                           setIsEditing(false);
                           setEditedEntity(null);
@@ -428,7 +431,6 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                 <h2 className={`text-xl font-semibold ${Colors.text.primary}`}>
                   {type} Details
                 </h2>
-
               </div>
 
               {/* Content */}
@@ -444,6 +446,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                         "institutionId",
                         "vendorId",
                         "instituteId",
+                        "createdBy",
                       ].includes(key),
                   )
                   .map(([key, value]) => (

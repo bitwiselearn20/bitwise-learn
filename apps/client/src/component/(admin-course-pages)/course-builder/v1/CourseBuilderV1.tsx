@@ -421,7 +421,7 @@ const EditCourseModal = ({
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} transition cursor-pointer`}
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.text.primary} ${Colors.hover.special} transition cursor-pointer`}
           >
             Cancel
           </button>
@@ -597,30 +597,29 @@ const CourseBuilderV1 = ({ courseId }: Props) => {
     }
   };
 
-const handlePublishCourse = async () => {
-  try {
-    toast.loading("Updating publish status...", { id: "publish" });
+  const handlePublishCourse = async () => {
+    try {
+      toast.loading("Updating publish status...", { id: "publish" });
 
-    const res = await publishCourse(courseId);
+      const res = await publishCourse(courseId);
 
-    const { isPublished } = res.data;
+      const { isPublished } = res.data;
 
-    toast.success(
-      isPublished
-        ? "Course published successfully"
-        : "Course unpublished successfully",
-      { id: "publish" },
-    );
+      toast.success(
+        isPublished
+          ? "Course published successfully"
+          : "Course unpublished successfully",
+        { id: "publish" },
+      );
 
-    const refreshed = await getCourseById(courseId);
-    setCourse(refreshed.data);
-  } catch (error) {
-    toast.error("Failed to update publish status", { id: "publish" });
-  } finally {
-    setShowPublishModal(false);
-  }
-};
-
+      const refreshed = await getCourseById(courseId);
+      setCourse(refreshed.data);
+    } catch (error) {
+      toast.error("Failed to update publish status", { id: "publish" });
+    } finally {
+      setShowPublishModal(false);
+    }
+  };
 
   const publishRequirements = [
     {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Pencil, Save, X, Trash, Upload } from "lucide-react";
+import { Pencil, Save, X, Trash, Upload, ArrowLeft } from "lucide-react";
 import InfoBlock from "./InfoBlock";
 import { updateEntity, deleteEntity } from "@/api/institutions/entity";
 import { useRouter } from "next/navigation";
@@ -146,6 +146,13 @@ const BatchSidebar = ({ batch }: BatchSidebarProps) => {
     <aside
       className={`w-[320px] ${Colors.background.secondary} ${Colors.text.primary} p-6 rounded-xl min-h-[93vh]`}
     >
+      <div
+        onClick={() => router.back()}
+        className="flex gap-3 mb-4 cursor-pointer"
+      >
+        <ArrowLeft className="text-gray-400 text-md" />
+        <span>Go Back</span>
+      </div>
       <input
         type="file"
         accept=".csv,.xlsx"

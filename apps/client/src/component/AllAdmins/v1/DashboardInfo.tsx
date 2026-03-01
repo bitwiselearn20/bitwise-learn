@@ -48,6 +48,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
   const [selected, setSelected] = useState<UserData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UserData | null>(null);
+  const [isDisabled, setIsDisabled] = useState(false);
   const Colors = useColors();
 
   /* ------------------ HANDLERS ------------------ */
@@ -64,7 +65,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
   };
 
   const handleSubmit = async () => {
-    const toasdId = toast.loading("Saving Changes...");
+    setIsDisabled(true);
     try {
       if (!formData) return;
 
@@ -76,17 +77,16 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
         },
         null,
       );
-      toast.success("Changes Saved!", { id: toasdId });
+      setIsDisabled(false);
       setSelected(formData);
       setIsEditing(false);
       window.location.reload();
     } catch (error) {
-      toast.error("Unable to update", { id: toasdId });
+      toast.error("Unable to update");
     }
   };
 
   const handleDelete = async () => {
-    const toastId = toast.loading("Deleting Admin...");
     try {
       if (!selected) return;
       await deleteEntity(
@@ -98,13 +98,10 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
         null,
       );
 
-      toast.success("Delete Admin Success", { id: toastId });
-
       setSelected(null);
       setIsEditing(false);
-    } catch (error) {
-      toast.error("Ubale to delete Admin", { id: toastId });
-    }
+      window.location.reload();
+    } catch (error) {}
   };
 
   const handleChange = (key: keyof UserData, value: string) => {
@@ -213,6 +210,7 @@ export default function DashboardInfo({ data, onUpdate, onDelete }: Props) {
                 {isEditing ? (
                   <>
                     <button
+                      disabled={isDisabled}
                       onClick={handleSubmit}
                       className={`rounded-md ${Colors.background.special} px-4 py-1.5 text-xs font-semibold ${Colors.text.primary} hover:opacity-90 cursor-pointer`}
                     >

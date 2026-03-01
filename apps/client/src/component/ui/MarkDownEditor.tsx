@@ -2,8 +2,7 @@
 
 import MDEditor from "@uiw/react-md-editor";
 import { useColors } from "../general/(Color Manager)/useColors";
-
-const Colors = useColors();
+import React from "react";
 
 type Mode = "live" | "preview" | "edit";
 export const THEME_MAP = {
@@ -26,11 +25,12 @@ export default function MarkdownEditor({
 }: {
   height: number;
   value: string;
-  setValue: (val: string) => void;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
   mode: Mode;
   hideToolbar: boolean;
   theme: "light" | "dark";
 }) {
+  const Colors = useColors();
   return (
     <div
       style={{
@@ -44,7 +44,7 @@ export default function MarkdownEditor({
         // data-color-mode={theme}
         height={height}
         value={value}
-        onChange={(val) => setValue(val ?? "")}
+        onChange={(val) => setValue(val || "")}
         preview={mode}
         hideToolbar={hideToolbar}
         spellCheck

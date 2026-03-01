@@ -131,6 +131,7 @@ function BatchStudentForm({
       });
       onSubmit?.(formData);
       openForm(false);
+      window.location.reload();
     } catch (error) {
       // console.error("Failed to create student", error);
       toast.error("Failed to create student");

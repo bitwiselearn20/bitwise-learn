@@ -130,8 +130,9 @@ export default function TeacherForm({
       });
 
       toast.success("Teacher created successfully", { id: toastId });
-      onSubmit?.(formData);
+      await onSubmit?.(formData);
       openForm(false);
+      window.location.reload();
     } catch (error) {
       // console.error("Failed to create teacher", error);
       toast.error("Failed to create teacher", { id: toastId });

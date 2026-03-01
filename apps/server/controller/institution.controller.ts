@@ -87,19 +87,26 @@ class InstitutionController {
 
       const data: UpdateInstitutionBody = req.body;
 
-      const dbAdmin = await prismaClient.user.findFirst({
-        where: { id: userId },
-      });
+      if (
+        req.user.type !== "ADMIN" &&
+        req.user.type !== "SUPERADMIN" &&
+        req.user.type !== "VENDOR"
+      ) {
+        throw new Error("only admin/superadmin can view institutions");
+      }
+
+      let dbAdmin;
+      if (req.user.type === "VENDOR") {
+        dbAdmin = await prismaClient.vendor.findUnique({
+          where: { id: userId },
+        });
+      } else {
+        dbAdmin = await prismaClient.vendor.findUnique({
+          where: { id: userId },
+        });
+      }
 
       if (!dbAdmin) throw new Error("no such user found!");
-
-      if (
-        dbAdmin.ROLE !== "ADMIN" &&
-        dbAdmin.ROLE !== "SUPERADMIN" &&
-        dbAdmin.ROLE !== "VENDOR"
-      ) {
-        throw new Error("only admin or superadmin can update institutions");
-      }
 
       const institution = await prismaClient.institution.findFirst({
         where: { id: institutionId as string },
@@ -163,20 +170,26 @@ class InstitutionController {
       const institutionId = req.params.id;
 
       if (!institutionId) throw new Error("institution id is required");
-
-      const dbAdmin = await prismaClient.user.findFirst({
-        where: { id: userId },
-      });
-
-      if (!dbAdmin) throw new Error("no such user found!");
-
       if (
-        dbAdmin.ROLE !== "ADMIN" &&
-        dbAdmin.ROLE !== "SUPERADMIN" &&
-        dbAdmin.ROLE !== "VENDOR"
+        req.user.type !== "ADMIN" &&
+        req.user.type !== "SUPERADMIN" &&
+        req.user.type !== "VENDOR"
       ) {
         throw new Error("only admin/superadmin can view institutions");
       }
+
+      let dbAdmin;
+      if (req.user.type === "VENDOR") {
+        dbAdmin = await prismaClient.vendor.findUnique({
+          where: { id: userId },
+        });
+      } else {
+        dbAdmin = await prismaClient.user.findUnique({
+          where: { id: userId },
+        });
+      }
+
+      if (!dbAdmin) throw new Error("no such user found!");
 
       const institution = await prismaClient.institution.findFirst({
         where: {

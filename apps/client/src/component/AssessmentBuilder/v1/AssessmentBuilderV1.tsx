@@ -938,6 +938,7 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
       toast.success("Assessments uploaded successfully", {
         id: "bulk-upload",
       });
+      window.location.reload();
     } catch (error) {
       console.error(error);
       toast.error("Bulk upload failed", {

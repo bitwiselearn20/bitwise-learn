@@ -1,9 +1,10 @@
 import { use, useEffect, useState } from "react";
-import { Pencil, Save, X, Trash } from "lucide-react";
+import { Pencil, Save, X, Trash, ArrowLeft } from "lucide-react";
 import InfoBlock from "./InfoBlock";
 import { deleteEntity, updateEntity } from "@/api/institutions/entity";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { useRouter } from "next/navigation";
+import useVendor from "@/store/vendorStore";
 
 type InstitutionSidebarProps = {
   institution: any;
@@ -66,6 +67,7 @@ const InstitutionSidebar = ({
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(institution);
+  const { info } = useVendor();
   useEffect(() => {
     setFormData(institution);
   }, [institution]);
@@ -104,8 +106,11 @@ const InstitutionSidebar = ({
         },
         null,
       );
-
-      router.push("/admin-dashboard/institutions");
+      if (info?.data.id) {
+        router.push("/vendor-dashboard");
+      } else {
+        router.push("/admin-dashboard/institutions");
+      }
     }
   };
 
@@ -113,6 +118,13 @@ const InstitutionSidebar = ({
     <aside
       className={`w-[320px] ${Colors.background.secondary} ${Colors.text.primary} p-6 rounded-xl min-h-[93vh]`}
     >
+      <div
+        onClick={() => router.back()}
+        className="flex gap-3 mb-4 cursor-pointer"
+      >
+        <ArrowLeft className="text-gray-400 text-md" />
+        <span>Go Back</span>
+      </div>
       {/* Header */}
       <div className="mb-4">
         {isEditing ? (

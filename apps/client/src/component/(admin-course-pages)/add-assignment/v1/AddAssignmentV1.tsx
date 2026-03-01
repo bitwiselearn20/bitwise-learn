@@ -42,6 +42,7 @@ export default function AddAssignmentV1({
       });
 
       toast.success("Assignment created!", { id: "assignment" });
+      window.location.reload();
       onClose();
     } catch (error) {
       toast.error("Failed to create assignment", { id: "assignment" });

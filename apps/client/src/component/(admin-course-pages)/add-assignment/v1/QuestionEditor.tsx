@@ -41,8 +41,9 @@ export default function QuestionEditor({
     });
   };
 
-  const handleComplete = () => {
-    onSubmit();
+  const handleComplete = async () => {
+    await onSubmit();
+    window.location.reload();
   };
 
   const ConfirmDeleteQuestionModal = ({
@@ -76,7 +77,7 @@ export default function QuestionEditor({
             <button
               onClick={onClose}
               disabled={loading}
-            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
+              className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
             >
               Cancel
             </button>
@@ -136,7 +137,9 @@ export default function QuestionEditor({
   };
 
   return (
-    <div className={`flex w-1/2 flex-col justify-between rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThin} p-6 shadow-lg`}>
+    <div
+      className={`flex w-1/2 flex-col justify-between rounded-2xl ${Colors.background.secondary} ${Colors.border.defaultThin} p-6 shadow-lg`}
+    >
       {/* TOP BAR */}
       <div className="flex flex-col gap-3">
         <div className="flex justify-end">
@@ -145,7 +148,7 @@ export default function QuestionEditor({
               size={26}
               onClick={onClose}
               className={`cursor-pointer ${Colors.text.secondary} hover:text-red-500 transition
-              relative ${locked?"left-5":"left-38.5"}`}
+              relative ${locked ? "left-5" : "left-38.5"}`}
             />
             <div className="flex justify-end gap-4">
               {locked && (
@@ -206,7 +209,7 @@ export default function QuestionEditor({
           value={question.text}
           placeholder="Type your question here…"
           onChange={(e) => saveQuestion({ ...question, text: e.target.value })}
-          className={`${locked?"cursor-not-allowed opacity-70":"cursor-pointer"}
+          className={`${locked ? "cursor-not-allowed opacity-70" : "cursor-pointer"}
             w-full rounded-lg px-4 py-2 text-sm
             ${Colors.background.primary} ${Colors.text.secondary}
             placeholder:text-neutral-400
