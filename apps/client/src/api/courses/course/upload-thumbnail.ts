@@ -21,6 +21,6 @@ export const uploadThumbnail = async (
 
     return res.data;
   } catch (error) {
-    toast.error("failed to upload course thumbnail");
+    // toast.error("failed to upload course thumbnail");
   }
 };

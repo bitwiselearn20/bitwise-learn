@@ -41,3 +41,4 @@ yarn-error.log*
 #temp
 apps/client/src/component/reset-password/ResetPassword.tsx
 apps/client/src/app/reset-password/page.tsx
+.vscode/settings.json

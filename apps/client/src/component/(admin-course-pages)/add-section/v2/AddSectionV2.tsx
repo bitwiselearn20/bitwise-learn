@@ -563,11 +563,10 @@ px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} 
             className={`
     px-4 py-2 rounded-lg
     text-white transition cursor-pointer
-    ${
-      loading
-        ? "bg-red-600/60 cursor-not-allowed"
-        : "bg-red-600 hover:bg-red-500"
-    }
+    ${loading
+                ? "bg-red-600/60 cursor-not-allowed"
+                : "bg-red-600 hover:bg-red-500"
+              }
   `}
           >
             {loading ? "Deleting Assignment..." : "Delete"}
@@ -758,11 +757,10 @@ const AddSectionV2 = ({
             onClick={() => setActiveTab("TOPIC")}
             className={`
         px-3 py-1.5 text-sm rounded-md transition ${Colors.text.primary} cursor-pointer
-        ${
-          activeTab === "TOPIC"
-            ? `${Colors.background.special}`
-            : `${Colors.background.primary} ${Colors.hover.special}`
-        }
+        ${activeTab === "TOPIC"
+                ? `${Colors.background.special}`
+                : `${Colors.background.primary} ${Colors.hover.special}`
+              }
       `}
           >
             Topics
@@ -772,11 +770,10 @@ const AddSectionV2 = ({
             onClick={() => setActiveTab("ASSIGNMENT")}
             className={`
         px-3 py-1.5 text-sm rounded-md transition ${Colors.text.primary} cursor-pointer
-        ${
-          activeTab === "ASSIGNMENT"
-            ? `${Colors.background.special}`
-            : `${Colors.background.primary} ${Colors.hover.special}`
-        }
+        ${activeTab === "ASSIGNMENT"
+                ? `${Colors.background.special}`
+                : `${Colors.background.primary} ${Colors.hover.special}`
+              }
       `}
           >
             Assignments
@@ -935,7 +932,7 @@ const AddSectionV2 = ({
 
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
                   <Link
-                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1771158933/assignment_xlq50a.xlsx"
+                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1772358952/assignmentFormat_aj6jgo.xlsx"
                     download
                     className={`
             group:opacity-100
@@ -1128,11 +1125,13 @@ const AddSectionV2 = ({
                 await uploadTranscript(selectedTopic.id, data.transcriptFile);
               }
               toast.success("Topic updated!", { id: toastId });
+              //TODO: add re-fetch for topic
+              window.location.reload();
               setIsUpdateTopicOpen(false);
               setSelectedTopic(null);
             } catch (err) {
               // console.error(err);
-              toast.error("Failed to update topic");
+              toast.error("Failed to update topic", { id: toastId });
             }
           }}
         />

@@ -53,7 +53,10 @@ class BatchController {
       });
       if (!batch) throw new Error("Batch not found");
 
-      if (req.user.type === "INSTITUTION" && batch.institutionId !== institutionId) {
+      if (
+        req.user.type === "INSTITUTION" &&
+        batch.institutionId !== institutionId
+      ) {
         throw new Error("this batch does not belongs to this institution");
       }
 
@@ -86,7 +89,8 @@ class BatchController {
       if (
         req.user.type !== "SUPERADMIN" &&
         req.user.type !== "ADMIN" &&
-        req.user.type !== "INSTITUTION"
+        req.user.type !== "INSTITUTION" &&
+        req.user.type !== "VENDOR"
       ) {
         throw new Error("only institution can delete batches");
       }
@@ -94,15 +98,6 @@ class BatchController {
         where: { id: batchId as string },
       });
       if (!batch) throw new Error("Batch not found");
-
-      if (
-        req.user.type !== "SUPERADMIN" &&
-        req.user.type !== "ADMIN" &&
-        req.user.type == "INSTITUTION" &&
-        batch.institutionId !== institutionId
-      ) {
-        throw new Error("this batch does not belongs to this institution");
-      }
 
       const deletedBatch = await prismaClient.batch.delete({
         where: { id: batchId as string },

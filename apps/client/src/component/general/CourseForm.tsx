@@ -4,6 +4,7 @@ import { getAllCourses } from "@/api/courses/course/get-all-courses";
 import { enrollInstitutionCourses } from "@/api/courses/course/enrollments/enroll-institution";
 import React, { use, useEffect, useState } from "react";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
+import toast from "react-hot-toast";
 
 interface Course {
   id: string;
@@ -42,8 +43,9 @@ function CourseForm({ batchId }: { batchId: string }) {
         courses: selectedCourses,
       });
 
-      alert("Institution enrolled successfully 🎉");
+      toast.success("Institution enrolled successfully 🎉");
       setSelectedCourses([]);
+      window.location.reload();
     } catch (error) {
       // console.error(error);
       alert("Something went wrong while enrolling courses");
