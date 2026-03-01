@@ -14,10 +14,7 @@ class TeacherController {
       if (!data) throw new Error("please provide all required fields");
 
       if (
-        req.user.type !== "SUPERADMIN" &&
-        req.user.type !== "ADMIN" &&
-        req.user.type !== "INSTITUTION" &&
-        req.user.type !== "VENDOR"
+        req.user.type === "STUDENT"
       ) {
         throw new Error("only institution or vendor can create teachers");
       }
@@ -34,13 +31,16 @@ class TeacherController {
         },
       });
       if (!batch) throw new Error("batch does not belong to institution");
-
+      let vendorId = null;
       // Logged-in user is a VENDOR
       if (req.user.type === "VENDOR") {
+        console.log("VENDORRRRR SPOTTEDDD");
+
         const vendor = await prismaClient.vendor.findFirst({
           where: { id: req.user.id },
           select: { id: true, createdInstitutions: true },
         });
+        vendorId = req.user.id;
 
         if (!vendor) {
           throw new Error("vendor not found");
@@ -68,7 +68,7 @@ class TeacherController {
           loginPassword: hashedPassword,
           instituteId: data.instituteId,
           batchId: data.batchId,
-          vendorId: data.vendorId ?? null,
+          vendorId: vendorId,
         },
       });
       await handleSendMail(data.email, loginPassword);
@@ -314,7 +314,7 @@ class TeacherController {
       });
       if (!teachers) throw new Error("teachers not found");
 
-      if (req.user.type !== "SUPERADMIN" && req.user.type !== "ADMIN") {
+      if (req.user.type === "STUDENT") {
         throw new Error("not authorized");
       }
 

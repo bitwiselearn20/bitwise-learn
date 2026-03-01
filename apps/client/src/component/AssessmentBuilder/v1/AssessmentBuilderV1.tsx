@@ -981,11 +981,10 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
               {assessmentData && (
                 <button
                   onClick={() => setShowPublishModal(true)}
-                  className={`rounded-md px-4 py-2 text-sm font-medium ${
-                    assessmentData.status === "LIVE"
+                  className={`rounded-md px-4 py-2 text-sm font-medium ${assessmentData.status === "LIVE"
                       ? "bg-red-500 text-white hover:bg-red-600"
                       : "bg-[#1DA1F2] text-black hover:bg-[#1DA1F2]/90"
-                  }`}
+                    }`}
                 >
                   {assessmentData.status === "LIVE"
                     ? "End Assessment"
@@ -1034,7 +1033,7 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                 <div className="flex items-center gap-2">
                   {/* Bulk format  */}
                   <Link
-                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1771158933/assignment_xlq50a.xlsx"
+                    href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1772358952/assignmentFormat_aj6jgo.xlsx"
                     download
                     className={`
             group:opacity-100
@@ -1193,11 +1192,10 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                                   key={idx}
                                   className={`rounded-lg border px-3 py-2 text-xs flex items-center justify-between
 
-                                  ${
-                                    isCorrect
+                                  ${isCorrect
                                       ? "border-green-500 bg-green-500/10 text-green-400"
                                       : `${Colors.border.defaultThin} ${Colors.text.primary} ${Colors.background.secondary}`
-                                  }`}
+                                    }`}
                                 >
                                   <span>{opt}</span>
 

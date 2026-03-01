@@ -150,11 +150,10 @@ export const Tabs = ({
           <button
             key={tab}
             onClick={() => onValueChange(tab)}
-            className={`px-4 py-1.5 rounded-md text-md cursor-pointer ${
-              value === tab
+            className={`px-4 py-1.5 rounded-md text-md cursor-pointer ${value === tab
                 ? `${Colors.text.special} ${Colors.border.specialThick}`
                 : `${Colors.text.primary} ${Colors.hover.textSpecial}`
-            }`}
+              }`}
           >
             {tab}
           </button>
@@ -183,7 +182,7 @@ export const Tabs = ({
           logRole != 4 && (
             <>
               <Link
-                href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1771159081/student-info_rsa5q9_w8ihpg.xlsx"
+                href="https://res.cloudinary.com/djy3ewpb8/raw/upload/v1772358905/studentInfo_qd7tzr.xlsx"
                 download
                 className={`px-4 py-2 rounded-md ${Colors.hover.special} ${Colors.text.special} ${Colors.border.specialThick} cursor-pointer active:scale-95 transition-all`}
               >
