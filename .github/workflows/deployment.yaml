@@ -24,7 +24,6 @@ jobs:
               cd apps/client
               bun install
               bun run build
-              pm2 restart bitwise-learn-frontend 
             
               cd ../server
               bun install
@@ -33,5 +32,8 @@ jobs:
               bunx prisma db push
               bunx prisma generate
             
-              pm2 restart bitwise-learn-backend
+              cd ../../apps/worker-server
+              bun install
+              pm2 restart all
+
 

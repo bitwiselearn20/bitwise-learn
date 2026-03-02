@@ -126,6 +126,7 @@ const BatchSidebar = ({ batch }: BatchSidebarProps) => {
       null,
     );
     setIsEditing(false);
+    window.location.reload();
   };
 
   const handleDelete = async () => {
