@@ -127,7 +127,11 @@ export default function CourseV2() {
       // console.log(res.data);
       const progress = res.data;
       // console.log(res);
-      if (!progress || !progress.completedContentIds) {
+      if (progress?.completedContentIds) {
+        setCompletedSection(
+          progress.completedContentIds.map((id: string) => ({ id })),
+        );
+      } else {
         setCompletedSection([]);
       }
       // console.log("calling get assignemnt");
