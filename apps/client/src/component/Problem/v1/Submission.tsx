@@ -25,8 +25,10 @@ function Submission({ id }: SubmissionProps) {
 
   useEffect(() => {
     setLoading(true);
+    if (!id) return;
+    console.log(id);
     getAllProblemSubmission((data: Submission[]) => {
-      setContent(data);
+      setContent(data || []);
       setSelected(data.length > 0 ? 0 : null);
       setLoading(false);
     }, id);
