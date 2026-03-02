@@ -393,9 +393,9 @@ model ProblemSubmission {
   studentId       String                      @db.ObjectId
   student         Student                     @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  problemId String  @db.ObjectId
-  problem   Problem @relation(fields: [problemId], references: [id])
-  failedTestCase  String?
+  problemId      String  @db.ObjectId
+  problem        Problem @relation(fields: [problemId], references: [id])
+  failedTestCase String?
 
   submittedAt DateTime @default(now())
   createdAt   DateTime @default(now())
@@ -416,6 +416,7 @@ model ProblemSubmissionTestCase {
   memory       String?
 
   createdAt DateTime @default(now())
+
   @@unique([submissionId, testCaseId])
 }
 
@@ -424,8 +425,8 @@ model Assessment {
   name                       String
   description                String
   instruction                String
-  startTime                  DateTime
-  endTime                    DateTime
+  startTime                  String
+  endTime                    String
   individualSectionTimeLimit Int?
   status                     ASSESSMENT_STATUS @default(UPCOMING)
   report                     String?
