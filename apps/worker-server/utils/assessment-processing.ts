@@ -1,7 +1,7 @@
 import prismaClient from "@bitwiselearn/prisma";
 import * as XLSX from "xlsx";
 import path from "path";
-import { uploadToCloudinary } from "./file-upload";
+import uploadFile from "./file-upload";
 import fs from "fs/promises";
 
 /** Sleep helper */
@@ -175,12 +175,12 @@ export default async function assessmentProcessing(payload: string) {
 
     XLSX.writeFile(workbook, filePath);
 
-    const uploadData = await uploadToCloudinary(filePath);
+    const uploadData = await uploadFile(filePath);
 
     await prismaClient.assessment.update({
       where: { id: assessment.id },
       data: {
-        report: uploadData.url,
+        report: uploadData,
         reportStatus: "PROCESSED",
       },
     });
