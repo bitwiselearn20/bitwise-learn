@@ -296,8 +296,7 @@ export default function QuestionEditor({
             onClick={onPrev}
             disabled={index === 0}
             className={`
-              rounded-md ${Colors.background.special} ${Colors.hover.special}
-              disabled:bg-neutral-300 px-4 py-2 text-sm
+              rounded-md ${Colors.background.special} ${Colors.hover.special} px-4 py-2 text-sm
               cursor-pointer disabled:cursor-not-allowed
             `}
           >
@@ -308,8 +307,7 @@ export default function QuestionEditor({
             onClick={onNext}
             disabled={index === total - 1}
             className={`
-              rounded-md ${Colors.background.special} ${Colors.hover.special}
-              disabled:bg-neutral-300 px-4 py-2 text-sm
+              rounded-md ${Colors.background.special} ${Colors.hover.special} px-4 py-2 text-sm
               cursor-pointer disabled:cursor-not-allowed
             `}
           >

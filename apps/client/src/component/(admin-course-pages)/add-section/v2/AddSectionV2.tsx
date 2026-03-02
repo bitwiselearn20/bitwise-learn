@@ -117,7 +117,7 @@ const AddTopicModal = ({ open, onClose, onSubmit }: AddTopicModalProps) => {
             }}
             className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
-            Cancel
+            Cancel 
           </button>
 
           <button
@@ -171,7 +171,7 @@ const ConfirmDeleteSectionModal = ({
             onClick={onClose}
             className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
-            Cancel
+            Cancel 
           </button>
 
           <button
@@ -354,7 +354,7 @@ const UpdateTopicModal = ({
             onClick={onClose}
             className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
-            Cancel
+            Cancel 
           </button>
 
           <button
@@ -488,7 +488,7 @@ const EditAssignmentModal = ({
             onClick={onClose}
             className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
-            Cancel
+            Cancel 
           </button>
 
           <button
