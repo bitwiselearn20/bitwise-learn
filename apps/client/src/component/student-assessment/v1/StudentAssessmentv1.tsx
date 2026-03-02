@@ -28,6 +28,7 @@ type StudentAssessment = {
   individualSectionTimeLimit?: number;
   status?: "UPCOMING" | "LIVE" | "ENDED";
   batchId: string;
+  canAccessTest: boolean;
 };
 
 // -------------------------------------------------------------------------
@@ -42,7 +43,6 @@ const AssessmentCard = ({
 }) => {
   const statusStyles =
     "bg-green-500/10 text-green-400 border border-green-500/30";
-
   return (
     <motion.div
       whileHover={{ y: -6, scale: 1.01 }}
@@ -85,14 +85,16 @@ const AssessmentCard = ({
       </div>
 
       <button
+        disabled={!assessment.canAccessTest}
         onClick={() => onAttempt(assessment)}
         className={`
           mt-auto w-full rounded-lg py-2.5 text-sm font-semibold
           ${Colors.background.special}
           ${Colors.text.primary}
           ${Colors.hover.special}
+          ${assessment.canAccessTest ? "cursor-pointer" : "cursor-not-allowed"}
           hover:shadow-md hover:shadow-primary-hero/30
-          transition cursor-pointer
+          transition
         `}
       >
         Attempt Assessment

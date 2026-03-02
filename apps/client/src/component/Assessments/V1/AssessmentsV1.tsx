@@ -56,7 +56,6 @@ const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
         : "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
 
   const router = useRouter();
-
   const handleClick = (assessmentId: string) => {
     router.push(`/admin-dashboard/assessments/${assessmentId}`);
   };
@@ -92,8 +91,8 @@ const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
       <div className="flex items-center gap-2 text-xs text-secondary-font">
         <Clock size={14} />
         <span>
-          {new Date(assessment.startTime).toUTCString()} —{" "}
-          {new Date(assessment.endTime).toUTCString()}
+          {new Date(assessment.startTime).toLocaleString()} —{" "}
+          {new Date(assessment.endTime).toLocaleString()}
         </span>
       </div>
 

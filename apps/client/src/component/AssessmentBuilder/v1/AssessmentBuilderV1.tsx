@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { Trash } from "lucide-react";
+import { ChevronLeft, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import AddAssessmentCode from "./AddCODEAssessmentQuestion";
 import AddAssessmentMCQ from "./AddMCQAssessmentQuestion";
@@ -660,7 +660,7 @@ const UpdateQuestionModal = ({
             type="number"
             min={1}
             value={marks}
-            onChange={(e) => setMarks(Number(e.target.value))}
+            disabled={true}
             className={`mt-1 w-full rounded ${Colors.background.primary} ${Colors.border.defaultThin} px-3 py-2 text-sm ${Colors.text.primary} outline-none`}
           />
         </div>
@@ -964,9 +964,15 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
       />
       {/* Header */}
       <div className="flex items-center justify-between px-1 py-4">
-        <h1 className={`text-xl font-semibold ${Colors.text.primary}`}>
-          {assessmentData?.name || "Untitled Assessment"}
-        </h1>
+        <div className="flex gap-3">
+          <ChevronLeft
+            onClick={() => router.back()}
+            className={`text-xl font-semibold ${Colors.text.primary}`}
+          />
+          <h1 className={`text-xl font-semibold ${Colors.text.primary}`}>
+            {assessmentData?.name || "Untitled Assessment"}
+          </h1>
+        </div>
 
         <div className="flex gap-3">
           {assessmentData && (
@@ -981,10 +987,11 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
               {assessmentData && (
                 <button
                   onClick={() => setShowPublishModal(true)}
-                  className={`rounded-md px-4 py-2 text-sm font-medium ${assessmentData.status === "LIVE"
+                  className={`rounded-md px-4 py-2 text-sm font-medium ${
+                    assessmentData.status === "LIVE"
                       ? "bg-red-500 text-white hover:bg-red-600"
                       : "bg-[#1DA1F2] text-black hover:bg-[#1DA1F2]/90"
-                    }`}
+                  }`}
                 >
                   {assessmentData.status === "LIVE"
                     ? "End Assessment"
@@ -1192,10 +1199,11 @@ const AssessmentBuilderV1 = ({ assessmentId }: BuilderProps) => {
                                   key={idx}
                                   className={`rounded-lg border px-3 py-2 text-xs flex items-center justify-between
 
-                                  ${isCorrect
+                                  ${
+                                    isCorrect
                                       ? "border-green-500 bg-green-500/10 text-green-400"
                                       : `${Colors.border.defaultThin} ${Colors.text.primary} ${Colors.background.secondary}`
-                                    }`}
+                                  }`}
                                 >
                                   <span>{opt}</span>
 
