@@ -83,7 +83,7 @@ const ConfirmDeleteModal = ({
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} transition cursor-pointer`}
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
             Cancel
           </button>
@@ -155,9 +155,9 @@ const CreateSectionModal = ({
               setSectionName("");
               onClose();
             }}
-            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} transition cursor-pointer`}
+            className={`px-4 py-2 rounded-lg ${Colors.background.primary} ${Colors.border.defaultThick} ${Colors.hover.special} ${Colors.text.primary} transition cursor-pointer`}
           >
-            Cancel
+            Cancel 
           </button>
 
           <button
