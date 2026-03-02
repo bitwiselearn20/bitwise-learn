@@ -14,7 +14,10 @@ class BatchController {
         throw new Error("only institution can create batches");
       }
       const existingBatch = await prismaClient.batch.findFirst({
-        where: { batchname: data.batchname },
+        where: {
+          batchname: data.batchname,
+          institutionId: data.institutionId
+        },
       });
       if (existingBatch) throw new Error("Batch with this name already exists");
 
