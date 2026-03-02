@@ -1,10 +1,17 @@
 "use client";
 
-import { getAllCourses } from "@/api/courses/course/get-all-courses";
+import {
+  getAllCourses,
+  getInstitutionCourses,
+} from "@/api/courses/course/get-all-courses";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Filter, CheckCircle, XCircle } from "lucide-react";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
+import useVendor from "@/store/vendorStore";
+import { useAdmin } from "@/store/adminStore";
+import { useInstitution } from "@/store/institutionStore";
+import { info } from "console";
 
 type Course = {
   id: string;
@@ -28,15 +35,26 @@ function AllCourses() {
   const router = useRouter();
   const Colors = useColors();
 
+  const { info: adminInfo } = useAdmin();
+  const { info: instituteInfo } = useInstitution();
   useEffect(() => {
     async function handleLoad() {
+      if (!adminInfo?.data.id && !instituteInfo?.data.id) {
+        return;
+      }
       setLoading(true);
-      const data = await getAllCourses(true);
-      setCourses(data);
+      let data;
+      if (instituteInfo?.data.id) {
+        data = await getInstitutionCourses(instituteInfo?.data.id);
+        data = data.data;
+      } else {
+        data = await getAllCourses(true);
+      }
+      setCourses(data || []);
       setLoading(false);
     }
     handleLoad();
-  }, []);
+  }, [instituteInfo?.data.id, adminInfo?.data.id]);
 
   const uniqueLevels = useMemo(() => {
     return Array.from(new Set(courses.map((c) => c.level)));

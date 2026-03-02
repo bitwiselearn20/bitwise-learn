@@ -12,25 +12,50 @@ class CourseEnrollment {
 
       if (!dbCourse) throw new Error("course not found");
 
-      const getEnrollment = await prismaClient.courseEnrollment.findMany({
-        where: { courseId: dbCourse.id },
-        select: {
-          id: true,
-          institution: {
-            select: {
-              name: true,
-              id: true,
+      let getEnrollment: any[] = [];
+      if (req.user?.type === "ADMIN" || req.user?.type === "SUPERADMIN") {
+        getEnrollment = await prismaClient.courseEnrollment.findMany({
+          where: { courseId: dbCourse.id },
+          select: {
+            id: true,
+            institution: {
+              select: {
+                name: true,
+                id: true,
+              },
+            },
+            batch: {
+              select: {
+                id: true,
+                batchname: true,
+                branch: true,
+              },
             },
           },
-          batch: {
-            select: {
-              id: true,
-              batchname: true,
-              branch: true,
+        });
+      } else if (req.user?.type === "INSTITUTION") {
+        getEnrollment = await prismaClient.courseEnrollment.findMany({
+          where: { courseId: dbCourse.id, institutionId: req.user?.id },
+          select: {
+            id: true,
+            institution: {
+              select: {
+                name: true,
+                id: true,
+              },
+            },
+            batch: {
+              select: {
+                id: true,
+                batchname: true,
+                branch: true,
+              },
             },
           },
-        },
-      });
+        });
+      }
+      console.log("enrollments are:  ");
+      console.log(getEnrollment);
 
       return res.status(200).json(
         apiResponse(200, "fetched enrollments", {

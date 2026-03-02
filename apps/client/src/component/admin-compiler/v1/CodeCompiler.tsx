@@ -50,22 +50,6 @@ int main() {
   return 0;
 }`,
   },
-  go: {
-    monaco: "go",
-    boilerplate: `package main
-
-import "fmt"
-
-func main() {
-  fmt.Println("Hello, World!")
-}`,
-  },
-  rust: {
-    monaco: "rust",
-    boilerplate: `fn main() {
-  println!("Hello, World!");
-}`,
-  },
 };
 
 const Tooltip = ({ label }: { label: string }) => (
@@ -233,11 +217,17 @@ function CodeCompiler() {
   const theme = useTheme();
 
   return (
-    <div className={`flex flex-col w-full h-screen ${Colors.background.primary} ${Colors.text.primary}`}>
+    <div
+      className={`flex flex-col w-full h-screen ${Colors.background.primary} ${Colors.text.primary}`}
+    >
       {/* Header */}
-      <div className={`flex items-center justify-between px-6 py-3 border-b border-slate-700 ${Colors.background.primary}`}>
+      <div
+        className={`flex items-center justify-between px-6 py-3 border-b border-slate-700 ${Colors.background.primary}`}
+      >
         <div className="flex gap-3">
-          <div className={`h-7 w-7 flex items-center justify-center rounded ${Colors.background.heroSecondary} font-bold`}>
+          <div
+            className={`h-7 w-7 flex items-center justify-center rounded ${Colors.background.heroSecondary} font-bold`}
+          >
             B
           </div>
           <h1 className="font-semibold text-xl tracking-wide">
@@ -301,7 +291,8 @@ function CodeCompiler() {
           <div className="relative group">
             <button
               onClick={toggleFullscreen}
-              className={`p-2 ${Colors.background.secondary} rounded ${Colors.border.defaultThin} cursor-pointer`}            >
+              className={`p-2 ${Colors.background.secondary} rounded ${Colors.border.defaultThin} cursor-pointer`}
+            >
               <Maximize className="text-blue-400" size={18} />
             </button>
             <Tooltip label="Fullscreen" />
@@ -317,7 +308,9 @@ function CodeCompiler() {
             </button>
 
             {langOpen && (
-              <div className={`absolute right-0 mt-2 w-40 ${Colors.background.secondary} rounded-xl border ${Colors.border.defaultThin} shadow-lg overflow-hidden z-50`}>
+              <div
+                className={`absolute right-0 mt-2 w-40 ${Colors.background.secondary} rounded-xl border ${Colors.border.defaultThin} shadow-lg overflow-hidden z-50`}
+              >
                 {Object.keys(LANGUAGE_CONFIG).map((lang) => (
                   <button
                     key={lang}
@@ -402,7 +395,9 @@ function CodeCompiler() {
         >
           {/* Input */}
           <div style={{ height: `${inputHeight}%` }} className="min-h-30 p-3">
-            <p className={`text-sm font-medium ${Colors.text.secondary} mb-2 uppercase tracking-wide`}>
+            <p
+              className={`text-sm font-medium ${Colors.text.secondary} mb-2 uppercase tracking-wide`}
+            >
               Input
             </p>
             <textarea
@@ -444,7 +439,9 @@ function CodeCompiler() {
             style={{ height: `${100 - inputHeight - 2}%` }}
             className={`min-h-30 p-3 border-t ${Colors.border.defaultThin} my-5`}
           >
-            <p className={`text-xs font-medium ${Colors.text.secondary} mb-2 uppercase tracking-wide`}>
+            <p
+              className={`text-xs font-medium ${Colors.text.secondary} mb-2 uppercase tracking-wide`}
+            >
               Output
             </p>
             <textarea

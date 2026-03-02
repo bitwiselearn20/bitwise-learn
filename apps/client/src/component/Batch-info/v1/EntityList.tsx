@@ -216,6 +216,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
     if (value === null || value === undefined) return "—";
     if (typeof value === "string" && value.includes("T")) {
       const date = new Date(value);
+      if (date.toLocaleString() === "01/01/2001, 00:00:00") return value;
       if (!isNaN(date.getTime())) return date.toLocaleString();
     }
     return String(value);
@@ -334,7 +335,10 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                       ))}
                       <td className="px-6 py-4 text-right">
                         <button
-                          onClick={() => setSelectedEntity(entity)}
+                          onClick={() => {
+                            setSelectedEntity(entity);
+                            console.log(entity);
+                          }}
                           className={`rounded-md border px-3 py-1.5 text-xs font-medium transition ${Colors.border.specialThick} ${Colors.text.special} ${Colors.hover.special} cursor-pointer active:scale-95`}
                         >
                           See details
@@ -445,6 +449,8 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
                         "vendorId",
                         "instituteId",
                         "createdBy",
+                        "sections",
+                        "individualSectionTimeLimit",
                       ].includes(key),
                   )
                   .map(([key, value]) => (

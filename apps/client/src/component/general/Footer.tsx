@@ -3,7 +3,7 @@ import Link from "next/link";
 import BitwiseImage from "@/app/images/BitwiseImage.png";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import Image from "next/image";
-import logo from "../../../public/images/Logo.png"
+import logo from "../../../public/images/Logo.png";
 
 export default function Footer() {
   const Colors = useColors();
@@ -16,7 +16,7 @@ export default function Footer() {
         {/* Company Info & Social Media */}
         <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
           <Link href="/">
-          <Image src={logo} alt="Logo" height={40}/>
+            <Image src={logo} alt="Logo" height={40} />
           </Link>
           <p className={`text-sm max-w-62.5 mb-4 ${Colors.text.special}`}>
             Learn, Code, Grow.
@@ -70,7 +70,7 @@ export default function Footer() {
             Logins
           </h4>
           <ul className={`space-y-2 ${Colors.text.secondary}`}>
-            {["Vendor", "Institution", "Teacher"].map((item) => (
+            {["Other Login"].map((item) => (
               <li key={item}>
                 <Link
                   href={`/multi-login`}
@@ -90,16 +90,10 @@ export default function Footer() {
           </h4>
           <ul className={`space-y-2 ${Colors.text.secondary}`}>
             <li>
-              <p
-              >
-                Email : sales_support@bitwiselearn.com
-              </p>
+              <p>Email : sales_support@bitwiselearn.com</p>
             </li>
             <li>
-              <p
-              >
-                 Phone : +91 9787777547
-              </p>
+              <p>Phone : +91 9787777547</p>
             </li>
             <li>Address : Banglore India</li>
           </ul>

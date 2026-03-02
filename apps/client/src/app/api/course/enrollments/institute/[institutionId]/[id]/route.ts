@@ -21,14 +21,11 @@ export async function GET(
 
     let data = await res.json();
     const output = data.data.data;
-    const resultArray = data.data.data.filter((enrollment: any) => {
-      return enrollment.institution.id === id;
-    });
 
     const responseResult = {
       data: {
         course: data.data.course,
-        data: resultArray,
+        data: output,
       },
     };
     return NextResponse.json(responseResult.data, { status: res.status });

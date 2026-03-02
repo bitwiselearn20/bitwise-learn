@@ -150,10 +150,11 @@ export const Tabs = ({
           <button
             key={tab}
             onClick={() => onValueChange(tab)}
-            className={`px-4 py-1.5 rounded-md text-md cursor-pointer ${value === tab
+            className={`px-4 py-1.5 rounded-md text-md cursor-pointer ${
+              value === tab
                 ? `${Colors.text.special} ${Colors.border.specialThick}`
                 : `${Colors.text.primary} ${Colors.hover.textSpecial}`
-              }`}
+            }`}
           >
             {tab}
           </button>
@@ -163,6 +164,7 @@ export const Tabs = ({
         {!logsLoading &&
           logRole != null &&
           logRole != 5 &&
+          !(logRole == 3 && value == "Courses") &&
           value !== "Assessments" &&
           logRole != 4 && (
             <button
