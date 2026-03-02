@@ -174,7 +174,7 @@ class AssessmentController {
       } else {
         allowedStatus = ["LIVE", "ENDED", "UPCOMING"];
       }
-      const assessment = await prismaClient.assessment.findMany({
+      let assessment = await prismaClient.assessment.findMany({
         where: {
           batchId: batchId as string,
           status: {
@@ -199,6 +199,29 @@ class AssessmentController {
         },
       });
       if (!assessment) throw new Error("assessment not found");
+      if (req.user.type === "STUDENT") {
+        assessment = await Promise.all(
+          assessment.map(async (currAssessment) => {
+            const hasSubmitted =
+              await prismaClient.assessmentSubmission.findFirst({
+                where: {
+                  studentId: req.user?.id,
+                  assessmentId: currAssessment.id,
+                },
+              });
+
+            console.log({
+              ...currAssessment,
+              canAccessTest: !hasSubmitted,
+            });
+
+            return {
+              ...currAssessment,
+              canAccessTest: !hasSubmitted,
+            };
+          }),
+        );
+      }
 
       return res
         .status(200)

@@ -141,7 +141,7 @@ function IndividualCourseReportV1({
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <StatCard
             title="Total Students"
             value={totalStudents}
@@ -151,11 +151,6 @@ function IndividualCourseReportV1({
             title="Submission Rate"
             value={`${submissionRate}%`}
             icon={<FileCheck2 />}
-          />
-          <StatCard
-            title="Average Progress"
-            value={`${Number(avgProgress) % 100} %`}
-            icon={<TrendingUp />}
           />
         </div>
 

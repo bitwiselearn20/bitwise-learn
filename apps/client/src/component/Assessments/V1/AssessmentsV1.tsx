@@ -56,7 +56,6 @@ const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
         : "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
 
   const router = useRouter();
-
   const handleClick = (assessmentId: string) => {
     router.push(`/admin-dashboard/assessments/${assessmentId}`);
   };
@@ -560,6 +559,7 @@ const AssessmentsV1 = () => {
       let res: any;
       if (logsRole != null && logsRole < 3) {
         res = await getAllAssessments();
+        console.log(res.data);
         setAssessments(res.data || []);
       } else {
         res = await getAssessmentsByInstitution((data: any) => {
