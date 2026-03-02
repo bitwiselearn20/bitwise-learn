@@ -193,7 +193,7 @@ function TestCases({
                   (() => {
                     const o = output[activeCase];
                     const parsedInput = o.input;
-
+                    console.log(parsedInput);
                     return (
                       <div
                         className={`
