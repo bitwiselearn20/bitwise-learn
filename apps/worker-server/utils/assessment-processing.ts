@@ -116,14 +116,14 @@ export default async function assessmentProcessing(payload: string) {
             : 0;
 
         const startTime = new Date(dbAssessment.startTime + "+05:30");
-        const totalTimeSpent = submission.createdAt
-          ? Number(
-              (
-                (submission.startedAt.getTime() - startTime.getTime()) /
-                (1000 * 60)
-              ).toFixed(2),
-            )
-          : null;
+        // const totalTimeSpent = submission.createdAt
+        //   ? Number(
+        //       (
+        //         (submission.startedAt.getTime() - startTime.getTime()) /
+        //         (1000 * 60)
+        //       ).toFixed(2),
+        //     )
+        //   : null;
 
         rows.push({
           Name: submission.student.name,
@@ -141,7 +141,7 @@ export default async function assessmentProcessing(payload: string) {
           TotalPercentage: Number(totalPercentage.toFixed(2)),
           OverallQualifingStatus:
             totalPercentage >= 40 ? "QUALIFIED" : "NOT_QUALIFIED",
-          OverallTimeSpent: totalTimeSpent,
+          // OverallTimeSpent: totalTimeSpent,
           TabSwitchCount: submission.tabSwitchCount,
           ProctorMonitor: submission.proctoringStatus,
           Attemptedon: submission.submittedAt,
@@ -177,6 +177,7 @@ export default async function assessmentProcessing(payload: string) {
 
     const uploadData = await uploadFile(filePath);
 
+    if (!uploadData) throw new Error("file upload failed");
     await prismaClient.assessment.update({
       where: { id: assessment.id },
       data: {
