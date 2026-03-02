@@ -128,7 +128,7 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
     // Ensure entities is always an array
     const safeEntities = Array.isArray(entities) ? entities : [];
 
-    if (!searchQuery) return safeEntities;
+    if (!searchQuery.trim()) return safeEntities;
 
     return safeEntities.filter((entity) => {
       switch (type) {
@@ -153,10 +153,8 @@ export const EntityList = ({ type, batchId }: EntityListProps) => {
           );
         case "Courses":
           return (
-            entity.course.name
-              ?.toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-            entity.course.description
+            entity.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            entity.description
               ?.toLowerCase()
               .includes(searchQuery.toLowerCase())
           );

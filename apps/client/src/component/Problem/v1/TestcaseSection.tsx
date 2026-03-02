@@ -9,9 +9,9 @@ export default function TestCaseSection({ testCases }: { testCases: any[] }) {
 
   const parseInput = (input: string) => {
     try {
-      return JSON.parse(input);
+      return input;
     } catch {
-      return {};
+      return "";
     }
   };
 
@@ -63,19 +63,9 @@ export default function TestCaseSection({ testCases }: { testCases: any[] }) {
                   Input
                 </div>
 
-                <div className="p-4 space-y-1 font-mono text-sm">
-                  {Object.entries(parsedInput).map(([key, value], idx) => (
-                    <div key={idx} className="flex gap-2">
-                      <span className={Colors.text.primary}>{key}</span>
-                      <span className={Colors.text.primary}>:</span>
-                      <span className="break-all">
-                        {Array.isArray(value)
-                          ? JSON.stringify(value)
-                          : String(value)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <code className="p-4 space-y-1 font-mono text-sm">
+                  {parsedInput}
+                </code>
               </div>
 
               {/* Output */}
@@ -96,9 +86,7 @@ export default function TestCaseSection({ testCases }: { testCases: any[] }) {
                   Output
                 </div>
 
-                <div className="p-4 font-mono text-sm">
-                  {test.output}
-                </div>
+                <div className="p-4 font-mono text-sm">{test.output}</div>
               </div>
             </div>
           </div>
