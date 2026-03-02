@@ -101,7 +101,7 @@ class InstitutionController {
           where: { id: userId },
         });
       } else {
-        dbAdmin = await prismaClient.vendor.findUnique({
+        dbAdmin = await prismaClient.user.findUnique({
           where: { id: userId },
         });
       }
