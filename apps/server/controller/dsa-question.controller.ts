@@ -161,8 +161,13 @@ class DsaQuestionController {
       });
       if (!dbProblem) throw new Error("problem doesn't exists");
 
-      if (req.user?.type === "INSTITUTION" && dbProblem.createdBy !== dbAdmin.id) throw new Error("Unauthorized to delete problem");
-      if (req.user?.type === "VENDOR" && dbProblem.createdBy !== dbAdmin.id) throw new Error("Unauthorized to delete problem");
+      if (
+        req.user?.type === "INSTITUTION" &&
+        dbProblem.createdBy !== dbAdmin.id
+      )
+        throw new Error("Unauthorized to delete problem");
+      if (req.user?.type === "VENDOR" && dbProblem.createdBy !== dbAdmin.id)
+        throw new Error("Unauthorized to delete problem");
 
       const removedProblem = await prismaClient.problem.delete({
         where: { id: dbProblem.id },
@@ -274,8 +279,10 @@ class DsaQuestionController {
       const data = await prismaClient.problem.findUnique({
         where: { id: dbProblem.id },
         select: {
+          id: true,
           createdBy: true,
           creatorType: true,
+          description: true,
           testCases: {
             where: {
               testType: "EXAMPLE",
@@ -283,14 +290,14 @@ class DsaQuestionController {
           },
           problemTemplates: true,
           problemTopics: true,
+          hints: true,
           solution: {
             where: {
               problemId: dbProblem.id,
             },
           },
-        }
+        },
       });
-
 
       return res
         .status(200)
