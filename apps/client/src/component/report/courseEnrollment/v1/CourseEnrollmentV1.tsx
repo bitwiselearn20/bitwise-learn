@@ -7,9 +7,18 @@ import {
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { useAdmin } from "@/store/adminStore";
 import { useInstitution } from "@/store/institutionStore";
-import { Eye, Search, Filter, Building2, Layers } from "lucide-react";
+import {
+  Eye,
+  Search,
+  Filter,
+  Building2,
+  Layers,
+  ChevronLeft,
+  ArrowLeft,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 type CourseInfo = {
@@ -42,7 +51,7 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
   const [courseInfo, setCourseInfo] = useState<CourseInfo>({});
   const [loading, setLoading] = useState(true);
   const Colors = useColors();
-
+  const router = useRouter();
   // 🔎 Filters
   const [search, setSearch] = useState("");
   const [institution, setInstitution] = useState("all");
@@ -110,6 +119,13 @@ function CourseEnrollmentV1({ courseId }: { courseId: string }) {
       <aside
         className={`w-[320px] ml-4 mt-4 shrink-0 border ${Colors.border.defaultThin} ${Colors.background.primary} rounded-xl overflow-hidden sticky top-4 h-fit`}
       >
+        <div
+          onClick={() => router.back()}
+          className="mb-2 flex gap-3 cursor-pointer"
+        >
+          <ArrowLeft className={`${Colors.text.primary}`} />
+          <p>Go Back </p>
+        </div>
         {courseInfo.thumbnail && (
           <div className="h-40 w-full overflow-hidden">
             <Image

@@ -163,6 +163,28 @@ class ReportController {
         take: MAX_PAGE_ENTRY,
       });
 
+      for (let i = 0; i < studentData.length; i++) {
+        const assignmentSubmission =
+          studentData[i]?.courseAssignemntSubmissions;
+        let convertedSubmission = [];
+        if (assignmentSubmission?.length === 0) {
+          continue;
+        }
+
+        const set = new Set();
+        for (let j = 0; j < assignmentSubmission?.length!; j++) {
+          const question = assignmentSubmission[i];
+          if (set.has(question?.question.assignmentId)) {
+            continue;
+          }
+
+          set.add(question?.question.assignmentId);
+          convertedSubmission.push(question);
+        }
+
+        studentData[i].courseAssignemntSubmissions = convertedSubmission;
+      }
+
       return res.status(200).json(
         apiResponse(200, "course data fetched", {
           data: studentData,
