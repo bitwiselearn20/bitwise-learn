@@ -15,6 +15,8 @@ import {
 } from "recharts";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type ReportRow = {
   student: {
@@ -51,7 +53,7 @@ function IndividualAssessmentReportV1({
   const [statusFilter, setStatusFilter] = useState<string | "">("");
 
   const reportRef = useRef<HTMLDivElement>(null);
-
+  const router = useRouter();
   useEffect(() => {
     async function handleLoad() {
       setLoading(true);
@@ -383,6 +385,13 @@ function IndividualAssessmentReportV1({
       <div>
         <div className="flex justify-between w-full items-center">
           <div>
+            <div
+              onClick={() => router.back()}
+              className="cursor-pointer flex gap-3 text-gray-400"
+            >
+              <ArrowLeft />
+              <p>GO Back</p>
+            </div>
             <h1 className="text-xl font-semibold text-white">
               Assessment Report
             </h1>
