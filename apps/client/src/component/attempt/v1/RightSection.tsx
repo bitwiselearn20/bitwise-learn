@@ -105,10 +105,10 @@ export default function RightSection({
             const answered = userAnswers[questionIds[i]] != null;
 
             return (
-                <button
-                  key={i}
-                  onClick={() => onJumpToQuestion(i)}
-                  className={`
+              <button
+                key={i}
+                onClick={() => onJumpToQuestion(i)}
+                className={`
                     px-3 py-1 rounded-md ${Colors.background.primary}
                     ${
                       i === currentIndex
@@ -118,16 +118,16 @@ export default function RightSection({
                           : Colors.border.fadedThick
                     }
                   `}
-                >
-                  Q{i + 1}
-                </button>
+              >
+                Q{i + 1}
+              </button>
             );
           })}
         </div>
 
-        <button className={`${Colors.background.primary} px-4 py-2 rounded-md hover:opacity-80 group`}>
+        {/* <button className={`${Colors.background.primary} px-4 py-2 rounded-md hover:opacity-80 group`}>
           Mark As Correct
-        </button>
+        </button> */}
       </div>
     </div>
   );

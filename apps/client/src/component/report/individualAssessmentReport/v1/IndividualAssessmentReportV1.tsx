@@ -263,22 +263,17 @@ function IndividualAssessmentReportV1({
                 </div>
                 
                 <div style="flex: 1; min-width: 200px; padding: 20px; border-radius: 10px; border-left: 4px solid #48bb78;">
-                    <div style="font-size: 13px; font-weight: 600; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
-                        Duration
-                    </div>
-                    <div style="font-size: 24px; font-weight: 700; color: #2d3748;">
-                        ${duration}
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top: 20px; padding: 15px 20px; border-radius: 8px; border-left: 4px solid #fc8181;">
                 <div style="font-size: 13px; font-weight: 600; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
                     IP Address
                 </div>
                 <div style="font-size: 15px; color: #2d3748; font-family: 'Courier New', monospace;">
                     ${student.studentIp}
                 </div>
+                   
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px 20px; border-radius: 8px; border-left: 4px solid #fc8181;">
             </div>
         </div>
 

@@ -37,6 +37,7 @@ export const URL_ACCESS_MAP: Record<string, string[]> = {
     "/admin-dashboard/batches",
     "/admin-dashboard/batches/:batchId",
     "/admin-dashboard/reports",
+    "/compiler",
   ],
 
   INSTITUTION: [
@@ -72,6 +73,7 @@ export const URL_ACCESS_MAP: Record<string, string[]> = {
     "/admin-dashboard/reports",
     "/admin-dashboard/problems",
     "/admin-dashboard/compiler",
+    "/admin-dashboard/problems/:id",
   ],
   ADMIN: [
     "/admin-dashboard",
@@ -92,6 +94,6 @@ export const URL_ACCESS_MAP: Record<string, string[]> = {
     "/admin-dashboard/batches/:batchId",
     "/admin-dashboard/courses",
     "/admin-dashboard/courses/:id",
-    "/admin-dashboard/compiler"
+    "/admin-dashboard/compiler",
   ],
 };

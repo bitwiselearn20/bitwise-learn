@@ -19,7 +19,7 @@ export async function POST(
       `${process.env.BACKEND_URL}/api/v1/assessments/submit-assessment-by-id/${id}`,
       {
         method: "POST",
-        body: JSON.stringify(body),
+        body: JSON.stringify({ ...body, ip: clientIp }),
         headers: {
           "Content-Type": "application/json",
           Cookie: cookieHeader || "",

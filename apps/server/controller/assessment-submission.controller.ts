@@ -47,7 +47,7 @@ class AssessmentSubmission {
         data: {
           assessmentId: dbAssessment?.id,
           studentId: dbUser.id,
-          studentIp: req.ip as string,
+          studentIp: req.body.ip as string,
           proctoringStatus:
             req.body.tabSwitchCount !== 0 ? "CHEATED" : "NOT_CHEATED",
           tabSwitchCount: req.body.tabSwitchCount || 0,

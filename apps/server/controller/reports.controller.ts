@@ -173,6 +173,7 @@ class ReportController {
 
         const set = new Set();
         for (let j = 0; j < assignmentSubmission?.length!; j++) {
+          //@ts-ignore
           const question = assignmentSubmission[i];
           if (set.has(question?.question.assignmentId)) {
             continue;
@@ -181,7 +182,7 @@ class ReportController {
           set.add(question?.question.assignmentId);
           convertedSubmission.push(question);
         }
-
+        //@ts-ignore
         studentData[i].courseAssignemntSubmissions = convertedSubmission;
       }
 
@@ -226,6 +227,7 @@ class ReportController {
         await prismaClient.assessmentSubmission.findMany({
           where: {
             assessmentId: dbAssessment.id,
+            isSubmitted: true,
           },
           select: {
             student: {
@@ -244,8 +246,10 @@ class ReportController {
           },
           skip: MAX_PAGE_ENTRY * pageNumber,
           take: MAX_PAGE_ENTRY,
+          orderBy: { id: "asc" },
         });
 
+      console.log(studentAssessments);
       return res.status(200).json(
         apiResponse(200, "course data fetched", {
           data: studentAssessments,

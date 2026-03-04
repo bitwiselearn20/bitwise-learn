@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
 import { useTheme } from "@/component/general/(Color Manager)/ThemeController";
+import useLogs from "@/lib/useLogs";
 
 function V1Problem({ data }: any) {
   const Colors = useColors();
@@ -29,7 +30,6 @@ function V1Problem({ data }: any) {
   const isEditorResizing = useRef(false);
 
   const router = useRouter();
-
   const handleSidebarMouseDown = () => {
     isSidebarResizing.current = true;
     document.body.style.cursor = "col-resize";
