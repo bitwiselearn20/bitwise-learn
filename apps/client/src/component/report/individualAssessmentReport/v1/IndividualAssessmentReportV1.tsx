@@ -453,9 +453,8 @@ function IndividualAssessmentReportV1({
           className="px-4 py-2 rounded border border-neutral-700 bg-neutral-900 text-white w-full md:w-1/4"
         >
           <option value="">All Status</option>
-          <option value="CLEAN">CLEAN</option>
-          <option value="SUSPICIOUS">SUSPICIOUS</option>
-          <option value="MALPRACTICE">MALPRACTICE</option>
+          <option value="NOT_CHEATED">CLEAN</option>
+          <option value="CHEATED">SUSPICIOUS</option>
         </select>
       </div>
 
@@ -475,6 +474,8 @@ function IndividualAssessmentReportV1({
             {assessmentInfo
               .filter((row) => {
                 // Search filter: name, roll number, email
+                console.log(row);
+                console.log(statusFilter);
                 const term = searchTerm.toLowerCase();
                 const matchesSearch =
                   row.student.name.toLowerCase().includes(term) ||

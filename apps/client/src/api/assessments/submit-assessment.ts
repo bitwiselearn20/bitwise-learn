@@ -15,7 +15,13 @@ export const submitIndividualQuestion = async (
 
 export const submitTest = async (id: string, data: any) => {
   try {
-    await axiosInstance.post("/api/assessments/submit/" + id, data);
+    const request = await axiosInstance.get("http://jsonip.com/");
+    const clientIp = request.data.ip;
+
+    await axiosInstance.post("/api/assessments/submit/" + id, {
+      ...data,
+      ip: clientIp,
+    });
   } catch (error) {
     toast.error("error submitting test");
   }

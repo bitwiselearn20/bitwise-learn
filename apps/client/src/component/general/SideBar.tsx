@@ -78,86 +78,90 @@ export default function SideBar() {
         style={{ width }}
         className={`h-full ${Colors.background.primary} ${Colors.border.fadedRight}`}
       >
-        <div className={`px-4 py-6 text-sm opacity-60 ${Colors.text.secondary}`}>Loading navigation…</div>
+        <div
+          className={`px-4 py-6 text-sm opacity-60 ${Colors.text.secondary}`}
+        >
+          Loading navigation…
+        </div>
       </aside>
     );
   }
 
-return (
-  <>
-    <aside
-      ref={sidebarRef}
-      style={{ width }}
-      className={`fixed top-0 left-0 h-screen
+  return (
+    <>
+      <aside
+        ref={sidebarRef}
+        style={{ width }}
+        className={`fixed top-0 left-0 h-screen
         ${Colors.border.fadedRight}
         ${Colors.background.primary}
         ${Colors.text.primary}
         flex flex-col z-40`}
-    >
-      {/* Logo */}
-      <div className="px-4 py-6 flex justify-center">
-        {isCollapsed ? (
-          <span className="text-2xl font-bold text-primaryBlue">B</span>
-        ) : (
-          <h1 className="text-xl font-semibold tracking-wide">
-            <span className="text-primaryBlue">B</span>
-            itwise <span className="opacity-80">Learn</span>
-          </h1>
-        )}
-      </div>
+      >
+        {/* Logo */}
+        <div className="px-4 py-6 flex justify-center">
+          {isCollapsed ? (
+            <span className="text-2xl font-bold text-primaryBlue">B</span>
+          ) : (
+            <h1 className="text-xl font-semibold tracking-wide">
+              <span className="text-primaryBlue">B</span>
+              itwise <span className="opacity-80">Learn</span>
+            </h1>
+          )}
+        </div>
 
-      {/* Navigation */}
-      <nav className="px-2 py-4 space-y-1">
-        <NavLink
-          href={`/admin-dashboard`}
-          icon={<LayoutDashboard size={20} />}
-          label="Dashboard"
-          collapsed={isCollapsed}
-        />
-        {!logsLoading && logRole != null && logRole < 2 && (
+        {/* Navigation */}
+        <nav className="px-2 py-4 space-y-1">
           <NavLink
-            href={`/admin-dashboard/courses`}
-            icon={<NotebookPen size={20} />}
-            label="Courses"
+            href={`/admin-dashboard`}
+            icon={<LayoutDashboard size={20} />}
+            label="Dashboard"
             collapsed={isCollapsed}
           />
-        )}
-        <NavLink
-          href={`/admin-dashboard/problems`}
-          icon={<Code2 size={20} />}
-          label="Problems"
-          collapsed={isCollapsed}
-        />
-        {!logsLoading && logRole != null && logRole <= 3 && (
+          {!logsLoading && logRole != null && logRole < 2 && (
+            <NavLink
+              href={`/admin-dashboard/courses`}
+              icon={<NotebookPen size={20} />}
+              label="Courses"
+              collapsed={isCollapsed}
+            />
+          )}
           <NavLink
-            href={`/admin-dashboard/reports`}
-            icon={<ClipboardCheck size={20} />}
-            label="Reports"
+            href={`/admin-dashboard/problems`}
+            icon={<Code2 size={20} />}
+            label="Problems"
             collapsed={isCollapsed}
           />
-        )}
-        {!logsLoading && logRole != null && logRole < 4 && logRole !== 2 && (
+          {!logsLoading && logRole != null && logRole <= 3 && logRole != 2 && (
+            <NavLink
+              href={`/admin-dashboard/reports`}
+              icon={<ClipboardCheck size={20} />}
+              label="Reports"
+              collapsed={isCollapsed}
+            />
+          )}
+          {!logsLoading && logRole != null && logRole < 4 && logRole !== 2 && (
+            <NavLink
+              href={`/admin-dashboard/assessments`}
+              icon={<LibraryBig size={20} />}
+              label="Assessments"
+              collapsed={isCollapsed}
+            />
+          )}
           <NavLink
-            href={`/admin-dashboard/assessments`}
-            icon={<LibraryBig size={20} />}
-            label="Assessments"
+            href={`/admin-dashboard/compiler`}
+            icon={<Terminal size={20} />}
+            label="Compiler"
             collapsed={isCollapsed}
           />
-        )}
-        <NavLink
-          href={`/admin-dashboard/compiler`}
-          icon={<Terminal size={20} />}
-          label="Compiler"
-          collapsed={isCollapsed}
-        />
-      </nav>
+        </nav>
 
-      {/* Footer */}
-      <div className="mt-auto px-2 py-4">
-        <ThemeSwitcher />
-        <button
-          onClick={handleLogout}
-          className={`
+        {/* Footer */}
+        <div className="mt-auto px-2 py-4">
+          <ThemeSwitcher />
+          <button
+            onClick={handleLogout}
+            className={`
             w-full flex items-center
             ${isCollapsed ? "justify-center px-2" : "gap-3 px-4"}
             py-2.5 rounded-lg
@@ -169,51 +173,51 @@ return (
             cursor-pointer
             active:scale-95
           `}
-        >
-          <LogOut size={18} />
-          {!isCollapsed && <span>Log out</span>}
-        </button>
-      </div>
+          >
+            <LogOut size={18} />
+            {!isCollapsed && <span>Log out</span>}
+          </button>
+        </div>
 
-      {/* Resize Handle */}
-      <div
-        onMouseDown={startResizing}
-        className="absolute top-0 right-0 h-full w-1 cursor-col-resize hover:bg-primaryBlue/40"
-      />
-    </aside>
+        {/* Resize Handle */}
+        <div
+          onMouseDown={startResizing}
+          className="absolute top-0 right-0 h-full w-1 cursor-col-resize hover:bg-primaryBlue/40"
+        />
+      </aside>
 
-    {/* THIS is the spacer that pushes content */}
-    <div style={{ width }} className="shrink-0" />
-  </>
-);
+      {/* THIS is the spacer that pushes content */}
+      <div style={{ width }} className="shrink-0" />
+    </>
+  );
 
+  function NavLink({
+    href,
+    icon,
+    label,
+    collapsed,
+  }: {
+    href: string;
+    icon: React.ReactNode;
+    label: string;
+    collapsed: boolean;
+  }) {
+    const Colors = useColors();
 
-function NavLink({
-  href,
-  icon,
-  label,
-  collapsed,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  collapsed: boolean;
-}) {
-  const Colors = useColors();
-
-  return (
-    <Link href={href} className="block">
-      <div
-        className={`w-full flex items-center
+    return (
+      <Link href={href} className="block">
+        <div
+          className={`w-full flex items-center
           ${collapsed ? "justify-center px-2" : "gap-3 px-4"}
           py-2.5 rounded-lg text-sm font-medium
           ${Colors.text.secondary}
           ${Colors.hover.special}
           transition-all`}
-      >
-        {icon}
-        {!collapsed && <span>{label}</span>}
-      </div>
-    </Link>
-  );
-}}
+        >
+          {icon}
+          {!collapsed && <span>{label}</span>}
+        </div>
+      </Link>
+    );
+  }
+}

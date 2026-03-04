@@ -11,19 +11,15 @@ export async function POST(
     if (!token) throw new Error("Token not found");
     const cookieHeader = req.headers.get("cookie");
 
-    const request = await axiosInstance.get("http://jsonip.com/");
-    const clientIp = request.data.ip;
-
     const body = await req.json();
     const res = await fetch(
       `${process.env.BACKEND_URL}/api/v1/assessments/submit-assessment-by-id/${id}`,
       {
         method: "POST",
-        body: JSON.stringify({ ...body, ip: clientIp }),
+        body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
           Cookie: cookieHeader || "",
-          "X-Forwarded-For": clientIp,
         },
         credentials: "include",
       },
