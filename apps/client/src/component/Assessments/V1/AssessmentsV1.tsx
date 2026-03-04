@@ -47,14 +47,34 @@ type CreateAssessment = {
 // -------------------------------------------------------------------------
 // Assessment Card
 // -------------------------------------------------------------------------
-const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
-  const statusStyles =
-    assessment.status === "LIVE"
-      ? "bg-green-500/15 text-green-400 border-green-500/30"
-      : assessment.status === "ENDED"
-        ? "bg-red-500/15 text-red-400 border-red-500/30"
-        : "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
+const getStatus = (status: string) => {
+  if (status === "LIVE")
+    return "bg-green-500/15 text-green-400 border-green-500/30";
+  else if (status === "ENDED")
+    return "bg-red-500/15 text-red-400 border-red-500/30";
 
+  return "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
+};
+const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
+  const [status, setStatus] = useState(assessment.status);
+
+  const statusStyles = getStatus(status as any);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date().toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+      });
+      const start = new Date(assessment.startTime).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+      });
+      if (start <= now && status === "UPCOMING") {
+        setStatus("LIVE");
+      }
+    }, 1000); // check every second
+
+    return () => clearInterval(interval);
+  }, [assessment.startTime, status]);
   const router = useRouter();
   const handleClick = (assessmentId: string) => {
     router.push(`/admin-dashboard/assessments/${assessmentId}`);
@@ -75,11 +95,11 @@ const AssessmentCard = ({ assessment }: { assessment: CreateAssessment }) => {
           {assessment.name}
         </h3>
 
-        {assessment.status && (
+        {status && (
           <span
             className={`text-xs px-3 py-1 rounded-full border ${statusStyles}`}
           >
-            {assessment.status}
+            {status}
           </span>
         )}
       </div>

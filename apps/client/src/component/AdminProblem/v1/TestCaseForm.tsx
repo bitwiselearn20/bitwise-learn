@@ -18,21 +18,14 @@ export default function TestCaseForm({
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [errors, setErrors] = useState<{ input?: string; output?: string }>(
-    {}
-  );
+  const [errors, setErrors] = useState<{ input?: string; output?: string }>({});
 
   const Colors = useColors();
 
   /* ---------------- SAVE ---------------- */
   const handleSave = async () => {
     const nextErrors: { input?: string; output?: string } = {};
-    if (!input.trim()) {
-      nextErrors.input = "Input is required.";
-    }
-    if (!output.trim()) {
-      nextErrors.output = "Output is required.";
-    }
+
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
       return;
@@ -112,8 +105,9 @@ export default function TestCaseForm({
               placeholder={`Enter input`}
               aria-invalid={Boolean(errors.input)}
               aria-describedby={errors.input ? "input-error" : undefined}
-              className={`w-full p-2 rounded-md font-mono text-xs resize-none ${Colors.background.primary} ${Colors.text.secondary} placeholder:text-neutral-500 border ${errors.input ? "border-red-500/70" : "border-transparent"
-                }`}
+              className={`w-full p-2 rounded-md font-mono text-xs resize-none ${Colors.background.primary} ${Colors.text.secondary} placeholder:text-neutral-500 border ${
+                errors.input ? "border-red-500/70" : "border-transparent"
+              }`}
             />
             {errors.input && (
               <p id="input-error" className="text-xs text-red-400 mt-1">
@@ -134,8 +128,9 @@ export default function TestCaseForm({
               placeholder="Expected output"
               aria-invalid={Boolean(errors.output)}
               aria-describedby={errors.output ? "output-error" : undefined}
-              className={`w-full p-2 rounded-md font-mono text-xs resize-none ${Colors.background.primary} ${Colors.text.secondary} placeholder:text-neutral-500 border ${errors.output ? "border-red-500/70" : "border-transparent"
-                }`}
+              className={`w-full p-2 rounded-md font-mono text-xs resize-none ${Colors.background.primary} ${Colors.text.secondary} placeholder:text-neutral-500 border ${
+                errors.output ? "border-red-500/70" : "border-transparent"
+              }`}
             />
             {errors.output && (
               <p id="output-error" className="text-xs text-red-400 mt-1">

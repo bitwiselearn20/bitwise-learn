@@ -126,12 +126,21 @@ export default function SideBar() {
               collapsed={isCollapsed}
             />
           )}
-          <NavLink
-            href={`/admin-dashboard/problems`}
-            icon={<Code2 size={20} />}
-            label="Problems"
-            collapsed={isCollapsed}
-          />
+          {!logsLoading && logRole != null && logRole == 4 ? (
+            <NavLink
+              href={`/problems`}
+              icon={<Code2 size={20} />}
+              label="Problems"
+              collapsed={isCollapsed}
+            />
+          ) : (
+            <NavLink
+              href={`/admin-dashboard/problems`}
+              icon={<Code2 size={20} />}
+              label="Problems"
+              collapsed={isCollapsed}
+            />
+          )}
           {!logsLoading && logRole != null && logRole <= 3 && logRole != 2 && (
             <NavLink
               href={`/admin-dashboard/reports`}

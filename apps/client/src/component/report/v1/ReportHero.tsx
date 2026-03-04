@@ -3,14 +3,24 @@ import { TabsTrigger } from "@radix-ui/react-tabs";
 import AllAssessments from "./AllAssessments";
 import AllCourses from "./AllCourses";
 import { useColors } from "@/component/general/(Color Manager)/useColors";
-
+import useLogs from "@/lib/useLogs";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
 function ReportHero() {
   const Colors = useColors();
+  const rbac = useLogs();
+  const router = useRouter();
+  const query = useSearchParams();
+  const [tab, setTab] = useState(query.get("tab") || "assessments");
   return (
-    <div className={`h-screen w-full flex ${Colors.background.primary} ${Colors.text.primary} overflow-hidden`}>
+    <div
+      className={`h-screen w-full flex ${Colors.background.primary} ${Colors.text.primary} overflow-hidden`}
+    >
       <div className="border-r border-neutral-800 w-full flex flex-col relative">
-        <Tabs defaultValue="courses" className="flex w-full flex-col h-full">
-          <TabsList className={`border-b w-full justify-evenly border-neutral-400 ${Colors.background.primary} px-6 py-3 flex gap-6`}>
+        <Tabs defaultValue={tab} className="flex w-full flex-col h-full">
+          <TabsList
+            className={`border-b w-full justify-evenly border-neutral-400 ${Colors.background.primary} px-6 py-3 flex gap-6`}
+          >
             <TabsTrigger
               value="courses"
               className={`
@@ -53,11 +63,31 @@ function ReportHero() {
               WebkitScrollbar: { display: "none" },
             }}
           >
-            <TabsContent value="courses" className="animate-fadeIn">
-              <AllCourses />
-            </TabsContent>
+            {rbac && !rbac.loading && rbac.role != 2 && (
+              <TabsContent
+                onClick={() => {
+                  setTab("courses");
+                  const params = new URLSearchParams(query.toString());
+                  params.set("tab", "courses");
+                  router.push(`?${params.toString()}`);
+                }}
+                value="courses"
+                className="animate-fadeIn"
+              >
+                <AllCourses />
+              </TabsContent>
+            )}
 
-            <TabsContent value="assessments" className="animate-fadeIn">
+            <TabsContent
+              onClick={() => {
+                setTab("assessments");
+                const params = new URLSearchParams(query.toString());
+                params.set("tab", "assessments");
+                router.push(`?${params.toString()}`);
+              }}
+              value="assessments"
+              className="animate-fadeIn"
+            >
               <AllAssessments />
             </TabsContent>
           </div>

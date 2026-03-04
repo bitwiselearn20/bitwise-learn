@@ -1338,10 +1338,16 @@ class DsaQuestionController {
       if (!userId) {
         return res.status(401).json(apiResponse(401, "Unauthorized", null));
       }
-
-      const dbStudent = await prismaClient.student.findFirst({
-        where: { id: userId },
-      });
+      let dbStudent;
+      if (req.user?.type === "STUDENT") {
+        dbStudent = await prismaClient.student.findFirst({
+          where: { id: userId },
+        });
+      } else {
+        dbStudent = await prismaClient.teacher.findFirst({
+          where: { id: userId },
+        });
+      }
 
       if (!dbStudent) throw new Error("user not found!");
 
@@ -1399,9 +1405,16 @@ class DsaQuestionController {
 
       if (!userId) throw new Error("user not found ");
       if (!problemId) throw new Error("problemid not found ");
-      const dbUser = await prismaClient.student.findUnique({
-        where: { id: userId },
-      });
+      let dbUser;
+      if (req.user?.type === "STUDENT") {
+        dbUser = await prismaClient.student.findUnique({
+          where: { id: userId },
+        });
+      } else {
+        dbUser = await prismaClient.teacher.findUnique({
+          where: { id: userId },
+        });
+      }
       if (!dbUser) throw new Error("user not found");
 
       const dbProblem = await prismaClient.problem.findUnique({

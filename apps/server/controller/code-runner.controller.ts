@@ -161,9 +161,16 @@ class CodeRunnerController {
 
       if (!userId) throw new Error("no user id found");
 
-      const dbUser = await prismaClient.student.findUnique({
-        where: { id: userId },
-      });
+      let dbUser;
+      if (req.user?.type === "STUDENT") {
+        dbUser = await prismaClient.student.findUnique({
+          where: { id: userId },
+        });
+      } else {
+        dbUser = await prismaClient.teacher.findUnique({
+          where: { id: userId },
+        });
+      }
       if (!dbUser) throw new Error("no user found");
 
       const dbProblem = await prismaClient.problem.findUnique({
