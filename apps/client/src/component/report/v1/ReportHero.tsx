@@ -23,6 +23,12 @@ function ReportHero() {
             className={`border-b w-full justify-evenly border-neutral-400 ${Colors.background.primary} px-6 py-3 flex gap-6`}
           >
             <TabsTrigger
+              onClick={() => {
+                setTab("courses");
+                const params = new URLSearchParams(query.toString());
+                params.set("tab", "courses");
+                router.push(`?${params.toString()}`);
+              }}
               value="courses"
               className={`
                 relative px-4 py-2 text-sm font-medium ${Colors.text.secondary} transition-all
@@ -39,6 +45,12 @@ function ReportHero() {
             </TabsTrigger>
 
             <TabsTrigger
+              onClick={() => {
+                setTab("assessments");
+                const params = new URLSearchParams(query.toString());
+                params.set("tab", "assessments");
+                router.push(`?${params.toString()}`);
+              }}
               value="assessments"
               className={`
                 relative px-4 py-2 text-sm font-medium ${Colors.text.secondary} transition-all
@@ -65,30 +77,12 @@ function ReportHero() {
             }}
           >
             {rbac && !rbac.loading && rbac.role != 2 && (
-              <TabsContent
-                onClick={() => {
-                  setTab("courses");
-                  const params = new URLSearchParams(query.toString());
-                  params.set("tab", "courses");
-                  router.push(`?${params.toString()}`);
-                }}
-                value="courses"
-                className="animate-fadeIn"
-              >
+              <TabsContent value="courses" className="animate-fadeIn">
                 <AllCourses />
               </TabsContent>
             )}
 
-            <TabsContent
-              onClick={() => {
-                setTab("assessments");
-                const params = new URLSearchParams(query.toString());
-                params.set("tab", "assessments");
-                router.push(`?${params.toString()}`);
-              }}
-              value="assessments"
-              className="animate-fadeIn"
-            >
+            <TabsContent value="assessments" className="animate-fadeIn">
               <AllAssessments />
             </TabsContent>
           </div>

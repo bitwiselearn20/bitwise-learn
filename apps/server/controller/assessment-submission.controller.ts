@@ -43,14 +43,20 @@ class AssessmentSubmission {
         return acc + (submission?.marksObtained || 0);
       }, 0);
 
+      const tabSwitchCount = Number(req.body.tabSwitchCount) || 0;
+      const status =
+        typeof tabSwitchCount !== "number"
+          ? "NOT_CHEATED"
+          : tabSwitchCount === 0
+            ? "NOT_CHEATED"
+            : "CHEATED";
       const submitAssignment = await prismaClient.assessmentSubmission.create({
         data: {
           assessmentId: dbAssessment?.id,
           studentId: dbUser.id,
           studentIp: req.body.ip as string,
-          proctoringStatus:
-            req.body.tabSwitchCount !== 0 ? "CHEATED" : "NOT_CHEATED",
-          tabSwitchCount: req.body.tabSwitchCount || 0,
+          proctoringStatus: status,
+          tabSwitchCount: tabSwitchCount,
           isSubmitted: true,
           totalMarks: totalMarks,
         },
